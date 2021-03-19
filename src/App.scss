@@ -1,0 +1,134 @@
+.App {
+  flex-grow: 1;
+  position: relative;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 0.5rem;
+  border: 3px solid lightgrey;
+  border-top: none;
+  background: rgba(white, 0.95);
+
+  h1 {
+    text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+  }
+}
+
+$statuses:
+  "completed",
+  "enrolled",
+  "ready",
+  "under-one-away",
+  "one-away",
+  "over-one-away";
+
+$flow-colors: (
+  "course-completed": black,
+  "course-enrolled": darkviolet,
+  "course-ready": limegreen,
+  "course-under-one-away": goldenrod,
+  "course-one-away": darkorange,
+  "course-over-one-away": red,
+);
+
+.legend {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  display: flex;
+
+  border: 2px solid lightgrey;
+  border-bottom: none;
+  padding: 0.25rem;
+  background: rgba(white, 0.95);
+
+  div {
+    display: flex;
+    line-height: 1rem;
+    padding: 0.25rem;
+    margin: 0.25rem;
+
+    white-space: nowrap;
+
+    border: 3px solid;
+    border-radius: 5px;
+  }
+
+  @each $status in $statuses {
+    .#{$status} {
+      border-color: map-get($map: $flow-colors, $key: course-#{$status});
+    }
+  }
+
+}
+
+.react-flow__node {
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: bold;
+  border-width: 3px;
+  border-radius: 10px;
+
+  @each $status in $statuses {
+    $color: map-get($map: $flow-colors, $key: course-#{$status});
+    &.#{$status} {
+      border-color: $color;
+      background-color: hsl(hue($color), saturation($color), 95%);
+
+      &.connected {
+        background-color: hsl(hue($color), saturation($color), 80%);
+      }
+
+      &:hover,
+      &.selected {
+        color: white;
+        background-color: $color;
+      }
+    }
+  }
+}
+
+.react-flow__edge {
+  &-path {
+    stroke-width: 2px;
+  }
+  &-text {
+    fill: white;
+    font-size: 0.8rem;
+  }
+  &-textbg {
+    fill: black;
+  }
+
+  @each $status in $statuses {
+    &.#{$status} .react-flow__edge-path {
+      stroke: map-get($map: $flow-colors, $key: course-#{$status});
+    }
+  }
+
+  @each $status in $statuses {
+    &.animated.#{$status} .react-flow__edge-textbg {
+      fill: map-get($map: $flow-colors, $key: course-#{$status});
+    }
+  }
+
+  &.selected .react-flow__edge-path {
+    stroke-width: 4px;
+  }
+}
