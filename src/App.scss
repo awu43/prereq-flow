@@ -3,19 +3,38 @@
   position: relative;
 }
 
+%bdrs3 {
+  border-radius: 3px;
+}
+
+%button-style {
+  margin: 0 0.25rem;
+  padding: 0.25rem;
+  appearance: none;
+  border: 2px solid gray;
+  @extend %bdrs3;
+
+
+  &:hover {
+    color: white;
+    background-color: grey;
+  }
+}
+
 .header {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 10;
 
   display: flex;
   flex-direction: column;
 
   padding: 0.5rem;
-  border: 3px solid lightgrey;
+  border: 2px solid lightgrey;
   border-top: none;
+  @extend %bdrs3;
   background: rgba(white, 0.95);
 
   h1 {
@@ -24,6 +43,11 @@
 
   &__buttons {
     display: flex;
+    margin-top: 0.25rem;
+  }
+
+  button {
+    @extend %button-style;
   }
 }
 
@@ -36,7 +60,7 @@ $statuses:
   "over-one-away";
 
 $flow-colors: (
-  "course-completed": black,
+  "course-completed": rgb(0, 0, 0),
   "course-enrolled": darkviolet,
   "course-ready": limegreen,
   "course-under-one-away": goldenrod,
@@ -49,12 +73,13 @@ $flow-colors: (
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 10;
 
   display: flex;
 
   border: 2px solid lightgrey;
   border-bottom: none;
+  @extend %bdrs3;
   padding: 0.25rem;
   background: rgba(white, 0.95);
 
@@ -130,5 +155,191 @@ $flow-colors: (
 
   &.selected .react-flow__edge-path {
     stroke-width: 4px;
+  }
+}
+
+.react-flow__controls {
+  &-button {
+    cursor: auto;
+  }
+}
+
+.--transparent {
+  opacity: 0;
+}
+
+.ModalDialog {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 15;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.AboutDialog,
+.NewFlowDialog,
+.AddCourseDialog {
+  position: relative;
+  width: #{'min(40rem, 100% - 1rem)'};
+  max-height: #{'calc(100% - 1rem)'};
+  overflow: auto;
+}
+.PreWarning {
+  position: relative;
+  // padding-bottom: 2rem;
+  p:last-of-type {
+    padding-bottom: 2rem;
+  }
+  button {
+    position: absolute;
+    bottom: 0;
+    right: 1rem;
+    @extend %button-style;
+    font-size: 1rem;
+  }
+}
+
+.DegreeSelect {
+  position: relative;
+  button[type=submit] {
+    position: absolute;
+    bottom: 0;
+    right: 1rem;
+    @extend %button-style;
+    font-size: 1rem;
+  }
+}
+
+.NewFlowDialog__slides {
+  width: 300%;
+
+  display: flex;
+}
+
+.PreWarning,
+.DegreeSelect,
+.CourseSelect {
+  width: calc(100%/3);
+}
+
+.close-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+$dialog-dark: rgba(black, 0.5);
+.ModalDialog {
+  transition: opacity 100ms;
+  background: $dialog-dark;
+}
+.AboutDialog,
+.NewFlowDialog,
+.AddCourseDialog {
+  margin: 0.5rem;
+  border: 2px solid lightgray;
+  @extend %bdrs3;
+  padding: 1rem 1rem;
+  background: white;
+
+  hr {
+    margin-bottom: 0.5rem;
+  }
+
+  p:not(:first-child) {
+    margin: 1rem 0;
+  }
+  li {
+    margin-left: 1rem;
+  }
+}
+
+.NewFlowDialog {
+  padding: 1rem 0;
+
+  &__slides {
+    transition: transform 250ms;
+
+    // No transform for slide-0
+    &.slide-1 {
+      transform: translateX(-(100%/3)*1);
+    }
+    &.slide-2 {
+      transform: translateX(-(100%/3)*2);
+    }
+  }
+
+  h2,
+  &__slides > div {
+    padding: 0 1rem;
+  }
+
+  hr {
+    margin: 0.5rem 1rem;
+  }
+}
+
+.close-button {
+  appearance: none;
+  border: none;
+  background: url("dist/x-black.svg") no-repeat center center;
+  &:hover,
+  &:active {
+    background: url("dist/x-red.svg") no-repeat center center;
+  }
+}
+
+.AboutDialog {
+  &__github-link {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+
+    img {
+      height: 2rem;
+      width: 2rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+
+  &__contact-section {
+    display: flex;
+    flex-direction: column;
+  }
+}
+// TODO: Disabled button style
+
+.ContextMenu {
+  position: fixed;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+
+  background-color: hsl(0, 0%, 95%);
+  border: 2px solid gray;
+  @extend %bdrs3;
+
+  cursor: default;
+
+  p {
+    margin: 0.25rem 0.5rem;
+    // padding: 0.1rem;
+  }
+
+  hr {
+    margin: 0.2rem 0.5rem;
+  }
+
+  li:hover {
+    color: white;
+    background-color: grey;
   }
 }

@@ -20,6 +20,7 @@ if (import.meta.hot) {
 // TODO: About dialog
 // TODO: Degree select dialog
 // TODO: Course add dialog
+// TODO: Honeypots
 
 // TODO: Ctrl+Z revert
 // TODO: Context menus

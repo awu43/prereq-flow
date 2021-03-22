@@ -35,10 +35,12 @@ module.exports = {
 
     "import/extensions": [0],
     "react/jsx-one-expression-per-line": [0],
+    "react/destructuring-assignment": [0],
     "react/jsx-boolean-value": [2, "always"],
     "react/no-unescaped-entities": [2, { forbid: [">"] }],
     "react/self-closing-comp": ["error", { component: true, html: false }],
     "jsx-a11y/label-has-associated-control": [2, { assert: "either" }],
+    "max-len": [0],
 
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
     "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies

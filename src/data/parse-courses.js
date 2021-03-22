@@ -38,10 +38,12 @@ function addEdges(sources, target) {
   }
 }
 
+const EITHER_OR_REGEX = /\b(?:[Ei]ther|or)\b/;
+
 // First pass: unambiguous prerequisites
 for (const [course, data] of Object.entries(courseData)) {
   const { prereqText } = data;
-  if (!prereqText.match(COURSE_REGEX)) { // No prerequisites
+  if (!COURSE_REGEX.test(prereqText)) { // No prerequisites
     // eslint-disable-next-line no-continue
     continue;
   }
@@ -49,6 +51,7 @@ for (const [course, data] of Object.entries(courseData)) {
   const reqSections = prereqText.split(";");
   for (const section of reqSections) {
     const courseMatches = section.match(COURSE_REGEX);
+    // if (courseMatches.length === 1 && !EITHER_OR_REGEX.test(section)) {
     if (courseMatches.length === 1) {
       addEdges(courseMatches, course);
     } else {
@@ -72,6 +75,15 @@ const TRIPLE_EITHER_REGEX = new RegExp(
 // State machine maybe (look into JSON parsing)
 // TODO: Concurrency
 
+const CONCURRENT_LABEL = {
+  label: "CC",
+  labelBgPadding: [2, 2],
+  labelBgBorderRadius: 4,
+};
+const CONCURRENT_REGEX = (
+  /(?:either of )?which may be taken concurrently(?:\. Instructor|\.?$)/
+);
+
 // Second pass: single "or" prerequisites
 for (const [course, problemSection] of secondPass.entries()) {
   for (const section of problemSection) {
@@ -86,7 +98,15 @@ for (const [course, problemSection] of secondPass.entries()) {
       if (alreadyRequired) {
         // One of the choices is already required, so go with that one
         // TODO: implement OR into react flow instead of just picking one
-        addEdges([alreadyRequired], course);
+        let edge = newEdge(alreadyRequired, course);
+        if (CONCURRENT_REGEX.test(section)) {
+          edge = { ...edge, ...CONCURRENT_LABEL };
+        }
+        elements.push(edge);
+        if (!elementIds.has(alreadyRequired)) {
+          elements.push(newNode(alreadyRequired));
+          elementIds.add(alreadyRequired);
+        }
       } else {
         // TODO: Add every last one of them
       }
@@ -100,26 +120,17 @@ for (const [course, problemSection] of secondPass.entries()) {
 addEdges(["MATH 307", "MATH 308"], "MATH 309");
 addEdges(["MATH 125", "MATH 307"], "E E 215");
 const concurrentEdges = [
-  "MATH 124 -> PHYS 121",
-  "MATH 125 -> PHYS 122",
-  "MATH 126 -> PHYS 123",
   "MATH 307 -> E E 215",
-  "MATH 390 -> M E 395",
 ];
 elements = elements.map(elem => (
-  concurrentEdges.includes(elem.id)
-    ? {
-      ...elem,
-      label: "CC",
-      labelBgPadding: [2, 2],
-      labelBgBorderRadius: 4,
-    }
-    : elem
+  concurrentEdges.includes(elem.id) ? { ...elem, ...CONCURRENT_LABEL } : elem
 ));
 // DEMO FIXES (REMOVE LATER)
 
 export const _testing = {
+  EITHER_OR_REGEX,
   COURSE_REGEX,
   DOUBLE_EITHER_REGEX,
   TRIPLE_EITHER_REGEX,
+  CONCURRENT_REGEX,
 };

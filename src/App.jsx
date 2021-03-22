@@ -16,6 +16,11 @@ import {
 } from "react-flow-renderer";
 import dagre from "dagre";
 
+import ContextMenu from "./ContextMenu.jsx";
+import AboutDialog from "./AboutDialog.jsx";
+import NewFlowDialog from "./NewFlowDialog.jsx";
+import AddCourseDialog from "./AddCourseDialog.jsx";
+
 import { elements as mechanicalEngineering } from "./data/parse-courses.js";
 
 // import initialElements from "./initial-elements.js";
@@ -28,7 +33,7 @@ const nodeHeight = 36;
 function generateDagreLayout(elements) {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: "LR" });
+  dagreGraph.setGraph({ rankdir: "LR", ranksep: 75 });
 
   for (const elem of elements) {
     if (isNode(elem)) {
@@ -88,24 +93,23 @@ function newNodeData(elements) {
   const roots = [];
   for (const node of elements.filter(elem => isNode(elem))) {
     const nodeId = node.id;
-    initialNodeData.set(nodeId, {
+    const newData = {
       depth: 0,
       status: "over-one-away",
       incomingNodes: getIncomers(node, elements).map(elem => elem.id),
       incomingEdges: getIncomingEdges(node, elements).map(elem => elem.id),
       outgoingEdges: getOutgoingEdges(node, elements).map(elem => elem.id),
       outgoingNodes: getOutgoers(node, elements).map(elem => elem.id),
-    });
-    initialNodeData.get(nodeId).connectedEdges = [
-      ...initialNodeData.get(nodeId).incomingEdges,
-      ...initialNodeData.get(nodeId).outgoingEdges,
+    };
+    newData.connectedEdges = [
+      ...newData.incomingEdges, ...newData.outgoingEdges,
     ];
-    initialNodeData.get(nodeId).connectedNodes = [
-      ...initialNodeData.get(nodeId).incomingNodes,
-      ...initialNodeData.get(nodeId).outgoingNodes,
+    newData.connectedNodes = [
+      ...newData.incomingNodes, ...newData.outgoingNodes,
     ];
+    initialNodeData.set(nodeId, newData);
 
-    if (initialNodeData.get(nodeId).incomingNodes.length === 0) {
+    if (newData.incomingNodes.length === 0) {
       roots.push(nodeId);
     }
   }
@@ -216,6 +220,34 @@ function App() {
   const nodeData = useRef(initialNodeData);
   const elemIndexes = useRef(initialIndexes);
 
+  const [contextActive, setContextActive] = useState(false);
+  const [contextTarget, setContextTarget] = useState("");
+  const [mouseXY, setMouseXY] = useState([0, 0]);
+
+  const [aboutCls, setAboutCls] = useState(
+    "ModalDialog --transparent --display-none"
+  );
+  const [newFlowCls, setNewFlowCls] = useState(
+    "ModalDialog --transparent --display-none"
+  );
+  const [addCourseCls, setAddCourseCls] = useState(
+    "ModalDialog --transparent --display-none"
+  );
+
+  function openDialog(setState) {
+    setState("ModalDialog --transparent");
+    setTimeout(() => {
+      setState("ModalDialog");
+    }, 0);
+  }
+
+  function closeDialog(setState) {
+    setState("ModalDialog --transparent");
+    setTimeout(() => {
+      setState("ModalDialog --transparent --display-none");
+    }, 100);
+  }
+
   function recalculateElements(newElements) {
     nodeData.current = newNodeData(newElements);
     let recalculatedElems = sortElementsByDepth(newElements, nodeData.current);
@@ -298,7 +330,7 @@ function App() {
       const i = elemIndexes.current.get(id);
       const currentStatus = nodeData.current.get(id).status;
       newElements[i] = {
-        ...newElements[i], className: `${currentStatus} connected`,
+        ...newElements[i], className: `${currentStatus} connected`
       };
     }
     setElements(newElements);
@@ -326,6 +358,15 @@ function App() {
 
   function onNodeContextMenu(event, node) {
     event.preventDefault();
+
+    const newElements = elements.slice();
+    const i = elemIndexes.current.get(node.id);
+    newElements[i] = { ...newElements[i], selected: true };
+    setElements(newElements);
+
+    setContextTarget(node.id);
+    setMouseXY([event.clientX, event.clientY]);
+    setContextActive(true);
   }
 
   function onConnect({ source, target }) {
@@ -355,14 +396,23 @@ function App() {
   }
 
   return (
-    <div className="App">
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div className="App" onClick={() => setContextActive(false)}>
       <header className="header">
         <h1>Prereq Flow</h1>
         <div className="header__buttons">
-          <button type="button" disabled={true}>About</button>
-          <button type="button" disabled={true}>New Flow</button>
-          <button type="button" onClick={reflowElements}>Reflow</button>
-          <button type="button" disabled={true}>Add course</button>
+          <button type="button" onClick={() => openDialog(setAboutCls)}>
+            About
+          </button>
+          <button type="button" onClick={() => openDialog(setNewFlowCls)}>
+            New Flow
+          </button>
+          <button type="button" onClick={() => openDialog(setAddCourseCls)}>
+            Add course
+          </button>
+          <button type="button" onClick={reflowElements}>
+            Reflow
+          </button>
         </div>
       </header>
       <ReactFlowProvider>
@@ -376,6 +426,7 @@ function App() {
           onNodeMouseLeave={onNodeMouseLeave}
           onNodeContextMenu={onNodeContextMenu}
           onConnect={onConnect}
+          // TODO: onEdgeUpdate
           onEdgeContextMenu={onEdgeContextMenu}
           onSelectionContextMenu={onSelectionContextMenu}
           // Interaction
@@ -396,6 +447,25 @@ function App() {
         <div className="one-away">1 away</div>
         <div className="over-one-away">&gt;1 away</div>
       </div>
+
+      <ContextMenu
+        active={contextActive}
+        xy={mouseXY}
+        target={contextTarget}
+      />
+
+      <AboutDialog
+        modalCls={aboutCls}
+        closeDialog={() => closeDialog(setAboutCls)}
+      />
+      <NewFlowDialog
+        modalCls={newFlowCls}
+        closeDialog={() => closeDialog(setNewFlowCls)}
+      />
+      <AddCourseDialog
+        modalCls={addCourseCls}
+        closeDialog={() => closeDialog(setAddCourseCls)}
+      />
     </div>
   );
 }

@@ -1,0 +1,55 @@
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+
+import ModalDialog from "./ModalDialog.jsx";
+import PreWarning from "./PreWarning.jsx";
+import DegreeSelect from "./DegreeSelect.jsx";
+import CourseSelect from "./CourseSelect.jsx";
+
+export default function NewFlowDialog({ modalCls, closeDialog }) {
+  const [busy, setBusy] = useState(false);
+  const [warningAccepted, setWarningAccepted] = useState(0);
+  const [slideState, setSlideState] = useState(0);
+
+  function close() {
+    closeDialog();
+    setTimeout(() => {
+      setSlideState(0);
+    }, 100);
+  }
+
+  function acceptWarning() {
+    setWarningAccepted(1);
+  }
+
+  function advanceSlide() {
+    setSlideState(slideState + 1);
+  }
+
+  const slideNum = warningAccepted + slideState;
+
+  return (
+    <ModalDialog modalCls={modalCls} dlgCls="NewFlowDialog">
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      <button
+        type="button"
+        className="close-button"
+        onClick={close}
+        disabled={busy}
+      >
+      </button>
+      <h2>New Flow</h2>
+      <hr />
+      <div className={`NewFlowDialog__slides slide-${slideNum}`}>
+        <PreWarning accept={acceptWarning} />
+        <DegreeSelect busy={busy} setBusy={setBusy} advance={advanceSlide} />
+        <CourseSelect />
+      </div>
+      {/* Flex, 3x width + transform */}
+    </ModalDialog>
+  );
+}
+NewFlowDialog.propTypes = {
+  modalCls: PropTypes.string.isRequired,
+  closeDialog: PropTypes.func.isRequired,
+};
