@@ -21,7 +21,7 @@ import AboutDialog from "./AboutDialog.jsx";
 import NewFlowDialog from "./NewFlowDialog.jsx";
 import AddCourseDialog from "./AddCourseDialog.jsx";
 
-import { elements as mechanicalEngineering } from "./data/parse-courses.js";
+import { CONCURRENT_LABEL, demoElements } from "./data/parse-courses.js";
 
 // import initialElements from "./initial-elements.js";
 
@@ -207,7 +207,7 @@ function updateAllNodes(elements, nodeData, elemIndexes) {
 }
 
 // const arrangedElements = generateDagreLayout(initialElements);
-const arrangedElements = generateDagreLayout(mechanicalEngineering);
+const arrangedElements = generateDagreLayout(demoElements);
 const initialNodeData = newNodeData(arrangedElements);
 const sortedElements = sortElementsByDepth(arrangedElements, initialNodeData);
 const initialIndexes = newElemIndexes(sortedElements);
@@ -215,14 +215,21 @@ const initialElements = updateAllNodes(
   sortedElements, initialNodeData, initialIndexes
 );
 
+function onLoad(reactFlowInstance) {
+  reactFlowInstance.fitView();
+}
+
 function App() {
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
   const elemIndexes = useRef(initialIndexes);
 
   const [contextActive, setContextActive] = useState(false);
+  const [contextType, setContextType] = useState("node");
   const [contextTarget, setContextTarget] = useState("");
   const [mouseXY, setMouseXY] = useState([0, 0]);
+
+  const [controlsClosed, setControlsClosed] = useState(true);
 
   const [aboutCls, setAboutCls] = useState(
     "ModalDialog --transparent --display-none"
@@ -248,6 +255,17 @@ function App() {
     }, 100);
   }
 
+  function generateNewFlow(elems) {
+    let newElements = generateDagreLayout(elems);
+    nodeData.current = newNodeData(newElements);
+    newElements = sortElementsByDepth(newElements, nodeData.current);
+    elemIndexes.current = newElemIndexes(newElements);
+    newElements = updateAllNodes(
+      newElements, nodeData.current, elemIndexes.current
+    );
+    setElements(newElements);
+  }
+
   function recalculateElements(newElements) {
     nodeData.current = newNodeData(newElements);
     let recalculatedElems = sortElementsByDepth(newElements, nodeData.current);
@@ -270,9 +288,9 @@ function App() {
   }
 
   // Single change can only propogate 2 layers deep
-  function onElementClick(_event, targetElem) {
+  function onElementClick(event, targetElem) {
     // NOTE: targetElem isn't the actual element so can't use id equality
-    if (isNode(targetElem)) {
+    if (event.altKey && isNode(targetElem)) {
       const nodeId = targetElem.id;
       const newElements = elements.slice();
       let newStatus;
@@ -315,6 +333,10 @@ function App() {
     recalculateElements(removeElements(targetElems, elements));
   }
 
+  function onNodeDragStart(_event, _node) {
+    setContextActive(false);
+  }
+
   function onNodeMouseEnter(_event, targetNode) {
     const nodeId = targetNode.id;
     const newElements = elements.slice();
@@ -330,7 +352,7 @@ function App() {
       const i = elemIndexes.current.get(id);
       const currentStatus = nodeData.current.get(id).status;
       newElements[i] = {
-        ...newElements[i], className: `${currentStatus} connected`
+        ...newElements[i], className: `${currentStatus} connected`,
       };
     }
     setElements(newElements);
@@ -358,13 +380,8 @@ function App() {
 
   function onNodeContextMenu(event, node) {
     event.preventDefault();
-
-    const newElements = elements.slice();
-    const i = elemIndexes.current.get(node.id);
-    newElements[i] = { ...newElements[i], selected: true };
-    setElements(newElements);
-
     setContextTarget(node.id);
+    setContextType("node");
     setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
   }
@@ -387,12 +404,25 @@ function App() {
     });
     recalculateElements(newElements);
   }
+
+  function onConnectStart(_event, { _nodeId, _handleType }) {
+    setContextActive(false);
+  }
+
   function onEdgeContextMenu(event, edge) {
     event.preventDefault();
+    setContextTarget(edge.id);
+    setContextType("edge");
+    setMouseXY([event.clientX, event.clientY]);
+    setContextActive(true);
   }
 
   function onSelectionContextMenu(event, nodes) {
     event.preventDefault();
+    setContextTarget(nodes.map(n => n.id));
+    setContextType("selection");
+    setMouseXY([event.clientX, event.clientY]);
+    setContextActive(true);
   }
 
   return (
@@ -417,20 +447,25 @@ function App() {
       </header>
       <ReactFlowProvider>
         <ReactFlow
+          // Instance
+          onLoad={onLoad}
           // Basic Props
           elements={elements}
           // Event Handlers
           onElementClick={onElementClick}
           onElementsRemove={onElementsRemove}
+          onNodeDragStart={onNodeDragStart}
           onNodeMouseEnter={onNodeMouseEnter}
           onNodeMouseLeave={onNodeMouseLeave}
           onNodeContextMenu={onNodeContextMenu}
           onConnect={onConnect}
+          onConnectStart={onConnectStart}
           // TODO: onEdgeUpdate
           onEdgeContextMenu={onEdgeContextMenu}
           onSelectionContextMenu={onSelectionContextMenu}
           // Interaction
           selectNodesOnDrag={false}
+          zoomOnDoubleClick={false}
           // Keys
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
@@ -447,11 +482,70 @@ function App() {
         <div className="one-away">1 away</div>
         <div className="over-one-away">&gt;1 away</div>
       </div>
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      <button
+        type="button"
+        className="display-controls"
+        onClick={() => setControlsClosed(false)}
+      >
+        <img src="dist/question.svg" alt="Open controls" />
+      </button>
+      <ul className={`controls-help${controlsClosed ? " closed" : ""}`}>
+        <li>Right click elements for context menu</li>
+        <li><kbd>Alt</kbd> + click to advance course status</li>
+        <li><kbd>Shift</kbd> + drag for area select</li>
+        <li><kbd>Ctrl</kbd> + click for multiple select</li>
+        <button
+          type="button"
+          className="close-controls"
+          onClick={() => setControlsClosed(true)}
+        >
+          <img src="dist/chevron-right.svg" alt="Close controls" />
+        </button>
+      </ul>
 
       <ContextMenu
         active={contextActive}
+        type={contextType}
         xy={mouseXY}
         target={contextTarget}
+        setNodeStatuses={(nodeIds, newStatus) => {
+          for (const id of nodeIds) {
+            setnodeStatus(
+              id, newStatus, elements, nodeData.current, elemIndexes.current
+            );
+          }
+          setElements(
+            updateAllNodes(elements, nodeData.current, elemIndexes.current)
+          );
+        }}
+        toggleEdgeCon={edgeId => {
+          const newElements = elements.slice();
+          const i = elemIndexes.current.get(edgeId);
+          const targetEdge = newElements[i];
+
+          if (targetEdge.label) {
+            newElements[i] = {
+              id: edgeId,
+              source: targetEdge.source,
+              target: targetEdge.target,
+              className: targetEdge.className,
+              label: null,
+            };
+          } else {
+            newElements[i] = { ...targetEdge, ...CONCURRENT_LABEL };
+          }
+          setElements(
+            updateAllNodes(newElements, nodeData.current, elemIndexes.current)
+          );
+        }}
+        deleteElems={elemIds => {
+          recalculateElements(
+            removeElements(
+              elemIds.map(id => elements[elemIndexes.current.get(id)]), elements
+            )
+          );
+        }}
       />
 
       <AboutDialog
@@ -461,6 +555,7 @@ function App() {
       <NewFlowDialog
         modalCls={newFlowCls}
         closeDialog={() => closeDialog(setNewFlowCls)}
+        generateNewFlow={generateNewFlow}
       />
       <AddCourseDialog
         modalCls={addCourseCls}

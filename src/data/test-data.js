@@ -18,16 +18,16 @@ const courseData = {
     id: "MATH 307",
     prereqText: "Minimum grade of 2.0 in MATH 125.",
   },
-  // 'AMATH 351': {
-  //     'prereqText': 'MATH 125 or MATH 135.',
-  // },
+  "AMATH 351": {
+    prereqText: "MATH 125 or MATH 135.",
+  },
   "MATH 308": {
     id: "MATH 308",
     prereqText: "Minimum grade of 2.0 in MATH 126.",
   },
-  // 'AMATH 352': {
-  //     'prereqText': 'MATH 126 or MATH 136.',
-  // },
+  "AMATH 352": {
+    prereqText: "MATH 126 or MATH 136.",
+  },
   "MATH 309": {
     id: "MATH 309",
     prereqText: "Either a minimum grade of 2.0 in both MATH 307 and MATH 308 or minimum grade of 2.0 in MATH 136.",
@@ -48,14 +48,14 @@ const courseData = {
     id: "PHYS 123",
     prereqText: "Either MATH 126 or MATH 134, which may be taken concurrently; PHYS 122.",
   },
-  // 'CHEM 142': {
-  // eslint-disable-next-line max-len
-  //     'prereqText': 'Either a minimum grade of 1.7 in CHEM 110, a passing score in the General Chemistry Placement exam, or a score of 1 or higher on Chemistry AP test.',
-  // },
   "CHEM 142": {
-    id: "CHEM 142",
-    prereqText: "None",
+  // eslint-disable-next-line max-len
+    prereqText: "Either a minimum grade of 1.7 in CHEM 110, a passing score in the General Chemistry Placement exam, or a score of 1 or higher on Chemistry AP test.",
   },
+  // "CHEM 142": {
+  //   id: "CHEM 142",
+  //   prereqText: "None",
+  // },
   "CHEM 152": {
     id: "CHEM 152",
     prereqText: "Minimum grade of 1.7 in either CHEM 142, CHEM 143 or CHEM 145.",
@@ -76,8 +76,8 @@ const courseData = {
     id: "E E 215",
     prereqText: "Either MATH 136, or MATH 126 and either MATH 307 or AMATH 351, either of which may be taken concurrently; PHYS 122.",
   },
-  "MATH 390": {
-    id: "MATH 390",
+  "STAT 390": {
+    id: "STAT 390",
     prereqText: "Either MATH 126 or MATH 136.",
   },
   "M E 123": {
@@ -106,7 +106,8 @@ const courseData = {
   },
   "M E 354": {
     id: "M E 354",
-    prereqText: "MSE 170; CEE 220. Instructors: Tuttle", // Corrected comma to semicolon
+    prereqText: "MSE 170; CEE 220. Instructors: Tuttle",
+    // Corrected comma to semicolon
   },
   "M E 355": {
     id: "M E 355",
@@ -126,8 +127,8 @@ const courseData = {
   },
   "M E 395": {
     id: "M E 395",
-    prereqText: "M E 123; M E 323; IND E 315 or MATH 390 either of which may be taken concurrently. Instructors: Cooper",
-  }, // Removed STAT 390
+    prereqText: "M E 123; M E 323; IND E 315 or STAT 390 either of which may be taken concurrently. Instructors: Cooper",
+  },
   "M E 495": {
     id: "M E 495",
     prereqText: "M E 395; M E 494. Instructors: Cooper", // Added M E 494

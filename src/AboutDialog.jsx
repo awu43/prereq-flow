@@ -34,8 +34,8 @@ export default function AboutDialog({ modalCls, closeDialog }) {
         <label htmlFor="email">Email</label>
         <input type="email" name="email" />
         <label htmlFor="Message">Message</label>
-        <textarea name="message"></textarea>
-        <button type="button">Submit</button>
+        <textarea name="message" rows="5"></textarea>
+        <button type="submit">Submit</button>
       </section>
     </ModalDialog>
   );

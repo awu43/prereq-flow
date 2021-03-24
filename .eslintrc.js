@@ -28,7 +28,12 @@ module.exports = {
     "arrow-parens": ["error", "as-needed"],
     "no-param-reassign": ["error", { props: false }],
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
-    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "no-unused-vars": ["error", {
+      varsIgnorePattern: "^_",
+      argsIgnorePattern: "^_",
+    }],
+    "prefer-const": ["error", { destructuring: "all" }],
+
     "no-underscore-dangle": [0],
     "no-else-return": [0],
     "object-curly-newline": [0],

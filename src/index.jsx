@@ -21,9 +21,12 @@ if (import.meta.hot) {
 // TODO: Degree select dialog
 // TODO: Course add dialog
 // TODO: Honeypots
+// TODO: Form semantics
+// TODO: Mobile/tablet warning
 
+// TODO: Click multiselect
 // TODO: Ctrl+Z revert
 // TODO: Context menus
 // TODO: Connection counters
 // TODO: Courses table
-// TODO: Alt + Click to advance status
+// TODO: Don't select when Alt + Click

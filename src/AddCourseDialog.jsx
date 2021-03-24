@@ -14,8 +14,10 @@ export default function AddCourseDialog({ modalCls, closeDialog }) {
       <button type="button" className="close-button" onClick={close}></button>
       <section>
         <h2>Add course</h2>
-        <input type="text" />
-        <button type="button">Add</button>
+        <div className="course-search">
+          <input type="text" />
+          <button type="submit">Add</button>
+        </div>
       </section>
     </ModalDialog>
   );

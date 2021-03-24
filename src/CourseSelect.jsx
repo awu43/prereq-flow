@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
-export default function CourseSelect() {
-  function generate(event) {
-    event.preventDefault();
+export default function CourseSelect({ courseData, generateNewFlow }) {
+  function generate(_event) {
+
   }
 
   return (
@@ -16,7 +17,11 @@ export default function CourseSelect() {
       <section className="ambiguous">
 
       </section>
-      <button type="submit" onClick={generate}>Generate flow</button>
+      <button type="button" onClick={generate}>Generate flow</button>
     </div>
   );
 }
+CourseSelect.propTypes = {
+  courseData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  generateNewFlow: PropTypes.func.isRequired,
+};

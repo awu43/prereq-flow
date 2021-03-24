@@ -6,10 +6,14 @@ import PreWarning from "./PreWarning.jsx";
 import DegreeSelect from "./DegreeSelect.jsx";
 import CourseSelect from "./CourseSelect.jsx";
 
-export default function NewFlowDialog({ modalCls, closeDialog }) {
+export default function NewFlowDialog({
+  modalCls, closeDialog, generateNewFlow
+}) {
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
+
+  const [courseData, setCourseData] = useState({});
 
   function close() {
     closeDialog();
@@ -22,8 +26,17 @@ export default function NewFlowDialog({ modalCls, closeDialog }) {
     setWarningAccepted(1);
   }
 
-  function advanceSlide() {
-    setSlideState(slideState + 1);
+  // function advanceSlide() {
+  //   setSlideState(slideState + 1);
+  // }
+
+  function onCoursesFetched(fetchedData) {
+    setCourseData(fetchedData);
+    close();
+    // advanceSlide();
+    // setTimeout(() => {
+    //   setBusy(false);
+    // }, 250);
   }
 
   const slideNum = warningAccepted + slideState;
@@ -42,8 +55,15 @@ export default function NewFlowDialog({ modalCls, closeDialog }) {
       <hr />
       <div className={`NewFlowDialog__slides slide-${slideNum}`}>
         <PreWarning accept={acceptWarning} />
-        <DegreeSelect busy={busy} setBusy={setBusy} advance={advanceSlide} />
-        <CourseSelect />
+        <DegreeSelect
+          busy={busy}
+          setBusy={setBusy}
+          advance={onCoursesFetched}
+        />
+        {/* <CourseSelect
+          courseData={courseData}
+          generateNewFlow={generateNewFlow}
+        /> */}
       </div>
       {/* Flex, 3x width + transform */}
     </ModalDialog>
@@ -52,4 +72,5 @@ export default function NewFlowDialog({ modalCls, closeDialog }) {
 NewFlowDialog.propTypes = {
   modalCls: PropTypes.string.isRequired,
   closeDialog: PropTypes.func.isRequired,
+  generateNewFlow: PropTypes.func.isRequired,
 };

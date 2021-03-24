@@ -1,26 +1,37 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { nanoid } from "nanoid";
+
+import testData from "./data/test-data.js";
+import degreeRequirements from "./data/mech-eng.js";
+
+const mockFetchedData = Object.fromEntries(
+  degreeRequirements.flat().map(c => [c, testData[c]])
+);
+
+const mockMajorList = [
+  "Mechanical Engineering",
+  "Electrical Engineering (Controls)",
+];
 
 function toKebabCase(text) {
-  return text.replace(/ /g, "-").toLowerCase();
+  return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
 }
 
-// FIXME: Initialize selectedMajor
 export default function DegreeSelect({ busy, setBusy, advance }) {
   const [majors, setMajors] = useState([]);
   // const [minors, setMinors] = useState([]);
-  const selectedMajor = useRef("");
+  const [selectedMajor, setSelectedMajor] = useState(mockMajorList[0]);
 
   function onMajorSelect(event) {
     const { target } = event;
-    selectedMajor.current = target.options[target.selectedIndex].label;
+    setSelectedMajor(target.options[target.selectedIndex].label);
   }
 
   function addMajor() {
-    if (!majors.includes(selectedMajor.current)) {
-      setMajors(majors.concat([selectedMajor.current]));
+    if (!majors.includes(selectedMajor) && majors.length < 3) {
+      setMajors(majors.concat([selectedMajor]));
     }
-    // TODO: Limit to 3 majors
   }
 
   function deleteMajor(targetMajor) {
@@ -33,45 +44,61 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
 
   function getCourses(event) {
     event.preventDefault();
-    setBusy(true);
+    // setBusy(true);
     // TODO: Fetch operation here
-    setTimeout(() => {
-      advance();
-      setBusy(false);
-    }, 2000);
+    // setTimeout(() => {
+    //   advance([]);
+    // }, 2000);
+    advance(mockFetchedData);
   }
 
-  const majorsList = majors.map(m => {
+  const majorsListElems = majors.map(m => {
     const id = toKebabCase(m);
     return (
-      <li key={id} id={id}>
-        <label>
-          {m}
-          <button type="button" onClick={() => deleteMajor(m)}>
-            X
-          </button>
-        </label>
+      <li className="selected-major" key={id}>
+        {m}
+        <button
+          className="delete-major"
+          type="button"
+          onClick={() => deleteMajor(m)}
+        >
+          X
+        </button>
       </li>
     );
   });
+  const numEmpty = 3 - majorsListElems.length;
+  for (let i = 0; i < numEmpty; i++) {
+    majorsListElems.push(
+      <li className="selected-major" key={nanoid()}>&nbsp;</li>
+    );
+  }
 
   return (
     <div className="DegreeSelect">
       <section className="majors">
-        <h3>Majors</h3>
-        <ul>
-          {majorsList}
+        <h3>Majors (up to 3)</h3>
+        <ul className="selected-majors">
+          {majorsListElems}
         </ul>
-        {/* <input type="text" /> */}
-        <select onChange={onMajorSelect}>
-          <option>Mechanical Engineering (Mechatronics)</option>
-          <option>Electrical Engineering</option>
-          <option>Computer Science &amp; Engineering</option>
-        </select>
-        <button type="button" onClick={addMajor}>+</button>
+        <div className="select-major">
+          <select className="major-select" onChange={onMajorSelect}>
+            {mockMajorList.map(m => <option key={toKebabCase(m)}>{m}</option>)}
+          </select>
+          <button className="add-major" type="button" onClick={addMajor}>+</button>
+        </div>
       </section>
       <section className="minors">
-        <h3>Minors</h3>
+        {/* <h3>Minors (up to 3)</h3> */}
+        {/* <ul className="selected-minors">
+          {minorsListElems}
+        </ul>
+        <div className="select-minor">
+          <select className="minor-select" onChange={onMinorSelect}>
+            {minorsList.map(m => <option key={toKebabCase(m)}>{m}</option>)}
+          </select>
+          <button className="add-minor" type="button" onClick={addMinor}>+</button>
+        </div> */}
       </section>
       <button type="submit" onClick={getCourses} disabled={busy}>
         Get courses
