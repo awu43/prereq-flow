@@ -16,17 +16,14 @@ if (import.meta.hot) {
   import.meta.hot.accept();
 }
 
-// TODO: Header
-// TODO: About dialog
 // TODO: Degree select dialog
 // TODO: Course add dialog
-// TODO: Honeypots
-// TODO: Form semantics
 // TODO: Mobile/tablet warning
+// FIXME: Update node positions with multiclick select
 
-// TODO: Click multiselect
 // TODO: Ctrl+Z revert
 // TODO: Context menus
 // TODO: Connection counters
 // TODO: Courses table
 // TODO: Don't select when Alt + Click
+// TODO: Poppers (custom node maybe)

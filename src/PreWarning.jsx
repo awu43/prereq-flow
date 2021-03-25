@@ -6,7 +6,7 @@ export default function PreWarning({ accept }) {
     <div className="PreWarning">
       <section>
         <h3>⚠️ Important information ⚠️</h3>
-        <p>Prereq Flow is not an official University of Washington resource and is still undergoing active development. No guarantees are made about the accuracy, completeness, or up-to-dateness of information presented.</p>
+        <p>Prereq Flow is not an official University of Washington resource and is undergoing active development. No guarantees are made about the accuracy, completeness, or up-to-dateness of information presented.</p>
 
         <p>Current limitations of Prereq Flow:</p>
         <ul>

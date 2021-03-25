@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 
@@ -10,13 +10,21 @@ const mockFetchedData = Object.fromEntries(
 );
 
 const mockMajorList = [
-  "Mechanical Engineering",
+  "Civil Engineering",
   "Electrical Engineering (Controls)",
+  "Materials Science & Engineering",
+  "Mechanical Engineering",
 ];
 
 function toKebabCase(text) {
   return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
 }
+
+const dummyMajors = [
+  <li className="selected-major dummy" key={nanoid()}>&nbsp;</li>,
+  <li className="selected-major dummy" key={nanoid()}>&nbsp;</li>,
+  <li className="selected-major dummy" key={nanoid()}>&nbsp;</li>,
+];
 
 export default function DegreeSelect({ busy, setBusy, advance }) {
   const [majors, setMajors] = useState([]);
@@ -62,17 +70,12 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
           type="button"
           onClick={() => deleteMajor(m)}
         >
-          X
+          <img src="dist/icons/times.svg" alt="Delete" />
         </button>
       </li>
     );
   });
-  const numEmpty = 3 - majorsListElems.length;
-  for (let i = 0; i < numEmpty; i++) {
-    majorsListElems.push(
-      <li className="selected-major" key={nanoid()}>&nbsp;</li>
-    );
-  }
+  majorsListElems.push(...dummyMajors.slice(majorsListElems.length));
 
   return (
     <div className="DegreeSelect">
@@ -85,9 +88,12 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
           <select className="major-select" onChange={onMajorSelect}>
             {mockMajorList.map(m => <option key={toKebabCase(m)}>{m}</option>)}
           </select>
-          <button className="add-major" type="button" onClick={addMajor}>+</button>
+          <button className="add-major" type="button" onClick={addMajor}>
+            <img src="dist/icons/plus.svg" alt="Add" />
+          </button>
         </div>
       </section>
+      {/* TODO: Minors */}
       <section className="minors">
         {/* <h3>Minors (up to 3)</h3> */}
         {/* <ul className="selected-minors">

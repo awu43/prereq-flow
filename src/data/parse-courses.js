@@ -1,4 +1,5 @@
-import testData from "./test-data.js";
+// import testData from "./test-data.js";
+import demoData from "./demo-data.js";
 
 export const ZERO_POSITION = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z]+ )+\d{3}`; // COURSE_REGEX_STRING
@@ -57,6 +58,13 @@ export const CONCURRENT_LABEL = {
 
 export function generateInitialElements(courseData) {
   const elements = Object.keys(courseData).map(c => newNode(c));
+  // const elements = Object.keys(courseData).map(c => {
+  //   const prereqText = courseData[c].prereqText.replace(/ ?Instructor.+$/, "");
+  //   const prereqList = prereqText.split(";").map(s => s.trim());
+  //   const elemNode = newNode(c);
+  //   elemNode.data = { ...elemNode.data, prereqs: prereqList };
+  //   return elemNode;
+  // });
   const elementIds = new Set(Object.keys(courseData));
   const secondPass = new Map();
 
@@ -127,7 +135,7 @@ export function generateInitialElements(courseData) {
 }
 
 // eslint-disable-next-line import/no-mutable-exports
-let [elements, _elementIds] = generateInitialElements(testData);
+let [elements, _elementIds] = generateInitialElements(demoData);
 
 // DEMO FIXES (REMOVE LATER)
 // eslint-disable-next-line import/first, import/order

@@ -19,10 +19,15 @@ import dagre from "dagre";
 import ContextMenu from "./ContextMenu.jsx";
 import AboutDialog from "./AboutDialog.jsx";
 import NewFlowDialog from "./NewFlowDialog.jsx";
+import OpenFileDialog from "./OpenFileDialog.jsx";
 import AddCourseDialog from "./AddCourseDialog.jsx";
 
-import { CONCURRENT_LABEL, demoElements } from "./data/parse-courses.js";
+import {
+  CONCURRENT_LABEL,
+  // demoElements,
+} from "./data/parse-courses.js";
 
+import demoFlow from "./data/demo-flow.json";
 // import initialElements from "./initial-elements.js";
 
 import "./App.scss";
@@ -207,17 +212,23 @@ function updateAllNodes(elements, nodeData, elemIndexes) {
 }
 
 // const arrangedElements = generateDagreLayout(initialElements);
-const arrangedElements = generateDagreLayout(demoElements);
-const initialNodeData = newNodeData(arrangedElements);
-const sortedElements = sortElementsByDepth(arrangedElements, initialNodeData);
-const initialIndexes = newElemIndexes(sortedElements);
-const initialElements = updateAllNodes(
-  sortedElements, initialNodeData, initialIndexes
-);
+// const arrangedElements = generateDagreLayout(demoElements);
+// const initialNodeData = newNodeData(arrangedElements);
+// const sortedElements = sortElementsByDepth(arrangedElements, initialNodeData);
+// const initialIndexes = newElemIndexes(sortedElements);
+// const initialElements = updateAllNodes(
+//   sortedElements, initialNodeData, initialIndexes
+// );
+
+const initialElements = demoFlow.elements;
+const initialNodeData = new Map(Object.entries(demoFlow.nodeData));
+const initialIndexes = newElemIndexes(initialElements);
 
 function onLoad(reactFlowInstance) {
-  reactFlowInstance.fitView();
+  reactFlowInstance.setTransform({ x: 400, y: 50, zoom: 0.55 });
 }
+
+const BASE_MODAL_CLS = "ModalDialog --transparent --display-none";
 
 function App() {
   const [elements, setElements] = useState(initialElements);
@@ -231,21 +242,16 @@ function App() {
 
   const [controlsClosed, setControlsClosed] = useState(true);
 
-  const [aboutCls, setAboutCls] = useState(
-    "ModalDialog --transparent --display-none"
-  );
-  const [newFlowCls, setNewFlowCls] = useState(
-    "ModalDialog --transparent --display-none"
-  );
-  const [addCourseCls, setAddCourseCls] = useState(
-    "ModalDialog --transparent --display-none"
-  );
+  const [aboutCls, setAboutCls] = useState(BASE_MODAL_CLS);
+  const [newFlowCls, setNewFlowCls] = useState(BASE_MODAL_CLS);
+  const [openFileCls, setOpenFileCls] = useState(BASE_MODAL_CLS);
+  const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
 
   function openDialog(setState) {
     setState("ModalDialog --transparent");
     setTimeout(() => {
       setState("ModalDialog");
-    }, 0);
+    }, 25);
   }
 
   function closeDialog(setState) {
@@ -253,6 +259,26 @@ function App() {
     setTimeout(() => {
       setState("ModalDialog --transparent --display-none");
     }, 100);
+  }
+
+  function openFlow(openedElements, openedNodeData) {
+    nodeData.current = openedNodeData;
+    elemIndexes.current = newElemIndexes(openedElements);
+    setElements(openedElements);
+  }
+
+  function saveFlow() {
+    const downloadLink = document.createElement("a");
+    const fileContents = {
+      elements,
+      nodeData: Object.fromEntries(nodeData.current),
+    };
+    const fileBlob = new Blob(
+      [JSON.stringify(fileContents, null, 2)], { type: "application/json" }
+    );
+    downloadLink.href = URL.createObjectURL(fileBlob);
+    downloadLink.download = "prereq-flow.json";
+    downloadLink.click();
   }
 
   function generateNewFlow(elems) {
@@ -287,6 +313,7 @@ function App() {
     setElements(newElements);
   }
 
+  /* ELEMENT */
   // Single change can only propogate 2 layers deep
   function onElementClick(event, targetElem) {
     // NOTE: targetElem isn't the actual element so can't use id equality
@@ -333,11 +360,18 @@ function App() {
     recalculateElements(removeElements(targetElems, elements));
   }
 
+  /* NODE */
   function onNodeDragStart(_event, _node) {
     setContextActive(false);
   }
 
-  function onNodeMouseEnter(_event, targetNode) {
+  function onNodeDragStop(_event, node) {
+    const newElements = elements.slice();
+    newElements[elemIndexes.current.get(node.id)].position = node.position;
+    setElements(newElements);
+  }
+
+  function onNodeMouseEnter(event, targetNode) {
     const nodeId = targetNode.id;
     const newElements = elements.slice();
 
@@ -386,6 +420,7 @@ function App() {
     setContextActive(true);
   }
 
+  /* EDGE */
   function onConnect({ source, target }) {
     const newElements = elements.map(elem => {
       if (isNode(elem)) {
@@ -409,12 +444,38 @@ function App() {
     setContextActive(false);
   }
 
+  function onEdgeUpdate(oldEdge, newConnection) {
+    const newElements = elements.slice();
+    newElements[elemIndexes.current.get(oldEdge.id)] = {
+      ...oldEdge, target: newConnection.target
+    };
+    recalculateElements(newElements);
+  }
+
   function onEdgeContextMenu(event, edge) {
     event.preventDefault();
     setContextTarget(edge.id);
     setContextType("edge");
     setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
+  }
+
+  /* MOVE */
+  function onMoveStart(_flowTransform) {
+    setContextActive(false);
+  }
+
+  /* SELECTION */
+  // function onSelectionDragStart(event, _nodes) {
+  //   console.log(event);
+  // }
+
+  function onSelectionDragStop(_event, nodes) {
+    const newElements = elements.slice();
+    for (const node of nodes) {
+      newElements[elemIndexes.current.get(node.id)].position = node.position;
+    }
+    setElements(newElements);
   }
 
   function onSelectionContextMenu(event, nodes) {
@@ -425,23 +486,34 @@ function App() {
     setContextActive(true);
   }
 
+  /* PANE */
+  // function onPaneClick(_event) {
+  //   setContextActive(false);
+  // }
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div className="App" onClick={() => setContextActive(false)}>
       <header className="header">
         <h1>Prereq Flow</h1>
         <div className="header__buttons">
-          <button type="button" onClick={() => openDialog(setAboutCls)}>
-            About
-          </button>
           <button type="button" onClick={() => openDialog(setNewFlowCls)}>
             New Flow
+          </button>
+          <button type="button" onClick={() => openDialog(setOpenFileCls)}>
+            Open
+          </button>
+          <button type="button" onClick={saveFlow}>
+            Save
           </button>
           <button type="button" onClick={() => openDialog(setAddCourseCls)}>
             Add course
           </button>
           <button type="button" onClick={reflowElements}>
             Reflow
+          </button>
+          <button type="button" onClick={() => openDialog(setAboutCls)}>
+            About
           </button>
         </div>
       </header>
@@ -452,23 +524,36 @@ function App() {
           // Basic Props
           elements={elements}
           // Event Handlers
+          // --- Element ---
           onElementClick={onElementClick}
           onElementsRemove={onElementsRemove}
+          // --- Node ---
           onNodeDragStart={onNodeDragStart}
+          onNodeDragStop={onNodeDragStop}
           onNodeMouseEnter={onNodeMouseEnter}
           onNodeMouseLeave={onNodeMouseLeave}
           onNodeContextMenu={onNodeContextMenu}
+          // --- Edge ---
           onConnect={onConnect}
           onConnectStart={onConnectStart}
-          // TODO: onEdgeUpdate
+          onEdgeUpdate={onEdgeUpdate}
           onEdgeContextMenu={onEdgeContextMenu}
+          // --- Move ---
+          onMoveStart={onMoveStart}
+          // --- Selection ---
+          // onSelectionDragStart={onSelectionDragStart}
+          onSelectionDragStop={onSelectionDragStop}
           onSelectionContextMenu={onSelectionContextMenu}
+          // --- Pane ---
+          // onPaneClick={onPaneClick}
           // Interaction
           selectNodesOnDrag={false}
           zoomOnDoubleClick={false}
           // Keys
           deleteKeyCode="Delete"
-          multiSelectionKeyCode="Control"
+          // multiSelectionKeyCode="Control"
+          // Going to disable multiclick selection for now,
+          // doesn't go well with recording node movements
         >
           <Background variant="lines" />
           <Controls showInteractive={false} />
@@ -488,19 +573,22 @@ function App() {
         className="display-controls"
         onClick={() => setControlsClosed(false)}
       >
-        <img src="dist/question.svg" alt="Open controls" />
+        <img src="dist/icons/question.svg" alt="Open controls" />
       </button>
       <ul className={`controls-help${controlsClosed ? " closed" : ""}`}>
-        <li>Right click elements for context menu</li>
-        <li><kbd>Alt</kbd> + click to advance course status</li>
-        <li><kbd>Shift</kbd> + drag for area select</li>
-        <li><kbd>Ctrl</kbd> + click for multiple select</li>
+        <li>Click on an element to&nbsp;select</li>
+        <li>Right click an element for context&nbsp;menu</li>
+        <li>Drag to create a new edge when crosshair icon&nbsp;appears</li>
+        <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
+        <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
+        <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
+        {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
         <button
           type="button"
           className="close-controls"
           onClick={() => setControlsClosed(true)}
         >
-          <img src="dist/chevron-right.svg" alt="Close controls" />
+          <img src="dist/icons/chevron-right.svg" alt="Close controls" />
         </button>
       </ul>
 
@@ -556,6 +644,11 @@ function App() {
         modalCls={newFlowCls}
         closeDialog={() => closeDialog(setNewFlowCls)}
         generateNewFlow={generateNewFlow}
+      />
+      <OpenFileDialog
+        modalCls={openFileCls}
+        closeDialog={() => closeDialog(setOpenFileCls)}
+        openFlow={openFlow}
       />
       <AddCourseDialog
         modalCls={addCourseCls}

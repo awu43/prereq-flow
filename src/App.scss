@@ -51,6 +51,8 @@ $flow-colors: (
 
   @extend %base-border;
   border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   padding: 0.5rem;
   background: rgba(white, 0.95);
 
@@ -80,6 +82,8 @@ $flow-colors: (
 
   @extend %base-border;
   border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   padding: 0.25rem;
   background: rgba(white, 0.95);
 
@@ -128,27 +132,31 @@ $flow-colors: (
     filter: invert(100%);
   }
 }
-// TODO
 
 .controls-help {
   position: absolute;
   bottom: 0;
   right: 0;
+  max-width: 20rem;
   z-index: 11;
 
   @extend %base-border;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-right: none;
   border-bottom: none;
-  list-style: inside;
+  // list-style: inside;
   padding: 1rem;
+  padding-left: 2rem;
   padding-right: 3rem;
   background-color: white;
+  font-size: 0.9rem;
 
   li {
     margin: 0.25rem 0;
   }
 
-  transition: transform 250ms;
+  transition: transform 150ms ease-out;
   &.closed {
     transform: translateX(100%);
   }
@@ -173,6 +181,7 @@ kbd {
   border-width: 3px;
   border-radius: 10px;
   text-transform: uppercase;
+  font-family: sans-serif;
   font-size: 1rem;
   font-weight: bold;
 
@@ -199,6 +208,7 @@ kbd {
     stroke-width: 2px;
   }
   &-text {
+    font-family: sans-serif;
     fill: white;
     font-size: 0.8rem;
   }
@@ -279,15 +289,16 @@ kbd {
 
   appearance: none;
   border: none;
-  background: url("dist/x-black.svg") no-repeat center center;
+  background: url("dist/icons/x-black.svg") no-repeat center center;
   &:hover,
   &:active {
-    background: url("dist/x-red.svg") no-repeat center center;
+    background: url("dist/icons/x-red.svg") no-repeat center center;
   }
 }
 
 .AboutDialog,
 .NewFlowDialog,
+.OpenFileDialog,
 .AddCourseDialog {
   position: relative;
   max-height: #{'calc(100% - 1rem)'};
@@ -350,6 +361,27 @@ kbd {
     width: 100%;
     height: 2rem;
     margin: 0;
+  }
+}
+.OpenFileDialog {
+  width: #{'min(17.5rem, 100% - 1rem)'};
+
+  h2 {
+    margin-bottom: 0.5rem;
+  }
+  p {
+    margin-top: 0.5rem;
+    // padding-bottom: 2.5rem;
+    color: red;
+    height: 4rem;
+  }
+  .open-file {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    @extend %base-button-style;
+    @extend %base-button-spacing;
+    font-size: 1rem;
   }
 }
 .NewFlowDialog {
@@ -441,6 +473,30 @@ kbd {
     margin-left : 0.25rem;
     height: 1.5rem;
     width: 1.5rem;
+
+    background-color: rgb(240, 240, 240);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover img {
+      filter: invert(100%);
+    }
+  }
+
+  .add-major,
+  .add-minor {
+    img {
+      height: 70%;
+      width: 70%;
+    }
+  }
+
+  .delete-major,
+  .delete-minor {
+    img {
+      height: 75%;
+      width: 75%;
+    }
   }
 
   .selected-majors,
@@ -494,5 +550,4 @@ kbd {
     padding: 0 0.25rem;
   }
 }
-
 // TODO: Disabled button style

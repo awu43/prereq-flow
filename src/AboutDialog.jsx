@@ -4,9 +4,17 @@ import PropTypes from "prop-types";
 import ModalDialog from "./ModalDialog.jsx";
 
 export default function AboutDialog({ modalCls, closeDialog }) {
+  // const [msgName, setMsgName] = useState("");
+  // const [msgEmail, setMsgEmail] = useState("");
+  // const [msgContent, setMsgContent] = useState("");
+
   function close() {
     closeDialog();
   }
+
+  // function submitMessage() {
+
+  // }
 
   return (
     <ModalDialog modalCls={modalCls} dlgCls="AboutDialog">
@@ -15,6 +23,9 @@ export default function AboutDialog({ modalCls, closeDialog }) {
       <section className="AboutDialog__about-section">
         <h2>About</h2>
         <p>Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate degrees.</p>
+
+        <p>Powered by <a href="https://reactflow.dev/" target="_blank" rel="noreferrer">React Flow</a>, built with <a href="https://www.snowpack.dev/" target="_blank" rel="noreferrer">Snowpack</a>, and hosted on <a href="https://vercel.com/" target="_blank" rel="noreferrer">Vercel</a>.</p>
+
         <p>
           <a
             href="https://github.com/andrew-1135/prereq-flow"
@@ -22,21 +33,39 @@ export default function AboutDialog({ modalCls, closeDialog }) {
             rel="noreferrer"
             className="AboutDialog__github-link"
           >
-            <img src="dist/github.svg" alt="Github logo" />
+            <img src="dist/icons/github.svg" alt="Github logo" />
             Source code
           </a>
         </p>
       </section>
-      <section className="AboutDialog__contact-section">
+      {/* TODO: Contact backend */}
+      {/* TODO: Honeypot/catchpha */}
+      {/* <section className="AboutDialog__contact-section">
         <h2>Contact</h2>
         <label htmlFor="name">Name</label>
-        <input type="text" name="name" />
+        <input
+          type="text"
+          name="name"
+          value={msgName}
+          onChange={e => setMsgName(e.target.value)}
+        />
         <label htmlFor="email">Email</label>
-        <input type="email" name="email" />
+        <input
+          type="email"
+          name="email"
+          value={msgEmail}
+          onChange={e => setMsgEmail(e.target.value)}
+        />
         <label htmlFor="Message">Message</label>
-        <textarea name="message" rows="5"></textarea>
-        <button type="submit">Submit</button>
-      </section>
+        <textarea
+          name="message"
+          rows="5"
+          value={msgContent}
+          onChange={e => setMsgContent(e.target.value)}
+        >
+        </textarea>
+        <button type="submit" onClick={submitMessage}>Submit</button>
+      </section> */}
     </ModalDialog>
   );
 }

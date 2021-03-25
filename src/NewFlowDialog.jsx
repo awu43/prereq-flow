@@ -51,7 +51,7 @@ export default function NewFlowDialog({
         disabled={busy}
       >
       </button>
-      <h2>New Flow</h2>
+      <h2>New flow</h2>
       <hr />
       <div className={`NewFlowDialog__slides slide-${slideNum}`}>
         <PreWarning accept={acceptWarning} />
