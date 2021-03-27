@@ -21,9 +21,9 @@ if (import.meta.hot) {
 // TODO: Mobile/tablet warning
 // FIXME: Update node positions with multiclick select
 
-// TODO: Ctrl+Z revert
-// TODO: Context menus
+// FIXME: Ctrl+Z undo, Ctrl+Y redo
+// TODO: Context menu for edge style
 // TODO: Connection counters
 // TODO: Courses table
 // TODO: Don't select when Alt + Click
-// TODO: Poppers (custom node maybe)
+// TODO: Poppers

@@ -28,6 +28,9 @@ describe("COURSE_REGEX", () => {
   it("Matches 'A A 210'", () => {
     expect("A A 210".match(COURSE_REGEX)).to.eql(["A A 210"]);
   });
+  it("Matches 'CS&SS 221'", () => {
+    expect("CS&SS 221".match(COURSE_REGEX)).to.eql(["CS&SS 221"]);
+  });
   it("Tests false for 'None'", () => {
     expect(COURSE_REGEX.test("None")).to.be.false;
   });

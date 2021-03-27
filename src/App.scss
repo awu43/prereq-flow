@@ -259,6 +259,15 @@ kbd {
     margin: 0.2rem 0.5rem;
   }
 
+  li.current p {
+    padding-left: 0;
+    &::before {
+      content: "✓";
+      display: inline-block;
+      width: 1rem;
+    }
+  }
+
   li:hover {
     color: white;
     background-color: grey;

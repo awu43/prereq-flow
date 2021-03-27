@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 // eslint-disable-next-line import/no-duplicates
 import ReactFlow from "react-flow-renderer"; // FIXME: Default import error
 import {
@@ -205,8 +205,9 @@ function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
 
 function updateAllNodes(elements, nodeData, elemIndexes) {
   const updatedElements = elements.slice();
-  for (const nodeId of nodeData.keys()) {
-    updateNodeStatus(nodeId, updatedElements, nodeData, elemIndexes);
+  const numNodes = nodeData.size;
+  for (let i = 0; i < numNodes; i++) {
+    updateNodeStatus(elements[i].id, updatedElements, nodeData, elemIndexes);
   }
   return updatedElements;
 }
@@ -229,23 +230,28 @@ function onLoad(reactFlowInstance) {
 }
 
 const BASE_MODAL_CLS = "ModalDialog --transparent --display-none";
+const MAX_UNDO_NUM = 10;
 
 function App() {
-  const [elements, setElements] = useState(initialElements);
-  const nodeData = useRef(initialNodeData);
-  const elemIndexes = useRef(initialIndexes);
-
-  const [contextActive, setContextActive] = useState(false);
-  const [contextType, setContextType] = useState("node");
-  const [contextTarget, setContextTarget] = useState("");
-  const [mouseXY, setMouseXY] = useState([0, 0]);
-
-  const [controlsClosed, setControlsClosed] = useState(true);
-
   const [aboutCls, setAboutCls] = useState(BASE_MODAL_CLS);
   const [newFlowCls, setNewFlowCls] = useState(BASE_MODAL_CLS);
   const [openFileCls, setOpenFileCls] = useState(BASE_MODAL_CLS);
   const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
+
+  const [elements, setElements] = useState(initialElements);
+  const nodeData = useRef(initialNodeData);
+  const elemIndexes = useRef(initialIndexes);
+  const undoStack = useRef([]);
+  const redoStack = useRef([]);
+
+  // TODO: Refactor into one context data object
+  const [contextActive, setContextActive] = useState(false);
+  const [contextType, setContextType] = useState("node");
+  const [contextTarget, setContextTarget] = useState("");
+  const [contextTargetStatus, setContextTargetStatus] = useState("");
+  const [mouseXY, setMouseXY] = useState([0, 0]);
+
+  const [controlsClosed, setControlsClosed] = useState(true);
 
   function openDialog(setState) {
     setState("ModalDialog --transparent");
@@ -313,6 +319,60 @@ function App() {
     setElements(newElements);
   }
 
+  // FIXME: Try storing nodeData/elemIndexes as well
+  // function resetElementStates(elems) {
+  //   const newElements = elems.slice();
+
+  //   const numNodes = nodeData.current.size;
+  //   const numElems = elemIndexes.current.size;
+  //   for (let i = 0; i < numNodes; i++) {
+  //     newElements[i] = {
+  //       ...newElements[i],
+  //       className: nodeData.current.get(newElements[i].id).status,
+  //     };
+  //   }
+  //   for (let i = numNodes; i < numElems; i++) {
+  //     newElements[i] = { ...newElements[i], animated: false, style: {} };
+  //   }
+
+  //   return newElements;
+  // }
+
+  // function recordFlowState() {
+  //   if (undoStack.current.length === MAX_UNDO_NUM) {
+  //     undoStack.current.shift();
+  //   }
+  //   undoStack.current.push(resetElementStates(elements));
+  //   redoStack.current = [];
+  // }
+
+  // const undoListener = useCallback(event => {
+  //   if (event.ctrlKey && event.key === "z") {
+  //     if (undoStack.current.length) {
+  //       redoStack.current.push(resetElementStates(elements));
+  //       const pastElements = undoStack.current.pop();
+  //       recalculateElements(pastElements);
+  //     }
+  //   }
+  // }, [elements, undoStack, redoStack]);
+  // const redoListener = useCallback(event => {
+  //   if (event.ctrlKey && event.key === "y") {
+  //     if (redoStack.current.length) {
+  //       undoStack.current.push(resetElementStates(elements));
+  //       recalculateElements(redoStack.current.pop());
+  //     }
+  //   }
+  // }, [elements, undoStack, redoStack]);
+  // useEffect(() => {
+  //   document.addEventListener("keydown", undoListener);
+  //   document.addEventListener("keydown", redoListener);
+
+  //   return () => {
+  //     document.removeEventListener("keydown", undoListener);
+  //     document.removeEventListener("keydown", redoListener);
+  //   };
+  // }, [undoListener, redoListener]);
+
   /* ELEMENT */
   // Single change can only propogate 2 layers deep
   function onElementClick(event, targetElem) {
@@ -331,6 +391,7 @@ function App() {
         default:
           return;
       }
+      // recordFlowState();
       setnodeStatus(
         nodeId, newStatus, newElements, nodeData.current, elemIndexes.current
       );
@@ -371,7 +432,7 @@ function App() {
     setElements(newElements);
   }
 
-  function onNodeMouseEnter(event, targetNode) {
+  function onNodeMouseEnter(_event, targetNode) {
     const nodeId = targetNode.id;
     const newElements = elements.slice();
 
@@ -415,6 +476,7 @@ function App() {
   function onNodeContextMenu(event, node) {
     event.preventDefault();
     setContextTarget(node.id);
+    setContextTargetStatus(nodeData.current.get(node.id).status);
     setContextType("node");
     setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
@@ -455,6 +517,7 @@ function App() {
   function onEdgeContextMenu(event, edge) {
     event.preventDefault();
     setContextTarget(edge.id);
+    setContextTargetStatus(elements[elemIndexes.current.get(edge.id)].label);
     setContextType("edge");
     setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
@@ -498,7 +561,7 @@ function App() {
         <h1>Prereq Flow</h1>
         <div className="header__buttons">
           <button type="button" onClick={() => openDialog(setNewFlowCls)}>
-            New Flow
+            New flow
           </button>
           <button type="button" onClick={() => openDialog(setOpenFileCls)}>
             Open
@@ -563,9 +626,9 @@ function App() {
         <div className="completed">Completed</div>
         <div className="enrolled">Enrolled</div>
         <div className="ready">Ready</div>
-        <div className="under-one-away">&lt;1 away</div>
-        <div className="one-away">1 away</div>
-        <div className="over-one-away">&gt;1 away</div>
+        <div className="under-one-away">&lt;1&nbsp;away</div>
+        <div className="one-away">1&nbsp;away</div>
+        <div className="over-one-away">&gt;1&nbsp;away</div>
       </div>
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
@@ -582,6 +645,7 @@ function App() {
         <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
         <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
         <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
+        <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
         {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
         <button
           type="button"
@@ -597,17 +661,20 @@ function App() {
         type={contextType}
         xy={mouseXY}
         target={contextTarget}
-        setNodeStatuses={(nodeIds, newStatus) => {
+        targetStatus={contextTargetStatus}
+        COURSE_STATUS_CODES={COURSE_STATUS_CODES}
+        setSelectionStatuses={(nodeIds, newStatus) => {
+          const newElements = elements.slice();
           for (const id of nodeIds) {
             setnodeStatus(
-              id, newStatus, elements, nodeData.current, elemIndexes.current
+              id, newStatus, newElements, nodeData.current, elemIndexes.current
             );
           }
           setElements(
-            updateAllNodes(elements, nodeData.current, elemIndexes.current)
+            updateAllNodes(newElements, nodeData.current, elemIndexes.current)
           );
         }}
-        toggleEdgeCon={edgeId => {
+        toggleEdgeConcurrency={edgeId => {
           const newElements = elements.slice();
           const i = elemIndexes.current.get(edgeId);
           const targetEdge = newElements[i];

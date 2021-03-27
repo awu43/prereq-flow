@@ -6,7 +6,7 @@ export default function PreWarning({ accept }) {
     <div className="PreWarning">
       <section>
         <h3>⚠️ Important information ⚠️</h3>
-        <p>Prereq Flow is not an official University of Washington resource and is undergoing active development. No guarantees are made about the accuracy, completeness, or up-to-dateness of information presented.</p>
+        <p>Prereq Flow is not an official University of Washington resource and is undergoing active development. No guarantees are made about the accuracy, completeness, or up-to-dateness of any information presented.</p>
 
         <p>Current limitations of Prereq Flow:</p>
         <ul>
@@ -17,7 +17,9 @@ export default function PreWarning({ accept }) {
               <li>For equal prerequisites like <q>Either MATH 125, Q SCI 292, or MATH 135</q>, multiple nodes/connections may be created.</li>
             </ul>
           </li>
-          <li>Electives are not included.</li>
+          <li>Co-requisite status is not displayed.</li>
+          <li>Registration restrictions are not displayed.</li>
+          <li>Electives may not be included.</li>
         </ul>
 
         <p>All caveats for <a href="https://prereqmap.uw.edu/" target="_blank" rel="noreferrer">Prereq Map</a> also apply here:</p>
