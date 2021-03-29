@@ -5,6 +5,12 @@ import { nanoid } from "nanoid";
 import testData from "./data/test-data.js";
 import degreeRequirements from "./data/mech-eng.js";
 
+const API_URL = (
+  import.meta.env.MODE === "production"
+    ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
+    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
+);
+
 const mockFetchedData = Object.fromEntries(
   degreeRequirements.flat().map(c => [c, testData[c]])
 );
@@ -57,7 +63,18 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
     // setTimeout(() => {
     //   advance([]);
     // }, 2000);
-    advance(mockFetchedData);
+    fetch(`${API_URL}/degrees/`, {
+      method: "POST",
+      headers: { contentType: "application/json" },
+      body: JSON.stringify(majors),
+    })
+      .then(resp => resp.json())
+      .catch(error => {
+        console.error("Error:", error);
+      });
+    // TODO: Proper error handling
+    // TODO: Busy state
+    // advance(mockFetchedData);
   }
 
   const majorsListElems = majors.map(m => {

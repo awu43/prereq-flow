@@ -22,7 +22,7 @@ const degreeRequirements = [
   "E E 448",
   "E E 449",
 
-  ["E E 398", "E E 406", "E E 418", "E E 426", "E E 456"]
+  ["E E 398", "E E 406", "E E 418", "E E 426", "E E 456"],
 ];
 
 export default degreeRequirements;
