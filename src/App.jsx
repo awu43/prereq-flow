@@ -38,7 +38,7 @@ const nodeHeight = 36;
 function generateDagreLayout(elements) {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: "LR", ranksep: 75 });
+  dagreGraph.setGraph({ rankdir: "LR", ranksep: 150 });
 
   for (const elem of elements) {
     if (isNode(elem)) {
