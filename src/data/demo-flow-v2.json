@@ -852,9 +852,14 @@
       "source": "MATH 307",
       "target": "E E 215",
       "className": "over-one-away",
-      "label": null,
+      "label": "CC",
       "animated": false,
-      "style": {}
+      "style": {},
+      "labelBgPadding": [
+        2,
+        2
+      ],
+      "labelBgBorderRadius": 4
     },
     {
       "id": "MATH 126 -> A A 210",

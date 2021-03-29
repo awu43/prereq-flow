@@ -640,7 +640,8 @@ function App() {
       <ul className={`controls-help${controlsClosed ? " closed" : ""}`}>
         <li>Click on an element to&nbsp;select</li>
         <li>Right click an element for context&nbsp;menu</li>
-        <li>Drag to create a new edge when crosshair icon&nbsp;appears</li>
+        <li>Hover over a node for connections and course information (click to hide course&nbsp;info)</li>
+        <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
         <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
         <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
         <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>

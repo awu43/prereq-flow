@@ -571,3 +571,15 @@ kbd {
   }
 }
 // TODO: Disabled button style
+
+.tippy-box {
+  background: rgba(#333, 0.96);
+  p {
+    margin: 0.5rem 0;
+  }
+  mark {
+    color: #333;
+    background: rgba(white, 0.96);
+    padding: 0 0.1rem;
+  }
+}

@@ -1,7 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Tippy from "@tippyjs/react";
 
 import { Handle } from "react-flow-renderer";
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "tippy.js/dist/tippy.css";
+
+import { COURSE_REGEX } from "./data/parse-courses.js";
 
 const defaultNodeStyle = {
   padding: "10px",
@@ -15,16 +21,42 @@ const defaultNodeStyle = {
 };
 
 export default function CustomNode({ data }) {
+  const prereqText = data.prerequisite.replaceAll(
+    COURSE_REGEX, "<mark>$&</mark>"
+  );
+
+  const tippyContent = (
+    <>
+      <p>{data.id} — {data.name} ({data.credits})</p>
+      <p>{data.description}</p>
+      <hr />
+      {/* eslint-disable-next-line react/no-danger */}
+      <p dangerouslySetInnerHTML={{ __html: `Prerequisite: ${prereqText}` }}></p>
+      {data.offered.length ? <p>Offered: {data.offered}</p> : null}
+    </>
+  );
+
   return (
-    <div
-      className={`CustomNode ${data.nodeStatus}${
-        data.nodeConnected ? " connected" : ""}`}
-      style={defaultNodeStyle}
+    <Tippy
+      content={tippyContent}
+      duration={100}
+      hideOnClick={true}
+      maxWidth="15rem"
+      trigger="mouseenter"
+      // For testing
+      // hideOnClick={false}
+      // trigger="click"
     >
-      <Handle type="target" position="left" />
-      <div>{data.id}</div>
-      <Handle type="source" position="right" />
-    </div>
+      <div
+        className={`CustomNode ${data.nodeStatus}${
+          data.nodeConnected ? " connected" : ""}`}
+        style={defaultNodeStyle}
+      >
+        <Handle type="target" position="left" />
+        <div>{data.id}</div>
+        <Handle type="source" position="right" />
+      </div>
+    </Tippy>
   );
 }
 CustomNode.propTypes = {
