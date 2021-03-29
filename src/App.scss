@@ -537,17 +537,19 @@ kbd {
 }
 
 .AddCourseDialog {
-  width: #{'min(15rem, 100% - 1rem)'};
+  width: #{'min(40rem, 100% - 1rem)'};
 
   .course-search {
     display: flex;
   }
 
-  input {
+  #course-select {
     height: 1.5rem;
-    width: 10rem;
+    width: 30rem;
     padding: 0 0.25rem;
+  }
 
+  input {
     border: 2px solid gray;
     @extend %bdrs3;
   }

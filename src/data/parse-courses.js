@@ -3,7 +3,7 @@ import demoData from "./demo-data.js";
 
 export const ZERO_POSITION = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
-const COURSE_REGEX = new RegExp(CRS, "g"); // AAA 000
+export const COURSE_REGEX = new RegExp(CRS, "g"); // AAA 000
 
 const EITHER_OR_REGEX = /\b(?:[Ei]ther|or)\b/;
 
