@@ -1,5 +1,5 @@
 // import testData from "./test-data.js";
-import demoData from "./demo-data.js";
+// import demoData from "./demo-data.js";
 
 export const ZERO_POSITION = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
@@ -18,12 +18,17 @@ const CONCURRENT_REGEX = (
   /(?:either of )?which may be taken concurrently(?:\. Instructor|\.?$)/
 );
 
-function newNode(course) {
+function newNode(courseData) {
   return {
-    id: course,
+    id: courseData.id,
+    type: "custom",
     position: ZERO_POSITION,
-    data: { label: course },
-    className: "over-one-away",
+    selected: false,
+    data: {
+      ...courseData,
+      nodeStatus: "over-one-away",
+      nodeConnected: false,
+    }
   };
 }
 
@@ -40,13 +45,13 @@ function newEdge(source, target, id = null) {
 
 function addEdges(sources, target, elements, elementIds) {
   for (const source of sources) {
-    if (!elementIds.has(`${source} -> ${target}`)) {
+    if (elementIds.has(source) && !elementIds.has(`${source} -> ${target}`)) {
       elements.push(newEdge(source, target));
     }
-    if (!elementIds.has(source)) {
-      elements.push(newNode(source));
-      elementIds.add(source);
-    }
+    // if (!elementIds.has(source)) {
+    //   elements.push(newNode(source));
+    //   elementIds.add(source);
+    // }
   }
 }
 
@@ -57,7 +62,7 @@ export const CONCURRENT_LABEL = {
 };
 
 export function generateInitialElements(courseData) {
-  const elements = Object.keys(courseData).map(c => newNode(c));
+  const elements = courseData.map(c => newNode(c));
   // const elements = Object.keys(courseData).map(c => {
   //   const prereqText = courseData[c].prereqText.replace(/ ?Instructor.+$/, "");
   //   const prereqList = prereqText.split(";").map(s => s.trim());
@@ -65,28 +70,29 @@ export function generateInitialElements(courseData) {
   //   elemNode.data = { ...elemNode.data, prereqs: prereqList };
   //   return elemNode;
   // });
-  const elementIds = new Set(Object.keys(courseData));
+  const elementIds = new Set(courseData.map(c => c.id));
   const secondPass = new Map();
 
   // First pass: unambiguous prerequisites
-  for (const [course, data] of Object.entries(courseData)) {
-    const { prereqText } = data;
-    if (!COURSE_REGEX.test(prereqText)) { // No prerequisites
+  for (const data of courseData) {
+    const courseId = data.id;
+    const { prerequisite } = data;
+    if (!COURSE_REGEX.test(prerequisite)) { // No prerequisites
       // eslint-disable-next-line no-continue
       continue;
     }
 
-    const reqSections = prereqText.split(";");
+    const reqSections = prerequisite.split(";");
     for (const section of reqSections) {
       const courseMatches = section.match(COURSE_REGEX);
       // if (courseMatches.length === 1 && !EITHER_OR_REGEX.test(section)) {
       if (courseMatches.length === 1) {
-        addEdges(courseMatches, course, elements, elementIds);
+        addEdges(courseMatches, courseId, elements, elementIds);
       } else {
-        if (!secondPass.has(course)) {
-          secondPass.set(course, []);
+        if (!secondPass.has(courseId)) {
+          secondPass.set(courseId, []);
         }
-        secondPass.get(course).push(section);
+        secondPass.get(courseId).push(section);
       }
     }
   }
@@ -131,31 +137,31 @@ export function generateInitialElements(courseData) {
       }
     }
   }
-  return [elements, elementIds];
+  return elements;
 }
 
 // eslint-disable-next-line import/no-mutable-exports
-let [elements, _elementIds] = generateInitialElements(demoData);
+// let [elements, _elementIds] = generateInitialElements(demoData);
 
 // DEMO FIXES (REMOVE LATER)
 // eslint-disable-next-line import/first, import/order
-import { removeElements } from "react-flow-renderer";
+// import { removeElements } from "react-flow-renderer";
 
 // addEdges(["MATH 307", "MATH 308"], "MATH 309", elements, elementIds);
 // addEdges(["MATH 126", "MATH 307"], "E E 215", elements, elementIds);
-const concurrentEdges = [
-  "MATH 307 -> E E 215",
-];
-elements = elements.map(elem => (
-  concurrentEdges.includes(elem.id) ? { ...elem, ...CONCURRENT_LABEL } : elem
-));
-const nodesToRemove = ["CHEM 110", "MATH 136", "AMATH 351", "AMATH 352"];
-elements = removeElements(
-  elements.filter(e => nodesToRemove.includes(e.id)), elements
-);
+// const concurrentEdges = [
+//   "MATH 307 -> E E 215",
+// ];
+// elements = elements.map(elem => (
+//   concurrentEdges.includes(elem.id) ? { ...elem, ...CONCURRENT_LABEL } : elem
+// ));
+// const nodesToRemove = ["CHEM 110", "MATH 136", "AMATH 351", "AMATH 352"];
+// elements = removeElements(
+//   elements.filter(e => nodesToRemove.includes(e.id)), elements
+// );
 // DEMO FIXES (REMOVE LATER)
 
-export { elements as demoElements };
+// export { elements as demoElements };
 
 export const _testing = {
   EITHER_OR_REGEX,

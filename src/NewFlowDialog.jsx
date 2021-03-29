@@ -6,6 +6,8 @@ import PreWarning from "./PreWarning.jsx";
 import DegreeSelect from "./DegreeSelect.jsx";
 import CourseSelect from "./CourseSelect.jsx";
 
+import { generateInitialElements } from "./data/parse-courses.js";
+
 export default function NewFlowDialog({
   modalCls, closeDialog, generateNewFlow
 }) {
@@ -31,7 +33,9 @@ export default function NewFlowDialog({
   // }
 
   function onCoursesFetched(fetchedData) {
-    setCourseData(fetchedData);
+    // setCourseData(fetchedData);
+    const newElements = generateInitialElements(fetchedData);
+    generateNewFlow(newElements);
     close();
     // advanceSlide();
     // setTimeout(() => {

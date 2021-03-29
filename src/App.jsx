@@ -21,13 +21,14 @@ import AboutDialog from "./AboutDialog.jsx";
 import NewFlowDialog from "./NewFlowDialog.jsx";
 import OpenFileDialog from "./OpenFileDialog.jsx";
 import AddCourseDialog from "./AddCourseDialog.jsx";
+import CustomNode from "./CustomNode.jsx";
 
 import {
   CONCURRENT_LABEL,
   // demoElements,
 } from "./data/parse-courses.js";
 
-import demoFlow from "./data/demo-flow.json";
+import demoFlow from "./data/demo-flow-v2.json";
 // import initialElements from "./initial-elements.js";
 
 import "./App.scss";
@@ -53,8 +54,8 @@ function generateDagreLayout(elements) {
   const arrangedElements = elements.map(elem => {
     if (isNode(elem)) {
       const node = dagreGraph.node(elem.id);
-      elem.targetPosition = "left";
-      elem.sourcePosition = "right";
+      // elem.targetPosition = "left";
+      // elem.sourcePosition = "right";
 
       // Slight random change is needed as a hack to notify react flow
       // about the change.
@@ -100,7 +101,6 @@ function newNodeData(elements) {
     const nodeId = node.id;
     const newData = {
       depth: 0,
-      status: "over-one-away",
       incomingNodes: getIncomers(node, elements).map(elem => elem.id),
       incomingEdges: getIncomingEdges(node, elements).map(elem => elem.id),
       outgoingEdges: getOutgoingEdges(node, elements).map(elem => elem.id),
@@ -152,18 +152,18 @@ const COURSE_STATUS_CODES = Object.freeze({
 });
 
 function setnodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes) {
-  const data = nodeData.get(nodeId);
-  data.status = newStatus;
-  for (const id of [nodeId, ...data.outgoingEdges]) {
-    elements[elemIndexes.get(id)] = {
-      ...elements[elemIndexes.get(id)], className: newStatus
+  elements[elemIndexes.get(nodeId)].data.nodeStatus = newStatus;
+  for (const edgeId of nodeData.get(nodeId).outgoingEdges) {
+    elements[elemIndexes.get(edgeId)] = {
+      ...elements[elemIndexes.get(edgeId)], className: newStatus
     };
   }
 }
 
 function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
   const data = nodeData.get(nodeId);
-  const currentStatus = data.status;
+  // const currentStatus = data.status;
+  const currentStatus = elements[elemIndexes.get(nodeId)].data.nodeStatus;
   const incomingEdges = data.incomingEdges.map(id => (
     elements[elemIndexes.get(id)]
   ));
@@ -225,12 +225,12 @@ const initialElements = demoFlow.elements;
 const initialNodeData = new Map(Object.entries(demoFlow.nodeData));
 const initialIndexes = newElemIndexes(initialElements);
 
-function onLoad(reactFlowInstance) {
-  reactFlowInstance.setTransform({ x: 400, y: 50, zoom: 0.55 });
-}
-
 const BASE_MODAL_CLS = "ModalDialog --transparent --display-none";
-const MAX_UNDO_NUM = 10;
+// const MAX_UNDO_NUM = 10;
+
+function onLoad(reactFlowInstance) {
+  reactFlowInstance.fitView();
+}
 
 function App() {
   const [aboutCls, setAboutCls] = useState(BASE_MODAL_CLS);
@@ -241,8 +241,8 @@ function App() {
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
   const elemIndexes = useRef(initialIndexes);
-  const undoStack = useRef([]);
-  const redoStack = useRef([]);
+  // const undoStack = useRef([]);
+  // const redoStack = useRef([]);
 
   // TODO: Refactor into one context data object
   const [contextActive, setContextActive] = useState(false);
@@ -276,8 +276,7 @@ function App() {
   function saveFlow() {
     const downloadLink = document.createElement("a");
     const fileContents = {
-      elements,
-      nodeData: Object.fromEntries(nodeData.current),
+      elements, nodeData: Object.fromEntries(nodeData.current)
     };
     const fileBlob = new Blob(
       [JSON.stringify(fileContents, null, 2)], { type: "application/json" }
@@ -381,7 +380,7 @@ function App() {
       const nodeId = targetElem.id;
       const newElements = elements.slice();
       let newStatus;
-      switch (nodeData.current.get(nodeId).status) {
+      switch (elements[elemIndexes.current.get(nodeId)].data.nodeStatus) {
         case "ready":
           newStatus = "enrolled";
           break;
@@ -445,9 +444,9 @@ function App() {
 
     for (const id of nodeData.current.get(nodeId).connectedNodes) {
       const i = elemIndexes.current.get(id);
-      const currentStatus = nodeData.current.get(id).status;
       newElements[i] = {
-        ...newElements[i], className: `${currentStatus} connected`,
+        ...newElements[i],
+        data: { ...newElements[i].data, nodeConnected: true },
       };
     }
     setElements(newElements);
@@ -461,7 +460,7 @@ function App() {
     for (let i = 0; i < numNodes; i++) {
       newElements[i] = {
         ...newElements[i],
-        className: nodeData.current.get(newElements[i].id).status,
+        data: { ...newElements[i].data, nodeConnected: false },
       };
     }
     for (let i = numNodes; i < numElems; i++) {
@@ -476,7 +475,7 @@ function App() {
   function onNodeContextMenu(event, node) {
     event.preventDefault();
     setContextTarget(node.id);
-    setContextTargetStatus(nodeData.current.get(node.id).status);
+    setContextTargetStatus(node.data.nodeStatus);
     setContextType("node");
     setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
@@ -486,8 +485,7 @@ function App() {
   function onConnect({ source, target }) {
     const newElements = elements.map(elem => {
       if (isNode(elem)) {
-        const currentStatus = nodeData.current.get(elem.id).status;
-        return { ...elem, className: currentStatus };
+        return { ...elem, data: { ...elem.data, nodeConnected: false } };
       } else {
         return { ...elem, animated: false, style: {} };
       }
@@ -586,6 +584,7 @@ function App() {
           onLoad={onLoad}
           // Basic Props
           elements={elements}
+          nodeTypes={{ custom: CustomNode }}
           // Event Handlers
           // --- Element ---
           onElementClick={onElementClick}

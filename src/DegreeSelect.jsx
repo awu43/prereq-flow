@@ -69,6 +69,7 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
       body: JSON.stringify(majors),
     })
       .then(resp => resp.json())
+      .then(data => advance(data))
       .catch(error => {
         console.error("Error:", error);
       });

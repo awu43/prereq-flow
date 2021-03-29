@@ -177,7 +177,17 @@ kbd {
   font-family: consolas;
  }
 
-.react-flow__node {
+ .react-flow__node.selected .CustomNode {
+  @each $status, $color in $flow-colors {
+
+  &.#{$status} {
+      color: white;
+      background-color: $color;
+    }
+  }
+ }
+
+.CustomNode {
   border-width: 3px;
   border-radius: 10px;
   text-transform: uppercase;
@@ -194,8 +204,7 @@ kbd {
         background-color: hsl(hue($color), saturation($color), 80%);
       }
 
-      &:hover,
-      &.selected {
+      &:hover {
         color: white;
         background-color: $color;
       }
