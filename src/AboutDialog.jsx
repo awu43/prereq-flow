@@ -24,7 +24,7 @@ export default function AboutDialog({ modalCls, closeDialog }) {
         <h2>About</h2>
         <p>Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate degrees.</p>
 
-        <p>Powered by <a href="https://reactflow.dev/" target="_blank" rel="noreferrer">React Flow</a>, built with <a href="https://www.snowpack.dev/" target="_blank" rel="noreferrer">Snowpack</a>, and hosted on <a href="https://vercel.com/" target="_blank" rel="noreferrer">Vercel</a>.</p>
+        <p>Powered by <a href="https://reactflow.dev/" target="_blank" rel="noreferrer">React Flow</a> in the front and <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noreferrer">FastAPI</a> in the back. Built with <a href="https://www.snowpack.dev/" target="_blank" rel="noreferrer">Snowpack</a> and hosted on <a href="https://vercel.com/" target="_blank" rel="noreferrer">Vercel</a>.</p>
 
         <p>
           <a
