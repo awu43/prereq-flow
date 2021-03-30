@@ -156,7 +156,9 @@ $flow-colors: (
     margin: 0.25rem 0;
   }
 
-  transition: transform 150ms ease-out;
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 150ms ease-out;
+  }
   &.closed {
     transform: translateX(100%);
   }
@@ -294,8 +296,9 @@ kbd {
   align-items: center;
   justify-content: center;
 
-  transition: opacity 100ms;
-  // TODO: prefers-reduced-motion
+  @media (prefers-reduced-motion: no-preference) {
+    transition: opacity 100ms;
+  }
   background: rgba(black, 0.5);
 }
 .close-button {
@@ -426,7 +429,9 @@ kbd {
   }
 
   &__slides {
-    transition: transform 250ms;
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform 250ms;
+    }
 
     // No transform for slide-0
     &.slide-1 {

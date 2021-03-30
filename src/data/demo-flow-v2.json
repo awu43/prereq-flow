@@ -726,9 +726,14 @@
       "source": "STAT 390",
       "target": "M E 395",
       "className": "over-one-away",
-      "label": null,
+      "label": "CC",
       "animated": false,
-      "style": {}
+      "style": {},
+      "labelBgPadding": [
+        2,
+        2
+      ],
+      "labelBgBorderRadius": 4
     },
     {
       "id": "MATH 307 -> M E 333",

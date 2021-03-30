@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  // useEffect,
+  useRef,
+  // useCallback,
+} from "react";
 // eslint-disable-next-line import/no-duplicates
 import ReactFlow from "react-flow-renderer"; // FIXME: Default import error
 import {
@@ -22,6 +27,8 @@ import NewFlowDialog from "./NewFlowDialog.jsx";
 import OpenFileDialog from "./OpenFileDialog.jsx";
 import AddCourseDialog from "./AddCourseDialog.jsx";
 import CustomNode from "./CustomNode.jsx";
+
+import usePrefersReducedMotion from "./prefersReducedMotion.jsx";
 
 import {
   CONCURRENT_LABEL,
@@ -250,23 +257,33 @@ function App() {
 
   const [controlsClosed, setControlsClosed] = useState(true);
 
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   function onLoad(reactFlowInstance) {
     reactFlowInstance.fitView();
     flowInstance.current = reactFlowInstance;
   }
 
   function openDialog(setState) {
-    setState("ModalDialog --transparent");
-    setTimeout(() => {
+    if (!prefersReducedMotion) {
+      setState("ModalDialog --transparent");
+      setTimeout(() => {
+        setState("ModalDialog");
+      }, 25);
+    } else {
       setState("ModalDialog");
-    }, 25);
+    }
   }
 
   function closeDialog(setState) {
-    setState("ModalDialog --transparent");
-    setTimeout(() => {
+    if (!prefersReducedMotion) {
+      setState("ModalDialog --transparent");
+      setTimeout(() => {
+        setState("ModalDialog --transparent --display-none");
+      }, 100);
+    } else {
       setState("ModalDialog --transparent --display-none");
-    }, 100);
+    }
   }
 
   function openFlow(openedElements, openedNodeData) {

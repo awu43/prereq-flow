@@ -7,6 +7,9 @@ import { Handle } from "react-flow-renderer";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
+// Not sure how to pass this from App into CustomNode
+import usePrefersReducedMotion from "./prefersReducedMotion.jsx";
+
 import { COURSE_REGEX } from "./data/parse-courses.js";
 
 const defaultNodeStyle = {
@@ -21,6 +24,7 @@ const defaultNodeStyle = {
 };
 
 export default function CustomNode({ data }) {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const prereqText = data.prerequisite.replaceAll(
     COURSE_REGEX, "<mark>$&</mark>"
   );
@@ -39,7 +43,7 @@ export default function CustomNode({ data }) {
   return (
     <Tippy
       content={tippyContent}
-      duration={100}
+      duration={prefersReducedMotion ? 0 : 100}
       hideOnClick={true}
       maxWidth="15rem"
       trigger="mouseenter"
