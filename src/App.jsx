@@ -28,7 +28,7 @@ import OpenFileDialog from "./OpenFileDialog.jsx";
 import AddCourseDialog from "./AddCourseDialog.jsx";
 import CustomNode from "./CustomNode.jsx";
 
-import usePrefersReducedMotion from "./prefersReducedMotion.jsx";
+import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
 import {
   CONCURRENT_LABEL,

@@ -8,7 +8,7 @@ import { Handle } from "react-flow-renderer";
 import "tippy.js/dist/tippy.css";
 
 // Not sure how to pass this from App into CustomNode
-import usePrefersReducedMotion from "./prefersReducedMotion.jsx";
+import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
 import { COURSE_REGEX } from "./data/parse-courses.js";
 
