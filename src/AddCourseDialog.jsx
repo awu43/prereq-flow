@@ -141,9 +141,7 @@ export default function AddCourseDialog({
           placement="bottom"
           arrow={false}
           duration={0}
-          hideOnClick={false}
           offset={[0, 5]}
-          trigger="manual"
           visible={nodeData.has(customCourseData.id)}
         >
           <input
