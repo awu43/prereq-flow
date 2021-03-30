@@ -26,4 +26,3 @@ if (import.meta.hot) {
 // TODO: Connection counters
 // TODO: Courses table
 // TODO: Don't select when Alt + Click
-// TODO: Poppers

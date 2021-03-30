@@ -58,11 +58,7 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
 
   function getCourses(event) {
     event.preventDefault();
-    // setBusy(true);
-    // TODO: Fetch operation here
-    // setTimeout(() => {
-    //   advance([]);
-    // }, 2000);
+    setBusy(true);
     fetch(`${API_URL}/degrees/`, {
       method: "POST",
       headers: { contentType: "application/json" },
@@ -74,7 +70,6 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
         console.error("Error:", error);
       });
     // TODO: Proper error handling
-    // TODO: Busy state
     // advance(mockFetchedData);
   }
 

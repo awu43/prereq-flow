@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import ModalDialog from "./ModalDialog.jsx";
 import PreWarning from "./PreWarning.jsx";
 import DegreeSelect from "./DegreeSelect.jsx";
-import CourseSelect from "./CourseSelect.jsx";
+// import CourseSelect from "./CourseSelect.jsx";
 
 import { generateInitialElements } from "./data/parse-courses.js";
 
@@ -15,7 +15,7 @@ export default function NewFlowDialog({
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
 
-  const [courseData, setCourseData] = useState({});
+  // const [courseData, setCourseData] = useState({});
 
   function close() {
     closeDialog();
@@ -38,9 +38,9 @@ export default function NewFlowDialog({
     generateNewFlow(newElements);
     close();
     // advanceSlide();
-    // setTimeout(() => {
-    //   setBusy(false);
-    // }, 250);
+    setTimeout(() => {
+      setBusy(false);
+    }, 250);
   }
 
   const slideNum = warningAccepted + slideState;

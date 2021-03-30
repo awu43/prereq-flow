@@ -18,7 +18,7 @@ const CONCURRENT_REGEX = (
   /(?:either of )?which may be taken concurrently(?:\. Instructor|\.?$)/
 );
 
-function newNode(courseData) {
+export function newNode(courseData) {
   return {
     id: courseData.id,
     type: "custom",

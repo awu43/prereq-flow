@@ -308,7 +308,7 @@ kbd {
   appearance: none;
   border: none;
   background: url("dist/icons/x-black.svg") no-repeat center center;
-  &:hover,
+  &:not(:disabled):hover,
   &:active {
     background: url("dist/icons/x-red.svg") no-repeat center center;
   }
@@ -570,7 +570,6 @@ kbd {
     padding: 0 0.25rem;
   }
 }
-// TODO: Disabled button style
 
 .tippy-box {
   background: rgba(#333, 0.96);

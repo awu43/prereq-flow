@@ -307,6 +307,10 @@ function App() {
     setElements(recalculatedElems);
   }
 
+  function addCourseNode(newNode) {
+    recalculateElements(elements.slice().concat([newNode]));
+  }
+
   function reflowElements() {
     // https://flaviocopes.com/how-to-shuffle-array-javascript/
     let newElements = generateDagreLayout(
@@ -720,6 +724,8 @@ function App() {
       <AddCourseDialog
         modalCls={addCourseCls}
         closeDialog={() => closeDialog(setAddCourseCls)}
+        nodeData={nodeData.current}
+        addCourseNode={addCourseNode}
       />
     </div>
   );
