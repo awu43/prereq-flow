@@ -228,16 +228,13 @@ const initialIndexes = newElemIndexes(initialElements);
 const BASE_MODAL_CLS = "ModalDialog --transparent --display-none";
 // const MAX_UNDO_NUM = 10;
 
-function onLoad(reactFlowInstance) {
-  reactFlowInstance.fitView();
-}
-
 function App() {
   const [aboutCls, setAboutCls] = useState(BASE_MODAL_CLS);
   const [newFlowCls, setNewFlowCls] = useState(BASE_MODAL_CLS);
   const [openFileCls, setOpenFileCls] = useState(BASE_MODAL_CLS);
   const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
 
+  const flowInstance = useRef(null);
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
   const elemIndexes = useRef(initialIndexes);
@@ -252,6 +249,11 @@ function App() {
   const [mouseXY, setMouseXY] = useState([0, 0]);
 
   const [controlsClosed, setControlsClosed] = useState(true);
+
+  function onLoad(reactFlowInstance) {
+    reactFlowInstance.fitView();
+    flowInstance.current = reactFlowInstance;
+  }
 
   function openDialog(setState) {
     setState("ModalDialog --transparent");
