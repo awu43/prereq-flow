@@ -317,6 +317,13 @@ kbd {
   }
 }
 
+%base-text-input-style {
+  height: 1.5rem;
+  padding: 0.75rem 0.25rem;
+  border: 2px solid gray;
+  @extend %bdrs3;
+}
+
 .AboutDialog,
 .NewFlowDialog,
 .OpenFileDialog,
@@ -551,26 +558,94 @@ kbd {
 }
 
 .AddCourseDialog {
-  width: #{'min(40rem, 100% - 1rem)'};
+  width: #{'min(30rem, 100% - 1rem)'};
+
+
+  fieldset {
+    padding: 0.5rem 0;
+    border: none;
+
+    .uw-course-radio {
+      margin-right: 1rem;
+    }
+
+    input {
+      margin-right: 0.25rem;
+    }
+  }
+
+  .custom-course {
+    display: flex;
+    flex-direction: column;
+
+    .header-row {
+      display: flex;
+      justify-content: start;
+      align-items: flex-start;
+    }
+    .footer-row {
+      display: flex;
+      margin-bottom: 1.5rem;
+    }
+    input,
+    textarea {
+      font-family: sans-serif;
+    }
+
+    .custom-id {
+      width: 8rem;
+    }
+    .custom-name {
+      margin: 0 0.5rem;
+      flex-grow: 1;
+    }
+    .custom-credits {
+      width: 3.5rem;
+    }
+    .custom-description {
+      height: 5rem;
+      font-size: 0.9rem;
+      padding: 0.25rem;
+      margin: 0.5rem 0;
+      border: 2px solid gray;
+      @extend %bdrs3;
+      resize: none;
+    }
+
+    .custom-prerequisite {
+      flex-grow: 1;
+      margin-right: 0.25rem;
+    }
+    .custom-offered {
+      flex-grow: 1;
+      margin-left: 0.25rem;
+    }
+
+    .add-custom-button {
+      @extend %base-button-style;
+      height: 2rem;
+    }
+  }
 
   .course-search {
     display: flex;
   }
 
   #course-select {
-    height: 1.5rem;
-    width: 30rem;
-    padding: 0 0.25rem;
+    // height: 1.5rem;
+    max-width: 30rem;
+    flex-grow: 1;
+    // padding: 0 0.25rem;
   }
 
-  input {
-    border: 2px solid gray;
-    @extend %bdrs3;
+  input[type=text],
+  input[type=search] {
+    @extend %base-text-input-style
   }
 
   button[type=submit] {
     @extend %base-button-style;
-    height: 1.5rem;
+    height: 1.75rem;
     margin: 0 0.25rem;
     padding: 0 0.25rem;
   }
@@ -586,4 +661,7 @@ kbd {
     background: rgba(white, 0.96);
     padding: 0 0.1rem;
   }
+}
+.tippy-box.course-already-exists {
+  background: darkred;
 }
