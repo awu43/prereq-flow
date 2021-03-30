@@ -461,7 +461,9 @@ function App() {
     for (const id of nodeData.current.get(nodeId).connectedEdges) {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
-        ...newElements[i], animated: true, style: { strokeWidth: "4px" }
+        ...newElements[i],
+        animated: !prefersReducedMotion,
+        style: { strokeWidth: "4px" },
       };
     }
 
