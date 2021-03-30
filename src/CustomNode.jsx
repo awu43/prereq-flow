@@ -23,11 +23,27 @@ const defaultNodeStyle = {
   borderStyle: "solid",
 };
 
+function markCoursesAndPreventBreaks(text) {
+  let newText = text.replaceAll(COURSE_REGEX, "<mark>$&</mark>");
+  try {
+    for (const match of text.match(COURSE_REGEX)) {
+      newText = newText.replace(match, match.replaceAll(" ", "\u00A0"));
+      // Stop courses from being split
+    }
+  } catch (err) {
+    // null = no matches
+    if (!(err instanceof TypeError)) {
+      throw err;
+    }
+  }
+  newText = newText.replace(/ ([\S\u00A0.]+)$/, "\u00A0$1"); // Stop orphans
+  return newText;
+}
+
 export default function CustomNode({ data }) {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const prereqText = data.prerequisite.replaceAll(
-    COURSE_REGEX, "<mark>$&</mark>"
-  );
+
+  const prereqText = markCoursesAndPreventBreaks(data.prerequisite);
 
   const tippyContent = (
     <>
