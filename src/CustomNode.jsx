@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import Tippy from "@tippyjs/react";
-
-import { Handle } from "react-flow-renderer";
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
+
+import { Handle } from "react-flow-renderer";
 
 // Not sure how to pass this from App into CustomNode
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
@@ -15,7 +15,7 @@ import { COURSE_REGEX } from "./data/parse-courses.js";
 const defaultNodeStyle = {
   padding: "10px",
   // "border-radius": "3px",
-  width: "150px",
+  minWidth: "150px",
   // "fontSize": "12px",
   // color: "#222",
   textAlign: "center",
