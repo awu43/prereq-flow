@@ -31,6 +31,7 @@ import CustomNode from "./CustomNode.jsx";
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
 import {
+  edgeArrowId,
   CONCURRENT_LABEL,
   // demoElements,
 } from "./data/parse-courses.js";
@@ -241,6 +242,7 @@ function App() {
   const [openFileCls, setOpenFileCls] = useState(BASE_MODAL_CLS);
   const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
 
+  // TODO: Convert flowInstance, nodeData, and elemIndexes to useState
   const flowInstance = useRef(null);
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
@@ -508,21 +510,25 @@ function App() {
 
   /* EDGE */
   function onConnect({ source, target }) {
-    const newElements = elements.map(elem => {
-      if (isNode(elem)) {
-        return { ...elem, data: { ...elem.data, nodeConnected: false } };
-      } else {
-        return { ...elem, animated: false, style: {} };
-      }
-    });
-    // Need to "unhover" to return to base state
-    newElements.push({
-      id: `${source} -> ${target}`,
-      source,
-      target,
-      className: "over-one-away",
-    });
-    recalculateElements(newElements);
+    const newEdgeId = edgeArrowId(source, target);
+    if (!elemIndexes.current.has(newEdgeId)) {
+      const newElements = elements.map(elem => {
+        if (isNode(elem)) {
+          return { ...elem, data: { ...elem.data, nodeConnected: false } };
+        } else {
+          return { ...elem, animated: false, style: {} };
+        }
+      });
+      // Need to "unhover" to return to base state
+      newElements.push({
+        id: newEdgeId,
+        source,
+        target,
+        className: elements[elemIndexes.current.get(source)].data.status,
+        label: null,
+      });
+      recalculateElements(newElements);
+    }
   }
 
   function onConnectStart(_event, { _nodeId, _handleType }) {
@@ -530,11 +536,20 @@ function App() {
   }
 
   function onEdgeUpdate(oldEdge, newConnection) {
-    const newElements = elements.slice();
-    newElements[elemIndexes.current.get(oldEdge.id)] = {
-      ...oldEdge, target: newConnection.target
-    };
-    recalculateElements(newElements);
+    const newSource = newConnection.source;
+    const newTarget = newConnection.target;
+    const newEdgeId = edgeArrowId(newSource, newTarget);
+    if (!elemIndexes.current.has(newEdgeId)) {
+      const newElements = elements.slice();
+      newElements[elemIndexes.current.get(oldEdge.id)] = {
+        ...oldEdge, // Keep CC status
+        id: newEdgeId,
+        source: newConnection.source,
+        target: newConnection.target,
+        className: elements[elemIndexes.current.get(newSource)].data.status,
+      };
+      recalculateElements(newElements);
+    }
   }
 
   function onEdgeContextMenu(event, edge) {

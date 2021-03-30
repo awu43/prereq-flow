@@ -32,8 +32,12 @@ export function newNode(courseData) {
   };
 }
 
+export function edgeArrowId(source, target) {
+  return `${source} -> ${target}`;
+}
+
 function newEdge(source, target, id = null) {
-  const edgeId = id ?? `${source} -> ${target}`;
+  const edgeId = id ?? edgeArrowId(source, target);
   return {
     id: edgeId,
     source,
