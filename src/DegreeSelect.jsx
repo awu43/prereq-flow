@@ -119,7 +119,11 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
           <button className="add-minor" type="button" onClick={addMinor}>+</button>
         </div> */}
       </section>
-      <button type="submit" onClick={getCourses} disabled={busy}>
+      <button
+        type="submit"
+        onClick={getCourses}
+        disabled={busy || !majors.length}
+      >
         Get courses
       </button>
     </div>
