@@ -360,9 +360,8 @@ kbd {
   }
 
   &__github-link {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    margin-top: 0.5rem;
 
     img {
       height: 2rem;
