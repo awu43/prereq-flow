@@ -106,6 +106,7 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
           </button>
         </div>
       </section>
+      <p>Not all majors are available. See <a href="https://github.com/andrew-1135/prereq-flow#supported-majors" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
       {/* TODO: Minors */}
       <section className="minors">
         {/* <h3>Minors (up to 3)</h3> */}

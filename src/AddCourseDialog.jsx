@@ -98,47 +98,49 @@ export default function AddCourseDialog({
 
   const courseSearchSection = (
     <section className="course-search">
-      <Tippy
-        className="error-box"
-        content="Course already exists"
-        placement="bottom-start"
-        arrow={false}
-        duration={0}
-        offset={[0, 5]}
-        visible={nodeData.has(selectedCourseId)}
-      >
-        <input
-          type="search"
-          list="courses"
-          id="course-select"
-          placeholder="Course ID or name"
-          value={selectedCourse}
-          onChange={e => {
-            const newValue = e.target.value;
-            setSelectedCourse(newValue);
-            const match = newValue.match(COURSE_REGEX);
-            setSelectedCourseId(match ? match[0] : "");
-          }}
-          disabled={busy}
-        />
-      </Tippy>
-      <datalist id="courses">
-        {courseOptions}
-      </datalist>
-      {/* <p>{errorMsg}</p> */}
-      <button
-        type="submit"
-        disabled={
-          (
-            !courseList.has(selectedCourse)
-            || nodeData.has(selectedCourseId)
-          )
-          || busy
-        }
-        onClick={fetchCourse}
-      >
-        Add
-      </button>
+      <div className="bar-and-button">
+        <Tippy
+          className="error-box"
+          content="Course already exists"
+          placement="bottom-start"
+          arrow={false}
+          duration={0}
+          offset={[0, 5]}
+          visible={nodeData.has(selectedCourseId)}
+        >
+          <input
+            type="search"
+            list="courses"
+            id="course-select"
+            placeholder="Course ID or name"
+            value={selectedCourse}
+            onChange={e => {
+              const newValue = e.target.value;
+              setSelectedCourse(newValue);
+              const match = newValue.match(COURSE_REGEX);
+              setSelectedCourseId(match ? match[0] : "");
+            }}
+            disabled={busy}
+          />
+        </Tippy>
+        <datalist id="courses">
+          {courseOptions}
+        </datalist>
+        <button
+          type="submit"
+          disabled={
+            (
+              !courseList.has(selectedCourse)
+              || nodeData.has(selectedCourseId)
+            )
+            || busy
+          }
+          onClick={fetchCourse}
+        >
+          Add
+        </button>
+      </div>
+      <p>Not all courses are available. See <a href="https://github.com/andrew-1135/prereq-flow#supported-courses" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
     </section>
   );
 

@@ -486,7 +486,7 @@ kbd {
   position: relative;
 
   .majors {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 
   .select-major,
@@ -637,8 +637,9 @@ kbd {
     }
   }
 
-  .course-search {
+  .bar-and-button {
     display: flex;
+    margin-bottom: 1rem;
   }
 
   #course-select {
@@ -647,6 +648,7 @@ kbd {
     flex-grow: 1;
     // padding: 0 0.25rem;
     font-family: sans-serif;
+    margin-right: 0.25rem;
   }
 
   input[type=text],
@@ -657,7 +659,7 @@ kbd {
   button[type=submit] {
     @extend %base-button-style;
     height: 1.75rem;
-    margin: 0 0.25rem;
+    // margin: 0 0.25rem;
     padding: 0 0.25rem;
   }
 }
