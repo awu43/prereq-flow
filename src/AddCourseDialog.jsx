@@ -27,7 +27,7 @@ export default function AddCourseDialog({
   modalCls, closeDialog, nodeData, addCourseNode
 }) {
   const [busy, setBusy] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("custom-course");
+  const [selectedOption, setSelectedOption] = useState("uw-course");
 
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedCourseId, setSelectedCourseId] = useState("");
