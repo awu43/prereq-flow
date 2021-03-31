@@ -242,7 +242,6 @@ function App() {
   const [openFileCls, setOpenFileCls] = useState(BASE_MODAL_CLS);
   const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
 
-  // TODO: Convert flowInstance, nodeData, and elemIndexes to useState
   const flowInstance = useRef(null);
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
@@ -250,12 +249,13 @@ function App() {
   // const undoStack = useRef([]);
   // const redoStack = useRef([]);
 
-  // TODO: Refactor into one context data object
   const [contextActive, setContextActive] = useState(false);
-  const [contextType, setContextType] = useState("node");
-  const [contextTarget, setContextTarget] = useState("");
-  const [contextTargetStatus, setContextTargetStatus] = useState("");
-  const [mouseXY, setMouseXY] = useState([0, 0]);
+  const contextData = useRef({
+    target: "",
+    typeType: "node",
+    targetStatus: "",
+  });
+  const mouseXY = useRef([0, 0]);
 
   const [controlsClosed, setControlsClosed] = useState(true);
 
@@ -501,10 +501,12 @@ function App() {
 
   function onNodeContextMenu(event, node) {
     event.preventDefault();
-    setContextTarget(node.id);
-    setContextTargetStatus(node.data.nodeStatus);
-    setContextType("node");
-    setMouseXY([event.clientX, event.clientY]);
+    contextData.current = {
+      target: node.id,
+      targetType: "node",
+      targetStatus: node.data.nodeStatus,
+    };
+    mouseXY.current = [event.clientX, event.clientY];
     setContextActive(true);
   }
 
@@ -554,10 +556,12 @@ function App() {
 
   function onEdgeContextMenu(event, edge) {
     event.preventDefault();
-    setContextTarget(edge.id);
-    setContextTargetStatus(elements[elemIndexes.current.get(edge.id)].label);
-    setContextType("edge");
-    setMouseXY([event.clientX, event.clientY]);
+    contextData.current = {
+      target: edge.id,
+      targetType: "edge",
+      targetStatus: elements[elemIndexes.current.get(edge.id)].label,
+    };
+    mouseXY.current = [event.clientX, event.clientY];
     setContextActive(true);
   }
 
@@ -581,9 +585,12 @@ function App() {
 
   function onSelectionContextMenu(event, nodes) {
     event.preventDefault();
-    setContextTarget(nodes.map(n => n.id));
-    setContextType("selection");
-    setMouseXY([event.clientX, event.clientY]);
+    contextData.current = {
+      target: nodes.map(n => n.id),
+      targetType: "selection",
+      targetStatus: "",
+    };
+    mouseXY.current = [event.clientX, event.clientY];
     setContextActive(true);
   }
 
@@ -699,10 +706,8 @@ function App() {
 
       <ContextMenu
         active={contextActive}
-        type={contextType}
-        xy={mouseXY}
-        target={contextTarget}
-        targetStatus={contextTargetStatus}
+        data={contextData.current}
+        xy={mouseXY.current}
         COURSE_STATUS_CODES={COURSE_STATUS_CODES}
         setSelectionStatuses={(nodeIds, newStatus) => {
           const newElements = elements.slice();

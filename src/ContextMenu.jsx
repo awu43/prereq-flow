@@ -1,14 +1,16 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from "react";
-import PropTypes, { number } from "prop-types";
+import PropTypes from "prop-types";
 
 export default function ContextMenu({
-  active, type, xy, target, targetStatus, COURSE_STATUS_CODES,
+  active, data, xy, COURSE_STATUS_CODES,
   setSelectionStatuses, toggleEdgeConcurrency, deleteElems
 }) {
+  const { target, targetType, targetStatus } = data;
+
   if (active) {
-    if (type === "selection") {
+    if (targetType === "selection") {
       const nodeOptions = [
         <li
           key="planned"
@@ -33,13 +35,14 @@ export default function ContextMenu({
       return (
         <ul className="ContextMenu" style={{ top: xy[1], left: xy[0] }}>
           {nodeOptions}
-          <hr />
-          <li onClick={() => deleteElems(target)}><p>Delete</p></li>
+          {/* FIXME: Remove empty selection after context delete */}
+          {/* <hr />
+          <li onClick={() => deleteElems(target)}><p>Delete</p></li> */}
         </ul>
       );
     } else {
       const targetStatusCode = (
-        type === "node" ? COURSE_STATUS_CODES[targetStatus] : 0
+        targetType === "node" ? COURSE_STATUS_CODES[targetStatus] : 0
       );
       const nodeOptions = [
         <li
@@ -76,9 +79,9 @@ export default function ContextMenu({
 
       return (
         <ul className="ContextMenu" style={{ top: xy[1], left: xy[0] }}>
-          {(type === "node" && targetStatusCode < 3) && nodeOptions}
-          {(type === "edge") && edgeOptions}
-          {(targetStatusCode < 3 || type === "edge") && <hr />}
+          {(targetType === "node" && targetStatusCode < 3) && nodeOptions}
+          {(targetType === "edge") && edgeOptions}
+          {(targetStatusCode < 3 || targetType === "edge") && <hr />}
           <li className="delete" onClick={() => deleteElems([target])}>
             <p>Delete</p>
           </li>
@@ -89,28 +92,18 @@ export default function ContextMenu({
     return null;
   }
 }
-// https://github.com/davidje13/prop-types-nullable
-function nullable(subRequirement) {
-  const check = (required, props, key, ...rest) => {
-    if (props[key] === null) {
-      return null;
-    }
-    const sub = required ? subRequirement.isRequired : subRequirement;
-    return sub(props, key, ...rest);
-  };
-  const fn = check.bind(null, false);
-  fn.isRequired = check.bind(null, true);
-  return fn;
-}
+
 ContextMenu.propTypes = {
   active: PropTypes.bool.isRequired,
-  type: PropTypes.string.isRequired,
-  xy: PropTypes.arrayOf(number).isRequired,
-  target: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.arrayOf(PropTypes.string).isRequired,
-  ]),
-  targetStatus: nullable(PropTypes.string).isRequired,
+  data: PropTypes.shape({
+    target: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+    targetType: PropTypes.string,
+    targetStatus: PropTypes.string,
+  }).isRequired,
+  xy: PropTypes.arrayOf(PropTypes.number).isRequired,
   COURSE_STATUS_CODES: PropTypes.objectOf(PropTypes.number).isRequired,
   setSelectionStatuses: PropTypes.func.isRequired,
   toggleEdgeConcurrency: PropTypes.func.isRequired,
