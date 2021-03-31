@@ -571,7 +571,9 @@ kbd {
 
 .AddCourseDialog {
   width: #{'min(30rem, 100% - 1rem)'};
-
+  min-height: 20rem;
+  display: flex;
+  flex-direction: column;
 
   fieldset {
     padding: 0.5rem 0;
@@ -587,6 +589,7 @@ kbd {
   }
 
   .custom-course {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
 
@@ -615,13 +618,14 @@ kbd {
       width: 3.5rem;
     }
     .custom-description {
-      height: 5rem;
+      // height: 5rem;
       font-size: 0.9rem;
       padding: 0.25rem;
       margin: 0.5rem 0;
       border: 2px solid gray;
       @extend %bdrs3;
       resize: none;
+      flex-grow: 1;
     }
 
     .custom-prerequisite {
@@ -648,6 +652,7 @@ kbd {
     max-width: 30rem;
     flex-grow: 1;
     // padding: 0 0.25rem;
+    font-family: sans-serif;
   }
 
   input[type=text],
