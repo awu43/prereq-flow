@@ -98,20 +98,30 @@ export default function AddCourseDialog({
 
   const courseSearchSection = (
     <section className="course-search">
-      <input
-        type="search"
-        list="courses"
-        id="course-select"
-        placeholder="Course ID or name"
-        value={selectedCourse}
-        onChange={e => {
-          const newValue = e.target.value;
-          setSelectedCourse(newValue);
-          const match = newValue.match(COURSE_REGEX);
-          setSelectedCourseId(match ? match[0] : "");
-        }}
-        disabled={busy}
-      />
+      <Tippy
+        className="error-box"
+        content="Course already exists"
+        placement="bottom-start"
+        arrow={false}
+        duration={0}
+        offset={[0, 5]}
+        visible={nodeData.has(selectedCourseId)}
+      >
+        <input
+          type="search"
+          list="courses"
+          id="course-select"
+          placeholder="Course ID or name"
+          value={selectedCourse}
+          onChange={e => {
+            const newValue = e.target.value;
+            setSelectedCourse(newValue);
+            const match = newValue.match(COURSE_REGEX);
+            setSelectedCourseId(match ? match[0] : "");
+          }}
+          disabled={busy}
+        />
+      </Tippy>
       <datalist id="courses">
         {courseOptions}
       </datalist>
@@ -136,7 +146,7 @@ export default function AddCourseDialog({
     <section className="custom-course">
       <div className="header-row">
         <Tippy
-          className="course-already-exists"
+          className="error-box"
           content="Course already exists"
           placement="bottom"
           arrow={false}

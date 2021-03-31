@@ -405,15 +405,10 @@ kbd {
 }
 .OpenFileDialog {
   width: #{'min(17.5rem, 100% - 1rem)'};
+  min-height: 10rem;
 
   h2 {
     margin-bottom: 0.5rem;
-  }
-  p {
-    margin-top: 0.5rem;
-    // padding-bottom: 2.5rem;
-    color: red;
-    height: 4rem;
   }
   .open-file {
     position: absolute;
@@ -679,6 +674,6 @@ kbd {
     padding: 0 0.1rem;
   }
 }
-.tippy-box.course-already-exists {
+.tippy-box.error-box {
   background: darkred;
 }

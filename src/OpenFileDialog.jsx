@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 
 import { isEdge, isNode } from "react-flow-renderer";
 
+import Tippy from "@tippyjs/react";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "tippy.js/dist/tippy.css";
+
 import ModalDialog from "./ModalDialog.jsx";
 
 export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
@@ -10,10 +14,8 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
   const fileInput = useRef(null);
 
   function close() {
+    setErrorMsg("");
     closeDialog();
-    setTimeout(() => {
-      setErrorMsg("");
-    }, 100);
   }
 
   function validateFile(file) {
@@ -64,8 +66,17 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
       <button type="button" className="close-button" onClick={close}></button>
       <section>
         <h2>Open flow</h2>
-        <input type="file" accept="application/json" ref={fileInput} />
-        <p>{errorMsg}</p>
+        <Tippy
+          className="error-box"
+          content={errorMsg}
+          placement="bottom-start"
+          arrow={false}
+          duration={0}
+          offset={[0, 5]}
+          visible={errorMsg.length}
+        >
+          <input type="file" accept="application/json" ref={fileInput} />
+        </Tippy>
         <button className="open-file" type="button" onClick={openFile}>
           Open
         </button>
