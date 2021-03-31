@@ -419,10 +419,11 @@ kbd {
   }
 }
 .NewFlowDialog {
-  width: #{'min(40rem, 100% - 1rem)'};
+  width: #{'min(30rem, 100% - 1rem)'};
   overflow: hidden;
 
   padding: 1rem 0;
+  padding-bottom: 0;
 
   h2 {
     margin: 0.5rem 1rem;
@@ -459,6 +460,7 @@ kbd {
   width: 300%;
 
   display: flex;
+  max-height: 20rem;
 }
 .PreWarning,
 .DegreeSelect,
@@ -467,8 +469,11 @@ kbd {
   padding: 0 1rem;
 }
 .PreWarning {
-  position: relative;
+  & > section {
+    position: relative;
+  }
   // padding-bottom: 2rem;
+  overflow-y: scroll;
 
   p:last-of-type {
     padding-bottom: 2rem;
@@ -476,10 +481,11 @@ kbd {
   button {
     position: absolute;
     bottom: 0;
-    right: 1rem;
+    right: 0;
     @extend %base-button-style;
     @extend %base-button-spacing;
     font-size: 1rem;
+    margin: 0;
   }
 }
 .DegreeSelect {
@@ -555,7 +561,7 @@ kbd {
 
   button[type=submit] {
     position: absolute;
-    bottom: 0;
+    bottom: 1rem;
     right: 1rem;
     @extend %base-button-style;
     @extend %base-button-spacing;
