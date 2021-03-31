@@ -617,6 +617,7 @@ function App() {
             About
           </button>
         </div>
+        <small className="header__version">Beta</small>
       </header>
       <ReactFlowProvider>
         <ReactFlow

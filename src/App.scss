@@ -65,9 +65,21 @@ $flow-colors: (
     margin-top: 0.25rem;
   }
 
+  &__version {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
   button {
     @extend %base-button-style;
     @extend %base-button-spacing;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 
