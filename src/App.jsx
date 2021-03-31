@@ -668,6 +668,50 @@ function App() {
           <Background variant="lines" />
           <Controls showInteractive={false} />
         </ReactFlow>
+        <ContextMenu
+          active={contextActive}
+          data={contextData.current}
+          xy={mouseXY.current}
+          COURSE_STATUS_CODES={COURSE_STATUS_CODES}
+          setSelectionStatuses={(nodeIds, newStatus) => {
+            const newElements = elements.slice();
+            for (const id of nodeIds) {
+              setnodeStatus(
+                id, newStatus, newElements, nodeData.current, elemIndexes.current
+              );
+            }
+            setElements(
+              updateAllNodes(newElements, nodeData.current, elemIndexes.current)
+            );
+          }}
+          toggleEdgeConcurrency={edgeId => {
+            const newElements = elements.slice();
+            const i = elemIndexes.current.get(edgeId);
+            const targetEdge = newElements[i];
+
+            if (targetEdge.label) {
+              newElements[i] = {
+                id: edgeId,
+                source: targetEdge.source,
+                target: targetEdge.target,
+                className: targetEdge.className,
+                label: null,
+              };
+            } else {
+              newElements[i] = { ...targetEdge, ...CONCURRENT_LABEL };
+            }
+            setElements(
+              updateAllNodes(newElements, nodeData.current, elemIndexes.current)
+            );
+          }}
+          deleteElems={elemIds => {
+            recalculateElements(
+              removeElements(
+                elemIds.map(id => elements[elemIndexes.current.get(id)]), elements
+              )
+            );
+          }}
+        />
       </ReactFlowProvider>
       <div className="legend">
         <div className="completed">Completed</div>
@@ -703,51 +747,6 @@ function App() {
           <img src="dist/icons/chevron-right.svg" alt="Close controls" />
         </button>
       </ul>
-
-      <ContextMenu
-        active={contextActive}
-        data={contextData.current}
-        xy={mouseXY.current}
-        COURSE_STATUS_CODES={COURSE_STATUS_CODES}
-        setSelectionStatuses={(nodeIds, newStatus) => {
-          const newElements = elements.slice();
-          for (const id of nodeIds) {
-            setnodeStatus(
-              id, newStatus, newElements, nodeData.current, elemIndexes.current
-            );
-          }
-          setElements(
-            updateAllNodes(newElements, nodeData.current, elemIndexes.current)
-          );
-        }}
-        toggleEdgeConcurrency={edgeId => {
-          const newElements = elements.slice();
-          const i = elemIndexes.current.get(edgeId);
-          const targetEdge = newElements[i];
-
-          if (targetEdge.label) {
-            newElements[i] = {
-              id: edgeId,
-              source: targetEdge.source,
-              target: targetEdge.target,
-              className: targetEdge.className,
-              label: null,
-            };
-          } else {
-            newElements[i] = { ...targetEdge, ...CONCURRENT_LABEL };
-          }
-          setElements(
-            updateAllNodes(newElements, nodeData.current, elemIndexes.current)
-          );
-        }}
-        deleteElems={elemIds => {
-          recalculateElements(
-            removeElements(
-              elemIds.map(id => elements[elemIndexes.current.get(id)]), elements
-            )
-          );
-        }}
-      />
 
       <AboutDialog
         modalCls={aboutCls}

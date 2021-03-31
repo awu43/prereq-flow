@@ -3,11 +3,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { useStoreActions } from "react-flow-renderer";
+
 export default function ContextMenu({
   active, data, xy, COURSE_STATUS_CODES,
   setSelectionStatuses, toggleEdgeConcurrency, deleteElems
 }) {
+  const setUserSelection = useStoreActions(actions => (
+    actions.setUserSelection
+  ));
+
   const { target, targetType, targetStatus } = data;
+
+  function deleteAndClearSelection() {
+    setUserSelection([]);
+    deleteElems(target);
+  }
 
   if (active) {
     if (targetType === "selection") {
@@ -35,9 +46,8 @@ export default function ContextMenu({
       return (
         <ul className="ContextMenu" style={{ top: xy[1], left: xy[0] }}>
           {nodeOptions}
-          {/* FIXME: Remove empty selection after context delete */}
-          {/* <hr />
-          <li onClick={() => deleteElems(target)}><p>Delete</p></li> */}
+          <hr />
+          <li onClick={deleteAndClearSelection}><p>Delete</p></li>
         </ul>
       );
     } else {
