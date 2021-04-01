@@ -11,7 +11,7 @@ import ModalDialog from "./ModalDialog.jsx";
 
 export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
   const [errorMsg, setErrorMsg] = useState("");
-  const fileInput = useRef(null);
+  const fileInputRef = useRef(null);
 
   function close() {
     setErrorMsg("");
@@ -29,32 +29,31 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
     let loadedData;
     reader.onload = event => {
       loadedData = JSON.parse(event.target.result);
-      if (typeof loadedData !== "object"
-          || Object.keys(loadedData).length !== 2
-          || !("elements" in loadedData)
-          || !("nodeData" in loadedData)) {
+      const structureValid = [
+        typeof loadedData === "object",
+        Object.keys(loadedData).toString() === ["version", "elements"].toString()
+      ].every(a => a);
+      if (!structureValid) {
         setErrorMsg("Invalid data");
         return;
       }
-      const { elements, nodeData } = loadedData;
-      const dataValid = (
-        Array.isArray(elements)
-        && elements.every(e => isNode(e) || isEdge(e))
-        && typeof nodeData === "object"
-        && elements.filter(e => isNode(e)).length
-            === Object.keys(nodeData).length
-      );
+      const { version, elements } = loadedData;
+      const dataValid = [
+        typeof version === "string",
+        Array.isArray(elements),
+        elements.every(e => isNode(e) || isEdge(e)),
+      ].every(a => a);
       if (!dataValid) {
         setErrorMsg("Invalid data");
       } else {
-        openFlow(elements, new Map(Object.entries(nodeData)));
+        openFlow(elements);
         close();
       }
     };
   }
 
   function openFile() {
-    const file = fileInput.current.files[0];
+    const file = fileInputRef.current.files[0];
     if (file !== undefined) {
       validateFile(file);
     }
@@ -75,7 +74,7 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
           offset={[0, 5]}
           visible={errorMsg.length}
         >
-          <input type="file" accept="application/json" ref={fileInput} />
+          <input type="file" accept="application/json" ref={fileInputRef} />
         </Tippy>
         <button
           className="OpenFileDialog__open-button"

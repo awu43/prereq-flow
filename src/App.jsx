@@ -32,7 +32,7 @@ import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
 import { edgeArrowId, CONCURRENT_LABEL } from "./data/parse-courses.js";
 
-import demoFlow from "./data/demo-flow-v2.json";
+import demoFlow from "./data/demo-flow.json";
 
 import "./App.scss";
 
@@ -212,7 +212,7 @@ function updateAllNodes(elements, nodeData, elemIndexes) {
 }
 
 const initialElements = demoFlow.elements;
-const initialNodeData = new Map(Object.entries(demoFlow.nodeData));
+const initialNodeData = newNodeData(initialElements);
 const initialIndexes = newElemIndexes(initialElements);
 
 const BASE_MODAL_CLS = "ModalDialog --transparent --display-none";
@@ -330,9 +330,9 @@ function App() {
     }
   }
 
-  function openFlow(openedElements, openedNodeData) {
+  function openFlow(openedElements) {
     recordFlowState();
-    nodeData.current = openedNodeData;
+    nodeData.current = newNodeData(openedElements);
     elemIndexes.current = newElemIndexes(openedElements);
     setElements(openedElements);
   }
@@ -340,13 +340,14 @@ function App() {
   function saveFlow() {
     const downloadLink = document.createElement("a");
     const fileContents = {
-      elements, nodeData: Object.fromEntries(nodeData.current)
+      version: "Beta",
+      elements: resetElementStates(flowInstance.current.toObject().elements),
     };
     const fileBlob = new Blob(
       [JSON.stringify(fileContents, null, 2)], { type: "application/json" }
     );
     downloadLink.href = URL.createObjectURL(fileBlob);
-    downloadLink.download = "prereq-flow.json";
+    downloadLink.download = "untitled-flow.json";
     downloadLink.click();
   }
 

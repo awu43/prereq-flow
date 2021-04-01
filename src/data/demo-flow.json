@@ -1,4 +1,5 @@
 {
+  "version": "Beta",
   "elements": [
     {
       "id": "CHEM 142",
@@ -596,7 +597,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 126 -> MATH 324",
@@ -605,7 +609,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "CHEM 142 -> MSE 170",
@@ -614,7 +621,10 @@
       "className": "ready",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 307 -> MATH 309",
@@ -623,7 +633,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 230 -> M E 373",
@@ -632,7 +645,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "CHEM 142 -> CHEM 152",
@@ -641,7 +657,10 @@
       "className": "ready",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 124 -> PHYS 121",
@@ -655,7 +674,10 @@
       ],
       "labelBgBorderRadius": 4,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "PHYS 121 -> PHYS 122",
@@ -664,7 +686,10 @@
       "className": "one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "PHYS 122 -> PHYS 123",
@@ -673,7 +698,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 308 -> MATH 309",
@@ -682,7 +710,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 125 -> PHYS 122",
@@ -696,7 +727,10 @@
       ],
       "labelBgBorderRadius": 4,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 126 -> STAT 390",
@@ -705,7 +739,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 126 -> PHYS 123",
@@ -719,7 +756,10 @@
       ],
       "labelBgBorderRadius": 4,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "STAT 390 -> M E 395",
@@ -733,7 +773,10 @@
         2,
         2
       ],
-      "labelBgBorderRadius": 4
+      "labelBgBorderRadius": 4,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 307 -> M E 333",
@@ -742,7 +785,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 323 -> M E 395",
@@ -751,7 +797,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 395 -> M E 495",
@@ -760,7 +809,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 123 -> M E 395",
@@ -769,7 +821,10 @@
       "className": "ready",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 354 -> M E 356",
@@ -778,7 +833,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 125 -> MATH 126",
@@ -787,7 +845,10 @@
       "className": "one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 373 -> M E 374",
@@ -796,7 +857,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "CHEM 142 -> M E 323",
@@ -805,7 +869,10 @@
       "className": "ready",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MSE 170 -> M E 354",
@@ -814,7 +881,10 @@
       "className": "one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 124 -> MATH 125",
@@ -823,7 +893,10 @@
       "className": "ready",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 126 -> MATH 308",
@@ -832,7 +905,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "AMATH 301 -> M E 374",
@@ -841,7 +917,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 354 -> M E 355",
@@ -850,7 +929,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 307 -> E E 215",
@@ -864,7 +946,10 @@
         2,
         2
       ],
-      "labelBgBorderRadius": 4
+      "labelBgBorderRadius": 4,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 126 -> A A 210",
@@ -873,7 +958,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 307 -> M E 373",
@@ -882,7 +970,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "AMATH 301 -> M E 333",
@@ -891,7 +982,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 125 -> AMATH 301",
@@ -900,7 +994,10 @@
       "className": "one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 333 -> M E 331",
@@ -909,7 +1006,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "PHYS 121 -> A A 210",
@@ -918,7 +1018,10 @@
       "className": "one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "CEE 220 -> M E 354",
@@ -927,7 +1030,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 125 -> MATH 307",
@@ -936,7 +1042,10 @@
       "className": "one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "PHYS 122 -> E E 215",
@@ -945,7 +1054,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 308 -> M E 373",
@@ -954,7 +1066,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "PHYS 121 -> M E 323",
@@ -963,7 +1078,10 @@
       "className": "one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "MATH 126 -> M E 323",
@@ -972,7 +1090,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "A A 210 -> M E 230",
@@ -981,7 +1102,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "E E 215 -> M E 373",
@@ -990,7 +1114,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "A A 210 -> CEE 220",
@@ -999,7 +1126,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     },
     {
       "id": "M E 323 -> M E 333",
@@ -1008,796 +1138,10 @@
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {}
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
     }
-  ],
-  "nodeData": {
-    "CHEM 142": {
-      "depth": 0,
-      "incomingNodes": [],
-      "incomingEdges": [],
-      "outgoingEdges": [
-        "CHEM 142 -> CHEM 152",
-        "CHEM 142 -> M E 323",
-        "CHEM 142 -> MSE 170"
-      ],
-      "outgoingNodes": [
-        "CHEM 152",
-        "MSE 170",
-        "M E 323"
-      ],
-      "connectedEdges": [
-        "CHEM 142 -> CHEM 152",
-        "CHEM 142 -> M E 323",
-        "CHEM 142 -> MSE 170"
-      ],
-      "connectedNodes": [
-        "CHEM 152",
-        "MSE 170",
-        "M E 323"
-      ]
-    },
-    "ENGR 231": {
-      "depth": 0,
-      "incomingNodes": [],
-      "incomingEdges": [],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [],
-      "connectedNodes": []
-    },
-    "M E 123": {
-      "depth": 0,
-      "incomingNodes": [],
-      "incomingEdges": [],
-      "outgoingEdges": [
-        "M E 123 -> M E 395"
-      ],
-      "outgoingNodes": [
-        "M E 395"
-      ],
-      "connectedEdges": [
-        "M E 123 -> M E 395"
-      ],
-      "connectedNodes": [
-        "M E 395"
-      ]
-    },
-    "MATH 124": {
-      "depth": 0,
-      "incomingNodes": [],
-      "incomingEdges": [],
-      "outgoingEdges": [
-        "MATH 124 -> MATH 125",
-        "MATH 124 -> PHYS 121"
-      ],
-      "outgoingNodes": [
-        "MATH 125",
-        "PHYS 121"
-      ],
-      "connectedEdges": [
-        "MATH 124 -> MATH 125",
-        "MATH 124 -> PHYS 121"
-      ],
-      "connectedNodes": [
-        "MATH 125",
-        "PHYS 121"
-      ]
-    },
-    "CHEM 152": {
-      "depth": 1,
-      "incomingNodes": [
-        "CHEM 142"
-      ],
-      "incomingEdges": [
-        "CHEM 142 -> CHEM 152"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "CHEM 142 -> CHEM 152"
-      ],
-      "connectedNodes": [
-        "CHEM 142"
-      ]
-    },
-    "MATH 125": {
-      "depth": 1,
-      "incomingNodes": [
-        "MATH 124"
-      ],
-      "incomingEdges": [
-        "MATH 124 -> MATH 125"
-      ],
-      "outgoingEdges": [
-        "MATH 125 -> MATH 126",
-        "MATH 125 -> MATH 307",
-        "MATH 125 -> AMATH 301",
-        "MATH 125 -> PHYS 122"
-      ],
-      "outgoingNodes": [
-        "AMATH 301",
-        "MATH 126",
-        "MATH 307",
-        "PHYS 122"
-      ],
-      "connectedEdges": [
-        "MATH 124 -> MATH 125",
-        "MATH 125 -> MATH 126",
-        "MATH 125 -> MATH 307",
-        "MATH 125 -> AMATH 301",
-        "MATH 125 -> PHYS 122"
-      ],
-      "connectedNodes": [
-        "MATH 124",
-        "AMATH 301",
-        "MATH 126",
-        "MATH 307",
-        "PHYS 122"
-      ]
-    },
-    "MSE 170": {
-      "depth": 1,
-      "incomingNodes": [
-        "CHEM 142"
-      ],
-      "incomingEdges": [
-        "CHEM 142 -> MSE 170"
-      ],
-      "outgoingEdges": [
-        "MSE 170 -> M E 354"
-      ],
-      "outgoingNodes": [
-        "M E 354"
-      ],
-      "connectedEdges": [
-        "CHEM 142 -> MSE 170",
-        "MSE 170 -> M E 354"
-      ],
-      "connectedNodes": [
-        "CHEM 142",
-        "M E 354"
-      ]
-    },
-    "PHYS 121": {
-      "depth": 1,
-      "incomingNodes": [
-        "MATH 124"
-      ],
-      "incomingEdges": [
-        "MATH 124 -> PHYS 121"
-      ],
-      "outgoingEdges": [
-        "PHYS 121 -> A A 210",
-        "PHYS 121 -> M E 323",
-        "PHYS 121 -> PHYS 122"
-      ],
-      "outgoingNodes": [
-        "PHYS 122",
-        "A A 210",
-        "M E 323"
-      ],
-      "connectedEdges": [
-        "MATH 124 -> PHYS 121",
-        "PHYS 121 -> A A 210",
-        "PHYS 121 -> M E 323",
-        "PHYS 121 -> PHYS 122"
-      ],
-      "connectedNodes": [
-        "MATH 124",
-        "PHYS 122",
-        "A A 210",
-        "M E 323"
-      ]
-    },
-    "AMATH 301": {
-      "depth": 2,
-      "incomingNodes": [
-        "MATH 125"
-      ],
-      "incomingEdges": [
-        "MATH 125 -> AMATH 301"
-      ],
-      "outgoingEdges": [
-        "AMATH 301 -> M E 333",
-        "AMATH 301 -> M E 374"
-      ],
-      "outgoingNodes": [
-        "M E 333",
-        "M E 374"
-      ],
-      "connectedEdges": [
-        "MATH 125 -> AMATH 301",
-        "AMATH 301 -> M E 333",
-        "AMATH 301 -> M E 374"
-      ],
-      "connectedNodes": [
-        "MATH 125",
-        "M E 333",
-        "M E 374"
-      ]
-    },
-    "MATH 126": {
-      "depth": 2,
-      "incomingNodes": [
-        "MATH 125"
-      ],
-      "incomingEdges": [
-        "MATH 125 -> MATH 126"
-      ],
-      "outgoingEdges": [
-        "MATH 126 -> M E 323",
-        "MATH 126 -> MATH 308",
-        "MATH 126 -> A A 210",
-        "MATH 126 -> E E 215",
-        "MATH 126 -> MATH 324",
-        "MATH 126 -> PHYS 123",
-        "MATH 126 -> STAT 390"
-      ],
-      "outgoingNodes": [
-        "A A 210",
-        "E E 215",
-        "M E 323",
-        "MATH 308",
-        "MATH 324",
-        "PHYS 123",
-        "STAT 390"
-      ],
-      "connectedEdges": [
-        "MATH 125 -> MATH 126",
-        "MATH 126 -> M E 323",
-        "MATH 126 -> MATH 308",
-        "MATH 126 -> A A 210",
-        "MATH 126 -> E E 215",
-        "MATH 126 -> MATH 324",
-        "MATH 126 -> PHYS 123",
-        "MATH 126 -> STAT 390"
-      ],
-      "connectedNodes": [
-        "MATH 125",
-        "A A 210",
-        "E E 215",
-        "M E 323",
-        "MATH 308",
-        "MATH 324",
-        "PHYS 123",
-        "STAT 390"
-      ]
-    },
-    "MATH 307": {
-      "depth": 2,
-      "incomingNodes": [
-        "MATH 125"
-      ],
-      "incomingEdges": [
-        "MATH 125 -> MATH 307"
-      ],
-      "outgoingEdges": [
-        "MATH 307 -> E E 215",
-        "MATH 307 -> M E 333",
-        "MATH 307 -> M E 373",
-        "MATH 307 -> MATH 309"
-      ],
-      "outgoingNodes": [
-        "E E 215",
-        "M E 333",
-        "MATH 309",
-        "M E 373"
-      ],
-      "connectedEdges": [
-        "MATH 125 -> MATH 307",
-        "MATH 307 -> E E 215",
-        "MATH 307 -> M E 333",
-        "MATH 307 -> M E 373",
-        "MATH 307 -> MATH 309"
-      ],
-      "connectedNodes": [
-        "MATH 125",
-        "E E 215",
-        "M E 333",
-        "MATH 309",
-        "M E 373"
-      ]
-    },
-    "PHYS 122": {
-      "depth": 2,
-      "incomingNodes": [
-        "MATH 125",
-        "PHYS 121"
-      ],
-      "incomingEdges": [
-        "PHYS 121 -> PHYS 122",
-        "MATH 125 -> PHYS 122"
-      ],
-      "outgoingEdges": [
-        "PHYS 122 -> E E 215",
-        "PHYS 122 -> PHYS 123"
-      ],
-      "outgoingNodes": [
-        "E E 215",
-        "PHYS 123"
-      ],
-      "connectedEdges": [
-        "PHYS 121 -> PHYS 122",
-        "MATH 125 -> PHYS 122",
-        "PHYS 122 -> E E 215",
-        "PHYS 122 -> PHYS 123"
-      ],
-      "connectedNodes": [
-        "MATH 125",
-        "PHYS 121",
-        "E E 215",
-        "PHYS 123"
-      ]
-    },
-    "A A 210": {
-      "depth": 3,
-      "incomingNodes": [
-        "PHYS 121",
-        "MATH 126"
-      ],
-      "incomingEdges": [
-        "PHYS 121 -> A A 210",
-        "MATH 126 -> A A 210"
-      ],
-      "outgoingEdges": [
-        "A A 210 -> CEE 220",
-        "A A 210 -> M E 230"
-      ],
-      "outgoingNodes": [
-        "CEE 220",
-        "M E 230"
-      ],
-      "connectedEdges": [
-        "PHYS 121 -> A A 210",
-        "MATH 126 -> A A 210",
-        "A A 210 -> CEE 220",
-        "A A 210 -> M E 230"
-      ],
-      "connectedNodes": [
-        "PHYS 121",
-        "MATH 126",
-        "CEE 220",
-        "M E 230"
-      ]
-    },
-    "E E 215": {
-      "depth": 3,
-      "incomingNodes": [
-        "MATH 126",
-        "MATH 307",
-        "PHYS 122"
-      ],
-      "incomingEdges": [
-        "PHYS 122 -> E E 215",
-        "MATH 126 -> E E 215",
-        "MATH 307 -> E E 215"
-      ],
-      "outgoingEdges": [
-        "E E 215 -> M E 373"
-      ],
-      "outgoingNodes": [
-        "M E 373"
-      ],
-      "connectedEdges": [
-        "PHYS 122 -> E E 215",
-        "MATH 126 -> E E 215",
-        "MATH 307 -> E E 215",
-        "E E 215 -> M E 373"
-      ],
-      "connectedNodes": [
-        "MATH 126",
-        "MATH 307",
-        "PHYS 122",
-        "M E 373"
-      ]
-    },
-    "M E 323": {
-      "depth": 3,
-      "incomingNodes": [
-        "CHEM 142",
-        "PHYS 121",
-        "MATH 126"
-      ],
-      "incomingEdges": [
-        "MATH 126 -> M E 323",
-        "PHYS 121 -> M E 323",
-        "CHEM 142 -> M E 323"
-      ],
-      "outgoingEdges": [
-        "M E 323 -> M E 333",
-        "M E 323 -> M E 395"
-      ],
-      "outgoingNodes": [
-        "M E 333",
-        "M E 395"
-      ],
-      "connectedEdges": [
-        "MATH 126 -> M E 323",
-        "PHYS 121 -> M E 323",
-        "CHEM 142 -> M E 323",
-        "M E 323 -> M E 333",
-        "M E 323 -> M E 395"
-      ],
-      "connectedNodes": [
-        "CHEM 142",
-        "PHYS 121",
-        "MATH 126",
-        "M E 333",
-        "M E 395"
-      ]
-    },
-    "MATH 308": {
-      "depth": 3,
-      "incomingNodes": [
-        "MATH 126"
-      ],
-      "incomingEdges": [
-        "MATH 126 -> MATH 308"
-      ],
-      "outgoingEdges": [
-        "MATH 308 -> M E 373",
-        "MATH 308 -> MATH 309"
-      ],
-      "outgoingNodes": [
-        "MATH 309",
-        "M E 373"
-      ],
-      "connectedEdges": [
-        "MATH 126 -> MATH 308",
-        "MATH 308 -> M E 373",
-        "MATH 308 -> MATH 309"
-      ],
-      "connectedNodes": [
-        "MATH 126",
-        "MATH 309",
-        "M E 373"
-      ]
-    },
-    "MATH 324": {
-      "depth": 3,
-      "incomingNodes": [
-        "MATH 126"
-      ],
-      "incomingEdges": [
-        "MATH 126 -> MATH 324"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "MATH 126 -> MATH 324"
-      ],
-      "connectedNodes": [
-        "MATH 126"
-      ]
-    },
-    "PHYS 123": {
-      "depth": 3,
-      "incomingNodes": [
-        "MATH 126",
-        "PHYS 122"
-      ],
-      "incomingEdges": [
-        "PHYS 122 -> PHYS 123",
-        "MATH 126 -> PHYS 123"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "PHYS 122 -> PHYS 123",
-        "MATH 126 -> PHYS 123"
-      ],
-      "connectedNodes": [
-        "MATH 126",
-        "PHYS 122"
-      ]
-    },
-    "STAT 390": {
-      "depth": 3,
-      "incomingNodes": [
-        "MATH 126"
-      ],
-      "incomingEdges": [
-        "MATH 126 -> STAT 390"
-      ],
-      "outgoingEdges": [
-        "STAT 390 -> M E 395"
-      ],
-      "outgoingNodes": [
-        "M E 395"
-      ],
-      "connectedEdges": [
-        "MATH 126 -> STAT 390",
-        "STAT 390 -> M E 395"
-      ],
-      "connectedNodes": [
-        "MATH 126",
-        "M E 395"
-      ]
-    },
-    "CEE 220": {
-      "depth": 4,
-      "incomingNodes": [
-        "A A 210"
-      ],
-      "incomingEdges": [
-        "A A 210 -> CEE 220"
-      ],
-      "outgoingEdges": [
-        "CEE 220 -> M E 354"
-      ],
-      "outgoingNodes": [
-        "M E 354"
-      ],
-      "connectedEdges": [
-        "A A 210 -> CEE 220",
-        "CEE 220 -> M E 354"
-      ],
-      "connectedNodes": [
-        "A A 210",
-        "M E 354"
-      ]
-    },
-    "M E 230": {
-      "depth": 4,
-      "incomingNodes": [
-        "A A 210"
-      ],
-      "incomingEdges": [
-        "A A 210 -> M E 230"
-      ],
-      "outgoingEdges": [
-        "M E 230 -> M E 373"
-      ],
-      "outgoingNodes": [
-        "M E 373"
-      ],
-      "connectedEdges": [
-        "A A 210 -> M E 230",
-        "M E 230 -> M E 373"
-      ],
-      "connectedNodes": [
-        "A A 210",
-        "M E 373"
-      ]
-    },
-    "M E 333": {
-      "depth": 4,
-      "incomingNodes": [
-        "AMATH 301",
-        "MATH 307",
-        "M E 323"
-      ],
-      "incomingEdges": [
-        "AMATH 301 -> M E 333",
-        "M E 323 -> M E 333",
-        "MATH 307 -> M E 333"
-      ],
-      "outgoingEdges": [
-        "M E 333 -> M E 331"
-      ],
-      "outgoingNodes": [
-        "M E 331"
-      ],
-      "connectedEdges": [
-        "AMATH 301 -> M E 333",
-        "M E 323 -> M E 333",
-        "MATH 307 -> M E 333",
-        "M E 333 -> M E 331"
-      ],
-      "connectedNodes": [
-        "AMATH 301",
-        "MATH 307",
-        "M E 323",
-        "M E 331"
-      ]
-    },
-    "M E 395": {
-      "depth": 4,
-      "incomingNodes": [
-        "M E 123",
-        "M E 323",
-        "STAT 390"
-      ],
-      "incomingEdges": [
-        "M E 123 -> M E 395",
-        "M E 323 -> M E 395",
-        "STAT 390 -> M E 395"
-      ],
-      "outgoingEdges": [
-        "M E 395 -> M E 495"
-      ],
-      "outgoingNodes": [
-        "M E 495"
-      ],
-      "connectedEdges": [
-        "M E 123 -> M E 395",
-        "M E 323 -> M E 395",
-        "STAT 390 -> M E 395",
-        "M E 395 -> M E 495"
-      ],
-      "connectedNodes": [
-        "M E 123",
-        "M E 323",
-        "STAT 390",
-        "M E 495"
-      ]
-    },
-    "MATH 309": {
-      "depth": 4,
-      "incomingNodes": [
-        "MATH 307",
-        "MATH 308"
-      ],
-      "incomingEdges": [
-        "MATH 307 -> MATH 309",
-        "MATH 308 -> MATH 309"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "MATH 307 -> MATH 309",
-        "MATH 308 -> MATH 309"
-      ],
-      "connectedNodes": [
-        "MATH 307",
-        "MATH 308"
-      ]
-    },
-    "M E 331": {
-      "depth": 5,
-      "incomingNodes": [
-        "M E 333"
-      ],
-      "incomingEdges": [
-        "M E 333 -> M E 331"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "M E 333 -> M E 331"
-      ],
-      "connectedNodes": [
-        "M E 333"
-      ]
-    },
-    "M E 354": {
-      "depth": 5,
-      "incomingNodes": [
-        "MSE 170",
-        "CEE 220"
-      ],
-      "incomingEdges": [
-        "MSE 170 -> M E 354",
-        "CEE 220 -> M E 354"
-      ],
-      "outgoingEdges": [
-        "M E 354 -> M E 355",
-        "M E 354 -> M E 356"
-      ],
-      "outgoingNodes": [
-        "M E 355",
-        "M E 356"
-      ],
-      "connectedEdges": [
-        "MSE 170 -> M E 354",
-        "CEE 220 -> M E 354",
-        "M E 354 -> M E 355",
-        "M E 354 -> M E 356"
-      ],
-      "connectedNodes": [
-        "MSE 170",
-        "CEE 220",
-        "M E 355",
-        "M E 356"
-      ]
-    },
-    "M E 373": {
-      "depth": 5,
-      "incomingNodes": [
-        "MATH 307",
-        "E E 215",
-        "MATH 308",
-        "M E 230"
-      ],
-      "incomingEdges": [
-        "E E 215 -> M E 373",
-        "M E 230 -> M E 373",
-        "MATH 307 -> M E 373",
-        "MATH 308 -> M E 373"
-      ],
-      "outgoingEdges": [
-        "M E 373 -> M E 374"
-      ],
-      "outgoingNodes": [
-        "M E 374"
-      ],
-      "connectedEdges": [
-        "E E 215 -> M E 373",
-        "M E 230 -> M E 373",
-        "MATH 307 -> M E 373",
-        "MATH 308 -> M E 373",
-        "M E 373 -> M E 374"
-      ],
-      "connectedNodes": [
-        "MATH 307",
-        "E E 215",
-        "MATH 308",
-        "M E 230",
-        "M E 374"
-      ]
-    },
-    "M E 495": {
-      "depth": 5,
-      "incomingNodes": [
-        "M E 395"
-      ],
-      "incomingEdges": [
-        "M E 395 -> M E 495"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "M E 395 -> M E 495"
-      ],
-      "connectedNodes": [
-        "M E 395"
-      ]
-    },
-    "M E 355": {
-      "depth": 6,
-      "incomingNodes": [
-        "M E 354"
-      ],
-      "incomingEdges": [
-        "M E 354 -> M E 355"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "M E 354 -> M E 355"
-      ],
-      "connectedNodes": [
-        "M E 354"
-      ]
-    },
-    "M E 356": {
-      "depth": 6,
-      "incomingNodes": [
-        "M E 354"
-      ],
-      "incomingEdges": [
-        "M E 354 -> M E 356"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "M E 354 -> M E 356"
-      ],
-      "connectedNodes": [
-        "M E 354"
-      ]
-    },
-    "M E 374": {
-      "depth": 6,
-      "incomingNodes": [
-        "AMATH 301",
-        "M E 373"
-      ],
-      "incomingEdges": [
-        "AMATH 301 -> M E 374",
-        "M E 373 -> M E 374"
-      ],
-      "outgoingEdges": [],
-      "outgoingNodes": [],
-      "connectedEdges": [
-        "AMATH 301 -> M E 374",
-        "M E 373 -> M E 374"
-      ],
-      "connectedNodes": [
-        "AMATH 301",
-        "M E 373"
-      ]
-    }
-  }
+  ]
 }
