@@ -66,8 +66,8 @@ export default function AddCourseDialog({
 
   function addNewNode(data) {
     const node = newNode(data);
-    node.position.x += (Math.random() - 0.5) * 100;
-    node.position.y += (Math.random() - 0.5) * 100;
+    node.position.x += (Math.random() - 0.5) * 200;
+    node.position.y += (Math.random() - 0.5) * 200;
     // Add fuzzing to stop multiple nodes from piling
     addCourseNode(node);
   }
