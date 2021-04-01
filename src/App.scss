@@ -221,7 +221,7 @@ kbd {
   border-radius: 10px;
   text-transform: uppercase;
   font-family: sans-serif;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: bold;
 
   @each $status, $color in $flow-colors {
