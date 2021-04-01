@@ -241,7 +241,7 @@ function App() {
     typeType: "node",
     targetStatus: "",
   });
-  const mouseXY = useRef([0, 0]);
+  const [mouseXY, setMouseXY] = useState([0, 0]);
 
   const [controlsClosed, setControlsClosed] = useState(true);
 
@@ -501,7 +501,7 @@ function App() {
       targetType: "node",
       targetStatus: node.data.nodeStatus,
     };
-    mouseXY.current = [event.clientX, event.clientY];
+    setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
   }
 
@@ -558,7 +558,7 @@ function App() {
       targetType: "edge",
       targetStatus: elements[elemIndexes.current.get(edge.id)].label,
     };
-    mouseXY.current = [event.clientX, event.clientY];
+    setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
   }
 
@@ -588,7 +588,7 @@ function App() {
       targetType: "selection",
       targetStatus: "",
     };
-    mouseXY.current = [event.clientX, event.clientY];
+    setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
   }
 
@@ -669,7 +669,7 @@ function App() {
         <ContextMenu
           active={contextActive}
           data={contextData.current}
-          xy={mouseXY.current}
+          xy={mouseXY}
           COURSE_STATUS_CODES={COURSE_STATUS_CODES}
           setSelectionStatuses={(nodeIds, newStatus) => {
             recordFlowState();
