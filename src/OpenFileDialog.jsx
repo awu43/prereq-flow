@@ -67,7 +67,7 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
       <section>
         <h2>Open flow</h2>
         <Tippy
-          className="error-box"
+          className="tippy-box--error"
           content={errorMsg}
           placement="bottom-start"
           arrow={false}
@@ -77,7 +77,11 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
         >
           <input type="file" accept="application/json" ref={fileInput} />
         </Tippy>
-        <button className="open-file" type="button" onClick={openFile}>
+        <button
+          className="OpenFileDialog__open-button"
+          type="button"
+          onClick={openFile}
+        >
           Open
         </button>
       </section>

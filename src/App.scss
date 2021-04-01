@@ -157,8 +157,8 @@ $flow-colors: (
   border-bottom-right-radius: 0;
   border-right: none;
   border-bottom: none;
-  // list-style: inside;
-  padding: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   padding-left: 2rem;
   padding-right: 3rem;
   background-color: white;
@@ -180,7 +180,6 @@ kbd {
   background-color: #eee;
   border-radius: 3px;
   border: 1px solid #b4b4b4;
-  // box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 2px 0 0 rgba(255, 255, 255, .7) inset;
   color: #333;
   display: inline-block;
   font-size: .85em;
@@ -189,9 +188,25 @@ kbd {
   padding: 2px 4px;
   white-space: nowrap;
   font-family: consolas;
- }
+}
 
- .react-flow__node.selected .CustomNode {
+.tippy-box {
+  background: rgba(#333, 0.96);
+  p {
+    margin: 0.5rem 0;
+  }
+  mark {
+    color: #333;
+    background: rgba(white, 0.96);
+    padding: 0 0.1rem;
+  }
+
+  &--error {
+    background: darkred;
+  }
+}
+
+.react-flow__node.selected .CustomNode {
   @each $status, $color in $flow-colors {
 
   &.#{$status} {
@@ -199,7 +214,7 @@ kbd {
       background-color: $color;
     }
   }
- }
+}
 
 .CustomNode {
   border-width: 3px;
@@ -274,7 +289,6 @@ kbd {
 
   p {
     margin: 0.25rem 0.5rem;
-    // padding: 0.1rem;
     padding-left: 1rem;
   }
 
@@ -336,10 +350,10 @@ kbd {
   @extend %bdrs3;
 }
 
-.AboutDialog,
 .NewFlowDialog,
 .OpenFileDialog,
-.AddCourseDialog {
+.AddCourseDialog,
+.AboutDialog {
   position: relative;
   max-height: #{'calc(100% - 1rem)'};
 
@@ -352,56 +366,6 @@ kbd {
     margin: 1rem 0;
   }
 }
-.AboutDialog {
-  width: #{'min(22.5rem, 100% - 1rem)'};
-
-  h2 {
-    margin-bottom: 0.5rem;
-  }
-
-  &__github-link {
-    display: inline-flex;
-    align-items: center;
-
-    img {
-      height: 2rem;
-      width: 2rem;
-      margin-right: 0.5rem;
-    }
-  }
-
-  &__contact-section {
-    display: flex;
-    flex-direction: column;
-  }
-
-  input {
-    height: 1.5rem;
-    padding: 0.75rem 0.25rem;
-    margin-bottom: 0.5rem;
-  }
-  textarea {
-    margin-bottom: 0.75rem;
-    resize: vertical;
-    padding: 0.25rem;
-    max-height: 40rem;
-    font-family: inherit;
-  }
-
-  input,
-  textarea {
-    border: 2px solid gray;
-    @extend %bdrs3;
-  }
-
-  button[type=submit] {
-    @extend %base-button-style;
-    @extend %base-button-spacing;
-    width: 100%;
-    height: 2rem;
-    margin: 0;
-  }
-}
 .OpenFileDialog {
   width: #{'min(17.5rem, 100% - 1rem)'};
   min-height: 10rem;
@@ -409,7 +373,8 @@ kbd {
   h2 {
     margin-bottom: 0.5rem;
   }
-  .open-file {
+
+  &__open-button {
     position: absolute;
     bottom: 1rem;
     right: 1rem;
@@ -436,10 +401,6 @@ kbd {
 
   hr {
     margin: 0 1rem;
-  }
-
-  li {
-    margin-left: 1rem;
   }
 
   &__slides {
@@ -472,13 +433,17 @@ kbd {
   & > section {
     position: relative;
   }
-  // padding-bottom: 2rem;
   overflow-y: scroll;
 
-  p:last-of-type {
-    padding-bottom: 2rem;
+  li {
+    margin-left: 1rem;
   }
-  button {
+
+  p:last-of-type {
+    padding-bottom: 2.5rem;
+  }
+
+  &__accept-button {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -491,75 +456,66 @@ kbd {
 .DegreeSelect {
   position: relative;
 
-  .majors {
+  .majors,
+  .minors {
     margin-bottom: 1rem;
-  }
 
-  .select-major,
-  .select-minor {
-    width: 17rem;
-    display: flex;
-    justify-content: space-between;
-  }
-  .major-select,
-  .minor-select {
-    height: 1.5rem;
-    width: 15rem;
-  }
-  .delete-major,
-  .add-major,
-  .delete-minor,
-  .add-minor {
-    appearance: none;
-    @extend %base-button-style;
-    margin-left : 0.25rem;
-    height: 1.5rem;
-    width: 1.5rem;
-
-    background-color: rgb(240, 240, 240);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &:hover img {
-      filter: invert(100%);
+    &__selected-list {
+      width: 17rem;
+      height: 6rem;
+      margin: 0.5rem 0;
     }
-  }
+    &__selected-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+      padding-left: 0.5rem;
+      font-size: 0.9rem;
+      line-height: 1.5rem;
 
-  .add-major,
-  .add-minor {
-    img {
+      background-color: hsl(0, 0%, 97%);
+    }
+
+    &__add-button,
+    &__delete-button {
+      appearance: none;
+      @extend %base-button-style;
+      margin-left : 0.25rem;
+      height: 1.5rem;
+      width: 1.5rem;
+
+      background-color: rgb(240, 240, 240);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &:hover img {
+        filter: invert(100%);
+      }
+    }
+
+    &__add-button img {
       height: 70%;
       width: 70%;
     }
-  }
 
-  .delete-major,
-  .delete-minor {
-    img {
+    &__delete-button img {
       height: 75%;
       width: 75%;
     }
+
+    &__bar-and-button {
+      width: 17rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    &__select-input {
+      height: 1.5rem;
+      width: 15rem;
+    }
   }
 
-  .selected-majors,
-  .selected-minors {
-    width: 17rem;
-    height: 6rem;
-    margin: 0.5rem 0;
-  }
-  .selected-major,
-  .selected-minor {
-    display: flex;
-    justify-content: space-between;
-    margin: 0.5rem 0;
-    padding-left: 0.5rem;
-    font-size: 0.9rem;
-    line-height: 1.5rem;
 
-    background-color: hsl(0, 0%, 97%);
-  }
-
-  button[type=submit] {
+  &__get-courses-button {
     position: absolute;
     bottom: 1rem;
     right: 1rem;
@@ -575,86 +531,23 @@ kbd {
   display: flex;
   flex-direction: column;
 
-  fieldset {
+  .course-type-select {
     padding: 0.5rem 0;
     border: none;
 
-    .uw-course-radio {
+    &__uw-label {
       margin-right: 1rem;
     }
 
-    input {
+    &__uw-radio,
+    &__custom-radio {
       margin-right: 0.25rem;
     }
   }
 
-  .custom-course {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-
-    .header-row {
-      display: flex;
-      justify-content: start;
-      align-items: flex-start;
-    }
-    .footer-row {
-      display: flex;
-      margin-bottom: 1.5rem;
-    }
-    input,
-    textarea {
-      font-family: sans-serif;
-    }
-
-    .custom-id {
-      width: 8rem;
-    }
-    .custom-name {
-      margin: 0 0.5rem;
-      flex-grow: 1;
-    }
-    .custom-credits {
-      width: 3.5rem;
-    }
-    .custom-description {
-      // height: 5rem;
-      font-size: 0.9rem;
-      padding: 0.25rem;
-      margin: 0.5rem 0;
-      border: 2px solid gray;
-      @extend %bdrs3;
-      resize: none;
-      flex-grow: 1;
-    }
-
-    .custom-prerequisite {
-      flex-grow: 1;
-      margin-right: 0.25rem;
-    }
-    .custom-offered {
-      flex-grow: 1;
-      margin-left: 0.25rem;
-    }
-
-    .add-custom-button {
-      @extend %base-button-style;
-      height: 2rem;
-    }
-  }
-
-  .bar-and-button {
-    display: flex;
-    margin-bottom: 1rem;
-  }
-
-  #course-select {
-    // height: 1.5rem;
-    max-width: 30rem;
-    flex-grow: 1;
-    // padding: 0 0.25rem;
+  input,
+  textarea {
     font-family: sans-serif;
-    margin-right: 0.25rem;
   }
 
   input[type=text],
@@ -662,25 +555,122 @@ kbd {
     @extend %base-text-input-style
   }
 
-  button[type=submit] {
-    @extend %base-button-style;
-    height: 1.75rem;
-    // margin: 0 0.25rem;
-    padding: 0 0.25rem;
+  .add-uw-course {
+    &__bar-and-button {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    &__searchbar {
+      max-width: 30rem;
+      flex-grow: 1;
+      margin-right: 0.25rem;
+    }
+    &__add-button {
+      @extend %base-button-style;
+      height: 1.75rem;
+      padding: 0 0.25rem;
+    }
+  }
+
+  .add-custom-course {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    &__header-row {
+      display: flex;
+      justify-content: start;
+      align-items: flex-start;
+    }
+    &__footer-row {
+      display: flex;
+      margin-bottom: 1.5rem;
+    }
+
+
+    &__id-input {
+      width: 8rem;
+    }
+    &__name-input {
+      margin: 0 0.5rem;
+      flex-grow: 1;
+    }
+    &__credits-input {
+      width: 3.5rem;
+    }
+    &__description-input {
+      padding: 0.25rem;
+      margin: 0.5rem 0;
+      border: 2px solid gray;
+      @extend %bdrs3;
+      resize: none;
+      flex-grow: 1;
+      font-size: 0.9rem;
+    }
+
+    &__prerequisite-input {
+      flex-grow: 1;
+      margin-right: 0.25rem;
+    }
+    &__offered-input {
+      flex-grow: 1;
+      margin-left: 0.25rem;
+    }
+
+    &__add-button {
+      @extend %base-button-style;
+      height: 2rem;
+    }
   }
 }
 
-.tippy-box {
-  background: rgba(#333, 0.96);
-  p {
-    margin: 0.5rem 0;
+.AboutDialog {
+  width: #{'min(22.5rem, 100% - 1rem)'};
+
+  h2 {
+    margin-bottom: 0.5rem;
   }
-  mark {
-    color: #333;
-    background: rgba(white, 0.96);
-    padding: 0 0.1rem;
+
+  &__github-link {
+    display: inline-flex;
+    align-items: center;
+
+    img {
+      height: 2rem;
+      width: 2rem;
+      margin-right: 0.5rem;
+    }
   }
-}
-.tippy-box.error-box {
-  background: darkred;
+
+  // &__contact-section {
+  //   display: flex;
+  //   flex-direction: column;
+  // }
+
+  // input {
+  //   height: 1.5rem;
+  //   padding: 0.75rem 0.25rem;
+  //   margin-bottom: 0.5rem;
+  // }
+  // textarea {
+  //   margin-bottom: 0.75rem;
+  //   resize: vertical;
+  //   padding: 0.25rem;
+  //   max-height: 40rem;
+  //   font-family: inherit;
+  // }
+
+  // input,
+  // textarea {
+  //   border: 2px solid gray;
+  //   @extend %bdrs3;
+  // }
+
+  // button[type=submit] {
+  //   @extend %base-button-style;
+  //   @extend %base-button-spacing;
+  //   width: 100%;
+  //   height: 2rem;
+  //   margin: 0;
+  // }
 }

@@ -21,12 +21,12 @@ import {
 } from "react-flow-renderer";
 import dagre from "dagre";
 
-import ContextMenu from "./ContextMenu.jsx";
-import AboutDialog from "./AboutDialog.jsx";
 import NewFlowDialog from "./NewFlowDialog.jsx";
 import OpenFileDialog from "./OpenFileDialog.jsx";
 import AddCourseDialog from "./AddCourseDialog.jsx";
+import AboutDialog from "./AboutDialog.jsx";
 import CustomNode from "./CustomNode.jsx";
+import ContextMenu from "./ContextMenu.jsx";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 

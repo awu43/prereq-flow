@@ -20,9 +20,9 @@ function toKebabCase(text) {
 }
 
 const dummyMajors = [
-  <li className="selected-major dummy" key={nanoid()}>&nbsp;</li>,
-  <li className="selected-major dummy" key={nanoid()}>&nbsp;</li>,
-  <li className="selected-major dummy" key={nanoid()}>&nbsp;</li>,
+  <li className="majors__selected-item" key={nanoid()}>&nbsp;</li>,
+  <li className="majors__selected-item" key={nanoid()}>&nbsp;</li>,
+  <li className="majors__selected-item" key={nanoid()}>&nbsp;</li>,
 ];
 
 export default function DegreeSelect({ busy, setBusy, advance }) {
@@ -68,10 +68,10 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
   const majorsListElems = majors.map(m => {
     const id = toKebabCase(m);
     return (
-      <li className="selected-major" key={id}>
+      <li className="majors__selected-item" key={id}>
         {m}
         <button
-          className="delete-major"
+          className="majors__delete-button"
           type="button"
           onClick={() => deleteMajor(m)}
         >
@@ -86,14 +86,18 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
     <div className="DegreeSelect">
       <section className="majors">
         <h3>Majors (up to 3)</h3>
-        <ul className="selected-majors">
+        <ul className="majors__selected-list">
           {majorsListElems}
         </ul>
-        <div className="select-major">
-          <select className="major-select" onChange={onMajorSelect}>
+        <div className="majors__bar-and-button">
+          <select className="majors__select-input" onChange={onMajorSelect}>
             {mockMajorList.map(m => <option key={toKebabCase(m)}>{m}</option>)}
           </select>
-          <button className="add-major" type="button" onClick={addMajor}>
+          <button
+            className="majors__add-button"
+            type="button"
+            onClick={addMajor}
+          >
             <img src="dist/icons/plus.svg" alt="Add" />
           </button>
         </div>
@@ -102,17 +106,18 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
       {/* TODO: Minors */}
       <section className="minors">
         {/* <h3>Minors (up to 3)</h3> */}
-        {/* <ul className="selected-minors">
+        {/* <ul className="minors__selected-list">
           {minorsListElems}
         </ul>
-        <div className="select-minor">
-          <select className="minor-select" onChange={onMinorSelect}>
+        <div className="minors__bar-and-button">
+          <select className="minors__select-input" onChange={onMinorSelect}>
             {minorsList.map(m => <option key={toKebabCase(m)}>{m}</option>)}
           </select>
-          <button className="add-minor" type="button" onClick={addMinor}>+</button>
+          <button className="minors__add-button" type="button" onClick={addMinor}>+</button>
         </div> */}
       </section>
       <button
+        className="DegreeSelect__get-courses-button"
         type="submit"
         onClick={getCourses}
         disabled={busy || !majors.length}

@@ -22,7 +22,13 @@ export default function PreWarning({ accept }) {
           <li>Equivalencies (e.g. placements tests, AP credits) are not&nbsp;displayed.</li>
         </ul>
         <p>Talk to your advisor when course&nbsp;planning.</p>
-        <button type="button" onClick={accept}>Continue</button>
+        <button
+          className="PreWarning__accept-button"
+          type="button"
+          onClick={accept}
+        >
+          Continue
+        </button>
       </section>
     </div>
   );

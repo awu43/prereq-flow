@@ -97,10 +97,10 @@ export default function AddCourseDialog({
   }
 
   const courseSearchSection = (
-    <section className="course-search">
-      <div className="bar-and-button">
+    <section className="add-uw-course">
+      <div className="add-uw-course__bar-and-button">
         <Tippy
-          className="error-box"
+          className="tippy-box--error"
           content="Course already exists"
           placement="bottom-start"
           arrow={false}
@@ -111,7 +111,7 @@ export default function AddCourseDialog({
           <input
             type="search"
             list="courses"
-            id="course-select"
+            className="add-uw-course__searchbar"
             placeholder="Course ID or name"
             value={selectedCourse}
             onChange={e => {
@@ -127,6 +127,7 @@ export default function AddCourseDialog({
           {courseOptions}
         </datalist>
         <button
+          className="add-uw-course__add-button"
           type="submit"
           disabled={
             (
@@ -145,10 +146,10 @@ export default function AddCourseDialog({
   );
 
   const customCourseSection = (
-    <section className="custom-course">
-      <div className="header-row">
+    <section className="add-custom-course">
+      <div className="add-custom-course__header-row">
         <Tippy
-          className="error-box"
+          className="tippy-box--error"
           content="Course already exists"
           placement="bottom"
           arrow={false}
@@ -157,7 +158,7 @@ export default function AddCourseDialog({
           visible={nodeData.has(customCourseData.id)}
         >
           <input
-            className="custom-id"
+            className="add-custom-course__id-input"
             type="text"
             required={true}
             placeholder="Course ID (required)"
@@ -168,7 +169,7 @@ export default function AddCourseDialog({
           />
         </Tippy>
         <input
-          className="custom-name"
+          className="add-custom-course__name-input"
           type="text"
           placeholder="Course name"
           value={customCourseData.name}
@@ -177,7 +178,7 @@ export default function AddCourseDialog({
           })}
         />
         <input
-          className="custom-credits"
+          className="add-custom-course__credits-input"
           type="text"
           placeholder="Credits"
           value={customCourseData.credits}
@@ -187,7 +188,7 @@ export default function AddCourseDialog({
         />
       </div>
       <textarea
-        className="custom-description"
+        className="add-custom-course__description-input"
         placeholder="Description"
         value={customCourseData.description}
         onChange={e => setCustomCourseData({
@@ -195,9 +196,9 @@ export default function AddCourseDialog({
         })}
       >
       </textarea>
-      <div className="footer-row">
+      <div className="add-custom-course__footer-row">
         <input
-          className="custom-prerequisite"
+          className="add-custom-course__prerequisite-input"
           type="text"
           placeholder="Prerequisite"
           value={customCourseData.prerequisite}
@@ -206,7 +207,7 @@ export default function AddCourseDialog({
           })}
         />
         <input
-          className="custom-offered"
+          className="add-custom-course__offered-input"
           type="text"
           placeholder="Offered"
           value={customCourseData.offered}
@@ -217,7 +218,7 @@ export default function AddCourseDialog({
       </div>
       <button
         type="button"
-        className="add-custom-button"
+        className="add-custom-course__add-button"
         onClick={addCustomCourse}
         disabled={
           !customCourseData.id.trim().length
@@ -246,10 +247,11 @@ export default function AddCourseDialog({
       >
       </button>
       <h2>Add course</h2>
-      <fieldset>
-        <label className="uw-course-radio">
+      <fieldset className="course-type-select">
+        <label className="course-type-select__uw-label">
           <input
             type="radio"
+            className="course-type-select__uw-radio"
             name="course-type"
             value="uw-course"
             checked={selectedOption === "uw-course"}
@@ -257,9 +259,10 @@ export default function AddCourseDialog({
           />
           UW course
         </label>
-        <label className="custom-course-radio">
+        <label className="course-type-select__custom-label">
           <input
             type="radio"
+            className="course-type-select__custom-radio"
             name="course-type"
             value="custom-course"
             checked={selectedOption === "custom-course"}
