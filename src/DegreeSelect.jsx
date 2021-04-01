@@ -1,18 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
-
-import testData from "./data/test-data.js";
-import degreeRequirements from "./data/mech-eng.js";
 
 const API_URL = (
   import.meta.env.MODE === "production"
     ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
     : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
-);
-
-const mockFetchedData = Object.fromEntries(
-  degreeRequirements.flat().map(c => [c, testData[c]])
 );
 
 const mockMajorList = [
@@ -70,7 +63,6 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
         console.error("Error:", error);
       });
     // TODO: Proper error handling
-    // advance(mockFetchedData);
   }
 
   const majorsListElems = majors.map(m => {

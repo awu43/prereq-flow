@@ -1,6 +1,3 @@
-// import testData from "./test-data.js";
-// import demoData from "./demo-data.js";
-
 export const ZERO_POSITION = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
 export const COURSE_REGEX = new RegExp(CRS, "g"); // AAA 000
@@ -52,10 +49,6 @@ function addEdges(sources, target, elements, elementIds) {
     if (elementIds.has(source) && !elementIds.has(`${source} -> ${target}`)) {
       elements.push(newEdge(source, target));
     }
-    // if (!elementIds.has(source)) {
-    //   elements.push(newNode(source));
-    //   elementIds.add(source);
-    // }
   }
 }
 
@@ -103,7 +96,7 @@ export function generateInitialElements(courseData) {
   // TODO: E E 215 "a or (b and (c or d))"
   // TODO: MATH 309 "(a and b) or c"
   // State machine maybe (look into JSON parsing)
-  // TODO: Concurrency
+  // TODO: Co-requisites
 
   // Second pass: single "or" prerequisites
   for (const [course, problemSection] of secondPass.entries()) {
@@ -143,29 +136,6 @@ export function generateInitialElements(courseData) {
   }
   return elements;
 }
-
-// eslint-disable-next-line import/no-mutable-exports
-// let [elements, _elementIds] = generateInitialElements(demoData);
-
-// DEMO FIXES (REMOVE LATER)
-// eslint-disable-next-line import/first, import/order
-// import { removeElements } from "react-flow-renderer";
-
-// addEdges(["MATH 307", "MATH 308"], "MATH 309", elements, elementIds);
-// addEdges(["MATH 126", "MATH 307"], "E E 215", elements, elementIds);
-// const concurrentEdges = [
-//   "MATH 307 -> E E 215",
-// ];
-// elements = elements.map(elem => (
-//   concurrentEdges.includes(elem.id) ? { ...elem, ...CONCURRENT_LABEL } : elem
-// ));
-// const nodesToRemove = ["CHEM 110", "MATH 136", "AMATH 351", "AMATH 352"];
-// elements = removeElements(
-//   elements.filter(e => nodesToRemove.includes(e.id)), elements
-// );
-// DEMO FIXES (REMOVE LATER)
-
-// export { elements as demoElements };
 
 export const _testing = {
   EITHER_OR_REGEX,

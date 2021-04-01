@@ -30,14 +30,9 @@ import CustomNode from "./CustomNode.jsx";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
-import {
-  edgeArrowId,
-  CONCURRENT_LABEL,
-  // demoElements,
-} from "./data/parse-courses.js";
+import { edgeArrowId, CONCURRENT_LABEL } from "./data/parse-courses.js";
 
 import demoFlow from "./data/demo-flow-v2.json";
-// import initialElements from "./initial-elements.js";
 
 import "./App.scss";
 
@@ -62,8 +57,6 @@ function generateDagreLayout(elements) {
   const arrangedElements = elements.map(elem => {
     if (isNode(elem)) {
       const node = dagreGraph.node(elem.id);
-      // elem.targetPosition = "left";
-      // elem.sourcePosition = "right";
 
       // Slight random change is needed as a hack to notify react flow
       // about the change.
@@ -169,10 +162,8 @@ function setnodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes) {
 }
 
 function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
-  const data = nodeData.get(nodeId);
-  // const currentStatus = data.status;
   const currentStatus = elements[elemIndexes.get(nodeId)].data.nodeStatus;
-  const incomingEdges = data.incomingEdges.map(id => (
+  const incomingEdges = nodeData.get(nodeId).incomingEdges.map(id => (
     elements[elemIndexes.get(id)]
   ));
 
@@ -219,15 +210,6 @@ function updateAllNodes(elements, nodeData, elemIndexes) {
   }
   return updatedElements;
 }
-
-// const arrangedElements = generateDagreLayout(initialElements);
-// const arrangedElements = generateDagreLayout(demoElements);
-// const initialNodeData = newNodeData(arrangedElements);
-// const sortedElements = sortElementsByDepth(arrangedElements, initialNodeData);
-// const initialIndexes = newElemIndexes(sortedElements);
-// const initialElements = updateAllNodes(
-//   sortedElements, initialNodeData, initialIndexes
-// );
 
 const initialElements = demoFlow.elements;
 const initialNodeData = new Map(Object.entries(demoFlow.nodeData));
