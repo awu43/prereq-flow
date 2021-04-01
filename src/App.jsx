@@ -1,6 +1,6 @@
 import React, {
   useState,
-  // useEffect,
+  useEffect,
   useRef,
   // useCallback,
 } from "react";
@@ -234,7 +234,7 @@ const initialNodeData = new Map(Object.entries(demoFlow.nodeData));
 const initialIndexes = newElemIndexes(initialElements);
 
 const BASE_MODAL_CLS = "ModalDialog --transparent --display-none";
-// const MAX_UNDO_NUM = 10;
+const MAX_UNDO_NUM = 20;
 
 function App() {
   const [aboutCls, setAboutCls] = useState(BASE_MODAL_CLS);
@@ -246,8 +246,12 @@ function App() {
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
   const elemIndexes = useRef(initialIndexes);
-  // const undoStack = useRef([]);
-  // const redoStack = useRef([]);
+  const undoStack = useRef([]);
+  const redoStack = useRef([]);
+  const dragStartState = useRef(null);
+  // Because drag start is triggered on mousedown even if no movement
+  // occurs, the flow state at drag start should only be added to undo
+  // history on drag end
 
   const [contextActive, setContextActive] = useState(false);
   const contextData = useRef({
@@ -265,6 +269,62 @@ function App() {
     reactFlowInstance.fitView();
     flowInstance.current = reactFlowInstance;
   }
+
+  function resetElementStates(newElements) {
+    const numNodes = nodeData.current.size;
+    const numElems = elemIndexes.current.size;
+    for (let i = 0; i < numNodes; i++) {
+      newElements[i] = {
+        ...newElements[i],
+        data: { ...newElements[i].data, nodeConnected: false }
+      };
+    }
+    for (let i = numNodes; i < numElems; i++) {
+      newElements[i] = { ...newElements[i], animated: false, style: {} };
+    }
+
+    return newElements;
+  }
+
+  function recordFlowState(elems = null) {
+    const flowElems = elems ?? flowInstance.current.toObject().elements;
+    if (undoStack.current.length === MAX_UNDO_NUM) {
+      undoStack.current.shift();
+    }
+    undoStack.current.push(resetElementStates(flowElems));
+    redoStack.current = [];
+  }
+
+  useEffect(() => {
+    function undoListener(event) {
+      if (event.ctrlKey && event.key === "z") {
+        if (undoStack.current.length) {
+          redoStack.current.push(
+            resetElementStates(flowInstance.current.toObject().elements)
+          );
+          const pastElements = undoStack.current.pop();
+          nodeData.current = newNodeData(pastElements);
+          elemIndexes.current = newElemIndexes(pastElements);
+          setElements(pastElements);
+        }
+      }
+    }
+    function redoListener(event) {
+      if (event.ctrlKey && event.key === "y") {
+        if (redoStack.current.length) {
+          undoStack.current.push(
+            resetElementStates(flowInstance.current.toObject().elements)
+          );
+          const futureElements = redoStack.current.pop();
+          nodeData.current = newNodeData(futureElements);
+          elemIndexes.current = newElemIndexes(futureElements);
+          setElements(futureElements);
+        }
+      }
+    }
+    document.addEventListener("keydown", undoListener);
+    document.addEventListener("keydown", redoListener);
+  }, []);
 
   function openDialog(setState) {
     if (!prefersReducedMotion) {
@@ -289,6 +349,7 @@ function App() {
   }
 
   function openFlow(openedElements, openedNodeData) {
+    recordFlowState();
     nodeData.current = openedNodeData;
     elemIndexes.current = newElemIndexes(openedElements);
     setElements(openedElements);
@@ -308,6 +369,7 @@ function App() {
   }
 
   function generateNewFlow(elems) {
+    recordFlowState();
     let newElements = generateDagreLayout(elems);
     nodeData.current = newNodeData(newElements);
     newElements = sortElementsByDepth(newElements, nodeData.current);
@@ -329,10 +391,12 @@ function App() {
   }
 
   function addCourseNode(newNode) {
+    recordFlowState();
     recalculateElements(elements.slice().concat([newNode]));
   }
 
   function reflowElements() {
+    recordFlowState();
     // https://flaviocopes.com/how-to-shuffle-array-javascript/
     let newElements = generateDagreLayout(
       elements.sort(() => Math.random() - 0.5)
@@ -342,60 +406,6 @@ function App() {
 
     setElements(newElements);
   }
-
-  // FIXME: Try storing nodeData/elemIndexes as well
-  // function resetElementStates(elems) {
-  //   const newElements = elems.slice();
-
-  //   const numNodes = nodeData.current.size;
-  //   const numElems = elemIndexes.current.size;
-  //   for (let i = 0; i < numNodes; i++) {
-  //     newElements[i] = {
-  //       ...newElements[i],
-  //       className: nodeData.current.get(newElements[i].id).status,
-  //     };
-  //   }
-  //   for (let i = numNodes; i < numElems; i++) {
-  //     newElements[i] = { ...newElements[i], animated: false, style: {} };
-  //   }
-
-  //   return newElements;
-  // }
-
-  // function recordFlowState() {
-  //   if (undoStack.current.length === MAX_UNDO_NUM) {
-  //     undoStack.current.shift();
-  //   }
-  //   undoStack.current.push(resetElementStates(elements));
-  //   redoStack.current = [];
-  // }
-
-  // const undoListener = useCallback(event => {
-  //   if (event.ctrlKey && event.key === "z") {
-  //     if (undoStack.current.length) {
-  //       redoStack.current.push(resetElementStates(elements));
-  //       const pastElements = undoStack.current.pop();
-  //       recalculateElements(pastElements);
-  //     }
-  //   }
-  // }, [elements, undoStack, redoStack]);
-  // const redoListener = useCallback(event => {
-  //   if (event.ctrlKey && event.key === "y") {
-  //     if (redoStack.current.length) {
-  //       undoStack.current.push(resetElementStates(elements));
-  //       recalculateElements(redoStack.current.pop());
-  //     }
-  //   }
-  // }, [elements, undoStack, redoStack]);
-  // useEffect(() => {
-  //   document.addEventListener("keydown", undoListener);
-  //   document.addEventListener("keydown", redoListener);
-
-  //   return () => {
-  //     document.removeEventListener("keydown", undoListener);
-  //     document.removeEventListener("keydown", redoListener);
-  //   };
-  // }, [undoListener, redoListener]);
 
   /* ELEMENT */
   // Single change can only propogate 2 layers deep
@@ -415,7 +425,7 @@ function App() {
         default:
           return;
       }
-      // recordFlowState();
+      recordFlowState();
       setnodeStatus(
         nodeId, newStatus, newElements, nodeData.current, elemIndexes.current
       );
@@ -442,15 +452,18 @@ function App() {
   }
 
   function onElementsRemove(targetElems) {
+    recordFlowState();
     recalculateElements(removeElements(targetElems, elements));
   }
 
   /* NODE */
   function onNodeDragStart(_event, _node) {
+    dragStartState.current = flowInstance.current.toObject().elements;
     setContextActive(false);
   }
 
   function onNodeDragStop(_event, node) {
+    recordFlowState(dragStartState.current);
     const newElements = elements.slice();
     newElements[elemIndexes.current.get(node.id)].position = node.position;
     setElements(newElements);
@@ -514,6 +527,7 @@ function App() {
   function onConnect({ source, target }) {
     const newEdgeId = edgeArrowId(source, target);
     if (!elemIndexes.current.has(newEdgeId)) {
+      recordFlowState();
       const newElements = elements.map(elem => {
         if (isNode(elem)) {
           return { ...elem, data: { ...elem.data, nodeConnected: false } };
@@ -542,6 +556,7 @@ function App() {
     const newTarget = newConnection.target;
     const newEdgeId = edgeArrowId(newSource, newTarget);
     if (!elemIndexes.current.has(newEdgeId)) {
+      recordFlowState();
       const newElements = elements.slice();
       newElements[elemIndexes.current.get(oldEdge.id)] = {
         ...oldEdge, // Keep CC status
@@ -571,11 +586,12 @@ function App() {
   }
 
   /* SELECTION */
-  // function onSelectionDragStart(event, _nodes) {
-  //   console.log(event);
-  // }
+  function onSelectionDragStart(_event, _nodes) {
+    dragStartState.current = flowInstance.current.toObject().elements;
+  }
 
   function onSelectionDragStop(_event, nodes) {
+    recordFlowState(dragStartState.current);
     const newElements = elements.slice();
     for (const node of nodes) {
       newElements[elemIndexes.current.get(node.id)].position = node.position;
@@ -651,7 +667,7 @@ function App() {
           // --- Move ---
           onMoveStart={onMoveStart}
           // --- Selection ---
-          // onSelectionDragStart={onSelectionDragStart}
+          onSelectionDragStart={onSelectionDragStart}
           onSelectionDragStop={onSelectionDragStop}
           onSelectionContextMenu={onSelectionContextMenu}
           // --- Pane ---
@@ -674,6 +690,7 @@ function App() {
           xy={mouseXY.current}
           COURSE_STATUS_CODES={COURSE_STATUS_CODES}
           setSelectionStatuses={(nodeIds, newStatus) => {
+            recordFlowState();
             const newElements = elements.slice();
             for (const id of nodeIds) {
               setnodeStatus(
@@ -685,6 +702,7 @@ function App() {
             );
           }}
           toggleEdgeConcurrency={edgeId => {
+            recordFlowState();
             const newElements = elements.slice();
             const i = elemIndexes.current.get(edgeId);
             const targetEdge = newElements[i];
@@ -705,6 +723,7 @@ function App() {
             );
           }}
           deleteElems={elemIds => {
+            recordFlowState();
             recalculateElements(
               removeElements(
                 elemIds.map(id => elements[elemIndexes.current.get(id)]), elements
@@ -730,15 +749,17 @@ function App() {
         <img src="dist/icons/question.svg" alt="Open controls" />
       </button>
       <ul className={`controls-help${controlsClosed ? " closed" : ""}`}>
-        <li>Click on an element to&nbsp;select</li>
-        <li>Right click an element for context&nbsp;menu</li>
-        <li>Hover over a node for connections and course information (click to hide course&nbsp;info)</li>
+        <li>Click for single&nbsp;select</li>
+        <li>Right click for context&nbsp;menu</li>
+        <li>Hover over a node for connections and course info (click to hide&nbsp;tooltip)</li>
         <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
         <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
         <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
+        {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
         <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
         <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
-        {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
+        <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;10)</li>
+        <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
         <button
           type="button"
           className="close-controls"

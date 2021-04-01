@@ -16,12 +16,12 @@ if (import.meta.hot) {
   import.meta.hot.accept();
 }
 
-// TODO: Degree select dialog
-// TODO: Course add dialog
+// TODO: Degree select dialog (select courses)
+// TODO: Course add dialog (add connections)
 // TODO: Mobile/tablet warning
 // FIXME: Update node positions with multiclick select
+// TODO: Esc to close dialogs + other keys
 
-// FIXME: Ctrl+Z undo, Ctrl+Y redo
 // TODO: Context menu for edge style
 // TODO: Connection counters
 // TODO: Courses table
