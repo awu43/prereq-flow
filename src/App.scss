@@ -13,16 +13,12 @@
   border: 2px solid gray;
   // background-color: rgb(240, 240, 240);
   @extend %bdrs3;
+  padding: 0.25rem;
 
   &:not(:disabled):hover {
     color: white;
     background-color: grey;
   }
-}
-
-%base-button-spacing {
-  margin: 0 0.25rem;
-  padding: 0.25rem;
 }
 
 %base-border {
@@ -73,7 +69,7 @@ $flow-colors: (
 
   button {
     @extend %base-button-style;
-    @extend %base-button-spacing;
+    margin: 0 0.25rem;
     &:first-child {
       margin-left: 0;
     }
@@ -311,6 +307,9 @@ kbd {
   }
 }
 
+/* %%%%%%% */
+/* DIALOGS */
+/* %%%%%%% */
 .ModalDialog {
   position: fixed;
   top: 0;
@@ -379,7 +378,6 @@ kbd {
     bottom: 1rem;
     right: 1rem;
     @extend %base-button-style;
-    @extend %base-button-spacing;
     font-size: 1rem;
   }
 }
@@ -448,9 +446,7 @@ kbd {
     bottom: 0;
     right: 0;
     @extend %base-button-style;
-    @extend %base-button-spacing;
     font-size: 1rem;
-    margin: 0;
   }
 }
 .DegreeSelect {
@@ -514,13 +510,11 @@ kbd {
     }
   }
 
-
   &__get-courses-button {
     position: absolute;
     bottom: 1rem;
     right: 1rem;
     @extend %base-button-style;
-    @extend %base-button-spacing;
     font-size: 1rem;
   }
 }
@@ -668,7 +662,6 @@ kbd {
 
   // button[type=submit] {
   //   @extend %base-button-style;
-  //   @extend %base-button-spacing;
   //   width: 100%;
   //   height: 2rem;
   //   margin: 0;
