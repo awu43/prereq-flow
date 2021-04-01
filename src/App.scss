@@ -4,26 +4,26 @@
   overflow: hidden;
 }
 
-%bdrs3 {
+%gray-border {
+  border: 2px solid gray;
+  border-radius: 3px;
+}
+
+%lightgray-border {
+  border: 2px solid lightgray;
   border-radius: 3px;
 }
 
 %base-button-style {
   appearance: none;
-  border: 2px solid gray;
+  @extend %gray-border;
   // background-color: rgb(240, 240, 240);
-  @extend %bdrs3;
   padding: 0.25rem;
 
   &:not(:disabled):hover {
     color: white;
-    background-color: grey;
+    background-color: gray;
   }
-}
-
-%base-border {
-  border: 2px solid lightgrey;
-  @extend %bdrs3;
 }
 
 $flow-colors: (
@@ -45,7 +45,7 @@ $flow-colors: (
   display: flex;
   flex-direction: column;
 
-  @extend %base-border;
+  @extend %lightgray-border;
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -88,7 +88,7 @@ $flow-colors: (
 
   display: flex;
 
-  @extend %base-border;
+  @extend %lightgray-border;
   border-bottom: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -148,7 +148,7 @@ $flow-colors: (
   max-width: 20rem;
   z-index: 11;
 
-  @extend %base-border;
+  @extend %lightgray-border;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right: none;
@@ -278,8 +278,7 @@ kbd {
   list-style: none;
 
   background-color: hsl(0, 0%, 95%);
-  border: 2px solid gray;
-  @extend %bdrs3;
+  @extend %gray-border;
 
   cursor: default;
 
@@ -303,7 +302,7 @@ kbd {
 
   li:hover {
     color: white;
-    background-color: grey;
+    background-color: gray;
   }
 }
 
@@ -345,8 +344,7 @@ kbd {
 %base-text-input-style {
   height: 1.5rem;
   padding: 0.75rem 0.25rem;
-  border: 2px solid gray;
-  @extend %bdrs3;
+  @extend %gray-border;
 }
 
 .NewFlowDialog,
@@ -357,7 +355,7 @@ kbd {
   max-height: #{'calc(100% - 1rem)'};
 
   margin: 0.5rem;
-  @extend %base-border;
+  @extend %lightgray-border;
   padding: 1rem;
   background: white;
 
@@ -479,8 +477,8 @@ kbd {
       margin-left : 0.25rem;
       height: 1.5rem;
       width: 1.5rem;
+      padding: 0;
 
-      background-color: rgb(240, 240, 240);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -593,10 +591,9 @@ kbd {
       width: 3.5rem;
     }
     &__description-input {
-      padding: 0.25rem;
       margin: 0.5rem 0;
-      border: 2px solid gray;
-      @extend %bdrs3;
+      @extend %gray-border;
+      padding: 0.25rem;
       resize: none;
       flex-grow: 1;
       font-size: 0.9rem;
@@ -612,8 +609,8 @@ kbd {
     }
 
     &__add-button {
-      @extend %base-button-style;
       height: 2rem;
+      @extend %base-button-style;
     }
   }
 }
@@ -656,8 +653,7 @@ kbd {
 
   // input,
   // textarea {
-  //   border: 2px solid gray;
-  //   @extend %bdrs3;
+  //   @extend %gray-border;
   // }
 
   // button[type=submit] {
