@@ -83,7 +83,7 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
   majorsListElems.push(...dummyMajors.slice(majorsListElems.length));
 
   return (
-    <div className="DegreeSelect">
+    <form className="DegreeSelect">
       <section className="majors">
         <h3>Majors (up to 3)</h3>
         <ul className="majors__selected-list">
@@ -124,7 +124,7 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
       >
         Get courses
       </button>
-    </div>
+    </form>
   );
 }
 DegreeSelect.propTypes = {

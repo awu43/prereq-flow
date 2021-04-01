@@ -40,7 +40,7 @@ export default function AboutDialog({ modalCls, closeDialog }) {
       </section>
       {/* TODO: Contact backend */}
       {/* TODO: Honeypot/catchpha */}
-      {/* <section className="AboutDialog__contact-section">
+      {/* <form className="AboutDialog__contact-form">
         <h2>Contact</h2>
         <label htmlFor="name">Name</label>
         <input
@@ -65,7 +65,7 @@ export default function AboutDialog({ modalCls, closeDialog }) {
         >
         </textarea>
         <button type="submit" onClick={submitMessage}>Submit</button>
-      </section> */}
+      </form> */}
     </ModalDialog>
   );
 }

@@ -7,9 +7,9 @@ export default function ModalDialog(props) {
   } else {
     return (
       <div className={props.modalCls}>
-        <div className={props.dlgCls}>
+        <aside className={props.dlgCls}>
           {props.children}
-        </div>
+        </aside>
       </div>
     );
   }

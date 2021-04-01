@@ -714,14 +714,14 @@ function App() {
           }}
         />
       </ReactFlowProvider>
-      <div className="legend">
+      <aside className="legend">
         <div className="completed">Completed</div>
         <div className="enrolled">Enrolled</div>
         <div className="ready">Ready</div>
         <div className="under-one-away">&lt;1&nbsp;away</div>
         <div className="one-away">1&nbsp;away</div>
         <div className="over-one-away">&gt;1&nbsp;away</div>
-      </div>
+      </aside>
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
@@ -730,26 +730,28 @@ function App() {
       >
         <img src="dist/icons/question.svg" alt="Open controls" />
       </button>
-      <ul className={`controls-help${controlsClosed ? " closed" : ""}`}>
-        <li>Click for single&nbsp;select</li>
-        <li>Right click for context&nbsp;menu</li>
-        <li>Hover over a node for connections and course info (click to hide&nbsp;tooltip)</li>
-        <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
-        <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
-        <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
-        {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
-        <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
-        <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
-        <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;10)</li>
-        <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
-        <button
-          type="button"
-          className="close-controls"
-          onClick={() => setControlsClosed(true)}
-        >
-          <img src="dist/icons/chevron-right.svg" alt="Close controls" />
-        </button>
-      </ul>
+      <aside className={`controls-help${controlsClosed ? " closed" : ""}`}>
+        <ul>
+          <li>Click for single&nbsp;select</li>
+          <li>Right click for context&nbsp;menu</li>
+          <li>Hover over a node for connections and course info (click to hide&nbsp;tooltip)</li>
+          <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
+          <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
+          <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
+          {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
+          <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
+          <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
+          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;10)</li>
+          <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
+          <button
+            type="button"
+            className="close-controls"
+            onClick={() => setControlsClosed(true)}
+          >
+            <img src="dist/icons/chevron-right.svg" alt="Close controls" />
+          </button>
+        </ul>
+      </aside>
 
       <AboutDialog
         modalCls={aboutCls}

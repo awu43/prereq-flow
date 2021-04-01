@@ -96,8 +96,8 @@ export default function AddCourseDialog({
     setBusy(false);
   }
 
-  const courseSearchSection = (
-    <section className="add-uw-course">
+  const uwCourseForm = (
+    <form className="add-uw-course">
       <div className="add-uw-course__bar-and-button">
         <Tippy
           className="tippy-box--error"
@@ -142,11 +142,11 @@ export default function AddCourseDialog({
         </button>
       </div>
       <p>Not all courses are available. See <a href="https://github.com/andrew-1135/prereq-flow#supported-courses" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
-    </section>
+    </form>
   );
 
-  const customCourseSection = (
-    <section className="add-custom-course">
+  const customCourseForm = (
+    <form className="add-custom-course">
       <div className="add-custom-course__header-row">
         <Tippy
           className="tippy-box--error"
@@ -227,13 +227,13 @@ export default function AddCourseDialog({
       >
         Add custom course
       </button>
-    </section>
+    </form>
   );
 
-  const displayedSection = (
+  const displayedForm = (
     selectedOption === "uw-course"
-      ? courseSearchSection
-      : customCourseSection
+      ? uwCourseForm
+      : customCourseForm
   );
 
   return (
@@ -271,7 +271,7 @@ export default function AddCourseDialog({
           Custom course
         </label>
       </fieldset>
-      {displayedSection}
+      {displayedForm}
     </ModalDialog>
   );
 }
