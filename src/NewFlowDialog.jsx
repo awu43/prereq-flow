@@ -9,13 +9,11 @@ import DegreeSelect from "./DegreeSelect.jsx";
 import { generateInitialElements } from "./data/parse-courses.js";
 
 export default function NewFlowDialog({
-  modalCls, closeDialog, generateNewFlow
+  modalCls, closeDialog, supportedMajors, generateNewFlow
 }) {
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
-
-  // const [courseData, setCourseData] = useState({});
 
   function close() {
     closeDialog();
@@ -33,7 +31,6 @@ export default function NewFlowDialog({
   // }
 
   function onCoursesFetched(fetchedData) {
-    // setCourseData(fetchedData);
     const newElements = generateInitialElements(fetchedData);
     generateNewFlow(newElements);
     close();
@@ -60,6 +57,7 @@ export default function NewFlowDialog({
       <div className={`NewFlowDialog__slides slide-${slideNum}`}>
         <PreWarning accept={acceptWarning} />
         <DegreeSelect
+          supportedMajors={supportedMajors}
           busy={busy}
           setBusy={setBusy}
           advance={onCoursesFetched}
@@ -76,5 +74,6 @@ export default function NewFlowDialog({
 NewFlowDialog.propTypes = {
   modalCls: PropTypes.string.isRequired,
   closeDialog: PropTypes.func.isRequired,
+  supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,
   generateNewFlow: PropTypes.func.isRequired,
 };

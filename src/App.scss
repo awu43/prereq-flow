@@ -455,7 +455,7 @@ kbd {
     margin-bottom: 1rem;
 
     &__selected-list {
-      width: 17rem;
+      max-width: 20rem;
       height: 6rem;
       margin: 0.5rem 0;
     }
@@ -498,13 +498,13 @@ kbd {
     }
 
     &__bar-and-button {
-      width: 17rem;
+      max-width: 20rem;
       display: flex;
       justify-content: space-between;
     }
     &__select-input {
+      flex-grow: 1;
       height: 1.5rem;
-      width: 15rem;
     }
   }
 

@@ -11,17 +11,26 @@ Live here: https://prereqflow.com
 ## Supported Majors
 
 ### College of Engineering
-* [ ] Aeronautics and Astronautics
-* [ ] Bioengineering
-* [ ] Chemical Engineering
-* [ ] Civil Engineering
-* [ ] Computer Science and Engineering
-* [ ] Electrical Engineering
-* [ ] Environmental Engineering
-* [ ] Human Centered Design and Engineering
-* [ ] Industrial Engineering
-* [ ] Materials Science and Engineering
-* [ ] Mechanical Engineering
+* Aeronautical and Astronautical Engineering
+* Bioengineering
+    * Data Science
+    * Nanoscience and Molecular Engineering
+* Chemical Engineering
+    * Nanoscience and Molecular Engineering
+* Civil Engineering
+* Computer Engineering
+* Computer Science
+    * Data Science
+* Electrical Engineering
+* Environmental Engineering
+* Human Centered Design and Engineering
+* Industrial Engineering
+* Materials Science and Engineering
+    * Nanoscience and Molecular Engineering
+* Mechanical Engineering
+    * Biomechanics
+    * Mechatronics
+    * Nanoscience and Molecular Engineering
 
 <br/>
 
@@ -78,10 +87,6 @@ Live here: https://prereqflow.com
   <tr>
     <td>Bioengineering</td>
     <td>BIOEN</td>
-  </tr>
-  <tr>
-    <td>Bioresource and Science Engineering</td>
-    <td>BSE</td>
   </tr>
   <tr>
     <td>Civil and Environmental Engineering</td>

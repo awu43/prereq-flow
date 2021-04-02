@@ -37,6 +37,7 @@ module.exports = {
     "no-underscore-dangle": [0],
     "no-else-return": [0],
     "object-curly-newline": [0],
+    "no-continue": [0],
 
     "import/extensions": [0],
     "react/jsx-one-expression-per-line": [0],

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 
@@ -7,13 +7,6 @@ const API_URL = (
     ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
     : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
 );
-
-const mockMajorList = [
-  "Civil Engineering",
-  "Electrical Engineering (Controls)",
-  "Materials Science & Engineering",
-  "Mechanical Engineering",
-];
 
 function toKebabCase(text) {
   return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
@@ -25,17 +18,20 @@ const dummyMajors = [
   <li className="majors__selected-item" key={nanoid()}>&nbsp;</li>,
 ];
 
-export default function DegreeSelect({ busy, setBusy, advance }) {
+export default function DegreeSelect({
+  supportedMajors, busy, setBusy, advance
+}) {
   const [majors, setMajors] = useState([]);
   // const [minors, setMinors] = useState([]);
-  const [selectedMajor, setSelectedMajor] = useState(mockMajorList[0]);
 
-  function onMajorSelect(event) {
-    const { target } = event;
-    setSelectedMajor(target.options[target.selectedIndex].label);
-  }
+  const majorSelectRef = useRef(null);
 
   function addMajor() {
+    if (!supportedMajors.length) {
+      return;
+    }
+    const selectInput = majorSelectRef.current;
+    const selectedMajor = selectInput.options[selectInput.selectedIndex].label;
     if (!majors.includes(selectedMajor) && majors.length < 3) {
       setMajors(majors.concat([selectedMajor]));
     }
@@ -90,8 +86,8 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
           {majorsListElems}
         </ul>
         <div className="majors__bar-and-button">
-          <select className="majors__select-input" onChange={onMajorSelect}>
-            {mockMajorList.map(m => <option key={toKebabCase(m)}>{m}</option>)}
+          <select className="majors__select-input" ref={majorSelectRef}>
+            {supportedMajors.map(m => <option key={toKebabCase(m)}>{m}</option>)}
           </select>
           <button
             className="majors__add-button"
@@ -102,7 +98,7 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
           </button>
         </div>
       </section>
-      <p>Not all majors are available. See <a href="https://github.com/andrew-1135/prereq-flow#supported-majors" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
+      <p>Only College of Engineering majors are currently available. See <a href="https://github.com/andrew-1135/prereq-flow#readme" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
       {/* TODO: Minors */}
       <section className="minors">
         {/* <h3>Minors (up to 3)</h3> */}
@@ -128,6 +124,7 @@ export default function DegreeSelect({ busy, setBusy, advance }) {
   );
 }
 DegreeSelect.propTypes = {
+  supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,
   busy: PropTypes.bool.isRequired,
   setBusy: PropTypes.func.isRequired,
   advance: PropTypes.func.isRequired,
