@@ -460,11 +460,8 @@ function App() {
     setContextActive(false);
   }
 
-  function onNodeDragStop(_event, node) {
+  function onNodeDragStop(_event, _node) {
     recordFlowState(dragStartState.current);
-    const newElements = elements.slice();
-    newElements[elemIndexes.current.get(node.id)].position = node.position;
-    setElements(newElements);
   }
 
   function onNodeMouseEnter(_event, targetNode) {
@@ -588,13 +585,8 @@ function App() {
     dragStartState.current = flowInstance.current.toObject().elements;
   }
 
-  function onSelectionDragStop(_event, nodes) {
+  function onSelectionDragStop(_event, _nodes) {
     recordFlowState(dragStartState.current);
-    const newElements = elements.slice();
-    for (const node of nodes) {
-      newElements[elemIndexes.current.get(node.id)].position = node.position;
-    }
-    setElements(newElements);
   }
 
   function onSelectionContextMenu(event, nodes) {
@@ -676,8 +668,7 @@ function App() {
           // Keys
           deleteKeyCode="Delete"
           // multiSelectionKeyCode="Control"
-          // Going to disable multiclick selection for now,
-          // doesn't go well with recording node movements
+          // FIXME: Context menu actions with click multiselect
         >
           <Background variant="lines" />
           <Controls showInteractive={false} />
