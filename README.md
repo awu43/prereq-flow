@@ -55,6 +55,10 @@ Live here: https://prereqflow.com
     <td>CHEM</td>
   </tr>
   <tr>
+    <td>Economics</td>
+    <td>ECON</td>
+  </tr>
+  <tr>
     <td>English</td>
     <td>ENGL</td>
   </tr>
@@ -69,6 +73,14 @@ Live here: https://prereqflow.com
   <tr>
     <td>Physics</td>
     <td>PHYS</td>
+  </tr>
+  <tr>
+    <td>Psychology</td>
+    <td>PSYCH</td>
+  </tr>
+  <tr>
+    <td>Sociology</td>
+    <td>SOC</td>
   </tr>
   <tr>
     <td>Statistics</td>
@@ -181,6 +193,16 @@ Live here: https://prereqflow.com
   <tr>
     <td>School of Marine and Environmental Affairs</td>
     <td>SMEA</td>
+  </tr>
+</table>
+
+<br/>
+
+### School of Medicine
+<table>
+  <tr>
+    <td>Bioethics and Humanities</td>
+    <td>B H</td>
   </tr>
 </table>
 
