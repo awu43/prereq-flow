@@ -6,9 +6,17 @@ Powered by [React Flow](https://reactflow.dev/) in the front and [FastAPI](https
 
 Live here: https://prereqflow.com
 
+## Todo
+<dl>
+  <dt><strong>UW course search</strong></dt>
+  <dd>Currently the list of supported UW courses that provides autocomplete for the searchbar is loaded from a JSON file, whose size grows with the number of supported courses. To fix this, autocomplete logic will be moved to the back end. <strong>Until this is finished, no new degrees or courses will be added.</strong></dd>
+</dl>
+
 <br/>
 
 ## Supported Majors
+
+Degree courses [here](https://github.com/andrew-1135/prereq-flow-degrees).
 
 ### College of Engineering
 * Aeronautical and Astronautical Engineering
