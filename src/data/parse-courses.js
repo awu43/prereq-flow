@@ -75,7 +75,6 @@ export function generateInitialElements(courseData) {
     const courseId = data.id;
     const { prerequisite } = data;
     if (!COURSE_REGEX.test(prerequisite)) { // No prerequisites
-      // eslint-disable-next-line no-continue
       continue;
     }
 
@@ -83,7 +82,9 @@ export function generateInitialElements(courseData) {
     for (const section of reqSections) {
       const courseMatches = section.match(COURSE_REGEX);
       // if (courseMatches.length === 1 && !EITHER_OR_REGEX.test(section)) {
-      if (courseMatches.length === 1) {
+      if (!courseMatches) {
+        continue;
+      } else if (courseMatches.length === 1) {
         addEdges(courseMatches, courseId, elements, elementIds);
       } else {
         if (!secondPass.has(courseId)) {
