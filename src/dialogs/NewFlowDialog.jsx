@@ -6,7 +6,7 @@ import PreWarning from "./PreWarning.jsx";
 import DegreeSelect from "./DegreeSelect.jsx";
 // import CourseSelect from "./CourseSelect.jsx";
 
-import { generateInitialElements } from "./data/parse-courses.js";
+import { generateInitialElements } from "../parse-courses.js";
 
 export default function NewFlowDialog({
   modalCls, closeDialog, supportedMajors, generateNewFlow

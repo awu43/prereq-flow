@@ -6,9 +6,8 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 import ModalDialog from "./ModalDialog.jsx";
-
-import allCourses from "./data/all_courses.json";
-import { COURSE_REGEX, newNode } from "./data/parse-courses.js";
+import { COURSE_REGEX, newNode } from "../parse-courses.js";
+import allCourses from "../data/all_courses.json";
 
 const API_URL = (
   import.meta.env.MODE === "production"

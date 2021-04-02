@@ -10,7 +10,7 @@ import { Handle } from "react-flow-renderer";
 // Not sure how to pass this from App into CustomNode
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
-import { COURSE_REGEX } from "./data/parse-courses.js";
+import { COURSE_REGEX } from "./parse-courses.js";
 
 const defaultNodeStyle = {
   padding: "10px",

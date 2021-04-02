@@ -21,16 +21,15 @@ import {
 } from "react-flow-renderer";
 import dagre from "dagre";
 
-import NewFlowDialog from "./NewFlowDialog.jsx";
-import OpenFileDialog from "./OpenFileDialog.jsx";
-import AddCourseDialog from "./AddCourseDialog.jsx";
-import AboutDialog from "./AboutDialog.jsx";
+import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import CustomNode from "./CustomNode.jsx";
 import ContextMenu from "./ContextMenu.jsx";
+import NewFlowDialog from "./dialogs/NewFlowDialog.jsx";
+import OpenFileDialog from "./dialogs/OpenFileDialog.jsx";
+import AddCourseDialog from "./dialogs/AddCourseDialog.jsx";
+import AboutDialog from "./dialogs/AboutDialog.jsx";
 
-import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
-
-import { edgeArrowId, CONCURRENT_LABEL } from "./data/parse-courses.js";
+import { edgeArrowId, CONCURRENT_LABEL } from "./parse-courses.js";
 import demoFlow from "./data/demo-flow.json";
 
 import "./App.scss";
