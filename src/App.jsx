@@ -744,7 +744,7 @@ function App() {
           {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
           <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
           <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;10)</li>
+          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;20)</li>
           <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
           <button
             type="button"
