@@ -5,9 +5,7 @@ import React, {
   // useCallback,
 } from "react";
 // eslint-disable-next-line import/no-duplicates
-import ReactFlow from "react-flow-renderer"; // FIXME: Default import error
-import {
-// import ReactFlow, {
+import ReactFlow, {
   Background,
   Controls,
   ReactFlowProvider,
@@ -17,7 +15,6 @@ import {
   getConnectedEdges,
   getIncomers,
   getOutgoers,
-// eslint-disable-next-line import/no-duplicates
 } from "react-flow-renderer";
 import dagre from "dagre";
 
