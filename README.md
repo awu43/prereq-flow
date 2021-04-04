@@ -123,7 +123,7 @@ Degree courses [here](https://github.com/andrew-1135/prereq-flow-degrees).
     <td>CSE</td>
   </tr>
   <tr>
-    <td>Electrical and Computer Engineering</td>
+    <td>Electrical Engineering</td>
     <td>E E</td>
   </tr>
   <tr>
