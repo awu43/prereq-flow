@@ -98,7 +98,7 @@ export default function DegreeSelect({
           </button>
         </div>
       </section>
-      <p>Only College of Engineering majors are currently available. See <a href="https://github.com/andrew-1135/prereq-flow#readme" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
+      <p>Only College of Engineering majors are currently available. See <a href="https://github.com/awu43/prereq-flow#readme" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
       {/* TODO: Minors */}
       <section className="minors">
         {/* <h3>Minors (up to 3)</h3> */}

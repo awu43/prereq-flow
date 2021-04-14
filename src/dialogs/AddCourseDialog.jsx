@@ -140,7 +140,7 @@ export default function AddCourseDialog({
           Add
         </button>
       </div>
-      <p>Not all courses are available. See <a href="https://github.com/andrew-1135/prereq-flow#supported-courses" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
+      <p>Not all courses are available. See <a href="https://github.com/awu43/prereq-flow#supported-courses" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
     </form>
   );
 
