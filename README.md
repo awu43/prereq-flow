@@ -18,7 +18,7 @@ Turns out that domains can't be transferred within 60 days of registration, so f
 
 ## Supported Majors
 
-Degree courses [here](https://github.com/awu43/prereq-flow-degrees).
+Degree course lists [here](https://github.com/awu43/prereq-flow-degrees).
 
 ### College of Engineering
 * Aeronautical and Astronautical Engineering
