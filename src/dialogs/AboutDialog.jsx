@@ -28,7 +28,7 @@ export default function AboutDialog({ modalCls, closeDialog }) {
 
         <p>
           <a
-            href="https://github.com/andrew-1135/prereq-flow"
+            href="https://github.com/awu43/prereq-flow"
             target="_blank"
             rel="noreferrer"
             className="AboutDialog__github-link"

@@ -4,7 +4,6 @@ import React, {
   useRef,
   // useCallback,
 } from "react";
-// eslint-disable-next-line import/no-duplicates
 import ReactFlow, {
   Background,
   Controls,
@@ -663,6 +662,7 @@ function App() {
           zoomOnDoubleClick={false}
           // Keys
           deleteKeyCode="Delete"
+          // FIXME: Reset elements on delete key
           // multiSelectionKeyCode="Control"
           // FIXME: Context menu actions with click multiselect
         >
