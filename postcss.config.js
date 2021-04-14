@@ -5,6 +5,6 @@ module.exports = {
     process.env.NODE_ENV === 'production'
       ? require('postcss-preset-env')
       : null,
-    process.env.NODE_ENV === 'production' ? require('cssnano') : null,
+    // process.env.NODE_ENV === 'production' ? require('cssnano') : null,
   ],
 };
