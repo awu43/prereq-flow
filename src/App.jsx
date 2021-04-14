@@ -516,7 +516,10 @@ function App() {
   /* EDGE */
   function onConnect({ source, target }) {
     const newEdgeId = edgeArrowId(source, target);
-    if (!elemIndexes.current.has(newEdgeId)) {
+    const reverseEdgeId = edgeArrowId(target, source);
+    // Creating a cycle causes infinite recursion in depth calculation
+    if (!elemIndexes.current.has(newEdgeId)
+        && !elemIndexes.current.has(reverseEdgeId)) {
       recordFlowState();
       const newElements = elements.map(elem => {
         if (isNode(elem)) {
@@ -545,7 +548,9 @@ function App() {
     const newSource = newConnection.source;
     const newTarget = newConnection.target;
     const newEdgeId = edgeArrowId(newSource, newTarget);
-    if (!elemIndexes.current.has(newEdgeId)) {
+    const reverseEdgeId = edgeArrowId(newTarget, newSource);
+    if (!elemIndexes.current.has(newEdgeId)
+        && !elemIndexes.current.has(reverseEdgeId)) {
       recordFlowState();
       const newElements = elements.slice();
       newElements[elemIndexes.current.get(oldEdge.id)] = {
