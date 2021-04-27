@@ -21,13 +21,13 @@ module.exports = {
   routes: [
     /* Enable an SPA Fallback in development: */
     // {"match": "routes", "src": ".*", "dest": "/index.html"},
-    {
-      src: "/api/.*",
-      dest: (req, res) => {
-        req.url = req.url.replace(/^\/api/, "");
-        proxy.web(req, res);
-      }
-    }
+    // {
+    //   src: "/api/.*",
+    //   dest: (req, res) => {
+    //     req.url = req.url.replace(/^\/api/, "");
+    //     proxy.web(req, res);
+    //   }
+    // }
   ],
   optimize: {
     /* Example: Bundle your final build: */

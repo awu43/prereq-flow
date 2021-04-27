@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Tippy from "@tippyjs/react";
@@ -15,6 +15,12 @@ const API_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
 );
 
+const WS_URL = (
+  import.meta.env.MODE === "production"
+    ? import.meta.env.SNOWPACK_PUBLIC_PROD_WS_URL
+    : import.meta.env.SNOWPACK_PUBLIC_DEV_WS_URL
+);
+
 const courseList = new Set(allCourses);
 
 const courseOptions = allCourses.map(c => {
@@ -25,6 +31,22 @@ const courseOptions = allCourses.map(c => {
 export default function AddCourseDialog({
   modalCls, closeDialog, nodeData, addCourseNode
 }) {
+  const websocket = useRef(null);
+  useEffect(() => {
+    const wsConnection = new WebSocket(WS_URL);
+    websocket.current = wsConnection;
+    window.addEventListener("beforeunload", () => {
+      wsConnection.close(1000);
+    });
+    wsConnection.addEventListener("message", event => {
+      console.log(`Server response: ${event.data}`);
+    });
+    return () => {
+      wsConnection.close(1000);
+    };
+    // TODO: Proper error handling
+  }, []);
+
   const [busy, setBusy] = useState(false);
   const [selectedOption, setSelectedOption] = useState("uw-course");
 
@@ -63,6 +85,14 @@ export default function AddCourseDialog({
     }, 100);
   }
 
+  function onSearchChange(event) {
+    const newValue = event.target.value;
+    websocket.current.send(newValue);
+    setSelectedCourse(newValue);
+    const match = newValue.match(COURSE_REGEX);
+    setSelectedCourseId(match ? match[0] : "");
+  }
+
   function addNewNode(data) {
     const node = newNode(data);
     node.position.x += (Math.random() - 0.5) * 200;
@@ -73,6 +103,8 @@ export default function AddCourseDialog({
 
   function fetchCourse(event) {
     event.preventDefault();
+    // TODO: Add validation
+    return;
     setBusy(true);
     fetch(`${API_URL}/courses/${selectedCourseId}`)
       .then(resp => resp.json())
@@ -113,12 +145,7 @@ export default function AddCourseDialog({
             className="add-uw-course__searchbar"
             placeholder="Course ID or name"
             value={selectedCourse}
-            onChange={e => {
-              const newValue = e.target.value;
-              setSelectedCourse(newValue);
-              const match = newValue.match(COURSE_REGEX);
-              setSelectedCourseId(match ? match[0] : "");
-            }}
+            onChange={onSearchChange}
             disabled={busy}
           />
         </Tippy>
@@ -128,13 +155,7 @@ export default function AddCourseDialog({
         <button
           className="add-uw-course__add-button"
           type="submit"
-          disabled={
-            (
-              !courseList.has(selectedCourse)
-              || nodeData.has(selectedCourseId)
-            )
-            || busy
-          }
+          disabled={busy}
           onClick={fetchCourse}
         >
           Add
