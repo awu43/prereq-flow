@@ -6,6 +6,7 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 import PreWarning from "./PreWarning.jsx";
 import DegreeSelect from "./DegreeSelect.jsx";
 // import CourseSelect from "./CourseSelect.jsx";
+import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
 import { generateInitialElements } from "../parse-courses.js";
 
@@ -16,11 +17,16 @@ export default function NewFlowDialog({
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
 
+  const prefersReducedMotion = usePrefersReducedMotion();
   function close() {
     closeDialog();
-    setTimeout(() => {
+    if (!prefersReducedMotion) {
+      setTimeout(() => {
+        setSlideState(0);
+      }, 100);
+    } else {
       setSlideState(0);
-    }, 100);
+    }
   }
 
   function acceptWarning() {
@@ -65,7 +71,9 @@ export default function NewFlowDialog({
         </button>
         <h2>New flow</h2>
         <hr />
-        <div className={`NewFlowDialog__slides slide-${slideNum}`}>
+        <div
+          className={`NewFlowDialog__slides slide-${slideNum}`}
+        >
           <PreWarning accept={acceptWarning} />
           <DegreeSelect
             supportedMajors={supportedMajors}

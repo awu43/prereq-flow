@@ -17,6 +17,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
+import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 import { newNode } from "../parse-courses.js";
 
 const API_URL = (
@@ -90,15 +91,23 @@ export default function AddCourseDialog({
     });
   }
 
+  const prefersReducedMotion = usePrefersReducedMotion();
   function close() {
     closeDialog();
-    setTimeout(() => {
-      // Don't reset selectedOption
+    if (!prefersReducedMotion) {
+      setTimeout(() => {
+        // Don't reset selectedOption
+        setSelectedCourse("");
+        setErrorMsg("");
+        setAutocompleteOpts([]);
+        resetCustomCourseData();
+      }, 100);
+    } else {
       setSelectedCourse("");
       setErrorMsg("");
       setAutocompleteOpts([]);
       resetCustomCourseData();
-    }, 100);
+    }
   }
 
   function onSearchChange(event) {
