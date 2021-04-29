@@ -10,11 +10,12 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
+import { DialogOverlay, DialogContent } from "@reach/dialog";
+
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import ModalDialog from "./ModalDialog.jsx";
 import { COURSE_REGEX, newNode } from "../parse-courses.js";
 
 const API_URL = (
@@ -86,8 +87,10 @@ export default function AddCourseDialog({
   function close() {
     closeDialog();
     setTimeout(() => {
+      // Don't reset selectedOption
       setSelectedCourse("");
       setErrorMsg("");
+      setAutocompleteOpts([]);
       resetCustomCourseData();
     }, 100);
   }
@@ -114,8 +117,6 @@ export default function AddCourseDialog({
 
   async function fetchCourse(event) {
     event.preventDefault();
-
-    setAutocompleteOpts([]);
 
     const courseMatch = selectedCourse.match(SEARCH_REGEX);
     if (!courseMatch) {
@@ -206,7 +207,7 @@ export default function AddCourseDialog({
         <Tippy
           className="tippy-box--error"
           content="Course already exists"
-          placement="bottom"
+          placement="bottom-start"
           arrow={false}
           duration={0}
           offset={[0, 5]}
@@ -292,42 +293,53 @@ export default function AddCourseDialog({
   );
 
   return (
-    <ModalDialog modalCls={modalCls} dlgCls="AddCourseDialog">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button
-        type="button"
-        className="close-button"
-        onClick={close}
-        disabled={busy}
-      >
-      </button>
-      <h2>Add course</h2>
-      <fieldset className="course-type-select">
-        <label className="course-type-select__uw-label">
-          <input
-            type="radio"
-            className="course-type-select__uw-radio"
-            name="course-type"
-            value="uw-course"
-            checked={selectedOption === "uw-course"}
-            onChange={e => setSelectedOption(e.target.value)}
-          />
-          UW course
-        </label>
-        <label className="course-type-select__custom-label">
-          <input
-            type="radio"
-            className="course-type-select__custom-radio"
-            name="course-type"
-            value="custom-course"
-            checked={selectedOption === "custom-course"}
-            onChange={e => setSelectedOption(e.target.value)}
-          />
-          Custom course
-        </label>
-      </fieldset>
-      {displayedForm}
-    </ModalDialog>
+    <DialogOverlay
+      className={modalCls}
+      isOpen={!modalCls.includes("--display-none")}
+      onDismiss={event => {
+        if (event.key === "Escape") {
+          closeDialog();
+        }
+        // Don't close on clicking modal background
+      }}
+    >
+      <DialogContent className="AddCourseDialog" aria-label="Add course dialog">
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <button
+          type="button"
+          className="close-button"
+          onClick={close}
+          disabled={busy}
+        >
+        </button>
+        <h2>Add course</h2>
+        <fieldset className="course-type-select">
+          <label className="course-type-select__uw-label">
+            <input
+              type="radio"
+              className="course-type-select__uw-radio"
+              name="course-type"
+              value="uw-course"
+              checked={selectedOption === "uw-course"}
+              onChange={e => setSelectedOption(e.target.value)}
+            />
+            UW course
+          </label>
+          <label className="course-type-select__custom-label">
+            <input
+              type="radio"
+              className="course-type-select__custom-radio"
+              name="course-type"
+              value="custom-course"
+              checked={selectedOption === "custom-course"}
+              onChange={e => setSelectedOption(e.target.value)}
+            />
+            Custom course
+          </label>
+        </fieldset>
+        {displayedForm}
+      </DialogContent>
+    </DialogOverlay>
   );
 }
 AddCourseDialog.propTypes = {

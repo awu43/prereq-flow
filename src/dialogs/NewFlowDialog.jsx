@@ -26,6 +26,7 @@ export default function NewFlowDialog({
     setWarningAccepted(1);
   }
 
+  // TODO: Disable focusable elements on hidden slides
   // function advanceSlide() {
   //   setSlideState(slideState + 1);
   // }
