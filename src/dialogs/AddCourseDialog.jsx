@@ -11,7 +11,6 @@ import "tippy.js/dist/tippy.css";
 
 import ModalDialog from "./ModalDialog.jsx";
 import { COURSE_REGEX, newNode } from "../parse-courses.js";
-// import allCourses from "../data/all_courses.json";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -24,13 +23,6 @@ const WS_URL = (
     ? import.meta.env.SNOWPACK_PUBLIC_PROD_WS_URL
     : import.meta.env.SNOWPACK_PUBLIC_DEV_WS_URL
 );
-
-// const courseList = new Set(allCourses);
-
-// const courseOptions = allCourses.map(c => {
-//   const courseId = c.match(COURSE_REGEX)[0];
-//   return <option key={courseId}>{c}</option>;
-// });
 
 const SEARCH_REGEX = /\b(?:[A-Z&]+ )+\d{3}\b/g;
 
@@ -61,7 +53,9 @@ export default function AddCourseDialog({
               setSelectedCourse(c);
               setAutocompleteOpts([]);
             }}
+            // TODO: Try Reach UI Combobox
             // TODO: Up/down keys (callback refs?)
+            // TODO: Close on outside click
             onKeyDown={e => {
               if (e.key === "Enter") {
                 setSelectedCourse(c);
@@ -80,7 +74,6 @@ export default function AddCourseDialog({
     return () => {
       wsConnection.close(1000);
     };
-    // TODO: Proper error handling
   }, []);
 
   const [customCourseData, setCustomCourseData] = useState({
@@ -113,6 +106,7 @@ export default function AddCourseDialog({
   }
 
   function onSearchChange(event) {
+    // TODO: Search throttle/debounce
     setErrorMsg("");
     const newValue = event.target.value;
     setSelectedCourse(newValue);
@@ -133,7 +127,6 @@ export default function AddCourseDialog({
 
   async function fetchCourse(event) {
     event.preventDefault();
-    // TODO: Add validation
 
     setAutocompleteOpts([]);
 
@@ -167,28 +160,6 @@ export default function AddCourseDialog({
     }
 
     setBusy(false);
-
-    // fetch(`${API_URL}/courses/${searchQuery}`)
-    //   // .then(resp => resp.json())
-    //   .then(resp => {
-    //     if (resp.ok) {
-
-    //     } else if (resp.status === 404) {
-    //       throw Error("Course not found");
-    //     } else {
-    //       throw Error("Something went wrong");
-    //     }
-    //   })
-    // .then(data => addNewNode(data))
-    // .then(() => {
-    //   setSelectedCourse("");
-    //   setBusy(false);
-    // })
-    // .catch(err => {
-    //   console.error(err);
-    //   setErrorMsg(err.message);
-    // });
-    // TODO: Proper error handling
   }
 
   function addCustomCourse() {
@@ -198,7 +169,6 @@ export default function AddCourseDialog({
     setBusy(false);
   }
 
-  // TODO: Custom autocomplete
   const uwCourseForm = (
     <form className="add-uw-course">
       <div className="add-uw-course__bar-and-button">
@@ -213,7 +183,6 @@ export default function AddCourseDialog({
         >
           <input
             type="search"
-            // list="courses"
             className="add-uw-course__searchbar"
             placeholder="Course ID"
             value={selectedCourse}
@@ -229,12 +198,11 @@ export default function AddCourseDialog({
             }}
           />
         </Tippy>
-        {/* <datalist id="courses">{autocompleteOpts}</datalist>
-         */}
         {
           Boolean(autocompleteOpts.length)
           && <ul className="add-uw-course__autocomplete">{autocompleteOpts}</ul>
         }
+        {/* TODO: Focus on autocomplete */}
         <button
           className="add-uw-course__add-button"
           type="submit"
