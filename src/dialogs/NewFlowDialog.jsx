@@ -55,13 +55,13 @@ export default function NewFlowDialog({
       }}
     >
       <DialogContent className="NewFlowDialog" aria-label="New flow dialog">
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           type="button"
           className="close-button"
           onClick={close}
           disabled={busy}
         >
+          <img src="dist/icons/x-black.svg" alt="close" />
         </button>
         <h2>New flow</h2>
         <hr />

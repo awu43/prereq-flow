@@ -19,7 +19,6 @@ if (import.meta.hot) {
 // TODO: Degree select dialog (select courses)
 // TODO: Course add dialog (add connections)
 // TODO: Mobile/tablet warning
-// TODO: Reach UI for dialogs
 
 // TODO: Context menu for edge style
 // TODO: Connection counters

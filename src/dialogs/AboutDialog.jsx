@@ -27,8 +27,9 @@ export default function AboutDialog({ modalCls, closeDialog }) {
       }}
     >
       <DialogContent className="AboutDialog" aria-label="About dialog">
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button type="button" className="close-button" onClick={close}></button>
+        <button type="button" className="close-button" onClick={close}>
+          <img src="dist/icons/x-black.svg" alt="close" />
+        </button>
         <section className="AboutDialog__about-section">
           <h2>About</h2>
           <p>Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate&nbsp;degrees.</p>

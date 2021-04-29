@@ -304,13 +304,13 @@ export default function AddCourseDialog({
       }}
     >
       <DialogContent className="AddCourseDialog" aria-label="Add course dialog">
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           type="button"
           className="close-button"
           onClick={close}
           disabled={busy}
         >
+          <img src="dist/icons/x-black.svg" alt="close" />
         </button>
         <h2>Add course</h2>
         <fieldset className="course-type-select">

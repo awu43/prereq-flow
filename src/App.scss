@@ -334,10 +334,21 @@ kbd {
 
   appearance: none;
   border: none;
-  background: url("dist/icons/x-black.svg") no-repeat center center;
+  background: none;
+
+  // https://codepen.io/sosuke/pen/Pjoqqp
+  // Red: #FF0000
   &:not(:disabled):hover,
   &:active {
-    background: url("dist/icons/x-red.svg") no-repeat center center;
+    img {
+      filter:
+        invert(14%)
+        sepia(100%)
+        saturate(7418%)
+        hue-rotate(2deg)
+        brightness(100%)
+        contrast(113%);
+    }
   }
 }
 

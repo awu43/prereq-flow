@@ -70,8 +70,10 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
       }}
     >
       <DialogContent className="OpenFileDialog" aria-label="Open file dialog">
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button type="button" className="close-button" onClick={close}></button>
+        {/* TODO: Add busy status */}
+        <button type="button" className="close-button" onClick={close}>
+          <img src="dist/icons/x-black.svg" alt="close" />
+        </button>
         <section>
           {/* TODO: Drag+drop file input */}
           <h2>Open flow</h2>
