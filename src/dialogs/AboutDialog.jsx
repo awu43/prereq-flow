@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import ModalDialog from "./ModalDialog.jsx";
+import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 export default function AboutDialog({ modalCls, closeDialog }) {
   // const [msgName, setMsgName] = useState("");
@@ -17,30 +17,39 @@ export default function AboutDialog({ modalCls, closeDialog }) {
   // }
 
   return (
-    <ModalDialog modalCls={modalCls} dlgCls="AboutDialog">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button type="button" className="close-button" onClick={close}></button>
-      <section className="AboutDialog__about-section">
-        <h2>About</h2>
-        <p>Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate&nbsp;degrees.</p>
+    <DialogOverlay
+      className={modalCls}
+      isOpen={!modalCls.includes("--display-none")}
+      onDismiss={event => {
+        if (event.key === "Escape") {
+          closeDialog();
+        }
+      }}
+    >
+      <DialogContent className="AboutDialog" aria-label="About dialog">
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <button type="button" className="close-button" onClick={close}></button>
+        <section className="AboutDialog__about-section">
+          <h2>About</h2>
+          <p>Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate&nbsp;degrees.</p>
 
-        <p>Powered by <a href="https://reactflow.dev/" target="_blank" rel="noreferrer">React Flow</a> in the front and <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noreferrer">FastAPI</a> in the back. Built with <a href="https://www.snowpack.dev/" target="_blank" rel="noreferrer">Snowpack</a> and hosted on&nbsp;<a href="https://vercel.com/" target="_blank" rel="noreferrer">Vercel</a>.</p>
+          <p>Powered by <a href="https://reactflow.dev/" target="_blank" rel="noreferrer">React Flow</a> in the front and <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noreferrer">FastAPI</a> in the back. Built with <a href="https://www.snowpack.dev/" target="_blank" rel="noreferrer">Snowpack</a> and hosted on&nbsp;<a href="https://vercel.com/" target="_blank" rel="noreferrer">Vercel</a>.</p>
 
-        <p>
-          <a
-            href="https://github.com/awu43/prereq-flow"
-            target="_blank"
-            rel="noreferrer"
-            className="AboutDialog__github-link"
-          >
-            <img src="dist/icons/github.svg" alt="Github logo" />
-            Source code
-          </a>
-        </p>
-      </section>
-      {/* TODO: Contact backend */}
-      {/* TODO: Honeypot/catchpha */}
-      {/* <form className="AboutDialog__contact-form">
+          <p>
+            <a
+              href="https://github.com/awu43/prereq-flow"
+              target="_blank"
+              rel="noreferrer"
+              className="AboutDialog__github-link"
+            >
+              <img src="dist/icons/github.svg" alt="Github logo" />
+              Source code
+            </a>
+          </p>
+        </section>
+        {/* TODO: Contact backend */}
+        {/* TODO: Honeypot/catchpha */}
+        {/* <form className="AboutDialog__contact-form">
         <h2>Contact</h2>
         <label htmlFor="name">Name</label>
         <input
@@ -66,7 +75,8 @@ export default function AboutDialog({ modalCls, closeDialog }) {
         </textarea>
         <button type="submit" onClick={submitMessage}>Submit</button>
       </form> */}
-    </ModalDialog>
+      </DialogContent>
+    </DialogOverlay>
   );
 }
 AboutDialog.propTypes = {
