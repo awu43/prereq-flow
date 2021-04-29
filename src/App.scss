@@ -549,6 +549,7 @@ kbd {
 
   .add-uw-course {
     &__bar-and-button {
+      position: relative;
       display: flex;
       margin-bottom: 1rem;
     }
@@ -557,9 +558,39 @@ kbd {
       flex-grow: 1;
       margin-right: 0.25rem;
     }
+    &__autocomplete {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      transform: translateY(calc(100% - 2px));
+      width: calc(100% - 2.75rem);
+      max-height: 20rem;
+
+      overflow-y: auto;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+
+      border: 2px solid gray;
+      border-top: 1px solid gray;
+      background: white;
+
+      li {
+        list-style-type: none;
+        font-family: sans-serif;
+        font-size: 0.8rem;
+
+        padding: 0.25rem;
+
+        &:hover,
+        &:focus {
+          background: lightgray;
+        }
+      }
+    }
     &__add-button {
       @extend %base-button-style;
       height: 1.75rem;
+      width: 2.5rem;
       padding: 0 0.25rem;
     }
   }

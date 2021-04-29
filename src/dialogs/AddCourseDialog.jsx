@@ -1,3 +1,7 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
@@ -7,7 +11,7 @@ import "tippy.js/dist/tippy.css";
 
 import ModalDialog from "./ModalDialog.jsx";
 import { COURSE_REGEX, newNode } from "../parse-courses.js";
-import allCourses from "../data/all_courses.json";
+// import allCourses from "../data/all_courses.json";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -21,16 +25,26 @@ const WS_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_WS_URL
 );
 
-const courseList = new Set(allCourses);
+// const courseList = new Set(allCourses);
 
-const courseOptions = allCourses.map(c => {
-  const courseId = c.match(COURSE_REGEX)[0];
-  return <option key={courseId}>{c}</option>;
-});
+// const courseOptions = allCourses.map(c => {
+//   const courseId = c.match(COURSE_REGEX)[0];
+//   return <option key={courseId}>{c}</option>;
+// });
+
+const SEARCH_REGEX = /\b(?:[A-Z&]+ )+\d{3}\b/g;
 
 export default function AddCourseDialog({
   modalCls, closeDialog, nodeData, addCourseNode
 }) {
+  const [busy, setBusy] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("uw-course");
+
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const [autocompleteOpts, setAutocompleteOpts] = useState([]);
+
   const websocket = useRef(null);
   useEffect(() => {
     const wsConnection = new WebSocket(WS_URL);
@@ -39,20 +53,35 @@ export default function AddCourseDialog({
       wsConnection.close(1000);
     });
     wsConnection.addEventListener("message", event => {
-      console.log(`Server response: ${event.data}`);
+      setAutocompleteOpts(
+        JSON.parse(event.data).map(c => (
+          <li
+            key={c.match(COURSE_REGEX)[0]}
+            onClick={() => {
+              setSelectedCourse(c);
+              setAutocompleteOpts([]);
+            }}
+            // TODO: Up/down keys (callback refs?)
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                setSelectedCourse(c);
+                setAutocompleteOpts([]);
+              } else if (e.key === "Escape") {
+                setAutocompleteOpts([]);
+              }
+            }}
+            tabIndex="0"
+          >
+            {c}
+          </li>
+        ))
+      );
     });
     return () => {
       wsConnection.close(1000);
     };
     // TODO: Proper error handling
   }, []);
-
-  const [busy, setBusy] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("uw-course");
-
-  const [selectedCourse, setSelectedCourse] = useState("");
-  const [selectedCourseId, setSelectedCourseId] = useState("");
-  // const [errorMsg, setErrorMsg] = useState("Foo");
 
   const [customCourseData, setCustomCourseData] = useState({
     id: "",
@@ -77,20 +106,21 @@ export default function AddCourseDialog({
   function close() {
     closeDialog();
     setTimeout(() => {
-      // Don't reset selectedOption
       setSelectedCourse("");
-      setSelectedCourseId("");
-      // setErrorMsg("");
+      setErrorMsg("");
       resetCustomCourseData();
     }, 100);
   }
 
   function onSearchChange(event) {
+    setErrorMsg("");
     const newValue = event.target.value;
-    websocket.current.send(newValue);
     setSelectedCourse(newValue);
-    const match = newValue.match(COURSE_REGEX);
-    setSelectedCourseId(match ? match[0] : "");
+    if (newValue.trim().length) {
+      websocket.current.send(newValue);
+    } else {
+      setAutocompleteOpts([]);
+    }
   }
 
   function addNewNode(data) {
@@ -101,22 +131,63 @@ export default function AddCourseDialog({
     addCourseNode(node);
   }
 
-  function fetchCourse(event) {
+  async function fetchCourse(event) {
     event.preventDefault();
     // TODO: Add validation
-    return;
+
+    setAutocompleteOpts([]);
+
+    const courseMatch = selectedCourse.match(SEARCH_REGEX);
+    if (!courseMatch) {
+      setErrorMsg("Invalid search");
+      return;
+    }
+
+    const searchQuery = courseMatch[0];
+    if (nodeData.has(searchQuery)) {
+      setErrorMsg("Course already exists");
+      return;
+    }
+
+    setErrorMsg("");
     setBusy(true);
-    fetch(`${API_URL}/courses/${selectedCourseId}`)
-      .then(resp => resp.json())
-      .then(data => addNewNode(data))
-      .then(() => {
+
+    try {
+      const resp = await fetch(`${API_URL}/courses/${searchQuery}`);
+      if (resp.ok) {
+        addNewNode(await resp.json());
         setSelectedCourse("");
-        setSelectedCourseId("");
-        setBusy(false);
-      })
-      .catch(error => {
-        console.error("Error:", error);
-      });
+      } else if (resp.status === 404) {
+        setErrorMsg("Course not found");
+      } else {
+        setErrorMsg("Something went wrong");
+      }
+    } catch (_error) {
+      setErrorMsg("Something went wrong");
+    }
+
+    setBusy(false);
+
+    // fetch(`${API_URL}/courses/${searchQuery}`)
+    //   // .then(resp => resp.json())
+    //   .then(resp => {
+    //     if (resp.ok) {
+
+    //     } else if (resp.status === 404) {
+    //       throw Error("Course not found");
+    //     } else {
+    //       throw Error("Something went wrong");
+    //     }
+    //   })
+    // .then(data => addNewNode(data))
+    // .then(() => {
+    //   setSelectedCourse("");
+    //   setBusy(false);
+    // })
+    // .catch(err => {
+    //   console.error(err);
+    //   setErrorMsg(err.message);
+    // });
     // TODO: Proper error handling
   }
 
@@ -127,31 +198,43 @@ export default function AddCourseDialog({
     setBusy(false);
   }
 
+  // TODO: Custom autocomplete
   const uwCourseForm = (
     <form className="add-uw-course">
       <div className="add-uw-course__bar-and-button">
         <Tippy
           className="tippy-box--error"
-          content="Course already exists"
+          content={errorMsg}
           placement="bottom-start"
           arrow={false}
           duration={0}
           offset={[0, 5]}
-          visible={nodeData.has(selectedCourseId)}
+          visible={errorMsg.length}
         >
           <input
             type="search"
-            list="courses"
+            // list="courses"
             className="add-uw-course__searchbar"
-            placeholder="Course ID or name"
+            placeholder="Course ID"
             value={selectedCourse}
             onChange={onSearchChange}
             disabled={busy}
+            onClick={() => {
+              setAutocompleteOpts([]);
+            }}
+            onKeyDown={event => {
+              if (event.key === "Escape") {
+                setAutocompleteOpts([]);
+              }
+            }}
           />
         </Tippy>
-        <datalist id="courses">
-          {courseOptions}
-        </datalist>
+        {/* <datalist id="courses">{autocompleteOpts}</datalist>
+         */}
+        {
+          Boolean(autocompleteOpts.length)
+          && <ul className="add-uw-course__autocomplete">{autocompleteOpts}</ul>
+        }
         <button
           className="add-uw-course__add-button"
           type="submit"
