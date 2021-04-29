@@ -60,3 +60,8 @@ body,
   display: flex;
   flex-direction: column;
 }
+
+:root {
+  --reach-dialog: 1;
+  // Exclude base dialog styles
+}
