@@ -1,9 +1,14 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
-
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
+
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxPopover,
+  ComboboxList,
+  ComboboxOption,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -24,7 +29,9 @@ const WS_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_WS_URL
 );
 
-const SEARCH_REGEX = /\b(?:[A-Z&]+ )+\d{3}\b/g;
+const SEARCH_REGEX = /^\s*((?:[A-Z&]+ )+\d{3})(?:\D+|$)/;
+// Strips away leading whitespace
+// Will not match if >3 numbers in ID
 
 export default function AddCourseDialog({
   modalCls, closeDialog, nodeData, addCourseNode
@@ -47,27 +54,7 @@ export default function AddCourseDialog({
     wsConnection.addEventListener("message", event => {
       setAutocompleteOpts(
         JSON.parse(event.data).map(c => (
-          <li
-            key={c.match(COURSE_REGEX)[0]}
-            onClick={() => {
-              setSelectedCourse(c);
-              setAutocompleteOpts([]);
-            }}
-            // TODO: Try Reach UI Combobox
-            // TODO: Up/down keys (callback refs?)
-            // TODO: Close on outside click
-            onKeyDown={e => {
-              if (e.key === "Enter") {
-                setSelectedCourse(c);
-                setAutocompleteOpts([]);
-              } else if (e.key === "Escape") {
-                setAutocompleteOpts([]);
-              }
-            }}
-            tabIndex="0"
-          >
-            {c}
-          </li>
+          <ComboboxOption key={c.match(COURSE_REGEX)[0]} value={c} />
         ))
       );
     });
@@ -136,7 +123,7 @@ export default function AddCourseDialog({
       return;
     }
 
-    const searchQuery = courseMatch[0];
+    const searchQuery = courseMatch[1];
     if (nodeData.has(searchQuery)) {
       setErrorMsg("Course already exists");
       return;
@@ -181,27 +168,24 @@ export default function AddCourseDialog({
           offset={[0, 5]}
           visible={errorMsg.length}
         >
-          <input
-            type="search"
-            className="add-uw-course__searchbar"
-            placeholder="Course ID"
-            value={selectedCourse}
-            onChange={onSearchChange}
-            disabled={busy}
-            onClick={() => {
-              setAutocompleteOpts([]);
-            }}
-            onKeyDown={event => {
-              if (event.key === "Escape") {
-                setAutocompleteOpts([]);
-              }
-            }}
-          />
+          <Combobox
+            onSelect={item => { setSelectedCourse(item); }}
+            aria-label="Course search"
+          >
+            <ComboboxInput
+              className="add-uw-course__searchbar"
+              placeholder="Course ID"
+              value={selectedCourse}
+              onChange={onSearchChange}
+              disabled={busy}
+            />
+            <ComboboxPopover>
+              <ComboboxList>
+                {autocompleteOpts}
+              </ComboboxList>
+            </ComboboxPopover>
+          </Combobox>
         </Tippy>
-        {
-          Boolean(autocompleteOpts.length)
-          && <ul className="add-uw-course__autocomplete">{autocompleteOpts}</ul>
-        }
         {/* TODO: Focus on autocomplete */}
         <button
           className="add-uw-course__add-button"
