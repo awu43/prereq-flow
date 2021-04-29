@@ -46,6 +46,9 @@ export default function AddCourseDialog({
 
   const [autocompleteOpts, setAutocompleteOpts] = useState([]);
 
+  const searchBarRef = useRef(null);
+  const addButtonRef = useRef(null);
+
   const websocket = useRef(null);
   useEffect(() => {
     const wsConnection = new WebSocket(WS_URL);
@@ -99,7 +102,7 @@ export default function AddCourseDialog({
   }
 
   function onSearchChange(event) {
-    // TODO: Search throttle/debounce
+    // TODO: Check if search throttle/debounce needed in prod
     setErrorMsg("");
     const newValue = event.target.value;
     setSelectedCourse(newValue);
@@ -123,13 +126,15 @@ export default function AddCourseDialog({
 
     const courseMatch = selectedCourse.match(SEARCH_REGEX);
     if (!courseMatch) {
-      setErrorMsg("Invalid search");
+      setErrorMsg("Invalid course ID");
+      searchBarRef.current.focus();
       return;
     }
 
     const searchQuery = courseMatch[1];
     if (nodeData.has(searchQuery)) {
       setErrorMsg("Course already exists");
+      searchBarRef.current.focus();
       return;
     }
 
@@ -151,6 +156,7 @@ export default function AddCourseDialog({
     }
 
     setBusy(false);
+    searchBarRef.current.focus();
   }
 
   function addCustomCourse() {
@@ -178,7 +184,8 @@ export default function AddCourseDialog({
           >
             <ComboboxInput
               className="add-uw-course__searchbar"
-              placeholder="Course ID"
+              ref={searchBarRef}
+              placeholder="Course ID (Enter key to add)"
               value={selectedCourse}
               onChange={onSearchChange}
               disabled={busy}
@@ -190,9 +197,9 @@ export default function AddCourseDialog({
             </ComboboxPopover>
           </Combobox>
         </Tippy>
-        {/* TODO: Focus on autocomplete */}
         <button
           className="add-uw-course__add-button"
+          ref={addButtonRef}
           type="submit"
           disabled={busy}
           onClick={fetchCourse}
