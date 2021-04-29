@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 
 import { isEdge, isNode } from "react-flow-renderer";
 
+import { DialogOverlay, DialogContent } from "@reach/dialog";
+
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
-
-import ModalDialog from "./ModalDialog.jsx";
 
 export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
   const [errorMsg, setErrorMsg] = useState("");
@@ -60,31 +60,42 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
   }
 
   return (
-    <ModalDialog modalCls={modalCls} dlgCls="OpenFileDialog">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button type="button" className="close-button" onClick={close}></button>
-      <section>
-        <h2>Open flow</h2>
-        <Tippy
-          className="tippy-box--error"
-          content={errorMsg}
-          placement="bottom-start"
-          arrow={false}
-          duration={0}
-          offset={[0, 5]}
-          visible={errorMsg.length}
-        >
-          <input type="file" accept="application/json" ref={fileInputRef} />
-        </Tippy>
-        <button
-          className="OpenFileDialog__open-button"
-          type="button"
-          onClick={openFile}
-        >
-          Open
-        </button>
-      </section>
-    </ModalDialog>
+    <DialogOverlay
+      className={modalCls}
+      isOpen={!modalCls.includes("--display-none")}
+      onDismiss={event => {
+        if (event.key === "Escape") {
+          closeDialog();
+        }
+      }}
+    >
+      <DialogContent className="OpenFileDialog" aria-label="Open file dialog">
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <button type="button" className="close-button" onClick={close}></button>
+        <section>
+          {/* TODO: Drag+drop file input */}
+          <h2>Open flow</h2>
+          <Tippy
+            className="tippy-box--error"
+            content={errorMsg}
+            placement="bottom-start"
+            arrow={false}
+            duration={0}
+            offset={[0, 5]}
+            visible={errorMsg.length}
+          >
+            <input type="file" accept="application/json" ref={fileInputRef} />
+          </Tippy>
+          <button
+            className="OpenFileDialog__open-button"
+            type="button"
+            onClick={openFile}
+          >
+            Open
+          </button>
+        </section>
+      </DialogContent>
+    </DialogOverlay>
   );
 }
 OpenFileDialog.propTypes = {
