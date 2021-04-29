@@ -1,7 +1,3 @@
-const httpProxy = require("http-proxy");
-
-const proxy = httpProxy.createServer({ target: "http://localhost:3000" });
-
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   // exclude: [
@@ -21,13 +17,6 @@ module.exports = {
   routes: [
     /* Enable an SPA Fallback in development: */
     // {"match": "routes", "src": ".*", "dest": "/index.html"},
-    // {
-    //   src: "/api/.*",
-    //   dest: (req, res) => {
-    //     req.url = req.url.replace(/^\/api/, "");
-    //     proxy.web(req, res);
-    //   }
-    // }
   ],
   optimize: {
     /* Example: Bundle your final build: */
