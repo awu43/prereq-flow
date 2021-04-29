@@ -7,6 +7,7 @@ import {
   ComboboxPopover,
   ComboboxList,
   ComboboxOption,
+  ComboboxOptionText,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
@@ -16,7 +17,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import { COURSE_REGEX, newNode } from "../parse-courses.js";
+import { newNode } from "../parse-courses.js";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -54,8 +55,10 @@ export default function AddCourseDialog({
     });
     wsConnection.addEventListener("message", event => {
       setAutocompleteOpts(
-        JSON.parse(event.data).map(c => (
-          <ComboboxOption key={c.match(COURSE_REGEX)[0]} value={c} />
+        JSON.parse(event.data).map(courseData => (
+          <ComboboxOption key={courseData.id} value={courseData.id}>
+            <ComboboxOptionText />: {courseData.name}
+          </ComboboxOption>
         ))
       );
     });
