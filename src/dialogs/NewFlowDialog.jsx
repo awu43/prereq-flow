@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import ModalDialog from "./ModalDialog.jsx";
+import { DialogOverlay, DialogContent } from "@reach/dialog";
+
 import PreWarning from "./PreWarning.jsx";
 import DegreeSelect from "./DegreeSelect.jsx";
 // import CourseSelect from "./CourseSelect.jsx";
@@ -44,32 +45,42 @@ export default function NewFlowDialog({
   const slideNum = warningAccepted + slideState;
 
   return (
-    <ModalDialog modalCls={modalCls} dlgCls="NewFlowDialog">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button
-        type="button"
-        className="close-button"
-        onClick={close}
-        disabled={busy}
-      >
-      </button>
-      <h2>New flow</h2>
-      <hr />
-      <div className={`NewFlowDialog__slides slide-${slideNum}`}>
-        <PreWarning accept={acceptWarning} />
-        <DegreeSelect
-          supportedMajors={supportedMajors}
-          busy={busy}
-          setBusy={setBusy}
-          advance={onCoursesFetched}
-        />
-        {/* <CourseSelect
+    <DialogOverlay
+      className={modalCls}
+      isOpen={!modalCls.includes("--display-none")}
+      onDismiss={event => {
+        if (event.key === "Escape") {
+          closeDialog();
+        }
+      }}
+    >
+      <DialogContent className="NewFlowDialog" aria-label="New flow dialog">
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <button
+          type="button"
+          className="close-button"
+          onClick={close}
+          disabled={busy}
+        >
+        </button>
+        <h2>New flow</h2>
+        <hr />
+        <div className={`NewFlowDialog__slides slide-${slideNum}`}>
+          <PreWarning accept={acceptWarning} />
+          <DegreeSelect
+            supportedMajors={supportedMajors}
+            busy={busy}
+            setBusy={setBusy}
+            advance={onCoursesFetched}
+          />
+          {/* <CourseSelect
           courseData={courseData}
           generateNewFlow={generateNewFlow}
         /> */}
-      </div>
-      {/* Flex, 3x width + transform */}
-    </ModalDialog>
+        </div>
+        {/* Flex, 3x width + transform */}
+      </DialogContent>
+    </DialogOverlay>
   );
 }
 NewFlowDialog.propTypes = {
