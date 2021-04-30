@@ -49,6 +49,7 @@ export default function AddCourseDialog({
 
   const searchBarRef = useRef(null);
   const addButtonRef = useRef(null);
+  const customCourseIdRef = useRef(null);
 
   const websocket = useRef(null);
   useEffect(() => {
@@ -111,7 +112,7 @@ export default function AddCourseDialog({
   }
 
   function onSearchChange(event) {
-    // TODO: Check if search throttle/debounce needed in prod
+    // Heroku responds fast enough, no throttling/debouncing needed
     setErrorMsg("");
     const newValue = event.target.value;
     setSelectedCourse(newValue);
@@ -173,6 +174,7 @@ export default function AddCourseDialog({
     addNewNode(customCourseData);
     resetCustomCourseData();
     setBusy(false);
+    customCourseIdRef.current.focus();
   }
 
   const uwCourseForm = (
@@ -233,6 +235,7 @@ export default function AddCourseDialog({
           visible={nodeData.has(customCourseData.id)}
         >
           <input
+            ref={customCourseIdRef}
             className="add-custom-course__id-input"
             type="text"
             required={true}

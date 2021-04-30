@@ -725,7 +725,6 @@ function App() {
         <div className="one-away">1&nbsp;away</div>
         <div className="over-one-away">&gt;1&nbsp;away</div>
       </aside>
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         className="display-controls"
