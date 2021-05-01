@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
+import { DialogOverlay, DialogContent } from "@reach/dialog";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import "@reach/tabs/styles.css";
 import {
   Combobox,
   ComboboxInput,
@@ -10,8 +13,6 @@ import {
   ComboboxOptionText,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
-
-import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -40,7 +41,7 @@ export default function AddCourseDialog({
   modalCls, closeDialog, nodeData, addCourseNode
 }) {
   const [busy, setBusy] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("uw-course");
+  const [selectedCampus, setSelectedCampus] = useState("Seattle");
 
   const [selectedCourse, setSelectedCourse] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -117,7 +118,9 @@ export default function AddCourseDialog({
     const newValue = event.target.value;
     setSelectedCourse(newValue);
     if (newValue.trim().length) {
-      websocket.current.send(newValue);
+      websocket.current.send(
+        JSON.stringify({ campus: selectedCampus, id: newValue.trim() })
+      );
     } else {
       setAutocompleteOpts([]);
     }
@@ -179,6 +182,41 @@ export default function AddCourseDialog({
 
   const uwCourseForm = (
     <form className="add-uw-course">
+      <fieldset className="add-uw-course__campus-select">
+        <label className="add-uw-course__radio-label--seattle">
+          <input
+            type="radio"
+            className="add-uw-course__radio-button"
+            name="uw-campus"
+            value="Seattle"
+            checked={selectedCampus === "Seattle"}
+            onChange={e => setSelectedCampus(e.target.value)}
+          />
+          Seattle
+        </label>
+        <label className="add-uw-course__radio-label--bothell">
+          <input
+            type="radio"
+            className="add-uw-course__radio-button"
+            name="uw-campus"
+            value="Bothell"
+            checked={selectedCampus === "Bothell"}
+            onChange={e => setSelectedCampus(e.target.value)}
+          />
+          Bothell
+        </label>
+        <label className="add-uw-course__radio-label--tacoma">
+          <input
+            type="radio"
+            className="add-uw-course__radio-button"
+            name="uw-campus"
+            value="Tacoma"
+            checked={selectedCampus === "Tacoma"}
+            onChange={e => setSelectedCampus(e.target.value)}
+          />
+          Tacoma
+        </label>
+      </fieldset>
       <div className="add-uw-course__bar-and-button">
         <Tippy
           className="tippy-box--error"
@@ -218,7 +256,6 @@ export default function AddCourseDialog({
           Add
         </button>
       </div>
-      <p>Not all courses are available. See <a href="https://github.com/awu43/prereq-flow#supported-courses" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
     </form>
   );
 
@@ -308,12 +345,6 @@ export default function AddCourseDialog({
     </form>
   );
 
-  const displayedForm = (
-    selectedOption === "uw-course"
-      ? uwCourseForm
-      : customCourseForm
-  );
-
   return (
     <DialogOverlay
       className={modalCls}
@@ -335,31 +366,17 @@ export default function AddCourseDialog({
           <img src="dist/icons/x-black.svg" alt="close" />
         </button>
         <h2>Add course</h2>
-        <fieldset className="course-type-select">
-          <label className="course-type-select__uw-label">
-            <input
-              type="radio"
-              className="course-type-select__uw-radio"
-              name="course-type"
-              value="uw-course"
-              checked={selectedOption === "uw-course"}
-              onChange={e => setSelectedOption(e.target.value)}
-            />
-            UW course
-          </label>
-          <label className="course-type-select__custom-label">
-            <input
-              type="radio"
-              className="course-type-select__custom-radio"
-              name="course-type"
-              value="custom-course"
-              checked={selectedOption === "custom-course"}
-              onChange={e => setSelectedOption(e.target.value)}
-            />
-            Custom course
-          </label>
-        </fieldset>
-        {displayedForm}
+        <Tabs>
+          <TabList>
+            <Tab>UW course</Tab>
+            <Tab>Custom course</Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>{uwCourseForm}</TabPanel>
+            <TabPanel>{customCourseForm}</TabPanel>
+          </TabPanels>
+        </Tabs>
       </DialogContent>
     </DialogOverlay>
   );

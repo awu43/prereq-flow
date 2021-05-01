@@ -545,18 +545,8 @@ kbd {
   display: flex;
   flex-direction: column;
 
-  .course-type-select {
-    padding: 0.5rem 0;
-    border: none;
-
-    &__uw-label {
-      margin-right: 1rem;
-    }
-
-    &__uw-radio,
-    &__custom-radio {
-      margin-right: 0.25rem;
-    }
+  [data-reach-tab-list] {
+    margin: 0.5rem 0;
   }
 
   input,
@@ -570,6 +560,18 @@ kbd {
   }
 
   .add-uw-course {
+    &__campus-select {
+      margin: 0.75rem 0;
+      border: none;
+    }
+    &__radio-label--seattle,
+    &__radio-label--bothell {
+      margin-right: 1rem;
+    }
+    &__radio-button {
+      margin-right: 0.25rem;
+    }
+
     &__bar-and-button {
       display: flex;
       margin-bottom: 1rem;
