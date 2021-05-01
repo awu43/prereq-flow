@@ -16,7 +16,6 @@ if (import.meta.hot) {
   import.meta.hot.accept();
 }
 
-// TODO: Stop dialogs from exiting when busy
 // TODO: Degree select dialog (select courses)
 // TODO: Course add dialog (add connections)
 // TODO: Mobile/tablet warning

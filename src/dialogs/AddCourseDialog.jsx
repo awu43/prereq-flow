@@ -319,7 +319,7 @@ export default function AddCourseDialog({
       className={modalCls}
       isOpen={!modalCls.includes("--display-none")}
       onDismiss={event => {
-        if (event.key === "Escape") {
+        if (event.key === "Escape" && !busy) {
           closeDialog();
         }
         // Don't close on clicking modal background

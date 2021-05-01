@@ -77,7 +77,7 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
       className={modalCls}
       isOpen={!modalCls.includes("--display-none")}
       onDismiss={event => {
-        if (event.key === "Escape") {
+        if (event.key === "Escape" && !busy) {
           closeDialog();
         }
       }}
