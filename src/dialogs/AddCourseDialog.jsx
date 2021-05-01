@@ -37,6 +37,7 @@ const SEARCH_REGEX = /^\s*((?:[A-Z&]+ )+\d{3})(?:\D+|$)/;
 // Strips away leading whitespace
 // Will not match if >3 numbers in ID
 
+// TODO: Autoconnect
 export default function AddCourseDialog({
   modalCls, closeDialog, nodeData, addCourseNode
 }) {
@@ -73,6 +74,10 @@ export default function AddCourseDialog({
     };
   }, []);
 
+  const [connectToExisting, setConnectToExisting] = useState(true);
+  const [ambiguousHandling, setAmbiguousHandling] = useState("aggressively");
+  const [newCoursePosition, setNewCoursePosition] = useState("zero");
+
   const [customCourseData, setCustomCourseData] = useState({
     id: "",
     name: "",
@@ -95,18 +100,17 @@ export default function AddCourseDialog({
 
   const prefersReducedMotion = usePrefersReducedMotion();
   function close() {
+    setErrorMsg("");
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
-        // Don't reset selectedOption
+        // Don't reset selected options
         setSelectedCourse("");
-        setErrorMsg("");
         setAutocompleteOpts([]);
         resetCustomCourseData();
       }, 100);
     } else {
       setSelectedCourse("");
-      setErrorMsg("");
       setAutocompleteOpts([]);
       resetCustomCourseData();
     }
@@ -182,15 +186,14 @@ export default function AddCourseDialog({
 
   const uwCourseForm = (
     <form className="add-uw-course">
-      <fieldset className="add-uw-course__campus-select">
+      <fieldset className="add-uw-course__campus-select" disabled={busy}>
         <label className="add-uw-course__radio-label--seattle">
           <input
             type="radio"
             className="add-uw-course__radio-button"
             name="uw-campus"
-            value="Seattle"
             checked={selectedCampus === "Seattle"}
-            onChange={e => setSelectedCampus(e.target.value)}
+            onChange={() => setSelectedCampus("Seattle")}
           />
           Seattle
         </label>
@@ -199,9 +202,8 @@ export default function AddCourseDialog({
             type="radio"
             className="add-uw-course__radio-button"
             name="uw-campus"
-            value="Bothell"
             checked={selectedCampus === "Bothell"}
-            onChange={e => setSelectedCampus(e.target.value)}
+            onChange={() => setSelectedCampus("Bothell")}
           />
           Bothell
         </label>
@@ -210,9 +212,8 @@ export default function AddCourseDialog({
             type="radio"
             className="add-uw-course__radio-button"
             name="uw-campus"
-            value="Tacoma"
             checked={selectedCampus === "Tacoma"}
-            onChange={e => setSelectedCampus(e.target.value)}
+            onChange={() => setSelectedCampus("Tacoma")}
           />
           Tacoma
         </label>
@@ -255,6 +256,65 @@ export default function AddCourseDialog({
         >
           Add
         </button>
+      </div>
+      <label>
+        <input
+          type="checkbox"
+          checked={connectToExisting}
+          disabled={busy}
+          onChange={() => { setConnectToExisting(!connectToExisting); }}
+        />
+        Connect to existing courses
+      </label>
+      <div className="add-uw-course__connection-opts">
+        <div className={`connection-opts__cover ${!connectToExisting || busy ? "--enabled" : ""}`}></div>
+        <fieldset disabled={!connectToExisting || busy}>
+          <legend>Ambiguous prereqs (e.g. <q>Either X or Y</q>) should be handled</legend>
+          <label>
+            <input
+              type="radio"
+              name="make-new-connections"
+              checked={ambiguousHandling === "aggressively"}
+              onChange={() => setAmbiguousHandling("aggressively")}
+            />
+            Aggressively (two new connections)
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="make-new-connections"
+              checked={ambiguousHandling === "cautiously"}
+              onChange={() => setAmbiguousHandling("cautiously")}
+            />
+            Cautiously (no new connections)
+          </label>
+        </fieldset>
+
+        <fieldset
+          className="connection-opts__position"
+          disabled={!connectToExisting || busy}
+        >
+          <legend>New courses should be placed</legend>
+          <label>
+            <input
+              type="radio"
+              name="new-position"
+              value="zero"
+              checked={newCoursePosition === "zero"}
+              onChange={() => setNewCoursePosition("zero")}
+            />
+            At zero position (top-left)
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="new-position"
+              checked={newCoursePosition === "relative"}
+              onChange={() => setNewCoursePosition("relative")}
+            />
+            Relative to pre/postreqs (may cause overlapping)
+          </label>
+        </fieldset>
       </div>
     </form>
   );

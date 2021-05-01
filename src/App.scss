@@ -380,7 +380,11 @@ kbd {
   @extend %lightgray-border;
   padding: 1rem;
   background: white;
-
+}
+.NewFlowDialog,
+.OpenFileDialog,
+// .AddCourseDialog,
+.AboutDialog {
   p:not(:first-of-type) {
     margin: 1rem 0;
   }
@@ -541,12 +545,12 @@ kbd {
 
 .AddCourseDialog {
   width: #{'min(30rem, 100% - 1rem)'};
-  min-height: 20rem;
+  // min-height: 20rem;
   display: flex;
   flex-direction: column;
 
   [data-reach-tab-list] {
-    margin: 0.5rem 0;
+    margin: 0.5rem 0 0.75rem 0;
   }
 
   input,
@@ -559,17 +563,24 @@ kbd {
     @extend %base-text-input-style
   }
 
+  input[type=radio],
+  input[type=checkbox] {
+    margin-right: 0.25rem;
+  }
+
+  fieldset label {
+    display: block;
+  }
+
   .add-uw-course {
     &__campus-select {
-      margin: 0.75rem 0;
+      margin: 0.25rem 0;
       border: none;
+      display: flex;
     }
     &__radio-label--seattle,
     &__radio-label--bothell {
       margin-right: 1rem;
-    }
-    &__radio-button {
-      margin-right: 0.25rem;
     }
 
     &__bar-and-button {
@@ -592,6 +603,41 @@ kbd {
       height: 1.75rem;
       width: 2.5rem;
       padding: 0 0.25rem;
+    }
+
+    &__connection-opts {
+      position: relative;
+      margin-top: 0.25rem;
+      border: 1px solid gray;
+      padding: 0.5rem;
+
+      fieldset {
+        border: none;
+      }
+      label {
+        margin-left: 0.5rem;
+      }
+    }
+
+    .connection-opts {
+      &__cover {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: none;
+
+        background: rgba(lightgray, 0.75);
+
+        &.--enabled {
+          display: inherit;
+        }
+      }
+
+      &__position {
+        margin-top: 0.5rem;
+      }
     }
   }
 
@@ -627,7 +673,7 @@ kbd {
       padding: 0.25rem;
       resize: none;
       flex-grow: 1;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
 
     &__prerequisite-input {

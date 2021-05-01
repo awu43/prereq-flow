@@ -10,6 +10,7 @@ import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
 import { generateInitialElements } from "../parse-courses.js";
 
+// TODO: New department flow, new blank flow
 export default function NewFlowDialog({
   modalCls, closeDialog, supportedMajors, generateNewFlow
 }) {
