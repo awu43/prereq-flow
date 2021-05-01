@@ -240,6 +240,9 @@ function App() {
   const [mouseXY, setMouseXY] = useState([0, 0]);
 
   const [controlsClosed, setControlsClosed] = useState(true);
+  const openControlsButtonRef = useRef(null);
+  // const closeControlsButtonRef = useRef(null);
+
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -726,9 +729,11 @@ function App() {
         <div className="over-one-away">&gt;1&nbsp;away</div>
       </aside>
       <button
+        ref={openControlsButtonRef}
         type="button"
         className="display-controls"
-        onClick={() => setControlsClosed(false)}
+        onClick={() => setControlsClosed(!controlsClosed)}
+        // Focusing on close button causes offscreen jerk
       >
         <img src="dist/icons/question.svg" alt="Open controls" />
       </button>
@@ -746,9 +751,14 @@ function App() {
           <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;20)</li>
           <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
           <button
+            // ref={closeControlsButtonRef}
             type="button"
             className="close-controls"
-            onClick={() => setControlsClosed(true)}
+            onClick={() => {
+              setControlsClosed(true);
+              openControlsButtonRef.current.focus();
+            }}
+            tabIndex={controlsClosed ? "-1" : "0"}
           >
             <img src="dist/icons/chevron-right.svg" alt="Close controls" />
           </button>
