@@ -337,10 +337,20 @@ kbd {
   border: none;
   background: none;
 
+  &:disabled img {
+    filter:
+      invert(55%)
+      sepia(0%)
+      saturate(28%)
+      hue-rotate(137deg)
+      brightness(92%)
+      contrast(83%);
+  }
+
   // https://codepen.io/sosuke/pen/Pjoqqp
   // Red: #FF0000
   &:not(:disabled):hover,
-  &:active {
+  &:not(:disabled):active {
     img {
       filter:
         invert(14%)
