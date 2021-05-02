@@ -545,7 +545,7 @@ kbd {
 
 .AddCourseDialog {
   width: #{'min(30rem, 100% - 1rem)'};
-  // min-height: 20rem;
+  min-height: 19.5rem;
   display: flex;
   flex-direction: column;
 
@@ -585,7 +585,7 @@ kbd {
 
     &__bar-and-button {
       display: flex;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
     [data-reach-combobox] {
       max-width: 30rem;
@@ -608,8 +608,7 @@ kbd {
     &__connection-opts {
       position: relative;
       margin-top: 0.25rem;
-      border: 1px solid gray;
-      padding: 0.5rem;
+      border-top: 1px solid gray;
 
       fieldset {
         border: none;

@@ -37,7 +37,6 @@ const SEARCH_REGEX = /^\s*((?:[A-Z&]+ )+\d{3})(?:\D+|$)/;
 // Strips away leading whitespace
 // Will not match if >3 numbers in ID
 
-// TODO: Autoconnect
 export default function AddCourseDialog({
   modalCls, closeDialog, nodeData, addCourseNode
 }) {
@@ -75,7 +74,7 @@ export default function AddCourseDialog({
   }, []);
 
   const [connectToExisting, setConnectToExisting] = useState(true);
-  const [ambiguousHandling, setAmbiguousHandling] = useState("aggressively");
+  // const [ambiguousHandling, setAmbiguousHandling] = useState("aggressively");
   const [newCoursePosition, setNewCoursePosition] = useState("zero");
 
   const [customCourseData, setCustomCourseData] = useState({
@@ -135,7 +134,7 @@ export default function AddCourseDialog({
     node.position.x += (Math.random() - 0.5) * 200;
     node.position.y += (Math.random() - 0.5) * 200;
     // Add fuzzing to stop multiple nodes from piling
-    addCourseNode(node);
+    addCourseNode(node, connectToExisting, newCoursePosition);
   }
 
   async function fetchCourse(event) {
@@ -268,7 +267,7 @@ export default function AddCourseDialog({
       </label>
       <div className="add-uw-course__connection-opts">
         <div className={`connection-opts__cover ${!connectToExisting || busy ? "--enabled" : ""}`}></div>
-        <fieldset disabled={!connectToExisting || busy}>
+        {/* <fieldset disabled={!connectToExisting || busy}>
           <legend>Ambiguous prereqs (e.g. <q>Either X or Y</q>) should be handled</legend>
           <label>
             <input
@@ -288,7 +287,7 @@ export default function AddCourseDialog({
             />
             Cautiously (no new connections)
           </label>
-        </fieldset>
+        </fieldset> */}
 
         <fieldset
           className="connection-opts__position"
@@ -303,7 +302,7 @@ export default function AddCourseDialog({
               checked={newCoursePosition === "zero"}
               onChange={() => setNewCoursePosition("zero")}
             />
-            At zero position (top-left)
+            At zero position i.e. top-left
           </label>
           <label>
             <input
@@ -312,7 +311,7 @@ export default function AddCourseDialog({
               checked={newCoursePosition === "relative"}
               onChange={() => setNewCoursePosition("relative")}
             />
-            Relative to pre/postreqs (may cause overlapping)
+            Relative to pre/postreqs (experimental)
           </label>
         </fieldset>
       </div>

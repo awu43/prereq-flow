@@ -20,7 +20,12 @@ import OpenFileDialog from "./dialogs/OpenFileDialog.jsx";
 import AddCourseDialog from "./dialogs/AddCourseDialog.jsx";
 import AboutDialog from "./dialogs/AboutDialog.jsx";
 
-import { edgeArrowId, CONCURRENT_LABEL } from "./parse-courses.js";
+import {
+  COURSE_REGEX,
+  edgeArrowId,
+  newEdge,
+  CONCURRENT_LABEL,
+} from "./parse-courses.js";
 import demoFlow from "./data/demo-flow.json";
 
 import "./App.scss";
@@ -147,7 +152,7 @@ const COURSE_STATUS_CODES = Object.freeze({
   "over-one-away": 5,
 });
 
-function setnodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes) {
+function setNodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes) {
   elements[elemIndexes.get(nodeId)].data.nodeStatus = newStatus;
   for (const edgeId of nodeData.get(nodeId).outgoingEdges) {
     elements[elemIndexes.get(edgeId)] = {
@@ -194,7 +199,7 @@ function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
     // At least one prereq not ready for enrollment
   }
 
-  setnodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes);
+  setNodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes);
 }
 
 function updateAllNodes(elements, nodeData, elemIndexes) {
@@ -381,9 +386,95 @@ function App() {
     setElements(recalculatedElems);
   }
 
-  function addCourseNode(newNode) {
+  function autoconnect(newElements, targetNode, reposition = false) {
+    const targetId = targetNode.id;
+    const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX);
+    const targetPrereqs = (
+      courseMatches
+        ? courseMatches.filter(elemId => elemIndexes.current.has(elemId))
+          .filter(
+            elemId => !elemIndexes.current.has(edgeArrowId(elemId, targetId))
+          )
+          .map(elemId => elements[elemIndexes.current.get(elemId)])
+        : []
+    );
+    const targetPostreqs = [];
+    const numNodes = nodeData.current.size;
+    for (let i = 0; i < numNodes; i++) {
+      const postreq = newElements[i];
+      if (postreq.data.prerequisite.includes(targetId)
+          && !elemIndexes.current.has(edgeArrowId(targetId, postreq.id))) {
+        targetPostreqs.push(postreq);
+      }
+    }
+    // Avoid traversing edges
+
+    for (const prereq of targetPrereqs) {
+      newElements.push(newEdge(prereq.id, targetId));
+    }
+    for (const postreq of targetPostreqs) {
+      newElements.push(newEdge(targetId, postreq.id));
+    }
+
+    if (reposition) {
+      const prereqPositions = targetPrereqs.map(elem => elem.position);
+      const postreqPositions = targetPostreqs.map(elem => elem.position);
+      if (prereqPositions.length && postreqPositions.length) {
+        const allPositions = prereqPositions.concat(postreqPositions);
+        const x = (
+          Math.max(...prereqPositions.map(pos => pos.x))
+          + Math.min(...postreqPositions.map(pos => pos.x))
+        ) / 2;
+        const y = (
+          allPositions
+            .map(pos => pos.y)
+            .reduce((a, b) => a + b, 0)
+            / allPositions.length
+        );
+        targetNode.position = { x, y };
+      } else if (prereqPositions.length && !postreqPositions.length) {
+        const x = Math.max(...prereqPositions.map(pos => pos.x)) + 325;
+        // Magic number, close to dagre spacing
+        const y = (
+          prereqPositions
+            .map(pos => pos.y)
+            .reduce((a, b) => a + b, 0)
+            / prereqPositions.length
+        );
+        targetNode.position = { x, y };
+      } else if (!prereqPositions.length && postreqPositions.length) {
+        const x = Math.min(...postreqPositions.map(pos => pos.x)) - 325;
+        const y = (
+          postreqPositions
+            .map(pos => pos.y)
+            .reduce((a, b) => a + b, 0)
+            / postreqPositions.length
+        );
+        targetNode.position = { x, y };
+      }
+    }
+
+    if (!elemIndexes.current.has(targetId)) {
+      newElements.push(targetNode);
+    }
+
+    return newElements;
+  }
+
+  function addCourseNode(newNode, connectToExisting, newCoursePosition) {
+    // Check flowInstance.current.toObject().elements for position
+    // FIXME: Position recording is broken (again)
+    // Undo/redo is also broken for positioning
     recordFlowState();
-    recalculateElements(elements.slice().concat([newNode]));
+    let newElems;
+    if (connectToExisting) {
+      newElems = autoconnect(
+        elements.slice(), newNode, newCoursePosition === "relative"
+      );
+    } else {
+      newElems = elements.slice().concat([newNode]);
+    }
+    recalculateElements(newElems);
   }
 
   function reflowElements() {
@@ -399,7 +490,7 @@ function App() {
   }
 
   /* ELEMENT */
-  // Single change can only propogate 2 layers deep
+  // Single change can only propagate 2 layers deep
   function onElementClick(event, targetElem) {
     // NOTE: targetElem isn't the actual element so can't use id equality
     if (event.altKey && isNode(targetElem)) {
@@ -417,7 +508,7 @@ function App() {
           return;
       }
       recordFlowState();
-      setnodeStatus(
+      setNodeStatus(
         nodeId, newStatus, newElements, nodeData.current, elemIndexes.current
       );
 
@@ -457,27 +548,36 @@ function App() {
     recordFlowState(dragStartState.current);
   }
 
+  const EXPECTED_ERROR_MSG = "can't access property \"connectedEdges\", nodeData.current.get(...) is undefined";
   function onNodeMouseEnter(_event, targetNode) {
-    const nodeId = targetNode.id;
-    const newElements = elements.slice();
+    try {
+      const nodeId = targetNode.id;
+      const newElements = elements.slice();
 
-    for (const id of nodeData.current.get(nodeId).connectedEdges) {
-      const i = elemIndexes.current.get(id);
-      newElements[i] = {
-        ...newElements[i],
-        animated: !prefersReducedMotion,
-        style: { strokeWidth: "4px" },
-      };
-    }
+      for (const id of nodeData.current.get(nodeId).connectedEdges) {
+        const i = elemIndexes.current.get(id);
+        newElements[i] = {
+          ...newElements[i],
+          animated: !prefersReducedMotion,
+          style: { strokeWidth: "4px" },
+        };
+      }
 
-    for (const id of nodeData.current.get(nodeId).connectedNodes) {
-      const i = elemIndexes.current.get(id);
-      newElements[i] = {
-        ...newElements[i],
-        data: { ...newElements[i].data, nodeConnected: true },
-      };
+      for (const id of nodeData.current.get(nodeId).connectedNodes) {
+        const i = elemIndexes.current.get(id);
+        newElements[i] = {
+          ...newElements[i],
+          data: { ...newElements[i].data, nodeConnected: true },
+        };
+      }
+      setElements(newElements);
+    } catch (error) {
+      // A TypeError occurs when a node is deleted from the context menu
+      // while the mouse is still over the node
+      if (!error.name === "TypeError" && error.message === EXPECTED_ERROR_MSG) {
+        throw error;
+      }
     }
-    setElements(newElements);
   }
 
   function onNodeMouseLeave(_event, _targetNode) {
@@ -681,7 +781,7 @@ function App() {
             recordFlowState();
             const newElements = elements.slice();
             for (const id of nodeIds) {
-              setnodeStatus(
+              setNodeStatus(
                 id, newStatus, newElements, nodeData.current, elemIndexes.current
               );
             }
@@ -748,8 +848,9 @@ function App() {
           {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
           <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
           <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;20)</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
+          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo* (max&nbsp;20)</li>
+          <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo*</li>
+          <small>*Still buggy for positioning</small>
           <button
             // ref={closeControlsButtonRef}
             type="button"
