@@ -118,12 +118,13 @@ export default function AddCourseDialog({
   function onSearchChange(event) {
     // Heroku responds fast enough, no throttling/debouncing needed
     setErrorMsg("");
-    const newValue = event.target.value;
+    const newValue = event.target.value.toUpperCase();
     setSelectedCourse(newValue);
     if (newValue.trim().length) {
       websocket.current.send(
-        JSON.stringify({ campus: selectedCampus, id: newValue.trim() })
+        JSON.stringify({ campus: selectedCampus, id: `${newValue.trim()} ` })
       );
+      // Adding a trailing space seems to improve accuracy for some reason
     } else {
       setAutocompleteOpts([]);
     }
