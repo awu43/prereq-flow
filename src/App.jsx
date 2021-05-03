@@ -574,7 +574,8 @@ function App() {
     } catch (error) {
       // A TypeError occurs when a node is deleted from the context menu
       // while the mouse is still over the node
-      if (!error.name === "TypeError" && error.message === EXPECTED_ERROR_MSG) {
+      if (!(error.name === "TypeError"
+            && error.message === EXPECTED_ERROR_MSG)) {
         throw error;
       }
     }
