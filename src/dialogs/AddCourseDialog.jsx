@@ -237,15 +237,21 @@ export default function AddCourseDialog({
           type="checkbox"
           checked={connectToExisting}
           disabled={busy}
-          onChange={() => { setConnectToExisting(!connectToExisting); }}
+          onChange={() => {
+            if (connectToExisting) {
+              // About to be disabled
+              setNewCoursePosition("zero");
+            }
+            setConnectToExisting(!connectToExisting);
+          }}
         />
-        Connect to existing courses
+        Connect to existing pre/postreqs
       </label>
       <div className="add-uw-course__connection-opts">
-        <div className={`connection-opts__cover ${!connectToExisting || busy ? "--enabled" : ""}`}></div>
+        {/* <div className={`connection-opts__cover ${!connectToExisting || busy ? "--enabled" : ""}`}></div> */}
         <fieldset
           className="connection-opts__position"
-          disabled={!connectToExisting || busy}
+          disabled={busy}
         >
           <legend>New courses should be placed</legend>
           <label>
@@ -264,6 +270,7 @@ export default function AddCourseDialog({
               name="new-position"
               checked={newCoursePosition === "relative"}
               onChange={() => setNewCoursePosition("relative")}
+              disabled={!connectToExisting}
             />
             Relative to pre/postreqs (experimental)
           </label>
