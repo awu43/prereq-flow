@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
@@ -10,9 +10,15 @@ import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
 import { generateInitialElements } from "../parse-courses.js";
 
+const API_URL = (
+  import.meta.env.MODE === "production"
+    ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
+    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
+);
+
 // TODO: New department flow, new blank flow
 export default function NewFlowDialog({
-  modalCls, closeDialog, supportedMajors, generateNewFlow
+  modalCls, closeDialog, generateNewFlow
 }) {
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
@@ -38,6 +44,17 @@ export default function NewFlowDialog({
   // function advanceSlide() {
   //   setSlideState(slideState + 1);
   // }
+
+  const [supportedMajors, setSupportedMajors] = useState([]);
+  useEffect(() => {
+    fetch(`${API_URL}/degrees/`)
+      .then(resp => resp.json())
+      .then(data => setSupportedMajors(data))
+      .catch(error => {
+        console.error("Error:", error);
+      });
+    // TODO: Proper error handling
+  }, []);
 
   function onCoursesFetched(fetchedData) {
     const newElements = generateInitialElements(fetchedData);
@@ -95,6 +112,5 @@ export default function NewFlowDialog({
 NewFlowDialog.propTypes = {
   modalCls: PropTypes.string.isRequired,
   closeDialog: PropTypes.func.isRequired,
-  supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,
   generateNewFlow: PropTypes.func.isRequired,
 };

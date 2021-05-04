@@ -30,12 +30,6 @@ import demoFlow from "./data/demo-flow.json";
 
 import "./App.scss";
 
-const API_URL = (
-  import.meta.env.MODE === "production"
-    ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
-    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
-);
-
 const nodeWidth = 172;
 const nodeHeight = 36;
 
@@ -221,7 +215,6 @@ const MAX_UNDO_NUM = 20;
 function App() {
   const [aboutCls, setAboutCls] = useState(BASE_MODAL_CLS);
   const [newFlowCls, setNewFlowCls] = useState(BASE_MODAL_CLS);
-  const [supportedMajors, setSupportedMajors] = useState([]);
   const [openFileCls, setOpenFileCls] = useState(BASE_MODAL_CLS);
   const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
 
@@ -249,16 +242,6 @@ function App() {
   // const closeControlsButtonRef = useRef(null);
 
   const prefersReducedMotion = usePrefersReducedMotion();
-
-  useEffect(() => {
-    fetch(`${API_URL}/degrees/`)
-      .then(resp => resp.json())
-      .then(data => setSupportedMajors(data))
-      .catch(error => {
-        console.error("Error:", error);
-      });
-    // TODO: Proper error handling
-  }, []);
 
   function onLoad(reactFlowInstance) {
     reactFlowInstance.fitView();
@@ -874,7 +857,6 @@ function App() {
       <NewFlowDialog
         modalCls={newFlowCls}
         closeDialog={() => closeDialog(setNewFlowCls)}
-        supportedMajors={supportedMajors}
         generateNewFlow={generateNewFlow}
       />
       <OpenFileDialog
