@@ -543,6 +543,17 @@ kbd {
   }
 }
 
+.CampusSelect {
+  margin: 0.25rem 0;
+  border: none;
+  display: flex;
+
+  &__radio-label--seattle,
+  &__radio-label--bothell {
+    margin-right: 1rem;
+  }
+}
+
 .AddCourseDialog {
   width: #{'min(30rem, 100% - 1rem)'};
   min-height: 19.5rem;
@@ -573,16 +584,6 @@ kbd {
   }
 
   .add-uw-course {
-    &__campus-select {
-      margin: 0.25rem 0;
-      border: none;
-      display: flex;
-    }
-    &__radio-label--seattle,
-    &__radio-label--bothell {
-      margin-right: 1rem;
-    }
-
     &__bar-and-button {
       display: flex;
       margin-bottom: 1.5rem;

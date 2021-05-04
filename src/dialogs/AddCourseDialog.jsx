@@ -18,6 +18,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
+import CampusSelect from "./CampusSelect.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 import { newNode } from "../parse-courses.js";
 
@@ -74,7 +75,6 @@ export default function AddCourseDialog({
   }, []);
 
   const [connectToExisting, setConnectToExisting] = useState(true);
-  // const [ambiguousHandling, setAmbiguousHandling] = useState("aggressively");
   const [newCoursePosition, setNewCoursePosition] = useState("zero");
 
   const [customCourseData, setCustomCourseData] = useState({
@@ -132,9 +132,11 @@ export default function AddCourseDialog({
 
   function addNewNode(data) {
     const node = newNode(data);
-    node.position.x += (Math.random() - 0.5) * 200;
-    node.position.y += (Math.random() - 0.5) * 200;
-    // Add fuzzing to stop multiple nodes from piling
+    if (newCoursePosition === "zero") {
+      node.position.x += (Math.random() - 0.5) * 200;
+      node.position.y += (Math.random() - 0.5) * 200;
+      // Add fuzzing to stop multiple nodes from piling
+    }
     addCourseNode(node, connectToExisting, newCoursePosition);
   }
 
@@ -186,38 +188,11 @@ export default function AddCourseDialog({
 
   const uwCourseForm = (
     <form className="add-uw-course">
-      <fieldset className="add-uw-course__campus-select" disabled={busy}>
-        <label className="add-uw-course__radio-label--seattle">
-          <input
-            type="radio"
-            className="add-uw-course__radio-button"
-            name="uw-campus"
-            checked={selectedCampus === "Seattle"}
-            onChange={() => setSelectedCampus("Seattle")}
-          />
-          Seattle
-        </label>
-        <label className="add-uw-course__radio-label--bothell">
-          <input
-            type="radio"
-            className="add-uw-course__radio-button"
-            name="uw-campus"
-            checked={selectedCampus === "Bothell"}
-            onChange={() => setSelectedCampus("Bothell")}
-          />
-          Bothell
-        </label>
-        <label className="add-uw-course__radio-label--tacoma">
-          <input
-            type="radio"
-            className="add-uw-course__radio-button"
-            name="uw-campus"
-            checked={selectedCampus === "Tacoma"}
-            onChange={() => setSelectedCampus("Tacoma")}
-          />
-          Tacoma
-        </label>
-      </fieldset>
+      <CampusSelect
+        selectedCampus={selectedCampus}
+        setSelectedCampus={setSelectedCampus}
+        busy={busy}
+      />
       <div className="add-uw-course__bar-and-button">
         <Tippy
           className="tippy-box--error"
@@ -268,28 +243,6 @@ export default function AddCourseDialog({
       </label>
       <div className="add-uw-course__connection-opts">
         <div className={`connection-opts__cover ${!connectToExisting || busy ? "--enabled" : ""}`}></div>
-        {/* <fieldset disabled={!connectToExisting || busy}>
-          <legend>Ambiguous prereqs (e.g. <q>Either X or Y</q>) should be handled</legend>
-          <label>
-            <input
-              type="radio"
-              name="make-new-connections"
-              checked={ambiguousHandling === "aggressively"}
-              onChange={() => setAmbiguousHandling("aggressively")}
-            />
-            Aggressively (two new connections)
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="make-new-connections"
-              checked={ambiguousHandling === "cautiously"}
-              onChange={() => setAmbiguousHandling("cautiously")}
-            />
-            Cautiously (no new connections)
-          </label>
-        </fieldset> */}
-
         <fieldset
           className="connection-opts__position"
           disabled={!connectToExisting || busy}
@@ -426,6 +379,7 @@ export default function AddCourseDialog({
           <img src="dist/icons/x-black.svg" alt="close" />
         </button>
         <h2>Add course</h2>
+        {/* TODO: Disable tabs when busy */}
         <Tabs>
           <TabList>
             <Tab>UW course</Tab>
