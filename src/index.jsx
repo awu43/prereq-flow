@@ -21,6 +21,7 @@ if (import.meta.hot) {
 // TODO: Mobile/tablet warning
 // TODO: Add concurrent edge to legend
 // TODO: Add pinned/hidden behavior to legend and header
+// TODO: Dark mode
 
 // TODO: Increase connection point size
 // TODO: Context menu for edge style

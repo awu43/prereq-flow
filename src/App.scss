@@ -381,7 +381,7 @@ kbd {
   padding: 1rem;
   background: white;
 }
-.NewFlowDialog,
+// .NewFlowDialog,
 .OpenFileDialog,
 // .AddCourseDialog,
 .AboutDialog {
@@ -443,10 +443,10 @@ kbd {
   width: 300%;
 
   display: flex;
-  max-height: 20rem;
+  max-height: 26rem;
 }
 .PreWarning,
-.DegreeSelect,
+.FlowType,
 .CourseSelect {
   width: calc(100%/3);
   padding: 0 1rem;
@@ -457,28 +457,68 @@ kbd {
   }
   overflow-y: scroll;
 
-  li {
-    margin-left: 1.5rem;
+  p:not(:first-of-type) {
+    margin-top: 1rem;
   }
 
-  p:last-of-type {
-    padding-bottom: 2.5rem;
+
+  li {
+    margin-top: 0.25rem;
+    margin-left: 1.5rem;
+    list-style-type: square;
   }
 
   &__accept-button {
-    position: absolute;
-    bottom: 0;
-    right: 0;
     @extend %base-button-style;
     font-size: 1rem;
   }
 }
-.DegreeSelect {
-  position: relative;
 
+.FlowType {
+  [data-reach-tab-list] {
+    height: 1.8rem;
+  }
+
+  [data-reach-tabs] {
+    height: calc(100% - 1rem);
+  }
+
+  [data-reach-tab-panels] {
+    height: calc(100% - 1.8rem);
+  }
+
+  [data-reach-tab-panel] {
+    height: 100%;
+  }
+}
+.PreWarning,
+.DegreeSelect,
+.CurriculumSelect,
+.NewBlankFlow {
+  display: flex;
+  flex-direction: column;
+
+  &__button-wrapper {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.DegreeSelect,
+.CurriculumSelect,
+.NewBlankFlow {
+  height: 100%;
+
+  &__end-padding {
+    flex-grow: 1;
+    background-image: url("dist/icons/x-gray.svg");
+  }
+}
+
+.DegreeSelect {
   .majors,
   .minors {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 
     &__selected-list {
       max-width: 20rem;
@@ -534,10 +574,32 @@ kbd {
     }
   }
 
+  .AmbiguitySelect {
+    margin-top: 1rem;
+  }
+
   &__get-courses-button {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
+    @extend %base-button-style;
+    font-size: 1rem;
+  }
+}
+.CurriculumSelect {
+  .CampusSelect {
+    margin: 0.5rem 0;
+  }
+
+  &__select-input {
+    height: 1.5rem;
+  }
+
+  &__external-checkbox {
+    margin: 1.25rem 0 0.5rem;
+    input {
+      margin-right: 0.25rem;
+    }
+  }
+
+  &__get-courses-button {
     @extend %base-button-style;
     font-size: 1rem;
   }
@@ -548,9 +610,35 @@ kbd {
   border: none;
   display: flex;
 
+  &__radio-button {
+    margin-right: 0.25rem;
+  }
+
   &__radio-label--seattle,
   &__radio-label--bothell {
     margin-right: 1rem;
+  }
+}
+
+.AmbiguitySelect {
+  border: none;
+  label {
+    display: block;
+    margin-left: 0.5rem;
+    input {
+      margin-right: 0.25rem;
+    }
+  }
+}
+
+.NewBlankFlow {
+  p {
+    margin-top: 0.5rem;
+  }
+
+  &__generate-button {
+    @extend %base-button-style;
+    font-size: 1rem;
   }
 }
 
@@ -607,9 +695,9 @@ kbd {
     }
 
     &__connection-opts {
-      position: relative;
+      // position: relative;
       margin-top: 0.25rem;
-      border-top: 1px solid gray;
+      // border-top: 1px solid gray;
 
       fieldset {
         border: none;
@@ -620,20 +708,20 @@ kbd {
     }
 
     .connection-opts {
-      &__cover {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: none;
+      // &__cover {
+      //   position: absolute;
+      //   top: 0;
+      //   right: 0;
+      //   bottom: 0;
+      //   left: 0;
+      //   display: none;
 
-        background: rgba(lightgray, 0.75);
+      //   background: rgba(lightgray, 0.75);
 
-        &.--enabled {
-          display: inherit;
-        }
-      }
+      //   &.--enabled {
+      //     display: inherit;
+      //   }
+      // }
 
       &__position {
         margin-top: 0.5rem;

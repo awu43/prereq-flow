@@ -1,6 +1,9 @@
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
+
 import { nanoid } from "nanoid";
+
+import AmbiguitySelect from "./AmbiguitySelect.jsx";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -23,8 +26,8 @@ export default function DegreeSelect({
 }) {
   const [majors, setMajors] = useState([]);
   // const [minors, setMinors] = useState([]);
-
   const majorSelectRef = useRef(null);
+  const [ambiguousHandling, setAmbiguousHandling] = useState("aggressively");
 
   function addMajor() {
     if (!supportedMajors.length) {
@@ -79,7 +82,7 @@ export default function DegreeSelect({
   majorsListElems.push(...dummyMajors.slice(majorsListElems.length));
 
   return (
-    <form className="DegreeSelect">
+    <div className="DegreeSelect">
       <section className="majors">
         <h3>Majors (up to 3)</h3>
         <ul className="majors__selected-list">
@@ -87,7 +90,9 @@ export default function DegreeSelect({
         </ul>
         <div className="majors__bar-and-button">
           <select className="majors__select-input" ref={majorSelectRef}>
-            {supportedMajors.map(m => <option key={toKebabCase(m)}>{m}</option>)}
+            {supportedMajors.map(m => (
+              <option key={toKebabCase(m)}>{m}</option>
+            ))}
           </select>
           <button
             className="majors__add-button"
@@ -98,12 +103,18 @@ export default function DegreeSelect({
           </button>
         </div>
       </section>
-      <p>Only College of Engineering majors are currently available. See <a href="https://github.com/awu43/prereq-flow#readme" target="_blank" rel="noreferrer">README</a> for&nbsp;details.</p>
-      <p>Degree course lists <a href="https://github.com/awu43/prereq-flow-degrees" target="_blank" rel="noreferrer">here</a>.</p>
+      <small>See degree courses, suggest changes, and contribute new degree data&nbsp;<a href="https://github.com/awu43/prereq-flow-degrees" target="_blank" rel="noreferrer">here</a>.</small>
+
+      <AmbiguitySelect
+        ambiguousHandling={ambiguousHandling}
+        setAmbiguousHandling={setAmbiguousHandling}
+        busy={busy}
+      />
+
       {/* TODO: Minors */}
-      <section className="minors">
-        {/* <h3>Minors (up to 3)</h3> */}
-        {/* <ul className="minors__selected-list">
+      {/* <section className="minors">
+        <h3>Minors (up to 3)</h3>
+        <ul className="minors__selected-list">
           {minorsListElems}
         </ul>
         <div className="minors__bar-and-button">
@@ -111,17 +122,20 @@ export default function DegreeSelect({
             {minorsList.map(m => <option key={toKebabCase(m)}>{m}</option>)}
           </select>
           <button className="minors__add-button" type="button" onClick={addMinor}>+</button>
-        </div> */}
-      </section>
-      <button
-        className="DegreeSelect__get-courses-button"
-        type="submit"
-        onClick={getCourses}
-        disabled={busy || !majors.length}
-      >
-        Get courses
-      </button>
-    </form>
+        </div>
+      </section> */}
+      <div className="DegreeSelect__button-wrapper">
+        <button
+          className="DegreeSelect__get-courses-button"
+          type="submit"
+          onClick={getCourses}
+          disabled={busy || !majors.length}
+        >
+          Get courses
+        </button>
+      </div>
+      <div className="DegreeSelect__end-padding"></div>
+    </div>
   );
 }
 DegreeSelect.propTypes = {

@@ -4,8 +4,7 @@ import PropTypes from "prop-types";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import PreWarning from "./PreWarning.jsx";
-import DegreeSelect from "./DegreeSelect.jsx";
-// import CourseSelect from "./CourseSelect.jsx";
+import FlowType from "./FlowType.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
 import { generateInitialElements } from "../parse-courses.js";
@@ -29,9 +28,11 @@ export default function NewFlowDialog({
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
+        setBusy(false);
         setSlideState(0);
       }, 100);
     } else {
+      setBusy(false);
       setSlideState(0);
     }
   }
@@ -56,14 +57,47 @@ export default function NewFlowDialog({
     // TODO: Proper error handling
   }, []);
 
+  const [supportedCurricula, setSupportedCurricula] = useState(new Map());
+  useEffect(() => {
+    fetch(`${API_URL}/curricula/`)
+      .then(resp => resp.json())
+      .then(data => {
+        const curricula = new Map(Object.entries({
+          Seattle: [],
+          Bothell: [],
+          Tacoma: [],
+        }));
+        for (const datum of data) {
+          curricula.get(datum.campus).push(datum);
+        }
+        for (const campus of curricula.keys()) {
+          curricula.get(campus).sort((a, b) => a.id.localeCompare(b.id));
+          curricula.set(campus, curricula.get(campus).map(curr => (
+            <option key={curr.id} value={curr.id}>
+              {`${curr.id}: ${curr.name}`}
+            </option>
+          )));
+        }
+        setSupportedCurricula(curricula);
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+    // TODO: Proper error handling
+  }, []);
+
   function onCoursesFetched(fetchedData) {
     const newElements = generateInitialElements(fetchedData);
     generateNewFlow(newElements);
     close();
     // advanceSlide();
-    setTimeout(() => {
-      setBusy(false);
-    }, 250);
+    // if (!prefersReducedMotion) {
+    //   setTimeout(() => {
+    //     setBusy(false);
+    //   }, 250);
+    // } else {
+    //   setBusy(false);
+    // }
   }
 
   const slideNum = warningAccepted + slideState;
@@ -93,11 +127,12 @@ export default function NewFlowDialog({
           className={`NewFlowDialog__slides slide-${slideNum}`}
         >
           <PreWarning accept={acceptWarning} />
-          <DegreeSelect
-            supportedMajors={supportedMajors}
+          <FlowType
             busy={busy}
             setBusy={setBusy}
-            advance={onCoursesFetched}
+            supportedMajors={supportedMajors}
+            supportedCurricula={supportedCurricula}
+            onCoursesFetched={onCoursesFetched}
           />
           {/* <CourseSelect
           courseData={courseData}
