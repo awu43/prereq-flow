@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import "@reach/tabs/styles.css";
+
 import {
   isEdge,
   isNode,
@@ -10,7 +13,8 @@ import {
 } from "react-flow-renderer";
 
 import PreWarning from "./PreWarning.jsx";
-import FlowType from "./FlowType.jsx";
+import DegreeSelect from "./DegreeSelect.jsx";
+import CurriculumSelect from "./CurriculumSelect.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
 import { COURSE_REGEX, generateInitialElements } from "../parse-courses.js";
@@ -204,15 +208,49 @@ export default function NewFlowDialog({
           className={`NewFlowDialog__slides slide-${slideNum}`}
         >
           <PreWarning accept={acceptWarning} />
-          <FlowType
-            busy={busy}
-            setBusy={setBusy}
-            supportedMajors={supportedMajors}
-            newDegreeFlow={newDegreeFlow}
-            supportedCurricula={supportedCurricula}
-            newCurriculumFlow={newCurriculumFlow}
-            newBlankFlow={newBlankFlow}
-          />
+          <form className="FlowType">
+            <Tabs>
+              <TabList>
+                <Tab>Degree</Tab>
+                <Tab>Curriculum</Tab>
+                <Tab>Blank</Tab>
+              </TabList>
+
+              <TabPanels>
+                <TabPanel>
+                  <DegreeSelect
+                    busy={busy}
+                    setBusy={setBusy}
+                    supportedMajors={supportedMajors}
+                    newDegreeFlow={newDegreeFlow}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <CurriculumSelect
+                    busy={busy}
+                    setBusy={setBusy}
+                    supportedCurricula={supportedCurricula}
+                    newCurriculumFlow={newCurriculumFlow}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <div className="NewBlankFlow">
+                    <p>Generate a new blank flow.</p>
+                    <div className="NewBlankFlow__button-wrapper">
+                      <button
+                        type="button"
+                        className="NewBlankFlow__generate-button"
+                        onClick={newBlankFlow}
+                      >
+                        Generate
+                      </button>
+                    </div>
+                    <div className="NewBlankFlow__end-padding"></div>
+                  </div>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </form>
           {/* <CourseSelect
           courseData={courseData}
           generateNewFlow={generateNewFlow}
