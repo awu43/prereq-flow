@@ -550,8 +550,19 @@ kbd {
       display: flex;
       justify-content: center;
       align-items: center;
-      &:hover img {
+
+      &:not(:disabled):hover img {
         filter: invert(100%);
+      }
+
+      &:disabled img {
+        filter:
+          invert(55%)
+          sepia(0%)
+          saturate(28%)
+          hue-rotate(137deg)
+          brightness(92%)
+          contrast(83%);
       }
     }
 
