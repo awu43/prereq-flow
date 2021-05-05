@@ -211,9 +211,9 @@ export default function NewFlowDialog({
           <form className="FlowType">
             <Tabs>
               <TabList>
-                <Tab>Degree</Tab>
-                <Tab>Curriculum</Tab>
-                <Tab>Blank</Tab>
+                <Tab disabled={busy}>Degree</Tab>
+                <Tab disabled={busy}>Curriculum</Tab>
+                <Tab disabled={busy}>Blank</Tab>
               </TabList>
 
               <TabPanels>

@@ -386,11 +386,10 @@ export default function AddCourseDialog({
           <img src="dist/icons/x-black.svg" alt="close" />
         </button>
         <h2>Add course</h2>
-        {/* TODO: Disable tabs when busy */}
         <Tabs onChange={() => setErrorMsg("")}>
           <TabList>
-            <Tab>UW course</Tab>
-            <Tab>Custom course</Tab>
+            <Tab disabled={busy}>UW course</Tab>
+            <Tab disabled={busy}>Custom course</Tab>
           </TabList>
 
           <TabPanels>
