@@ -51,17 +51,22 @@ export default function NewFlowDialog({
   // }
 
   const [supportedMajors, setSupportedMajors] = useState([]);
+  const [degreeError, setDegreeError] = useState("");
+
   useEffect(() => {
     fetch(`${API_URL}/degrees/`)
       .then(resp => resp.json())
       .then(data => setSupportedMajors(data))
       .catch(error => {
+        setDegreeError("Connection error");
+        // eslint-disable-next-line no-console
         console.error(error);
       });
-    // TODO: Proper error handling
   }, []);
 
   const [supportedCurricula, setSupportedCurricula] = useState(new Map());
+  const [curriculumError, setCurriculumError] = useState("");
+
   useEffect(() => {
     fetch(`${API_URL}/curricula/`)
       .then(resp => resp.json())
@@ -85,12 +90,12 @@ export default function NewFlowDialog({
         setSupportedCurricula(curricula);
       })
       .catch(error => {
+        setCurriculumError("Connection error");
+        // eslint-disable-next-line no-console
         console.error(error);
       });
-    // TODO: Proper error handling
   }, []);
 
-  const [degreeError, setDegreeError] = useState("");
   async function newDegreeFlow(majors, ambiguousHandling) {
     setDegreeError("");
     try {
@@ -121,7 +126,6 @@ export default function NewFlowDialog({
     // }
   }
 
-  const [curriculumError, setCurriculumError] = useState("");
   async function newCurriculumFlow(
     curriculum, includeExternal, ambiguousHandling
   ) {

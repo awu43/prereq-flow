@@ -69,6 +69,11 @@ export default function AddCourseDialog({
         ))
       );
     });
+    wsConnection.addEventListener("error", event => {
+      setErrorMsg("Connection error");
+      // eslint-disable-next-line no-console
+      console.error(event);
+    });
     return () => {
       wsConnection.close(1000);
     };
