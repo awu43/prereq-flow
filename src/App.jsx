@@ -716,6 +716,8 @@ function App() {
       </header>
       <ReactFlowProvider>
         <ReactFlow
+          // Flow View
+          minZoom={0.25}
           // Instance
           onLoad={onLoad}
           // Basic Props
