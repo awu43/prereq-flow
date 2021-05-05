@@ -284,8 +284,10 @@ kbd {
   cursor: default;
 
   p {
+    font-size: 0.9rem;
     margin: 0.25rem 0.5rem;
     padding-left: 1rem;
+    user-select: none;
   }
 
   hr {
@@ -674,7 +676,7 @@ kbd {
   .add-uw-course {
     &__bar-and-button {
       display: flex;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
     }
     [data-reach-combobox] {
       max-width: 30rem;

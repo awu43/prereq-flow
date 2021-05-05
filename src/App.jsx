@@ -804,6 +804,13 @@ function App() {
               )
             );
           }}
+          autoconnect={targetId => {
+            recordFlowState();
+            const newElements = autoconnect(
+              elements.slice(), elements[elemIndexes.current.get(targetId)]
+            );
+            recalculateElements(newElements);
+          }}
         />
       </ReactFlowProvider>
       <aside className="legend">
