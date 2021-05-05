@@ -1,11 +1,15 @@
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 
+import Tippy from "@tippyjs/react";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "tippy.js/dist/tippy.css";
+
 import CampusSelect from "./CampusSelect.jsx";
 import AmbiguitySelect from "./AmbiguitySelect.jsx";
 
 export default function CurriculumSelect({
-  busy, setBusy, supportedCurricula, newCurriculumFlow
+  busy, setBusy, supportedCurricula, newCurriculumFlow, errorMsg
 }) {
   const [selectedCampus, setSelectedCampus] = useState("Seattle");
   const curriculumSelectRef = useRef(null);
@@ -31,13 +35,23 @@ export default function CurriculumSelect({
         setSelectedCampus={setSelectedCampus}
         busy={busy}
       />
-      <select
-        className="CurriculumSelect__select-input"
-        ref={curriculumSelectRef}
-        disabled={busy}
+      <Tippy
+        className="tippy-box--error"
+        content={errorMsg}
+        placement="bottom-start"
+        arrow={false}
+        duration={0}
+        offset={[0, 5]}
+        visible={errorMsg.length}
       >
-        {supportedCurricula.get(selectedCampus)}
-      </select>
+        <select
+          className="CurriculumSelect__select-input"
+          ref={curriculumSelectRef}
+          disabled={busy}
+        >
+          {supportedCurricula.get(selectedCampus)}
+        </select>
+      </Tippy>
       <label className="CurriculumSelect__external-checkbox">
         <input
           type="checkbox"
@@ -71,4 +85,5 @@ CurriculumSelect.propTypes = {
   setBusy: PropTypes.func.isRequired,
   supportedCurricula: PropTypes.instanceOf(Map).isRequired,
   newCurriculumFlow: PropTypes.func.isRequired,
+  errorMsg: PropTypes.string.isRequired,
 };

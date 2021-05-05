@@ -1,6 +1,10 @@
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 
+import Tippy from "@tippyjs/react";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "tippy.js/dist/tippy.css";
+
 import { nanoid } from "nanoid";
 
 import AmbiguitySelect from "./AmbiguitySelect.jsx";
@@ -16,7 +20,7 @@ const dummyMajors = [
 ];
 
 export default function DegreeSelect({
-  busy, setBusy, supportedMajors, newDegreeFlow
+  busy, setBusy, supportedMajors, newDegreeFlow, errorMsg
 }) {
   const [majors, setMajors] = useState([]);
   // const [minors, setMinors] = useState([]);
@@ -73,20 +77,30 @@ export default function DegreeSelect({
         <ul className="majors__selected-list">
           {majorsListElems}
         </ul>
-        <div className="majors__bar-and-button">
-          <select className="majors__select-input" ref={majorSelectRef}>
-            {supportedMajors.map(m => (
-              <option key={toKebabCase(m)}>{m}</option>
-            ))}
-          </select>
-          <button
-            className="majors__add-button"
-            type="button"
-            onClick={addMajor}
-          >
-            <img src="dist/icons/plus.svg" alt="Add" />
-          </button>
-        </div>
+        <Tippy
+          className="tippy-box--error"
+          content={errorMsg}
+          placement="bottom-start"
+          arrow={false}
+          duration={0}
+          offset={[0, 5]}
+          visible={errorMsg.length}
+        >
+          <div className="majors__bar-and-button">
+            <select className="majors__select-input" ref={majorSelectRef}>
+              {supportedMajors.map(m => (
+                <option key={toKebabCase(m)}>{m}</option>
+              ))}
+            </select>
+            <button
+              className="majors__add-button"
+              type="button"
+              onClick={addMajor}
+            >
+              <img src="dist/icons/plus.svg" alt="Add" />
+            </button>
+          </div>
+        </Tippy>
       </section>
       <small>See degree courses, suggest changes, and contribute new degree data&nbsp;<a href="https://github.com/awu43/prereq-flow-degrees" target="_blank" rel="noreferrer">here</a>.</small>
 
@@ -128,4 +142,5 @@ DegreeSelect.propTypes = {
   setBusy: PropTypes.func.isRequired,
   supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,
   newDegreeFlow: PropTypes.func.isRequired,
+  errorMsg: PropTypes.string.isRequired,
 };

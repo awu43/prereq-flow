@@ -25,7 +25,6 @@ const API_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
 );
 
-// TODO: New department flow, new blank flow
 export default function NewFlowDialog({
   modalCls, closeDialog, generateNewFlow
 }) {
@@ -62,7 +61,7 @@ export default function NewFlowDialog({
       .then(resp => resp.json())
       .then(data => setSupportedMajors(data))
       .catch(error => {
-        console.error("Error:", error);
+        console.error(error);
       });
     // TODO: Proper error handling
   }, []);
@@ -91,12 +90,14 @@ export default function NewFlowDialog({
         setSupportedCurricula(curricula);
       })
       .catch(error => {
-        console.error("Error:", error);
+        console.error(error);
       });
     // TODO: Proper error handling
   }, []);
 
+  const [degreeError, setDegreeError] = useState("");
   async function newDegreeFlow(majors, ambiguousHandling) {
+    setDegreeError("");
     try {
       const resp = await fetch(`${API_URL}/degrees/`, {
         method: "POST",
@@ -109,10 +110,10 @@ export default function NewFlowDialog({
       generateNewFlow(newElements);
       close();
     } catch (error) {
+      setDegreeError("Something went wrong");
       setBusy(false);
-      // throw error;
+      // eslint-disable-next-line no-console
       console.error(error);
-      // TODO: Proper error handling
     }
 
     // advanceSlide();
@@ -125,9 +126,11 @@ export default function NewFlowDialog({
     // }
   }
 
+  const [curriculumError, setCurriculumError] = useState("");
   async function newCurriculumFlow(
     curriculum, includeExternal, ambiguousHandling
   ) {
+    setCurriculumError("");
     try {
       const resp = await fetch(`${API_URL}/curricula/${curriculum}`);
       const data = await resp.json();
@@ -168,10 +171,10 @@ export default function NewFlowDialog({
       generateNewFlow(removeElements(externalOrphans, newElements));
       close();
     } catch (error) {
-      setBusy(false);
-      // throw error;
+      setCurriculumError("Something went wrong");
+      // eslint-disable-next-line no-console
       console.error(error);
-      // TODO: Proper error handling
+      setBusy(false);
     }
   }
 
@@ -209,7 +212,12 @@ export default function NewFlowDialog({
         >
           <PreWarning accept={acceptWarning} />
           <form className="FlowType">
-            <Tabs>
+            <Tabs
+              onChange={() => {
+                setDegreeError("");
+                setCurriculumError("");
+              }}
+            >
               <TabList>
                 <Tab disabled={busy}>Degree</Tab>
                 <Tab disabled={busy}>Curriculum</Tab>
@@ -223,6 +231,7 @@ export default function NewFlowDialog({
                     setBusy={setBusy}
                     supportedMajors={supportedMajors}
                     newDegreeFlow={newDegreeFlow}
+                    errorMsg={degreeError}
                   />
                 </TabPanel>
                 <TabPanel>
@@ -231,6 +240,7 @@ export default function NewFlowDialog({
                     setBusy={setBusy}
                     supportedCurricula={supportedCurricula}
                     newCurriculumFlow={newCurriculumFlow}
+                    errorMsg={curriculumError}
                   />
                 </TabPanel>
                 <TabPanel>
