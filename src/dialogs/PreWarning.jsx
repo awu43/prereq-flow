@@ -1,7 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function PreWarning({ accept }) {
+export default function PreWarning({
+  warningAccepted, setWarningAccepted, closeButtonRef
+}) {
   return (
     <div className="PreWarning">
       <section>
@@ -15,7 +17,7 @@ export default function PreWarning({ accept }) {
           <li>Registration restrictions are not&nbsp;displayed.</li>
         </ul>
 
-        <p>All caveats for <a href="https://prereqmap.uw.edu/" target="_blank" rel="noreferrer">Prereq Map</a> also apply&nbsp;here:</p>
+        <p>All caveats for <a href="https://prereqmap.uw.edu/" target="_blank" rel="noreferrer" tabIndex={warningAccepted ? "-1" : "0"}>Prereq Map</a> also apply&nbsp;here:</p>
         <ul>
           <li>Prerequisites and graduation requirements may change over&nbsp;time.</li>
           <li>Non-course graduation requirements (e.g. 5 credits of VLPA) are not&nbsp;displayed.</li>
@@ -26,7 +28,14 @@ export default function PreWarning({ accept }) {
           <button
             className="PreWarning__accept-button"
             type="button"
-            onClick={accept}
+            onClick={() => setWarningAccepted(1)}
+            onKeyDown={event => {
+              if (event.key === "Tab" && !warningAccepted) {
+                event.preventDefault();
+                closeButtonRef.current.focus();
+              }
+            }}
+            disabled={warningAccepted}
           >
             Continue
           </button>
@@ -36,5 +45,9 @@ export default function PreWarning({ accept }) {
   );
 }
 PreWarning.propTypes = {
-  accept: PropTypes.func.isRequired,
+  warningAccepted: PropTypes.number.isRequired,
+  setWarningAccepted: PropTypes.func.isRequired,
+  closeButtonRef: PropTypes.shape({
+    current: PropTypes.instanceOf(Element)
+  }).isRequired,
 };

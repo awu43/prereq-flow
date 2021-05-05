@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
@@ -29,7 +29,7 @@ export default function NewFlowDialog({
   modalCls, closeDialog, generateNewFlow
 }) {
   const [busy, setBusy] = useState(false);
-  const [warningAccepted, setWarningAccepted] = useState(1);
+  const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
 
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -46,11 +46,6 @@ export default function NewFlowDialog({
     }
   }
 
-  function acceptWarning() {
-    setWarningAccepted(1);
-  }
-
-  // TODO: Disable focusable elements on hidden slides
   // function advanceSlide() {
   //   setSlideState(slideState + 1);
   // }
@@ -185,6 +180,7 @@ export default function NewFlowDialog({
   }
 
   const slideNum = warningAccepted + slideState;
+  const closeButtonRef = useRef(null);
 
   return (
     <DialogOverlay
@@ -198,6 +194,7 @@ export default function NewFlowDialog({
     >
       <DialogContent className="NewFlowDialog" aria-label="New flow dialog">
         <button
+          ref={closeButtonRef}
           type="button"
           className="close-button"
           onClick={close}
@@ -210,7 +207,11 @@ export default function NewFlowDialog({
         <div
           className={`NewFlowDialog__slides slide-${slideNum}`}
         >
-          <PreWarning accept={acceptWarning} />
+          <PreWarning
+            warningAccepted={warningAccepted}
+            setWarningAccepted={setWarningAccepted}
+            closeButtonRef={closeButtonRef}
+          />
           <form className="FlowType">
             <Tabs
               onChange={() => {
