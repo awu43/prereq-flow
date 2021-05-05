@@ -9,7 +9,10 @@ import DegreeSelect from "./DegreeSelect.jsx";
 import CurriculumSelect from "./CurriculumSelect.jsx";
 
 export default function FlowType({
-  busy, setBusy, supportedMajors, supportedCurricula, onCoursesFetched
+  busy, setBusy,
+  supportedMajors, newDegreeFlow,
+  supportedCurricula, newCurriculumFlow,
+  newBlankFlow,
 }) {
   return (
     <form className="FlowType">
@@ -26,7 +29,7 @@ export default function FlowType({
               supportedMajors={supportedMajors}
               busy={busy}
               setBusy={setBusy}
-              advance={onCoursesFetched}
+              newDegreeFlow={newDegreeFlow}
             />
           </TabPanel>
           <TabPanel>
@@ -34,14 +37,18 @@ export default function FlowType({
               supportedCurricula={supportedCurricula}
               busy={busy}
               setBusy={setBusy}
-              advance={onCoursesFetched}
+              newCurriculumFlow={newCurriculumFlow}
             />
           </TabPanel>
           <TabPanel>
             <div className="NewBlankFlow">
               <p>Generate a new blank flow.</p>
               <div className="NewBlankFlow__button-wrapper">
-                <button type="button" className="NewBlankFlow__generate-button">
+                <button
+                  type="button"
+                  className="NewBlankFlow__generate-button"
+                  onClick={newBlankFlow}
+                >
                   Generate
                 </button>
               </div>
@@ -58,6 +65,8 @@ FlowType.propTypes = {
   busy: PropTypes.bool.isRequired,
   setBusy: PropTypes.func.isRequired,
   supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  newDegreeFlow: PropTypes.func.isRequired,
   supportedCurricula: PropTypes.instanceOf(Map).isRequired,
-  onCoursesFetched: PropTypes.func.isRequired,
+  newCurriculumFlow: PropTypes.func.isRequired,
+  newBlankFlow: PropTypes.func.isRequired,
 };

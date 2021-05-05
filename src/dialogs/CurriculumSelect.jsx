@@ -1,17 +1,28 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 
 import CampusSelect from "./CampusSelect.jsx";
 import AmbiguitySelect from "./AmbiguitySelect.jsx";
 
 export default function CurriculumSelect({
-  supportedCurricula, busy, setBusy, advance
+  busy, setBusy, supportedCurricula, newCurriculumFlow
 }) {
   const [selectedCampus, setSelectedCampus] = useState("Seattle");
   const curriculumSelectRef = useRef(null);
 
-  const [includeExternal, setIncludeExternal] = useState(true);
+  const [includeExternal, setIncludeExternal] = useState(false);
   const [ambiguousHandling, setAmbiguousHandling] = useState("aggressively");
+
+  function getCourses(event) {
+    event.preventDefault();
+    setBusy(true);
+
+    const selectInput = curriculumSelectRef.current;
+    const selectedCurriculum = (
+      selectInput.options[selectInput.selectedIndex].value
+    );
+    newCurriculumFlow(selectedCurriculum, includeExternal, ambiguousHandling);
+  }
 
   return (
     <div className="CurriculumSelect">
@@ -43,8 +54,9 @@ export default function CurriculumSelect({
       />
       <div className="CurriculumSelect__button-wrapper">
         <button
+          type="submit"
           className="CurriculumSelect__get-courses-button"
-          type="button"
+          onClick={getCourses}
           disabled={busy}
         >
           Get courses
@@ -55,8 +67,8 @@ export default function CurriculumSelect({
   );
 }
 CurriculumSelect.propTypes = {
-  supportedCurricula: PropTypes.instanceOf(Map).isRequired,
   busy: PropTypes.bool.isRequired,
   setBusy: PropTypes.func.isRequired,
-  advance: PropTypes.func.isRequired,
+  supportedCurricula: PropTypes.instanceOf(Map).isRequired,
+  newCurriculumFlow: PropTypes.func.isRequired,
 };

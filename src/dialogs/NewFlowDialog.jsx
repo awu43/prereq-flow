@@ -2,12 +2,18 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
+import {
+  isEdge,
+  isNode,
+  removeElements,
+  getConnectedEdges,
+} from "react-flow-renderer";
 
 import PreWarning from "./PreWarning.jsx";
 import FlowType from "./FlowType.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
-import { generateInitialElements } from "../parse-courses.js";
+import { COURSE_REGEX, generateInitialElements } from "../parse-courses.js";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -20,7 +26,7 @@ export default function NewFlowDialog({
   modalCls, closeDialog, generateNewFlow
 }) {
   const [busy, setBusy] = useState(false);
-  const [warningAccepted, setWarningAccepted] = useState(0);
+  const [warningAccepted, setWarningAccepted] = useState(1);
   const [slideState, setSlideState] = useState(0);
 
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -86,10 +92,25 @@ export default function NewFlowDialog({
     // TODO: Proper error handling
   }, []);
 
-  function onCoursesFetched(fetchedData) {
-    const newElements = generateInitialElements(fetchedData);
-    generateNewFlow(newElements);
-    close();
+  async function newDegreeFlow(majors, ambiguousHandling) {
+    try {
+      const resp = await fetch(`${API_URL}/degrees/`, {
+        method: "POST",
+        headers: { contentType: "application/json" },
+        body: JSON.stringify(majors),
+      });
+      const data = await resp.json();
+
+      const newElements = generateInitialElements(data, ambiguousHandling);
+      generateNewFlow(newElements);
+      close();
+    } catch (error) {
+      setBusy(false);
+      // throw error;
+      console.error(error);
+      // TODO: Proper error handling
+    }
+
     // advanceSlide();
     // if (!prefersReducedMotion) {
     //   setTimeout(() => {
@@ -98,6 +119,62 @@ export default function NewFlowDialog({
     // } else {
     //   setBusy(false);
     // }
+  }
+
+  async function newCurriculumFlow(
+    curriculum, includeExternal, ambiguousHandling
+  ) {
+    try {
+      const resp = await fetch(`${API_URL}/curricula/${curriculum}`);
+      const data = await resp.json();
+
+      if (includeExternal) {
+        const externalPrereqs = [];
+        for (const course of data) {
+          const courseMatches = course.prerequisite.match(COURSE_REGEX);
+          const external = (
+            courseMatches
+              ? courseMatches.filter(
+                courseId => !courseId.startsWith(curriculum)
+              )
+              : []
+          );
+          externalPrereqs.push(...external);
+        }
+        if (externalPrereqs.length) {
+          const externalResp = await fetch(`${API_URL}/courses/`, {
+            method: "POST",
+            headers: { contentType: "application/json" },
+            body: JSON.stringify(externalPrereqs),
+          });
+          const externalData = await externalResp.json();
+          data.push(...externalData);
+        }
+      }
+
+      const newElements = generateInitialElements(data, ambiguousHandling);
+      const edges = newElements.filter(elem => isEdge(elem));
+      const externalOrphans = newElements.filter(elem => (
+        isNode(elem)
+        && !elem.id.startsWith(curriculum)
+        && !getConnectedEdges([elem], edges).length
+        // Not connected to any other nodes
+      ));
+
+      generateNewFlow(removeElements(externalOrphans, newElements));
+      close();
+    } catch (error) {
+      setBusy(false);
+      // throw error;
+      console.error(error);
+      // TODO: Proper error handling
+    }
+  }
+
+  function newBlankFlow() {
+    setBusy(true);
+    generateNewFlow([]);
+    close();
   }
 
   const slideNum = warningAccepted + slideState;
@@ -131,8 +208,10 @@ export default function NewFlowDialog({
             busy={busy}
             setBusy={setBusy}
             supportedMajors={supportedMajors}
+            newDegreeFlow={newDegreeFlow}
             supportedCurricula={supportedCurricula}
-            onCoursesFetched={onCoursesFetched}
+            newCurriculumFlow={newCurriculumFlow}
+            newBlankFlow={newBlankFlow}
           />
           {/* <CourseSelect
           courseData={courseData}

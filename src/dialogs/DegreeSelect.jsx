@@ -5,12 +5,6 @@ import { nanoid } from "nanoid";
 
 import AmbiguitySelect from "./AmbiguitySelect.jsx";
 
-const API_URL = (
-  import.meta.env.MODE === "production"
-    ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
-    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
-);
-
 function toKebabCase(text) {
   return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
 }
@@ -22,7 +16,7 @@ const dummyMajors = [
 ];
 
 export default function DegreeSelect({
-  supportedMajors, busy, setBusy, advance
+  busy, setBusy, supportedMajors, newDegreeFlow
 }) {
   const [majors, setMajors] = useState([]);
   // const [minors, setMinors] = useState([]);
@@ -48,20 +42,11 @@ export default function DegreeSelect({
 
   // }
 
-  function getCourses(event) {
+  function generateFlow(event) {
     event.preventDefault();
     setBusy(true);
-    fetch(`${API_URL}/degrees/`, {
-      method: "POST",
-      headers: { contentType: "application/json" },
-      body: JSON.stringify(majors),
-    })
-      .then(resp => resp.json())
-      .then(data => advance(data))
-      .catch(error => {
-        console.error("Error:", error);
-      });
-    // TODO: Proper error handling
+
+    newDegreeFlow(majors, ambiguousHandling);
   }
 
   const majorsListElems = majors.map(m => {
@@ -128,7 +113,7 @@ export default function DegreeSelect({
         <button
           className="DegreeSelect__get-courses-button"
           type="submit"
-          onClick={getCourses}
+          onClick={generateFlow}
           disabled={busy || !majors.length}
         >
           Get courses
@@ -139,8 +124,8 @@ export default function DegreeSelect({
   );
 }
 DegreeSelect.propTypes = {
-  supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,
   busy: PropTypes.bool.isRequired,
   setBusy: PropTypes.func.isRequired,
-  advance: PropTypes.func.isRequired,
+  supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  newDegreeFlow: PropTypes.func.isRequired,
 };

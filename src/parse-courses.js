@@ -46,8 +46,12 @@ export function newEdge(source, target, id = null) {
 
 function addEdges(sources, target, elements, elementIds) {
   for (const source of sources) {
-    if (elementIds.has(source) && !elementIds.has(`${source} -> ${target}`)) {
-      elements.push(newEdge(source, target));
+    const edgeId = edgeArrowId(source, target);
+    if (elementIds.has(source)
+        && !elementIds.has(edgeId)
+        && !elementIds.has(edgeArrowId(target, source))) { // For BIOL cycles
+      elements.push(newEdge(source, target, edgeId));
+      elementIds.add(edgeId);
     }
   }
 }
@@ -58,7 +62,7 @@ export const CONCURRENT_LABEL = {
   labelBgBorderRadius: 4,
 };
 
-export function generateInitialElements(courseData) {
+export function generateInitialElements(courseData, ambiguousHandling) {
   const elements = courseData.map(c => newNode(c));
   // const elements = Object.keys(courseData).map(c => {
   //   const prereqText = courseData[c].prereqText.replace(/ ?Instructor.+$/, "");
@@ -74,7 +78,8 @@ export function generateInitialElements(courseData) {
   for (const data of courseData) {
     const courseId = data.id;
     const { prerequisite } = data;
-    if (!COURSE_REGEX.test(prerequisite)) { // No prerequisites
+    if (!COURSE_REGEX.test(prerequisite)) {
+      // No prerequisites
       continue;
     }
 
@@ -99,7 +104,7 @@ export function generateInitialElements(courseData) {
   // State machine maybe (look into JSON parsing)
   // TODO: Co-requisites
 
-  // Second pass: single "or" prerequisites
+  // Second pass: single "or" prerequisites and unparsable
   for (const [course, problemSection] of secondPass.entries()) {
     for (const section of problemSection) {
       const doubleEitherMatch = section.match(DOUBLE_EITHER_REGEX);
@@ -107,13 +112,16 @@ export function generateInitialElements(courseData) {
       const matches = tripleEitherMatch || doubleEitherMatch;
       // Double can match triple but not the other way around
       const numCourses = section.match(COURSE_REGEX).length;
+
       if (matches && matches.length === numCourses + 1) {
         // If not all courses captured (i.e. 3+), it's a false match
         // matches includes full string match
+
         const alreadyRequired = matches.slice(1).filter(m => elementIds.has(m));
         if (alreadyRequired.length) {
           // Some of the choices are already required, so go with those
           // TODO: implement OR into react flow
+
           for (const req of alreadyRequired) {
             let edge = newEdge(req, course);
             if (CONCURRENT_REGEX.test(section)) {
@@ -125,13 +133,11 @@ export function generateInitialElements(courseData) {
               elementIds.add(req);
             }
           }
-        } else {
+        } else if (ambiguousHandling === "aggressively") {
           addEdges(matches.slice(1), course, elements, elementIds);
-          // TODO: User selection
         }
-      } else {
+      } else if (ambiguousHandling === "aggressively") {
         addEdges(section.match(COURSE_REGEX), course, elements, elementIds);
-        // TODO: User selection
       }
     }
   }

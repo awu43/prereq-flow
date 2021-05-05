@@ -10,7 +10,7 @@ export default function AmbiguitySelect({
 
   return (
     <fieldset className="AmbiguitySelect" disabled={busy}>
-      <legend>Ambiguous prereqs (e.g. <q>Either X or Y</q>) should be handled</legend>
+      <legend>When prereq text parsing fails, make connections</legend>
       <label>
         <input
           type="radio"
@@ -18,7 +18,7 @@ export default function AmbiguitySelect({
           checked={ambiguousHandling === "aggressively"}
           onChange={() => setAmbiguousHandling("aggressively")}
         />
-        Aggressively (two new connections)
+        Aggressively (all possible connections)
       </label>
       <label>
         <input
