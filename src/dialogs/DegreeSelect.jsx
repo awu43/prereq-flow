@@ -62,6 +62,7 @@ export default function DegreeSelect({
           className="majors__delete-button"
           type="button"
           onClick={() => deleteMajor(m)}
+          disabled={busy}
         >
           <img src="dist/icons/times.svg" alt="Delete" />
         </button>
@@ -87,7 +88,11 @@ export default function DegreeSelect({
           visible={errorMsg.length}
         >
           <div className="majors__bar-and-button">
-            <select className="majors__select-input" ref={majorSelectRef}>
+            <select
+              ref={majorSelectRef}
+              className="majors__select-input"
+              disabled={busy}
+            >
               {supportedMajors.map(m => (
                 <option key={toKebabCase(m)}>{m}</option>
               ))}
@@ -96,6 +101,7 @@ export default function DegreeSelect({
               className="majors__add-button"
               type="button"
               onClick={addMajor}
+              disabled={busy}
             >
               <img src="dist/icons/plus.svg" alt="Add" />
             </button>
