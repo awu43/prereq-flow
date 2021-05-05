@@ -387,7 +387,7 @@ export default function AddCourseDialog({
         </button>
         <h2>Add course</h2>
         {/* TODO: Disable tabs when busy */}
-        <Tabs>
+        <Tabs onChange={() => setErrorMsg("")}>
           <TabList>
             <Tab>UW course</Tab>
             <Tab>Custom course</Tab>
