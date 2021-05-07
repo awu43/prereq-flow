@@ -13,6 +13,7 @@ import ReactFlow, {
 import dagre from "dagre";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
+import FlowStoreLifter from "./FlowStoreLifter.jsx";
 import CustomNode from "./CustomNode.jsx";
 import ContextMenu from "./ContextMenu.jsx";
 import NewFlowDialog from "./dialogs/NewFlowDialog.jsx";
@@ -219,6 +220,8 @@ function App() {
   const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
 
   const flowInstance = useRef(null);
+  const resetSelectedElements = useRef(null);
+
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
   const elemIndexes = useRef(initialIndexes);
@@ -477,6 +480,7 @@ function App() {
   function onElementClick(event, targetElem) {
     // NOTE: targetElem isn't the actual element so can't use id equality
     if (event.altKey && isNode(targetElem)) {
+      resetSelectedElements.current();
       const nodeId = targetElem.id;
       const newElements = elements.slice();
       let newStatus;
@@ -715,6 +719,9 @@ function App() {
         <small className="header__version">Beta</small>
       </header>
       <ReactFlowProvider>
+        <FlowStoreLifter
+          resetSelectedElements={resetSelectedElements}
+        />
         <ReactFlow
           // Flow View
           minZoom={0.25}

@@ -27,4 +27,3 @@ if (import.meta.hot) {
 // TODO: Context menu for edge style
 // TODO: Connection counters
 // TODO: Courses table
-// TODO: Don't select when Alt + Click
