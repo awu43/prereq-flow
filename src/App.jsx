@@ -865,13 +865,24 @@ function App() {
               )
             );
           }}
-          autoconnect={targetId => {
+          connectAll={targetId => {
             resetSelectedElements.current();
             recordFlowState();
             const newElements = autoconnect(
               elements.slice(), elements[elemIndexes.current.get(targetId)]
             );
             recalculateElements(newElements);
+          }}
+          disconnectAll={targetId => {
+            resetSelectedElements.current();
+            recordFlowState();
+            const connectedEdges = getConnectedEdges(
+              [elements[elemIndexes.current.get(targetId)]],
+              elements.slice(nodeData.current.size)
+            );
+            recalculateElements(
+              removeElements(connectedEdges, elements)
+            );
           }}
         />
       </ReactFlowProvider>
@@ -900,7 +911,7 @@ function App() {
           <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
           <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
           <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
-          <li><kbd>Ctrl</kbd> + click for multiple select</li>
+          <li><kbd>Ctrl</kbd> + click for multiple&nbsp;select</li>
           <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
           <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
           <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo* (max&nbsp;20)</li>

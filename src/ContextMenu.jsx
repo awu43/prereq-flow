@@ -8,7 +8,7 @@ import { useStoreActions } from "react-flow-renderer";
 export default function ContextMenu({
   active, data, xy, COURSE_STATUS_CODES,
   setSelectionStatuses, deleteElems,
-  autoconnect, toggleEdgeConcurrency,
+  connectAll, disconnectAll, toggleEdgeConcurrency,
 }) {
   const setUserSelection = useStoreActions(actions => (
     actions.setUserSelection
@@ -58,8 +58,11 @@ export default function ContextMenu({
       menuOptions = (
         <>
           {targetStatusCode < 3 && courseStatusOptions}
-          <li className="autoconnect" onClick={() => autoconnect(target)}>
-            <p>Autoconnect</p>
+          <li className="connect-all" onClick={() => connectAll(target)}>
+            <p>Connect&nbsp;all</p>
+          </li>
+          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+            <p>Disconnect&nbsp;all</p>
           </li>
           <li className="delete" onClick={() => deleteElems([target])}>
             <p>Delete</p>
@@ -169,6 +172,7 @@ ContextMenu.propTypes = {
   COURSE_STATUS_CODES: PropTypes.objectOf(PropTypes.number).isRequired,
   setSelectionStatuses: PropTypes.func.isRequired,
   deleteElems: PropTypes.func.isRequired,
-  autoconnect: PropTypes.func.isRequired,
+  connectAll: PropTypes.func.isRequired,
+  disconnectAll: PropTypes.func.isRequired,
   toggleEdgeConcurrency: PropTypes.func.isRequired,
 };
