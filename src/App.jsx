@@ -641,13 +641,7 @@ function App() {
     if (!elemIndexes.current.has(newEdgeId)
         && !elemIndexes.current.has(reverseEdgeId)) {
       recordFlowState();
-      const newElements = elements.map(elem => {
-        if (isNode(elem)) {
-          return { ...elem, data: { ...elem.data, nodeConnected: false } };
-        } else {
-          return { ...elem, animated: false };
-        }
-      });
+      const newElements = resetElementStates(elements.slice());
       // Need to "unhover" to return to base state
       newElements.push({
         id: newEdgeId,

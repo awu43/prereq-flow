@@ -7,3 +7,4 @@ function fileReadAndReplace(file, targetStr, replStr) {
 }
 
 fileReadAndReplace("build/dist/index.css", /dist\/source-sans/g, "source-sans");
+// https://github.com/snowpackjs/snowpack/issues/3139
