@@ -221,6 +221,7 @@ function App() {
 
   const flowInstance = useRef(null);
   const selectedElements = useRef(null);
+  const setSelectedElements = useRef(null);
   const resetSelectedElements = useRef(null);
   const setUserSelection = useRef(null);
 
@@ -263,7 +264,7 @@ function App() {
       };
     }
     for (let i = numNodes; i < numElems; i++) {
-      newElements[i] = { ...newElements[i], animated: false, style: {} };
+      newElements[i] = { ...newElements[i], animated: false };
     }
 
     return newElements;
@@ -550,9 +551,7 @@ function App() {
       for (const id of nodeData.current.get(nodeId).connectedEdges) {
         const i = elemIndexes.current.get(id);
         newElements[i] = {
-          ...newElements[i],
-          animated: !prefersReducedMotion,
-          style: { strokeWidth: "4px" },
+          ...newElements[i], animated: !prefersReducedMotion
         };
       }
 
@@ -586,7 +585,7 @@ function App() {
       };
     }
     for (let i = numNodes; i < numElems; i++) {
-      newElements[i] = { ...newElements[i], animated: false, style: {} };
+      newElements[i] = { ...newElements[i], animated: false };
     }
 
     setElements(newElements);
@@ -596,11 +595,40 @@ function App() {
 
   function onNodeContextMenu(event, node) {
     event.preventDefault();
-    contextData.current = {
-      target: node.id,
-      targetType: "node",
-      targetStatus: node.data.nodeStatus,
-    };
+    const selectedIds = (
+      selectedElements.current
+        ? selectedElements.current.map(elem => elem.id)
+        : []
+    );
+    if (selectedIds.includes(node.id)) {
+      if (selectedIds.length === 1) {
+        contextData.current = {
+          target: node.id,
+          targetType: "node",
+          targetStatus: node.data.nodeStatus,
+        };
+      } else if (!selectedIds.some(elemId => elemId.includes("->"))) {
+        // Only nodes selected
+        contextData.current = {
+          target: selectedIds,
+          targetType: "nodeselection",
+          targetStatus: "",
+        };
+      } else {
+        contextData.current = {
+          target: selectedIds,
+          targetType: "mixedselection",
+          targetStatus: "",
+        };
+      }
+    } else {
+      setSelectedElements.current([node]);
+      contextData.current = {
+        target: node.id,
+        targetType: "node",
+        targetStatus: node.data.nodeStatus,
+      };
+    }
     setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
   }
@@ -617,7 +645,7 @@ function App() {
         if (isNode(elem)) {
           return { ...elem, data: { ...elem.data, nodeConnected: false } };
         } else {
-          return { ...elem, animated: false, style: {} };
+          return { ...elem, animated: false };
         }
       });
       // Need to "unhover" to return to base state
@@ -658,11 +686,33 @@ function App() {
 
   function onEdgeContextMenu(event, edge) {
     event.preventDefault();
-    contextData.current = {
-      target: edge.id,
-      targetType: "edge",
-      targetStatus: elements[elemIndexes.current.get(edge.id)].label,
-    };
+    const selectedIds = (
+      selectedElements.current
+        ? selectedElements.current.map(elem => elem.id)
+        : []
+    );
+    if (selectedIds.includes(edge.id)) {
+      if (selectedIds.length === 1) {
+        contextData.current = {
+          target: edge.id,
+          targetType: "edge",
+          targetStatus: elements[elemIndexes.current.get(edge.id)].label,
+        };
+      } else {
+        contextData.current = {
+          target: selectedIds,
+          targetType: "mixedselection",
+          targetStatus: "",
+        };
+      }
+    } else {
+      setSelectedElements.current([edge]);
+      contextData.current = {
+        target: edge.id,
+        targetType: "edge",
+        targetStatus: elements[elemIndexes.current.get(edge.id)].label,
+      };
+    }
     setMouseXY([event.clientX, event.clientY]);
     setContextActive(true);
   }
@@ -685,7 +735,7 @@ function App() {
     event.preventDefault();
     contextData.current = {
       target: nodes.map(n => n.id),
-      targetType: "selection",
+      targetType: "nodeselection",
       targetStatus: "",
     };
     setMouseXY([event.clientX, event.clientY]);
@@ -727,6 +777,7 @@ function App() {
       <ReactFlowProvider>
         <FlowStoreLifter
           selectedElements={selectedElements}
+          setSelectedElements={setSelectedElements}
           resetSelectedElements={resetSelectedElements}
           setUserSelection={setUserSelection}
         />
@@ -766,8 +817,7 @@ function App() {
           zoomOnDoubleClick={false}
           // Keys
           deleteKeyCode="Delete"
-          // multiSelectionKeyCode="Control"
-          // FIXME: Context menu actions with click multiselect
+          multiSelectionKeyCode="Control"
         >
           <Background variant="lines" />
           <Controls showInteractive={false} />
@@ -778,6 +828,7 @@ function App() {
           xy={mouseXY}
           COURSE_STATUS_CODES={COURSE_STATUS_CODES}
           setSelectionStatuses={(nodeIds, newStatus) => {
+            resetSelectedElements.current();
             recordFlowState();
             const newElements = elements.slice();
             for (const id of nodeIds) {
@@ -790,6 +841,7 @@ function App() {
             );
           }}
           toggleEdgeConcurrency={edgeId => {
+            resetSelectedElements.current();
             recordFlowState();
             const newElements = elements.slice();
             const i = elemIndexes.current.get(edgeId);
@@ -811,6 +863,7 @@ function App() {
             );
           }}
           deleteElems={elemIds => {
+            resetSelectedElements.current();
             recordFlowState();
             recalculateElements(
               removeElements(
@@ -819,6 +872,7 @@ function App() {
             );
           }}
           autoconnect={targetId => {
+            resetSelectedElements.current();
             recordFlowState();
             const newElements = autoconnect(
               elements.slice(), elements[elemIndexes.current.get(targetId)]
@@ -852,7 +906,7 @@ function App() {
           <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
           <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
           <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
-          {/* <li><kbd>Ctrl</kbd> + click for multiple select</li> */}
+          <li><kbd>Ctrl</kbd> + click for multiple select</li>
           <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
           <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
           <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo* (max&nbsp;20)</li>

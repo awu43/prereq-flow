@@ -85,7 +85,7 @@ export default function ContextMenu({
         </>
       );
       break;
-    case "selection":
+    case "nodeselection":
       menuOptions = (
         <>
           <li
@@ -109,6 +109,11 @@ export default function ContextMenu({
           <hr />
           <li onClick={deleteAndClearSelection}><p>Delete</p></li>
         </>
+      );
+      break;
+    case "mixedselection":
+      menuOptions = (
+        <li onClick={deleteAndClearSelection}><p>Delete</p></li>
       );
       break;
     default:

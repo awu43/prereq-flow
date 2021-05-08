@@ -240,7 +240,7 @@ kbd {
 
 .react-flow__edge {
   &-path {
-    stroke-width: 2px;
+    stroke-width: 3px;
   }
   &-text {
     font-family: sans-serif;
@@ -252,16 +252,26 @@ kbd {
   }
 
   @each $status, $color in $flow-colors {
-    &.#{$status} .react-flow__edge-path {
-      stroke: $color;
-    }
-    &.animated.#{$status} .react-flow__edge-textbg {
-      fill: $color;
+    &.#{$status} {
+      .react-flow__edge-path {
+        stroke: $color;
+      }
+      &:hover,
+      &.selected,
+      &.animated {
+        .react-flow__edge-textbg {
+          fill: $color;
+        }
+      }
     }
   }
 
-  &.selected .react-flow__edge-path {
-    stroke-width: 4px;
+  &.animated,
+  &.selected,
+  &:hover {
+    .react-flow__edge-path {
+      stroke-width: 6px;
+    }
   }
 }
 
