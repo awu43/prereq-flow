@@ -14,6 +14,7 @@ import dagre from "dagre";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import FlowStoreLifter from "./FlowStoreLifter.jsx";
+import Header from "./Header.jsx";
 import CustomNode from "./CustomNode.jsx";
 import ContextMenu from "./ContextMenu.jsx";
 import NewFlowDialog from "./dialogs/NewFlowDialog.jsx";
@@ -744,30 +745,26 @@ function App() {
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div className="App" onClick={() => setContextActive(false)}>
-      <header className="header">
-        <h1>Prereq Flow</h1>
-        <div className="header__buttons">
-          <button type="button" onClick={() => openDialog(setNewFlowCls)}>
-            New flow
-          </button>
-          <button type="button" onClick={() => openDialog(setOpenFileCls)}>
-            Open
-          </button>
-          <button type="button" onClick={saveFlow}>
-            Save
-          </button>
-          <button type="button" onClick={() => openDialog(setAddCourseCls)}>
-            Add course
-          </button>
-          <button type="button" onClick={reflowElements}>
-            Reflow
-          </button>
-          <button type="button" onClick={() => openDialog(setAboutCls)}>
-            About
-          </button>
-        </div>
-        <small className="header__version">Beta</small>
-      </header>
+      <Header>
+        <button type="button" onClick={() => openDialog(setNewFlowCls)}>
+          New flow
+        </button>
+        <button type="button" onClick={() => openDialog(setOpenFileCls)}>
+          Open
+        </button>
+        <button type="button" onClick={saveFlow}>
+          Save
+        </button>
+        <button type="button" onClick={() => openDialog(setAddCourseCls)}>
+          Add course
+        </button>
+        <button type="button" onClick={reflowElements}>
+          Reflow
+        </button>
+        <button type="button" onClick={() => openDialog(setAboutCls)}>
+          About
+        </button>
+      </Header>
       <ReactFlowProvider>
         <FlowStoreLifter
           selectedElements={selectedElements}
