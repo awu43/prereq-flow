@@ -107,13 +107,39 @@ export default function ContextMenu({
             <p>Completed</p>
           </li>
           <hr />
-          <li onClick={deleteAndClearSelection}><p>Delete</p></li>
+          <li onClick={() => deleteElems(target)}><p>Delete</p></li>
         </>
       );
       break;
     case "mixedselection":
       menuOptions = (
-        <li onClick={deleteAndClearSelection}><p>Delete</p></li>
+        <li onClick={() => deleteElems(target)}><p>Delete</p></li>
+      );
+      break;
+    case "selection":
+      menuOptions = (
+        <>
+          <li
+            key="planned"
+            onClick={() => setSelectionStatuses(target, "ready")}
+          >
+            <p>Planned</p>
+          </li>
+          <li
+            key="enrolled"
+            onClick={() => setSelectionStatuses(target, "enrolled")}
+          >
+            <p>Enrolled</p>
+          </li>
+          <li
+            key="complete"
+            onClick={() => setSelectionStatuses(target, "completed")}
+          >
+            <p>Completed</p>
+          </li>
+          <hr />
+          <li onClick={deleteAndClearSelection}><p>Delete</p></li>
+        </>
       );
       break;
     default:
