@@ -13,6 +13,8 @@ module.exports = {
     "@snowpack/plugin-sass",
     // "@snowpack/plugin-webpack",
     "@snowpack/plugin-postcss",
+    "./json-proxy-workaround.js",
+    // https://github.com/snowpackjs/snowpack/issues/3109
   ],
   routes: [
     /* Enable an SPA Fallback in development: */
@@ -20,7 +22,7 @@ module.exports = {
   ],
   optimize: {
     /* Example: Bundle your final build: */
-    // bundle: true,
+    bundle: true,
     minify: true,
     target: "es2017",
   },

@@ -1,11 +1,9 @@
 const fs = require("fs");
 
-const correctedEnvJs = (
-  fs.readFileSync("./build/_snowpack/env.js", "utf8")
-    .replace(
-      "MODE=\"development\",NODE_ENV=\"development\"",
-      "MODE=\"production\",NODE_ENV=\"production\"",
-    )
-);
+function fileReadAndReplace(file, targetStr, replStr) {
+  fs.writeFileSync(
+    file, fs.readFileSync(file, "utf8").replace(targetStr, replStr), "utf8"
+  );
+}
 
-fs.writeFileSync("./build/_snowpack/env.js", correctedEnvJs, "utf8");
+fileReadAndReplace("build/dist/index.css", /dist\/source-sans/g, "source-sans");
