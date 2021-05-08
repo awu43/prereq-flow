@@ -220,7 +220,9 @@ function App() {
   const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
 
   const flowInstance = useRef(null);
+  const selectedElements = useRef(null);
   const resetSelectedElements = useRef(null);
+  const setUserSelection = useRef(null);
 
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
@@ -522,7 +524,11 @@ function App() {
 
   function onElementsRemove(targetElems) {
     recordFlowState();
-    recalculateElements(removeElements(targetElems, elements));
+    recalculateElements(
+      resetElementStates(
+        removeElements(targetElems, elements)
+      )
+    );
   }
 
   /* NODE */
@@ -720,7 +726,9 @@ function App() {
       </header>
       <ReactFlowProvider>
         <FlowStoreLifter
+          selectedElements={selectedElements}
           resetSelectedElements={resetSelectedElements}
+          setUserSelection={setUserSelection}
         />
         <ReactFlow
           // Flow View
@@ -758,7 +766,6 @@ function App() {
           zoomOnDoubleClick={false}
           // Keys
           deleteKeyCode="Delete"
-          // FIXME: Reset elements on delete key
           // multiSelectionKeyCode="Control"
           // FIXME: Context menu actions with click multiselect
         >

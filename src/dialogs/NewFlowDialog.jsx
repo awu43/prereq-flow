@@ -25,6 +25,7 @@ const API_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
 );
 
+// FIXME: Error tippy location for connection errors
 export default function NewFlowDialog({
   modalCls, closeDialog, generateNewFlow
 }) {
