@@ -38,7 +38,7 @@ const nodeHeight = 36;
 function generateDagreLayout(elements) {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: "LR", ranksep: 150 });
+  dagreGraph.setGraph({ rankdir: "LR", ranksep: 200 });
 
   for (const elem of elements) {
     if (isNode(elem)) {
@@ -423,8 +423,8 @@ function App() {
         );
         targetNode.position = { x, y };
       } else if (prereqPositions.length && !postreqPositions.length) {
-        const x = Math.max(...prereqPositions.map(pos => pos.x)) + 325;
-        // Magic number, close to dagre spacing
+        const x = Math.max(...prereqPositions.map(pos => pos.x)) + 370;
+        // Magic number, approximation for dagre spacing
         const y = (
           prereqPositions
             .map(pos => pos.y)
@@ -433,7 +433,7 @@ function App() {
         );
         targetNode.position = { x, y };
       } else if (!prereqPositions.length && postreqPositions.length) {
-        const x = Math.min(...postreqPositions.map(pos => pos.x)) - 325;
+        const x = Math.min(...postreqPositions.map(pos => pos.x)) - 370;
         const y = (
           postreqPositions
             .map(pos => pos.y)
