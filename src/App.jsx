@@ -38,13 +38,17 @@ import demoFlow from "./data/demo-flow.json";
 
 import "./App.scss";
 
+const ranksep = 200;
 const nodeWidth = 172;
 const nodeHeight = 36;
+
+const nodeSpacing = ranksep + nodeWidth;
+// For autopositioning
 
 function generateDagreLayout(elements) {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: "LR", ranksep: 200 });
+  dagreGraph.setGraph({ rankdir: "LR", ranksep });
 
   for (const elem of elements) {
     if (isNode(elem)) {
@@ -429,8 +433,7 @@ function App() {
         );
         targetNode.position = { x, y };
       } else if (prereqPositions.length && !postreqPositions.length) {
-        const x = Math.max(...prereqPositions.map(pos => pos.x)) + 370;
-        // Magic number, approximation for dagre spacing
+        const x = Math.max(...prereqPositions.map(pos => pos.x)) + nodeSpacing;
         const y = (
           prereqPositions
             .map(pos => pos.y)
@@ -439,7 +442,7 @@ function App() {
         );
         targetNode.position = { x, y };
       } else if (!prereqPositions.length && postreqPositions.length) {
-        const x = Math.min(...postreqPositions.map(pos => pos.x)) - 370;
+        const x = Math.min(...postreqPositions.map(pos => pos.x)) - nodeSpacing;
         const y = (
           postreqPositions
             .map(pos => pos.y)
