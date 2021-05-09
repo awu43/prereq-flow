@@ -245,6 +245,17 @@ kbd {
   font-family: consolas;
 }
 
+// Originals
+// $autumn-pink: rgb(255, 204, 204);
+// $winter-blue: rgb(153, 204, 255);
+// $spring-green: rgb(204, 255, 204);
+// $summer-yellow: rgb(252, 249, 144);
+
+$autumn-pink: hsl(0, 100%, 85%); // -5% lightness
+$winter-blue: hsl(210, 100%, 80%); // No change
+$spring-green: hsl(120, 100%, 85%); // -5% lightness
+$summer-yellow: hsl(58, 95%, 75%); // -3% lightness
+
 .tippy-box {
   background: rgba(#333, 0.96);
   p {
@@ -253,6 +264,27 @@ kbd {
   mark {
     color: #333;
     background: rgba(white, 0.96);
+    padding: 0 0.1rem;
+  }
+
+  .offered-autumn {
+    color: black;
+    background: $autumn-pink;
+    padding: 0 0.1rem;
+  }
+  .offered-winter {
+    color: black;
+    background: $winter-blue;
+    padding: 0 0.1rem;
+  }
+  .offered-spring {
+    color: black;
+    background: $spring-green;
+    padding: 0 0.1rem;
+  }
+  .offered-summer {
+    color: black;
+    background: $summer-yellow;
     padding: 0 0.1rem;
   }
 
