@@ -1,26 +1,33 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { isEdge, isNode } from "react-flow-renderer";
-
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
-import Tippy from "@tippyjs/react";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import "tippy.js/dist/tippy.css";
+import Dropzone from "./Dropzone.jsx";
+import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
 export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
   const [busy, setBusy] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const fileInputRef = useRef(null);
 
+  const prefersReducedMotion = usePrefersReducedMotion();
   function close() {
-    setBusy(false);
-    setErrorMsg("");
     closeDialog();
+    if (!prefersReducedMotion) {
+      setTimeout(() => {
+        setBusy(false);
+        setErrorMsg("");
+      }, 100);
+    } else {
+      setBusy(false);
+      setErrorMsg("");
+    }
   }
 
-  function validateFile(file) {
+  function openFile(files) {
+    const [file] = files;
+
     setBusy(true);
 
     if (file.type !== "application/json") {
@@ -35,11 +42,13 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
     reader.onload = event => {
       loadedData = JSON.parse(event.target.result);
 
-      const structureValid = [
-        typeof loadedData === "object",
-        Object.keys(loadedData).toString() === ["version", "elements"].toString()
-      ].every(a => a);
-
+      const structureValid = (
+        typeof loadedData === "object"
+        && (
+          Object.keys(loadedData).toString()
+          === ["version", "elements"].toString()
+        )
+      );
       if (!structureValid) {
         setErrorMsg("Invalid data");
         setBusy(false);
@@ -47,29 +56,20 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
       }
 
       const { version, elements } = loadedData;
-      const dataValid = [
-        typeof version === "string",
-        Array.isArray(elements),
-        elements.every(e => isNode(e) || isEdge(e)),
-      ].every(a => a);
-
+      const dataValid = (
+        typeof version === "string"
+        && Array.isArray(elements)
+        && elements.every(e => isNode(e) || isEdge(e))
+      );
       if (!dataValid) {
         setErrorMsg("Invalid data");
         setBusy(false);
-        // eslint-disable-next-line no-useless-return
         return;
-      } else {
-        openFlow(elements);
-        close();
       }
-    };
-  }
 
-  function openFile() {
-    const file = fileInputRef.current.files[0];
-    if (file !== undefined) {
-      validateFile(file);
-    }
+      openFlow(elements);
+      close();
+    };
   }
 
   return (
@@ -92,32 +92,13 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
           <img src="dist/icons/x-black.svg" alt="close" />
         </button>
         <section>
-          {/* TODO: Drag+drop file input */}
           <h2>Open flow</h2>
-          <Tippy
-            className="tippy-box--error"
-            content={errorMsg}
-            placement="bottom-start"
-            arrow={false}
-            duration={0}
-            offset={[0, 5]}
-            visible={errorMsg.length}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="application/json"
-              disabled={busy}
-            />
-          </Tippy>
-          <button
-            className="OpenFileDialog__open-button"
-            type="button"
-            onClick={openFile}
-            disabled={busy}
-          >
-            Open
-          </button>
+          <Dropzone
+            busy={busy}
+            errorMsg={errorMsg}
+            setErrorMsg={setErrorMsg}
+            openFile={openFile}
+          />
         </section>
       </DialogContent>
     </DialogOverlay>
