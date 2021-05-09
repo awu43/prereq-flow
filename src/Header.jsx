@@ -31,9 +31,9 @@ export default function Header(props) {
           </button>
         </Tippy>
         <h1>Prereq Flow</h1>
-        <div className="Header__nav-buttons">
+        <nav className="Header__nav-buttons">
           {props.children}
-        </div>
+        </nav>
         <small className="Header__version">Beta</small>
       </div>
     </header>

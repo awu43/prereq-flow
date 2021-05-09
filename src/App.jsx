@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+
 import ReactFlow, {
   Background,
   Controls,
@@ -11,6 +13,10 @@ import ReactFlow, {
   getOutgoers,
 } from "react-flow-renderer";
 import dagre from "dagre";
+
+import Tippy from "@tippyjs/react";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "tippy.js/dist/tippy.css";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import FlowStoreLifter from "./FlowStoreLifter.jsx";
@@ -742,28 +748,61 @@ function App() {
   //   setContextActive(false);
   // }
 
+  function HeaderButton({ label, description, onClick }) {
+    return (
+      <Tippy
+        content={description}
+        trigger="mouseenter"
+        hideOnClick="true"
+        placement="bottom"
+        duration={prefersReducedMotion ? 0 : 100}
+      >
+        <button type="button" onClick={onClick}>
+          {label}
+        </button>
+      </Tippy>
+    );
+  }
+  HeaderButton.propTypes = {
+    label: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+  };
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div className="App" onClick={() => setContextActive(false)}>
       <Header>
-        <button type="button" onClick={() => openDialog(setNewFlowCls)}>
-          New flow
-        </button>
-        <button type="button" onClick={() => openDialog(setOpenFileCls)}>
-          Open
-        </button>
-        <button type="button" onClick={saveFlow}>
-          Save
-        </button>
-        <button type="button" onClick={() => openDialog(setAddCourseCls)}>
-          Add course
-        </button>
-        <button type="button" onClick={reflowElements}>
-          Reflow
-        </button>
-        <button type="button" onClick={() => openDialog(setAboutCls)}>
-          About
-        </button>
+        <HeaderButton
+          label="New flow"
+          description="Start a new flow"
+          onClick={() => openDialog(setNewFlowCls)}
+        />
+        <HeaderButton
+          label="Open"
+          description="Open an existing flow"
+          onClick={() => openDialog(setOpenFileCls)}
+        />
+        <HeaderButton
+          label="Save"
+          description="Save current flow to file"
+          onClick={saveFlow}
+        />
+        <HeaderButton
+          label="Add course"
+          description="Add courses to flow"
+          onClick={() => openDialog(setAddCourseCls)}
+        />
+        <HeaderButton
+          label="Reflow"
+          description="Generate a new layout"
+          onClick={reflowElements}
+        />
+        <HeaderButton
+          label="About"
+          description="About Prereq Flow"
+          onClick={() => openDialog(setAboutCls)}
+        />
       </Header>
       <ReactFlowProvider>
         <FlowStoreLifter
