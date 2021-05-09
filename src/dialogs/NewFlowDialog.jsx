@@ -25,10 +25,10 @@ const API_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
 );
 
-// FIXME: Error tippy location for connection errors
 export default function NewFlowDialog({
   modalCls, closeDialog, generateNewFlow
 }) {
+  const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
@@ -59,7 +59,7 @@ export default function NewFlowDialog({
       .then(resp => resp.json())
       .then(data => setSupportedMajors(data))
       .catch(error => {
-        setDegreeError("Connection error");
+        setConnectionError(true);
         // eslint-disable-next-line no-console
         console.error(error);
       });
@@ -91,7 +91,7 @@ export default function NewFlowDialog({
         setSupportedCurricula(curricula);
       })
       .catch(error => {
-        setCurriculumError("Connection error");
+        setConnectionError(true);
         // eslint-disable-next-line no-console
         console.error(error);
       });
@@ -207,7 +207,9 @@ export default function NewFlowDialog({
         >
           <img src="dist/icons/x-black.svg" alt="close" />
         </button>
-        <h2>New flow</h2>
+        <h2 className={connectionError ? "connection-error" : ""}>
+          New flow
+        </h2>
         <hr />
         <div
           className={`NewFlowDialog__slides slide-${slideNum}`}
@@ -233,6 +235,7 @@ export default function NewFlowDialog({
               <TabPanels>
                 <TabPanel>
                   <DegreeSelect
+                    connectionError={connectionError}
                     busy={busy}
                     setBusy={setBusy}
                     supportedMajors={supportedMajors}
@@ -242,6 +245,7 @@ export default function NewFlowDialog({
                 </TabPanel>
                 <TabPanel>
                   <CurriculumSelect
+                    connectionError={connectionError}
                     busy={busy}
                     setBusy={setBusy}
                     supportedCurricula={supportedCurricula}

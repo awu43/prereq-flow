@@ -9,7 +9,8 @@ import CampusSelect from "./CampusSelect.jsx";
 import AmbiguitySelect from "./AmbiguitySelect.jsx";
 
 export default function CurriculumSelect({
-  busy, setBusy, supportedCurricula, newCurriculumFlow, errorMsg
+  connectionError, busy, setBusy,
+  supportedCurricula, newCurriculumFlow, errorMsg
 }) {
   const [selectedCampus, setSelectedCampus] = useState("Seattle");
   const curriculumSelectRef = useRef(null);
@@ -47,7 +48,7 @@ export default function CurriculumSelect({
         <select
           className="CurriculumSelect__select-input"
           ref={curriculumSelectRef}
-          disabled={busy}
+          disabled={connectionError || busy}
         >
           {supportedCurricula.get(selectedCampus)}
         </select>
@@ -71,7 +72,7 @@ export default function CurriculumSelect({
           type="submit"
           className="CurriculumSelect__get-courses-button"
           onClick={getCourses}
-          disabled={busy}
+          disabled={connectionError || busy}
         >
           Get courses
         </button>
@@ -81,6 +82,7 @@ export default function CurriculumSelect({
   );
 }
 CurriculumSelect.propTypes = {
+  connectionError: PropTypes.bool.isRequired,
   busy: PropTypes.bool.isRequired,
   setBusy: PropTypes.func.isRequired,
   supportedCurricula: PropTypes.instanceOf(Map).isRequired,

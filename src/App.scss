@@ -439,6 +439,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   right: 0.5rem;
   width: 1.6rem;
   height: 1.6rem;
+  z-index: 20;
 
   appearance: none;
   border: none;
@@ -537,6 +538,22 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   h2 {
     margin: 0.5rem 1rem;
     margin-top: 0;
+
+    position: relative;
+
+    &.connection-error::after {
+      content: "Connection error";
+      position: absolute;
+      display: inline-block;
+      margin-left: 1rem;
+      padding: 5px 9px;
+      border-radius: 4px;
+
+      font-size: 14px;
+      font-weight: normal;
+      color: white;
+      background: darkred;
+    }
   }
 
   h3 {
@@ -780,6 +797,24 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   min-height: 19.5rem;
   display: flex;
   flex-direction: column;
+
+  h2 {
+    position: relative;
+
+    &.connection-error::after {
+      content: "Connection error";
+      position: absolute;
+      display: inline-block;
+      margin-left: 1rem;
+      padding: 5px 9px;
+      border-radius: 4px;
+
+      font-size: 14px;
+      font-weight: normal;
+      color: white;
+      background: darkred;
+    }
+  }
 
   [data-reach-tab-list] {
     margin: 0.5rem 0 0.75rem 0;

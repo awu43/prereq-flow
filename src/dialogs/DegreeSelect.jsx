@@ -20,7 +20,7 @@ const dummyMajors = [
 ];
 
 export default function DegreeSelect({
-  busy, setBusy, supportedMajors, newDegreeFlow, errorMsg
+  connectionError, busy, setBusy, supportedMajors, newDegreeFlow, errorMsg
 }) {
   const [majors, setMajors] = useState([]);
   // const [minors, setMinors] = useState([]);
@@ -91,7 +91,7 @@ export default function DegreeSelect({
             <select
               ref={majorSelectRef}
               className="majors__select-input"
-              disabled={busy}
+              disabled={connectionError || busy}
             >
               {supportedMajors.map(m => (
                 <option key={toKebabCase(m)}>{m}</option>
@@ -101,7 +101,7 @@ export default function DegreeSelect({
               className="majors__add-button"
               type="button"
               onClick={addMajor}
-              disabled={busy}
+              disabled={connectionError || busy}
             >
               <img src="dist/icons/plus.svg" alt="Add" />
             </button>
@@ -134,7 +134,7 @@ export default function DegreeSelect({
           className="DegreeSelect__get-courses-button"
           type="submit"
           onClick={generateFlow}
-          disabled={busy || !majors.length}
+          disabled={connectionError || busy || !majors.length}
         >
           Get courses
         </button>
@@ -144,6 +144,7 @@ export default function DegreeSelect({
   );
 }
 DegreeSelect.propTypes = {
+  connectionError: PropTypes.bool.isRequired,
   busy: PropTypes.bool.isRequired,
   setBusy: PropTypes.func.isRequired,
   supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,

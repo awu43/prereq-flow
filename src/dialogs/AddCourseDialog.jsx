@@ -41,6 +41,7 @@ const SEARCH_REGEX = /^\s*((?:[A-Z&]+ )+\d{3})(?:\D+|$)/;
 export default function AddCourseDialog({
   modalCls, closeDialog, nodeData, addCourseNode
 }) {
+  const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [selectedCampus, setSelectedCampus] = useState("Seattle");
 
@@ -70,7 +71,7 @@ export default function AddCourseDialog({
       );
     });
     wsConnection.addEventListener("error", event => {
-      setErrorMsg("Connection error");
+      setConnectionError(true);
       // eslint-disable-next-line no-console
       console.error(event);
     });
@@ -218,7 +219,7 @@ export default function AddCourseDialog({
               placeholder="Course ID (Enter key to add)"
               value={selectedCourse}
               onChange={onSearchChange}
-              disabled={busy}
+              disabled={connectionError || busy}
             />
             <ComboboxPopover>
               <ComboboxList>
@@ -231,7 +232,7 @@ export default function AddCourseDialog({
           className="add-uw-course__add-button"
           ref={addButtonRef}
           type="submit"
-          disabled={busy}
+          disabled={connectionError || busy}
           onClick={fetchCourse}
         >
           Add
@@ -390,7 +391,9 @@ export default function AddCourseDialog({
         >
           <img src="dist/icons/x-black.svg" alt="close" />
         </button>
-        <h2>Add course</h2>
+        <h2 className={connectionError ? "connection-error" : ""}>
+          Add course
+        </h2>
         <Tabs onChange={() => setErrorMsg("")}>
           <TabList>
             <Tab disabled={busy}>UW course</Tab>
