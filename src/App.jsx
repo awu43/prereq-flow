@@ -751,6 +751,19 @@ function App() {
   //   setContextActive(false);
   // }
 
+  function onPaneContextMenu(event) {
+    event.preventDefault();
+    resetSelectedElements.current();
+    setUserSelection.current([]);
+    contextData.current = {
+      target: "",
+      targetType: "pane",
+      targetStatus: "",
+    };
+    setMouseXY([event.clientX, event.clientY]);
+    setContextActive(true);
+  }
+
   function HeaderButton({ label, description, onClick }) {
     return (
       <Tippy
@@ -845,6 +858,7 @@ function App() {
           onSelectionContextMenu={onSelectionContextMenu}
           // --- Pane ---
           // onPaneClick={onPaneClick}
+          onPaneContextMenu={onPaneContextMenu}
           // Interaction
           selectNodesOnDrag={false}
           zoomOnDoubleClick={false}

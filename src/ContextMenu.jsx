@@ -145,6 +145,18 @@ export default function ContextMenu({
         </>
       );
       break;
+    case "pane":
+      menuOptions = (
+        <>
+          <li
+            onClick={() => {}}
+            // TODO: New OR node context menu action
+          >
+            <p>New OR node</p>
+          </li>
+        </>
+      );
+      break;
     default:
       // eslint-disable-next-line no-console
       console.error("Invalid context target");
