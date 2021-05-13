@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import classNames from "classnames";
+
 import { Handle } from "react-flow-renderer";
 
 const orNodeStyle = {
@@ -17,8 +19,9 @@ const orNodeStyle = {
 export default function OrNode({ data }) {
   return (
     <div
-      className={`OrNode ${data.nodeStatus}${
-        data.nodeConnected ? " connected" : ""}`}
+      className={classNames(
+        "CourseNode", data.nodeStatus, { connected: data.nodeConnected }
+      )}
       style={orNodeStyle}
     >
       <Handle type="target" position="left" />

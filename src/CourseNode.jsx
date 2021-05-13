@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import classNames from "classnames";
+
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
@@ -12,7 +14,7 @@ import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
 import { COURSE_REGEX } from "./parse-courses.js";
 
-const defaultNodeStyle = {
+const courseNodeStyle = {
   padding: "10px",
   // "border-radius": "3px",
   minWidth: "150px",
@@ -102,9 +104,10 @@ export default function CourseNode({ data }) {
       // trigger="click"
     >
       <div
-        className={`CourseNode ${data.nodeStatus}${
-          data.nodeConnected ? " connected" : ""}`}
-        style={defaultNodeStyle}
+        className={classNames(
+          "CourseNode", data.nodeStatus, { connected: data.nodeConnected }
+        )}
+        style={courseNodeStyle}
       >
         <Handle type="target" position="left" />
         <div>{data.id}</div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
+import classNames from "classnames";
+
 import ReactFlow, {
   Background,
   Controls,
@@ -956,7 +958,9 @@ function App() {
       >
         <img src="dist/icons/question.svg" alt="Open controls" />
       </button>
-      <aside className={`controls-help${controlsClosed ? " closed" : ""}`}>
+      <aside
+        className={classNames("controls-help", { closed: controlsClosed })}
+      >
         <ul>
           <li>Click for single&nbsp;select</li>
           <li>Right click for context&nbsp;menu</li>

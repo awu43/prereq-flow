@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
+import classNames from "classnames";
+
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
@@ -13,7 +15,7 @@ export default function Header(props) {
   const [pinned, setPinned] = useState(true);
 
   return (
-    <header className={`Header ${pinned ? "Header--pinned" : ""}`}>
+    <header className={classNames("Header", { "Header--pinned": pinned })}>
       <div className="Header__content">
         <Tippy
           content={pinned ? "Unpin header" : "Pin header"}

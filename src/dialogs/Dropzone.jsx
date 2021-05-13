@@ -2,6 +2,8 @@
 import React, { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 
+import classNames from "classnames";
+
 import { useDropzone } from "react-dropzone";
 // https://react-dropzone.js.org/#section-styling-dropzone
 
@@ -68,7 +70,7 @@ export default function Dropzone({ busy, errorMsg, setErrorMsg, openFile }) {
   }, [isDragReject, isDragAccept]);
 
   return (
-    <div className={`Dropzone${busy ? " Dropzone--disabled" : ""}`}>
+    <div className={classNames("Dropzone", { "Dropzone--disabled": busy })}>
       <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
         <p className={errorMsg.length ? "error" : ""}>
