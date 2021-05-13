@@ -25,3 +25,4 @@ if (import.meta.hot) {
 // TODO: Context menu for edge style
 // TODO: Connection counters
 // TODO: Courses table
+// TODO: General cycle check on edge update/create

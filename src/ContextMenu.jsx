@@ -9,6 +9,7 @@ export default function ContextMenu({
   active, data, xy, COURSE_STATUS_CODES,
   setSelectionStatuses, deleteElems,
   connectAll, disconnectAll, toggleEdgeConcurrency,
+  newOrNode,
 }) {
   const setUserSelection = useStoreActions(actions => (
     actions.setUserSelection
@@ -88,6 +89,7 @@ export default function ContextMenu({
         </>
       );
       break;
+    // TODO: Update for or nodes
     case "nodeselection":
       menuOptions = (
         <>
@@ -148,10 +150,7 @@ export default function ContextMenu({
     case "pane":
       menuOptions = (
         <>
-          <li
-            onClick={() => {}}
-            // TODO: New OR node context menu action
-          >
+          <li onClick={() => newOrNode({ x: xy[0], y: xy[1] })}>
             <p>New OR node</p>
           </li>
         </>
@@ -187,4 +186,5 @@ ContextMenu.propTypes = {
   connectAll: PropTypes.func.isRequired,
   disconnectAll: PropTypes.func.isRequired,
   toggleEdgeConcurrency: PropTypes.func.isRequired,
+  newOrNode: PropTypes.func.isRequired,
 };

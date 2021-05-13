@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import classNames from "classnames";
+import { nanoid } from "nanoid";
 
 import ReactFlow, {
   Background,
@@ -24,6 +25,7 @@ import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import FlowStoreLifter from "./FlowStoreLifter.jsx";
 import Header from "./Header.jsx";
 import CourseNode from "./CourseNode.jsx";
+import OrNode from "./OrNode.jsx";
 import ContextMenu from "./ContextMenu.jsx";
 import NewFlowDialog from "./dialogs/NewFlowDialog.jsx";
 import OpenFileDialog from "./dialogs/OpenFileDialog.jsx";
@@ -151,14 +153,18 @@ function newElemIndexes(elements) {
   return new Map(elements.map((elem, i) => [elem.id, i]));
 }
 
-const COURSE_STATUS_CODES = Object.freeze({
-  completed: 0,
-  enrolled: 1,
-  ready: 2,
-  "under-one-away": 3,
-  "one-away": 4,
-  "over-one-away": 5,
-});
+const COURSE_STATUSES = [
+  "completed",
+  "enrolled",
+  "ready",
+  "under-one-away",
+  "one-away",
+  "over-one-away",
+];
+
+const COURSE_STATUS_CODES = Object.freeze(Object.fromEntries(
+  COURSE_STATUSES.map((status, i) => [status, i])
+));
 
 function setNodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes) {
   elements[elemIndexes.get(nodeId)].data.nodeStatus = newStatus;
@@ -170,41 +176,68 @@ function setNodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes) {
 }
 
 function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
-  const currentStatus = elements[elemIndexes.get(nodeId)].data.nodeStatus;
+  const targetNode = elements[elemIndexes.get(nodeId)];
+  const currentStatus = targetNode.data.nodeStatus;
   const incomingEdges = nodeData.get(nodeId).incomingEdges.map(id => (
     elements[elemIndexes.get(id)]
   ));
 
-  let newStatusCode = Math.max(...incomingEdges.map(edge => {
-    let edgeStatusCode = COURSE_STATUS_CODES[edge.className];
-    if (edgeStatusCode === COURSE_STATUS_CODES.enrolled
-        && edge.label === "CC") {
-      edgeStatusCode = COURSE_STATUS_CODES.completed;
-    }
-    return edgeStatusCode;
-  }));
-  newStatusCode = (
-    newStatusCode === Number.NEGATIVE_INFINITY ? 0 : newStatusCode
-  );
-  // Math.max() with no args -> negative infinity
-
   let newStatus;
-  if (newStatusCode === 0) {
-    newStatus = (
-      currentStatus === "completed" || currentStatus === "enrolled"
-        ? currentStatus
-        : "ready"
-    );
-    // All prereqs completed (or concurrently enrolled)
-  } else if (newStatusCode === 1) {
-    newStatus = "under-one-away";
-    // All prereqs will be complete after finishing currently enrolled
-  } else if (newStatusCode === 2) {
-    newStatus = "one-away";
-    // All prereqs ready for enrollment
-  } else if (newStatusCode > 2) {
-    newStatus = "over-one-away";
-    // At least one prereq not ready for enrollment
+  switch (targetNode.type) {
+    case "course": {
+      let newStatusCode = Math.max(...incomingEdges.map(edge => {
+        let edgeStatusCode = COURSE_STATUS_CODES[edge.className];
+        if (edgeStatusCode === COURSE_STATUS_CODES.enrolled
+            && edge.label === "CC") {
+          edgeStatusCode = COURSE_STATUS_CODES.completed;
+        }
+        return edgeStatusCode;
+      }));
+
+      newStatusCode = (
+        newStatusCode === Number.NEGATIVE_INFINITY ? 0 : newStatusCode
+      );
+      // Math.max() with no args -> negative infinity
+
+      if (newStatusCode === 0) {
+        newStatus = (
+          currentStatus === "completed" || currentStatus === "enrolled"
+            ? currentStatus
+            : "ready"
+        );
+        // All prereqs completed (or concurrently enrolled)
+      } else if (newStatusCode === 1) {
+        newStatus = "under-one-away";
+        // All prereqs will be complete after finishing currently enrolled
+      } else if (newStatusCode === 2) {
+        newStatus = "one-away";
+        // All prereqs ready for enrollment
+      } else if (newStatusCode > 2) {
+        newStatus = "over-one-away";
+        // At least one prereq not ready for enrollment
+      }
+      break;
+    }
+    case "or": {
+      let newStatusCode = Math.min(...incomingEdges.map(edge => {
+        let edgeStatusCode = COURSE_STATUS_CODES[edge.className];
+        if (edgeStatusCode === COURSE_STATUS_CODES.enrolled
+            && edge.label === "CC") {
+          edgeStatusCode = COURSE_STATUS_CODES.completed;
+        }
+        return edgeStatusCode;
+      }));
+
+      newStatusCode = (
+        newStatusCode === Number.POSITIVE_INFINITY ? 0 : newStatusCode
+      );
+      // Math.min() with no args -> positive infinity
+
+      newStatus = COURSE_STATUSES[newStatusCode];
+    }
+      break;
+    default:
+      break;
   }
 
   setNodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes);
@@ -494,7 +527,7 @@ function App() {
   // Single change can only propagate 2 layers deep
   function onElementClick(event, targetElem) {
     // NOTE: targetElem isn't the actual element so can't use id equality
-    if (event.altKey && isNode(targetElem)) {
+    if (event.altKey && isNode(targetElem) && targetElem.type === "course") {
       resetSelectedElements.current();
       const nodeId = targetElem.id;
       const newElements = elements.slice();
@@ -671,6 +704,7 @@ function App() {
   }
 
   function onEdgeUpdate(oldEdge, newConnection) {
+    // FIXME: Broken for nodes with no existing connections
     const newSource = newConnection.source;
     const newTarget = newConnection.target;
     const newEdgeId = edgeArrowId(newSource, newTarget);
@@ -836,7 +870,7 @@ function App() {
           onLoad={onLoad}
           // Basic Props
           elements={elements}
-          nodeTypes={{ course: CourseNode }}
+          nodeTypes={{ course: CourseNode, or: OrNode }}
           // Event Handlers
           // --- Element ---
           onElementClick={onElementClick}
@@ -937,6 +971,20 @@ function App() {
             );
             recalculateElements(
               removeElements(connectedEdges, elements)
+            );
+          }}
+          newOrNode={xy => {
+            const newNode = {
+              id: `OR-${nanoid()}`,
+              type: "or",
+              position: flowInstance.current.project(xy),
+              data: {
+                nodeStatus: "completed",
+                nodeConnected: false,
+              }
+            };
+            recalculateElements(
+              elements.slice().concat([newNode])
             );
           }}
         />
