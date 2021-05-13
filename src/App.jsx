@@ -703,27 +703,6 @@ function App() {
     setContextActive(false);
   }
 
-  function onEdgeUpdate(oldEdge, newConnection) {
-    // FIXME: Broken for nodes with no existing connections
-    const newSource = newConnection.source;
-    const newTarget = newConnection.target;
-    const newEdgeId = edgeArrowId(newSource, newTarget);
-    const reverseEdgeId = edgeArrowId(newTarget, newSource);
-    if (!elemIndexes.current.has(newEdgeId)
-        && !elemIndexes.current.has(reverseEdgeId)) {
-      recordFlowState();
-      const newElements = elements.slice();
-      newElements[elemIndexes.current.get(oldEdge.id)] = {
-        ...oldEdge, // Keep CC status
-        id: newEdgeId,
-        source: newConnection.source,
-        target: newConnection.target,
-        className: elements[elemIndexes.current.get(newSource)].data.status,
-      };
-      recalculateElements(newElements);
-    }
-  }
-
   function onEdgeContextMenu(event, edge) {
     event.preventDefault();
     const selectedIds = (
@@ -884,7 +863,6 @@ function App() {
           // --- Edge ---
           onConnect={onConnect}
           onConnectStart={onConnectStart}
-          onEdgeUpdate={onEdgeUpdate}
           onEdgeContextMenu={onEdgeContextMenu}
           // --- Move ---
           onMoveStart={onMoveStart}
@@ -916,7 +894,8 @@ function App() {
             const newElements = elements.slice();
             for (const id of nodeIds) {
               setNodeStatus(
-                id, newStatus, newElements, nodeData.current, elemIndexes.current
+                id, newStatus, newElements,
+                nodeData.current, elemIndexes.current
               );
             }
             setElements(
@@ -1013,7 +992,6 @@ function App() {
           <li>Right click for context&nbsp;menu</li>
           <li>Hover over a node for connections and course info (click to hide&nbsp;tooltip)</li>
           <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
-          <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
           <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
           <li><kbd>Ctrl</kbd> + click for multiple&nbsp;select</li>
           <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
