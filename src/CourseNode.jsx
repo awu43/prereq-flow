@@ -60,7 +60,7 @@ function markOfferedQuarters(text) {
   return innerHTML;
 }
 
-export default function CustomNode({ data }) {
+export default function CourseNode({ data }) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const prereqHTML = markCoursesAndPreventBreaks(data.prerequisite);
@@ -102,7 +102,7 @@ export default function CustomNode({ data }) {
       // trigger="click"
     >
       <div
-        className={`CustomNode ${data.nodeStatus}${
+        className={`CourseNode ${data.nodeStatus}${
           data.nodeConnected ? " connected" : ""}`}
         style={defaultNodeStyle}
       >
@@ -113,7 +113,7 @@ export default function CustomNode({ data }) {
     </Tippy>
   );
 }
-CustomNode.propTypes = {
+CourseNode.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,

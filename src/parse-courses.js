@@ -15,10 +15,10 @@ const CONCURRENT_REGEX = (
   /(?:either of )?which may be taken concurrently(?:\. Instructor|\.?$)/
 );
 
-export function newNode(courseData) {
+export function newCourseNode(courseData) {
   return {
     id: courseData.id,
-    type: "custom",
+    type: "course",
     position: ZERO_POSITION,
     selected: false,
     data: {
@@ -63,11 +63,11 @@ export const CONCURRENT_LABEL = {
 };
 
 export function generateInitialElements(courseData, ambiguousHandling) {
-  const elements = courseData.map(c => newNode(c));
+  const elements = courseData.map(c => newCourseNode(c));
   // const elements = Object.keys(courseData).map(c => {
   //   const prereqText = courseData[c].prereqText.replace(/ ?Instructor.+$/, "");
   //   const prereqList = prereqText.split(";").map(s => s.trim());
-  //   const elemNode = newNode(c);
+  //   const elemNode = newCourseNode(c);
   //   elemNode.data = { ...elemNode.data, prereqs: prereqList };
   //   return elemNode;
   // });
@@ -129,7 +129,7 @@ export function generateInitialElements(courseData, ambiguousHandling) {
             }
             elements.push(edge);
             if (!elementIds.has(req)) {
-              elements.push(newNode(req));
+              elements.push(newCourseNode(req));
               elementIds.add(req);
             }
           }

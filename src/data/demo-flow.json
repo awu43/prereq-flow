@@ -3,7 +3,7 @@
   "elements": [
     {
       "id": "CHEM 142",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 437.0000382277891,
         "y": 5
@@ -22,7 +22,7 @@
     },
     {
       "id": "MATH 124",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": -169.99923683631994,
         "y": 656.5
@@ -41,7 +41,7 @@
     },
     {
       "id": "ENGR 231",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": -169.99978881929002,
         "y": 742.5
@@ -60,7 +60,7 @@
     },
     {
       "id": "M E 123",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 804.0005766928971,
         "y": 90
@@ -79,7 +79,7 @@
     },
     {
       "id": "CHEM 152",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 803.0009965416608,
         "y": -85
@@ -98,7 +98,7 @@
     },
     {
       "id": "PHYS 121",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 158.00093723091516,
         "y": 339
@@ -117,7 +117,7 @@
     },
     {
       "id": "MATH 125",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 144.0003283266609,
         "y": 721.5
@@ -136,7 +136,7 @@
     },
     {
       "id": "MSE 170",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1270.000563508373,
         "y": 10
@@ -155,7 +155,7 @@
     },
     {
       "id": "AMATH 301",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 804.000053939114,
         "y": 1067
@@ -174,7 +174,7 @@
     },
     {
       "id": "PHYS 122",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 465.0006951761884,
         "y": 426
@@ -193,7 +193,7 @@
     },
     {
       "id": "MATH 126",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 474.0002789209806,
         "y": 690
@@ -212,7 +212,7 @@
     },
     {
       "id": "MATH 307",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 806.0000335543914,
         "y": 798
@@ -231,7 +231,7 @@
     },
     {
       "id": "A A 210",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 808.0009908373477,
         "y": 199.5
@@ -250,7 +250,7 @@
     },
     {
       "id": "MATH 324",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 809.0001940079965,
         "y": 715
@@ -269,7 +269,7 @@
     },
     {
       "id": "STAT 390",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 812.0004753495203,
         "y": 426
@@ -288,7 +288,7 @@
     },
     {
       "id": "PHYS 123",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 817.0004076215298,
         "y": 585.5
@@ -307,7 +307,7 @@
     },
     {
       "id": "E E 215",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1288.000176714366,
         "y": 602.5
@@ -326,7 +326,7 @@
     },
     {
       "id": "M E 323",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 806.0009394597434,
         "y": 325.5
@@ -345,7 +345,7 @@
     },
     {
       "id": "MATH 308",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 796.0003330332447,
         "y": 915.5
@@ -364,7 +364,7 @@
     },
     {
       "id": "M E 230",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1280.0009616262582,
         "y": 295
@@ -383,7 +383,7 @@
     },
     {
       "id": "M E 395",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1288.000996751662,
         "y": 509.5
@@ -402,7 +402,7 @@
     },
     {
       "id": "M E 333",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1294.000312482514,
         "y": 811.5
@@ -421,7 +421,7 @@
     },
     {
       "id": "MATH 309",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1276.000345007588,
         "y": 915.5
@@ -440,7 +440,7 @@
     },
     {
       "id": "CEE 220",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1277.000344732872,
         "y": 155
@@ -459,7 +459,7 @@
     },
     {
       "id": "M E 331",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1610.0004054090462,
         "y": 784
@@ -478,7 +478,7 @@
     },
     {
       "id": "M E 495",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1610.0008898091003,
         "y": 413.5
@@ -497,7 +497,7 @@
     },
     {
       "id": "M E 373",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1610.0009211304186,
         "y": 609
@@ -516,7 +516,7 @@
     },
     {
       "id": "M E 354",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1610.0005179102077,
         "y": 36
@@ -535,7 +535,7 @@
     },
     {
       "id": "M E 356",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1932.0005994129076,
         "y": 3
@@ -554,7 +554,7 @@
     },
     {
       "id": "M E 374",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1932.000297211125,
         "y": 827.5
@@ -573,7 +573,7 @@
     },
     {
       "id": "M E 355",
-      "type": "custom",
+      "type": "course",
       "position": {
         "x": 1932.0004267812083,
         "y": 129

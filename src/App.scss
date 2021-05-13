@@ -293,7 +293,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 
-.react-flow__node.selected .CustomNode {
+.react-flow__node.selected .CourseNode {
   @each $status, $color in $flow-colors {
 
   &.#{$status} {
@@ -303,7 +303,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 
-.CustomNode {
+.CourseNode {
   border-width: 3px;
   border-radius: 10px;
   text-transform: uppercase;

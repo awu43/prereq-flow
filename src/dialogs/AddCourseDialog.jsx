@@ -20,7 +20,7 @@ import "tippy.js/dist/tippy.css";
 
 import CampusSelect from "./CampusSelect.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
-import { newNode } from "../parse-courses.js";
+import { newCourseNode } from "../parse-courses.js";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -137,7 +137,7 @@ export default function AddCourseDialog({
   }
 
   function addNewNode(data) {
-    const node = newNode(data);
+    const node = newCourseNode(data);
     if (newCoursePosition === "zero") {
       node.position.x += (Math.random() - 0.5) * 200;
       node.position.y += (Math.random() - 0.5) * 200;

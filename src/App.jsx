@@ -21,7 +21,7 @@ import "tippy.js/dist/tippy.css";
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import FlowStoreLifter from "./FlowStoreLifter.jsx";
 import Header from "./Header.jsx";
-import CustomNode from "./CustomNode.jsx";
+import CourseNode from "./CourseNode.jsx";
 import ContextMenu from "./ContextMenu.jsx";
 import NewFlowDialog from "./dialogs/NewFlowDialog.jsx";
 import OpenFileDialog from "./dialogs/OpenFileDialog.jsx";
@@ -821,7 +821,7 @@ function App() {
           onLoad={onLoad}
           // Basic Props
           elements={elements}
-          nodeTypes={{ custom: CustomNode }}
+          nodeTypes={{ course: CourseNode }}
           // Event Handlers
           // --- Element ---
           onElementClick={onElementClick}
