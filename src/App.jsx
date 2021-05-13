@@ -965,12 +965,11 @@ function App() {
           disconnectAll={targetId => {
             resetSelectedElements.current();
             recordFlowState();
-            const connectedEdges = getConnectedEdges(
-              [elements[elemIndexes.current.get(targetId)]],
-              elements.slice(nodeData.current.size)
+            const connectedEdges = new Set(
+              nodeData.current.get(targetId).connectedEdges
             );
             recalculateElements(
-              removeElements(connectedEdges, elements)
+              elements.slice().filter(elem => !connectedEdges.has(elem.id))
             );
           }}
           newOrNode={xy => {
