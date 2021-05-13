@@ -14,17 +14,6 @@ import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
 import { COURSE_REGEX } from "./parse-courses.js";
 
-const courseNodeStyle = {
-  padding: "10px",
-  // "border-radius": "3px",
-  minWidth: "150px",
-  // "fontSize": "12px",
-  // color: "#222",
-  textAlign: "center",
-  // "border-width": "1px",
-  borderStyle: "solid",
-};
-
 function markCoursesAndPreventBreaks(text) {
   let innerHTML = text.replaceAll(COURSE_REGEX, "<mark>$&</mark>");
   try {
@@ -107,7 +96,6 @@ export default function CourseNode({ data }) {
         className={classNames(
           "CourseNode", data.nodeStatus, { connected: data.nodeConnected }
         )}
-        style={courseNodeStyle}
       >
         <Handle type="target" position="left" />
         <div>{data.id}</div>
