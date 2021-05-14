@@ -1,4 +1,5 @@
-// import React from "react";
+// https://github.com/wbkd/react-flow/blob/main/src/store/actions.ts
+
 import {
   useStoreState,
   useStoreActions,
@@ -8,7 +9,7 @@ export default function FlowStoreLifter({
   selectedElements,
   setSelectedElements,
   resetSelectedElements,
-  setUserSelection,
+  unsetNodesSelection,
 }) {
   selectedElements.current = useStoreState(state => state.selectedElements);
   setSelectedElements.current = useStoreActions(action => (
@@ -17,8 +18,9 @@ export default function FlowStoreLifter({
   resetSelectedElements.current = useStoreActions(action => (
     action.resetSelectedElements
   ));
-  setUserSelection.current = useStoreActions(actions => (
-    actions.setUserSelection
+  unsetNodesSelection.current = useStoreActions(actions => (
+    actions.unsetNodesSelection
   ));
+
   return null;
 }

@@ -11,14 +11,14 @@ export default function ContextMenu({
   connectAll, disconnectAll, toggleEdgeConcurrency,
   newOrNode,
 }) {
-  const setUserSelection = useStoreActions(actions => (
-    actions.setUserSelection
+  const unsetNodesSelection = useStoreActions(actions => (
+    actions.unsetNodesSelection
   ));
 
   const { target, targetType, targetStatus } = data;
 
   function deleteAndClearSelection() {
-    setUserSelection([]);
+    unsetNodesSelection();
     deleteElems(target);
   }
 

@@ -269,7 +269,7 @@ function App() {
   const selectedElements = useRef(null);
   const setSelectedElements = useRef(null);
   const resetSelectedElements = useRef(null);
-  const setUserSelection = useRef(null);
+  const unsetNodesSelection = useRef(null);
 
   const [elements, setElements] = useState(initialElements);
   const nodeData = useRef(initialNodeData);
@@ -640,6 +640,7 @@ function App() {
 
   function onNodeContextMenu(event, node) {
     event.preventDefault();
+    unsetNodesSelection.current();
     const selectedIds = (
       selectedElements.current
         ? selectedElements.current.map(elem => elem.id)
@@ -705,6 +706,7 @@ function App() {
 
   function onEdgeContextMenu(event, edge) {
     event.preventDefault();
+    unsetNodesSelection.current();
     const selectedIds = (
       selectedElements.current
         ? selectedElements.current.map(elem => elem.id)
@@ -769,7 +771,7 @@ function App() {
   function onPaneContextMenu(event) {
     event.preventDefault();
     resetSelectedElements.current();
-    setUserSelection.current([]);
+    unsetNodesSelection.current();
     contextData.current = {
       target: "",
       targetType: "pane",
@@ -840,7 +842,7 @@ function App() {
           selectedElements={selectedElements}
           setSelectedElements={setSelectedElements}
           resetSelectedElements={resetSelectedElements}
-          setUserSelection={setUserSelection}
+          unsetNodesSelection={unsetNodesSelection}
         />
         <ReactFlow
           // Flow View
