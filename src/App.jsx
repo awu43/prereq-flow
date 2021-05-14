@@ -411,14 +411,14 @@ function App() {
     setElements(newElements);
   }
 
-  function recalculateElements(newElements) {
+  function recalculatedElements(newElements) {
     nodeData.current = newNodeData(newElements);
     let recalculatedElems = sortElementsByDepth(newElements, nodeData.current);
     elemIndexes.current = newElemIndexes(recalculatedElems);
     recalculatedElems = updateAllNodes(
       recalculatedElems, nodeData.current, elemIndexes.current
     );
-    setElements(recalculatedElems);
+    return resetElementStates(recalculatedElems);
   }
 
   function autoconnect(newElements, targetNode, reposition = false) {
@@ -508,7 +508,7 @@ function App() {
     } else {
       newElems = elements.slice().concat([newNode]);
     }
-    recalculateElements(newElems);
+    setElements(recalculatedElements(newElems));
   }
 
   function reflowElements() {
@@ -570,8 +570,8 @@ function App() {
 
   function onElementsRemove(targetElems) {
     recordFlowState();
-    recalculateElements(
-      resetElementStates(
+    setElements(
+      recalculatedElements(
         removeElements(targetElems, elements)
       )
     );
@@ -695,7 +695,7 @@ function App() {
         className: elements[elemIndexes.current.get(source)].data.status,
         label: null,
       });
-      recalculateElements(newElements);
+      setElements(recalculatedElements(newElements));
     }
   }
 
@@ -891,6 +891,7 @@ function App() {
           setSelectionStatuses={(nodeIds, newStatus) => {
             resetSelectedElements.current();
             recordFlowState();
+
             const newElements = elements.slice();
             for (const id of nodeIds) {
               setNodeStatus(
@@ -898,6 +899,7 @@ function App() {
                 nodeData.current, elemIndexes.current
               );
             }
+
             setElements(
               updateAllNodes(newElements, nodeData.current, elemIndexes.current)
             );
@@ -905,6 +907,7 @@ function App() {
           toggleEdgeConcurrency={edgeId => {
             resetSelectedElements.current();
             recordFlowState();
+
             const newElements = elements.slice();
             const i = elemIndexes.current.get(edgeId);
             const targetEdge = newElements[i];
@@ -920,38 +923,43 @@ function App() {
             } else {
               newElements[i] = { ...targetEdge, ...CONCURRENT_LABEL };
             }
+
             setElements(
               updateAllNodes(newElements, nodeData.current, elemIndexes.current)
             );
           }}
           deleteElems={elemIds => {
-            resetSelectedElements.current();
-            recordFlowState();
-            recalculateElements(
-              removeElements(
-                elemIds.map(id => elements[elemIndexes.current.get(id)]), elements
-              )
+            onElementsRemove(
+              elemIds.map(id => elements[elemIndexes.current.get(id)])
             );
           }}
           connectAll={targetId => {
             resetSelectedElements.current();
             recordFlowState();
+
             const newElements = autoconnect(
               elements.slice(), elements[elemIndexes.current.get(targetId)]
             );
-            recalculateElements(newElements);
+            setElements(recalculatedElements(newElements));
           }}
           disconnectAll={targetId => {
             resetSelectedElements.current();
             recordFlowState();
+
             const connectedEdges = new Set(
               nodeData.current.get(targetId).connectedEdges
             );
-            recalculateElements(
-              elements.slice().filter(elem => !connectedEdges.has(elem.id))
+
+            setElements(
+              recalculatedElements(
+                elements.filter(elem => !connectedEdges.has(elem.id))
+              )
             );
           }}
           newOrNode={xy => {
+            resetSelectedElements.current();
+            recordFlowState();
+
             const newNode = {
               id: `OR-${nanoid()}`,
               type: "or",
@@ -961,8 +969,9 @@ function App() {
                 nodeConnected: false,
               }
             };
-            recalculateElements(
-              elements.slice().concat([newNode])
+
+            setElements(
+              recalculatedElements(elements.concat([newNode]))
             );
           }}
         />
