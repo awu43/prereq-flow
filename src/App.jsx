@@ -14,6 +14,7 @@ import ReactFlow, {
   getConnectedEdges,
   getIncomers,
   getOutgoers,
+  updateEdge,
 } from "react-flow-renderer";
 import dagre from "dagre";
 
@@ -704,6 +705,23 @@ function App() {
     setContextActive(false);
   }
 
+  function onEdgeUpdate(oldEdge, newConnection) {
+    const newSource = newConnection.source;
+    const newTarget = newConnection.target;
+    const newEdgeId = edgeArrowId(newSource, newTarget);
+    const reverseEdgeId = edgeArrowId(newTarget, newSource);
+    if (!elemIndexes.current.has(newEdgeId)
+        && !elemIndexes.current.has(reverseEdgeId)) {
+      recordFlowState();
+      setElements(prevElems => (
+        recalculatedElements(
+          updateEdge(oldEdge, newConnection, prevElems)
+        )
+      ));
+      // Need to use functional update here for some reason
+    }
+  }
+
   function onEdgeContextMenu(event, edge) {
     event.preventDefault();
     unsetNodesSelection.current();
@@ -865,6 +883,7 @@ function App() {
           // --- Edge ---
           onConnect={onConnect}
           onConnectStart={onConnectStart}
+          onEdgeUpdate={onEdgeUpdate}
           onEdgeContextMenu={onEdgeContextMenu}
           // --- Move ---
           onMoveStart={onMoveStart}
@@ -1003,6 +1022,7 @@ function App() {
           <li>Right click for context&nbsp;menu</li>
           <li>Hover over a node for connections and course info (click to hide&nbsp;tooltip)</li>
           <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
+          <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
           <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
           <li><kbd>Ctrl</kbd> + click for multiple&nbsp;select</li>
           <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
