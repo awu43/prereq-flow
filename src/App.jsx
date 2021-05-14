@@ -754,7 +754,7 @@ function App() {
     event.preventDefault();
     contextData.current = {
       target: nodes.map(n => n.id),
-      targetType: "nodeselection",
+      targetType: "selection",
       targetStatus: "",
     };
     setMouseXY([event.clientX, event.clientY]);
