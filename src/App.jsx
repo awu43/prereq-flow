@@ -50,6 +50,7 @@ const nodeHeight = 36;
 const nodeSpacing = ranksep + nodeWidth;
 // For autopositioning
 
+// TODO: Positioning for or nodes
 function generateDagreLayout(elements) {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -588,35 +589,56 @@ function App() {
     recordFlowState(dragStartState.current);
   }
 
-  const EXPECTED_ERROR_MSG = "can't access property \"connectedEdges\", nodeData.current.get(...) is undefined";
-  function onNodeMouseEnter(_event, targetNode) {
-    try {
-      const nodeId = targetNode.id;
-      const newElements = elements.slice();
+  function applyHoverEffectBackward(nodeId, newElements) {
+    for (const id of nodeData.current.get(nodeId).incomingEdges) {
+      const i = elemIndexes.current.get(id);
+      newElements[i] = {
+        ...newElements[i], animated: !prefersReducedMotion
+      };
+    }
 
-      for (const id of nodeData.current.get(nodeId).connectedEdges) {
-        const i = elemIndexes.current.get(id);
-        newElements[i] = {
-          ...newElements[i], animated: !prefersReducedMotion
-        };
-      }
+    for (const id of nodeData.current.get(nodeId).incomingNodes) {
+      const i = elemIndexes.current.get(id);
+      newElements[i] = {
+        ...newElements[i],
+        data: { ...newElements[i].data, nodeConnected: true },
+      };
 
-      for (const id of nodeData.current.get(nodeId).connectedNodes) {
-        const i = elemIndexes.current.get(id);
-        newElements[i] = {
-          ...newElements[i],
-          data: { ...newElements[i].data, nodeConnected: true },
-        };
-      }
-      setElements(newElements);
-    } catch (error) {
-      // A TypeError occurs when a node is deleted from the context menu
-      // while the mouse is still over the node
-      if (!(error.name === "TypeError"
-            && error.message === EXPECTED_ERROR_MSG)) {
-        throw error;
+      if (newElements[i].type === "or") {
+        applyHoverEffectBackward(id, newElements);
       }
     }
+  }
+
+  function applyHoverEffectForward(nodeId, newElements) {
+    for (const id of nodeData.current.get(nodeId).outgoingEdges) {
+      const i = elemIndexes.current.get(id);
+      newElements[i] = {
+        ...newElements[i], animated: !prefersReducedMotion
+      };
+    }
+
+    for (const id of nodeData.current.get(nodeId).outgoingNodes) {
+      const i = elemIndexes.current.get(id);
+      newElements[i] = {
+        ...newElements[i],
+        data: { ...newElements[i].data, nodeConnected: true },
+      };
+
+      if (newElements[i].type === "or") {
+        applyHoverEffectForward(id, newElements);
+      }
+    }
+  }
+
+  function onNodeMouseEnter(_event, targetNode) {
+    const nodeId = targetNode.id;
+    const newElements = elements.slice();
+
+    applyHoverEffectBackward(nodeId, newElements);
+    applyHoverEffectForward(nodeId, newElements);
+
+    setElements(newElements);
   }
 
   function onNodeMouseLeave(_event, _targetNode) {
