@@ -27,6 +27,7 @@ import FlowStoreLifter from "./FlowStoreLifter.jsx";
 import Header from "./Header.jsx";
 import CourseNode from "./CourseNode.jsx";
 import OrNode from "./OrNode.jsx";
+import AndNode from "./AndNode.jsx";
 import ContextMenu from "./ContextMenu.jsx";
 import NewFlowDialog from "./dialogs/NewFlowDialog.jsx";
 import OpenFileDialog from "./dialogs/OpenFileDialog.jsx";
@@ -38,6 +39,7 @@ import {
   edgeArrowId,
   newEdge,
   CONCURRENT_LABEL,
+  ZERO_POSITION,
 } from "./parse-courses.js";
 import demoFlow from "./data/demo-flow.json";
 
@@ -156,12 +158,12 @@ function newElemIndexes(elements) {
 }
 
 const COURSE_STATUSES = [
-  "completed",
-  "enrolled",
-  "ready",
-  "under-one-away",
-  "one-away",
-  "over-one-away",
+  "completed", // 0
+  "enrolled", // 1
+  "ready", // 2
+  "under-one-away", // 3
+  "one-away", // 4
+  "over-one-away", // 5
 ];
 
 const COURSE_STATUS_CODES = Object.freeze(Object.fromEntries(
@@ -177,6 +179,15 @@ function setNodeStatus(nodeId, newStatus, elements, nodeData, elemIndexes) {
   }
 }
 
+function getEdgeStatus(edge) {
+  let edgeStatusCode = COURSE_STATUS_CODES[edge.className];
+  if (edgeStatusCode === COURSE_STATUS_CODES.enrolled
+      && edge.label === "CC") {
+    edgeStatusCode = COURSE_STATUS_CODES.completed;
+  }
+  return edgeStatusCode;
+}
+
 function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
   const targetNode = elements[elemIndexes.get(nodeId)];
   const currentStatus = targetNode.data.nodeStatus;
@@ -187,15 +198,7 @@ function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
   let newStatus;
   switch (targetNode.type) {
     case "course": {
-      let newStatusCode = Math.max(...incomingEdges.map(edge => {
-        let edgeStatusCode = COURSE_STATUS_CODES[edge.className];
-        if (edgeStatusCode === COURSE_STATUS_CODES.enrolled
-            && edge.label === "CC") {
-          edgeStatusCode = COURSE_STATUS_CODES.completed;
-        }
-        return edgeStatusCode;
-      }));
-
+      let newStatusCode = Math.max(...incomingEdges.map(getEdgeStatus));
       newStatusCode = (
         newStatusCode === Number.NEGATIVE_INFINITY ? 0 : newStatusCode
       );
@@ -220,16 +223,19 @@ function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
       }
       break;
     }
-    case "or": {
-      let newStatusCode = Math.min(...incomingEdges.map(edge => {
-        let edgeStatusCode = COURSE_STATUS_CODES[edge.className];
-        if (edgeStatusCode === COURSE_STATUS_CODES.enrolled
-            && edge.label === "CC") {
-          edgeStatusCode = COURSE_STATUS_CODES.completed;
-        }
-        return edgeStatusCode;
-      }));
+    case "and": {
+      let newStatusCode = Math.max(...incomingEdges.map(getEdgeStatus));
+      newStatusCode = (
+        newStatusCode === Number.NEGATIVE_INFINITY ? 0 : newStatusCode
+      );
+      // Math.max() with no args -> negative infinity
 
+      newStatus = COURSE_STATUSES[newStatusCode];
+      // Add node should be complete if no prereqs
+      break;
+    }
+    case "or": {
+      let newStatusCode = Math.min(...incomingEdges.map(getEdgeStatus));
       newStatusCode = (
         newStatusCode === Number.POSITIVE_INFINITY ? 0 : newStatusCode
       );
@@ -289,7 +295,7 @@ function App() {
     typeType: "node",
     targetStatus: "",
   });
-  const [mouseXY, setMouseXY] = useState([0, 0]);
+  const [mouseXY, setMouseXY] = useState(ZERO_POSITION);
 
   const [controlsClosed, setControlsClosed] = useState(true);
   const openControlsButtonRef = useRef(null);
@@ -604,7 +610,7 @@ function App() {
         data: { ...newElements[i].data, nodeConnected: true },
       };
 
-      if (newElements[i].type === "or") {
+      if (["or", "and"].includes(newElements[i].type)) {
         applyHoverEffectBackward(id, newElements);
       }
     }
@@ -625,7 +631,7 @@ function App() {
         data: { ...newElements[i].data, nodeConnected: true },
       };
 
-      if (newElements[i].type === "or") {
+      if (["or", "and"].includes(newElements[i].type)) {
         applyHoverEffectForward(id, newElements);
       }
     }
@@ -698,7 +704,7 @@ function App() {
         targetStatus: node.data.nodeStatus,
       };
     }
-    setMouseXY([event.clientX, event.clientY]);
+    setMouseXY({ x: event.clientX, y: event.clientY });
     setContextActive(true);
   }
 
@@ -774,7 +780,7 @@ function App() {
         targetStatus: elements[elemIndexes.current.get(edge.id)].label,
       };
     }
-    setMouseXY([event.clientX, event.clientY]);
+    setMouseXY({ x: event.clientX, y: event.clientY });
     setContextActive(true);
   }
 
@@ -799,7 +805,7 @@ function App() {
       targetType: "selection",
       targetStatus: "",
     };
-    setMouseXY([event.clientX, event.clientY]);
+    setMouseXY({ x: event.clientX, y: event.clientY });
     setContextActive(true);
   }
 
@@ -817,7 +823,7 @@ function App() {
       targetType: "pane",
       targetStatus: "",
     };
-    setMouseXY([event.clientX, event.clientY]);
+    setMouseXY({ x: event.clientX, y: event.clientY });
     setContextActive(true);
   }
 
@@ -891,7 +897,11 @@ function App() {
           onLoad={onLoad}
           // Basic Props
           elements={elements}
-          nodeTypes={{ course: CourseNode, or: OrNode }}
+          nodeTypes={{
+            course: CourseNode,
+            or: OrNode,
+            and: AndNode,
+          }}
           // Event Handlers
           // --- Element ---
           onElementClick={onElementClick}
@@ -999,13 +1009,13 @@ function App() {
               )
             );
           }}
-          newOrNode={xy => {
+          newConditionalNode={(type, xy) => {
             resetSelectedElements.current();
             recordFlowState();
 
             const newNode = {
-              id: `OR-${nanoid()}`,
-              type: "or",
+              id: `${type.toUpperCase()}-${nanoid()}`,
+              type,
               position: flowInstance.current.project(xy),
               data: {
                 nodeStatus: "completed",
@@ -1041,7 +1051,7 @@ function App() {
       >
         <ul>
           <li>Click for single&nbsp;select</li>
-          <li>Right click for context&nbsp;menu</li>
+          <li>Right click for context&nbsp;menus</li>
           <li>Hover over a node for connections and course info (click to hide&nbsp;tooltip)</li>
           <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
           <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>

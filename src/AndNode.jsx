@@ -5,20 +5,20 @@ import classNames from "classnames";
 
 import { Handle } from "react-flow-renderer";
 
-export default function OrNode({ data }) {
+export default function AndNode({ data }) {
   return (
     <div
       className={classNames(
-        "OrNode", data.nodeStatus, { connected: data.nodeConnected }
+        "AndNode", data.nodeStatus, { connected: data.nodeConnected }
       )}
     >
       <Handle type="target" position="left" />
-      <div>OR</div>
+      <div>AND</div>
       <Handle type="source" position="right" />
     </div>
   );
 }
-OrNode.propTypes = {
+AndNode.propTypes = {
   data: PropTypes.shape({
     nodeStatus: PropTypes.string,
     nodeConnected: PropTypes.bool,

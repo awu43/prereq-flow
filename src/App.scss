@@ -293,13 +293,16 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 
-.react-flow__node.selected .CourseNode,
-.react-flow__node.selected .OrNode {
-  @each $status, $color in $flow-colors {
+.react-flow__node.selected  {
+  .CourseNode,
+  .OrNode,
+  .AndNode {
+    @each $status, $color in $flow-colors {
 
-  &.#{$status} {
-      color: white;
-      background-color: $color;
+    &.#{$status} {
+        color: white;
+        background-color: $color;
+      }
     }
   }
 }
@@ -309,7 +312,8 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 }
 
 .CourseNode,
-.OrNode {
+.OrNode,
+.AndNode {
   border-width: 3px;
   border-style: solid;
   border-radius: 10px;

@@ -9,7 +9,7 @@ export default function ContextMenu({
   active, data, xy, COURSE_STATUS_CODES,
   setSelectionStatuses, deleteElems,
   connectAll, disconnectAll, toggleEdgeConcurrency,
-  newOrNode,
+  newConditionalNode,
 }) {
   const unsetNodesSelection = useStoreActions(actions => (
     actions.unsetNodesSelection
@@ -150,8 +150,11 @@ export default function ContextMenu({
     case "pane":
       menuOptions = (
         <>
-          <li onClick={() => newOrNode({ x: xy[0], y: xy[1] })}>
+          <li onClick={() => newConditionalNode("or", xy)}>
             <p>New OR node</p>
+          </li>
+          <li onClick={() => newConditionalNode("and", xy)}>
+            <p>New AND node</p>
           </li>
         </>
       );
@@ -163,7 +166,7 @@ export default function ContextMenu({
   }
 
   return (
-    <ul className="ContextMenu" style={{ top: xy[1], left: xy[0] }}>
+    <ul className="ContextMenu" style={{ top: xy.y, left: xy.x }}>
       {menuOptions}
     </ul>
   );
@@ -179,12 +182,15 @@ ContextMenu.propTypes = {
     targetType: PropTypes.string,
     targetStatus: PropTypes.string,
   }).isRequired,
-  xy: PropTypes.arrayOf(PropTypes.number).isRequired,
+  xy: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+  }).isRequired,
   COURSE_STATUS_CODES: PropTypes.objectOf(PropTypes.number).isRequired,
   setSelectionStatuses: PropTypes.func.isRequired,
   deleteElems: PropTypes.func.isRequired,
   connectAll: PropTypes.func.isRequired,
   disconnectAll: PropTypes.func.isRequired,
   toggleEdgeConcurrency: PropTypes.func.isRequired,
-  newOrNode: PropTypes.func.isRequired,
+  newConditionalNode: PropTypes.func.isRequired,
 };
