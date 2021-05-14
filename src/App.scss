@@ -293,7 +293,8 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 
-.react-flow__node.selected .CourseNode {
+.react-flow__node.selected .CourseNode,
+.react-flow__node.selected .OrNode {
   @each $status, $color in $flow-colors {
 
   &.#{$status} {
