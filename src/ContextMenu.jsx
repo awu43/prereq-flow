@@ -28,7 +28,8 @@ export default function ContextMenu({
 
   let menuOptions;
   switch (targetType) {
-    case "node": {
+    case "coursenode": {
+      // Single course node
       const targetStatusCode = COURSE_STATUS_CODES[targetStatus];
       const courseStatusOptions = (
         <>
@@ -62,7 +63,10 @@ export default function ContextMenu({
           <li className="connect-all" onClick={() => connectAll(target)}>
             <p>Connect&nbsp;all</p>
           </li>
-          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+          <li
+            className="disconnect-all"
+            onClick={() => disconnectAll([target])}
+          >
             <p>Disconnect&nbsp;all</p>
           </li>
           <li className="delete" onClick={() => deleteElems([target])}>
@@ -72,7 +76,24 @@ export default function ContextMenu({
       );
       break;
     }
+    case "conditionalnode":
+      // Single conditional node
+      menuOptions = (
+        <>
+          <li
+            className="disconnect-all"
+            onClick={() => disconnectAll([target])}
+          >
+            <p>Disconnect&nbsp;all</p>
+          </li>
+          <li className="delete" onClick={() => deleteElems([target])}>
+            <p>Delete</p>
+          </li>
+        </>
+      );
+      break;
     case "edge":
+      // Single edge
       menuOptions = (
         <>
           <li
@@ -89,8 +110,8 @@ export default function ContextMenu({
         </>
       );
       break;
-    // TODO: Update for or nodes
-    case "nodeselection":
+    case "coursemultiselect":
+      // Multiple nodes containing at least one course node
       menuOptions = (
         <>
           <li
@@ -112,16 +133,37 @@ export default function ContextMenu({
             <p>Completed</p>
           </li>
           <hr />
+          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+            <p>Disconnect&nbsp;all</p>
+          </li>
           <li onClick={() => deleteElems(target)}><p>Delete</p></li>
         </>
       );
       break;
-    case "mixedselection":
+    case "conditionalmultiselect":
+      // At least one conditional node
       menuOptions = (
-        <li onClick={() => deleteElems(target)}><p>Delete</p></li>
+        <>
+          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+            <p>Disconnect&nbsp;all</p>
+          </li>
+          <li onClick={() => deleteElems(target)}><p>Delete</p></li>
+        </>
       );
       break;
-    case "selection":
+    case "mixedmultiselect":
+      // Multiple edges
+      // At least one node and at least one edge
+      menuOptions = (
+        <>
+          <li onClick={() => deleteElems(target)}>
+            <p>Delete</p>
+          </li>
+        </>
+      );
+      break;
+    case "courseselection":
+      // Multiple nodes containing at least one course node
       menuOptions = (
         <>
           <li
@@ -143,6 +185,20 @@ export default function ContextMenu({
             <p>Completed</p>
           </li>
           <hr />
+          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+            <p>Disconnect&nbsp;all</p>
+          </li>
+          <li onClick={deleteAndClearSelection}><p>Delete</p></li>
+        </>
+      );
+      break;
+    case "conditionalselection":
+      // At least one conditional node
+      menuOptions = (
+        <>
+          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+            <p>Disconnect&nbsp;all</p>
+          </li>
           <li onClick={deleteAndClearSelection}><p>Delete</p></li>
         </>
       );

@@ -677,22 +677,31 @@ function App() {
     );
     if (selectedIds.includes(node.id)) {
       if (selectedIds.length === 1) {
+        // Only one node selected
         contextData.current = {
           target: node.id,
-          targetType: "node",
+          targetType: node.type === "course" ? "coursenode" : "conditionalnode",
           targetStatus: node.data.nodeStatus,
         };
       } else if (!selectedIds.some(elemId => elemId.includes("->"))) {
-        // Only nodes selected
+        // Multiple nodes selected
+        const courseNodeSelected = (
+          selectedIds.some(nodeId => (
+            elements[elemIndexes.current.get(nodeId)].type === "course"
+          ))
+        );
         contextData.current = {
           target: selectedIds,
-          targetType: "nodeselection",
+          targetType: (
+            courseNodeSelected ? "coursemultiselect" : "conditionalmultiselect"
+          ),
           targetStatus: "",
         };
       } else {
+        // Mixed selection, includes edges
         contextData.current = {
           target: selectedIds,
-          targetType: "mixedselection",
+          targetType: "mixedmultiselect",
           targetStatus: "",
         };
       }
@@ -700,7 +709,7 @@ function App() {
       setSelectedElements.current([node]);
       contextData.current = {
         target: node.id,
-        targetType: "node",
+        targetType: node.type === "course" ? "coursenode" : "conditionalnode",
         targetStatus: node.data.nodeStatus,
       };
     }
@@ -768,7 +777,7 @@ function App() {
       } else {
         contextData.current = {
           target: selectedIds,
-          targetType: "mixedselection",
+          targetType: "mixedmultiselect",
           targetStatus: "",
         };
       }
@@ -800,9 +809,16 @@ function App() {
 
   function onSelectionContextMenu(event, nodes) {
     event.preventDefault();
+    const courseNodeSelected = (
+      nodes.some(node => (
+        elements[elemIndexes.current.get(node.id)].type === "course"
+      ))
+    );
     contextData.current = {
       target: nodes.map(n => n.id),
-      targetType: "selection",
+      targetType: (
+        courseNodeSelected ? "courseselection" : "conditionalselection"
+      ),
       targetStatus: "",
     };
     setMouseXY({ x: event.clientX, y: event.clientY });
@@ -850,7 +866,11 @@ function App() {
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div className="App" onClick={() => setContextActive(false)}>
+    <div
+      className="App"
+      onClick={() => setContextActive(false)}
+      onWheel={() => setContextActive(false)}
+    >
       <Header>
         <HeaderButton
           label="New flow"
@@ -947,10 +967,12 @@ function App() {
 
             const newElements = elements.slice();
             for (const id of nodeIds) {
-              setNodeStatus(
-                id, newStatus, newElements,
-                nodeData.current, elemIndexes.current
-              );
+              if (elements[elemIndexes.current.get(id)].type === "course") {
+                setNodeStatus(
+                  id, newStatus, newElements,
+                  nodeData.current, elemIndexes.current
+                );
+              }
             }
 
             setElements(
@@ -995,13 +1017,16 @@ function App() {
             );
             setElements(recalculatedElements(newElements));
           }}
-          disconnectAll={targetId => {
+          disconnectAll={targetIds => {
             resetSelectedElements.current();
             recordFlowState();
 
-            const connectedEdges = new Set(
-              nodeData.current.get(targetId).connectedEdges
-            );
+            const connectedEdges = new Set();
+            for (const id of targetIds) {
+              for (const edge of nodeData.current.get(id).connectedEdges) {
+                connectedEdges.add(edge);
+              }
+            }
 
             setElements(
               recalculatedElements(
