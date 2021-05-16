@@ -1,0 +1,333 @@
+{
+  "version": "Beta",
+  "elements": [
+    {
+      "id": "MATH 125",
+      "type": "course",
+      "position": {
+        "x": 123.00008824939377,
+        "y": 144
+      },
+      "selected": false,
+      "data": {
+        "id": "MATH 125",
+        "name": "Calculus with Analytic Geometry II",
+        "credits": "5",
+        "description": "Second quarter in the calculus of functions of a single variable. Emphasizes integral calculus. Emphasizes applications and problem solving using the tools of calculus.",
+        "prerequisite": "either minimum grade of 2.0 in MATH 124, score of 3 on AB advanced placement test, or score of 3 on BC advanced placement test.",
+        "offered": "AWSpS.",
+        "nodeStatus": "ready",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "MATH 135",
+      "type": "course",
+      "position": {
+        "x": 359.0004641161711,
+        "y": -1.7763568394002505e-15
+      },
+      "selected": false,
+      "data": {
+        "campus": "Seattle",
+        "id": "MATH 135",
+        "name": "Accelerated [Honors] Calculus",
+        "credits": "5",
+        "description": "Covers the material of MATH 124, MATH 125, MATH 126; MATH 207, MATH 208. First year of a two-year accelerated sequence. May receive advanced placement (AP) credit for MATH 125 after taking MATH 135. For students with above average preparation, interest, and ability in mathematics.",
+        "prerequisite": "a minimum grade of 2.0 in MATH 134.",
+        "offered": "W.",
+        "nodeStatus": "ready",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "OR-qULA8-4xCGfflyeaa7DK3",
+      "type": "or",
+      "position": {
+        "x": 651.5738717442,
+        "y": 81.58512063427831
+      },
+      "data": {
+        "nodeStatus": "ready",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "MATH 307",
+      "type": "course",
+      "position": {
+        "x": 744.0008039537075,
+        "y": 172
+      },
+      "selected": false,
+      "data": {
+        "id": "MATH 307",
+        "name": "Introduction to Differential Equations",
+        "credits": "3",
+        "description": "Introductory course in ordinary differential equations. Includes first- and second-order equations and Laplace transform.",
+        "prerequisite": "minimum grade of 2.0 in MATH 125.",
+        "offered": "AWSpS.",
+        "nodeStatus": "one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "MATH 136",
+      "type": "course",
+      "position": {
+        "x": 744.0004119203272,
+        "y": 0
+      },
+      "selected": false,
+      "data": {
+        "campus": "Seattle",
+        "id": "MATH 136",
+        "name": "Accelerated [Honors] Calculus",
+        "credits": "5",
+        "description": "Covers the material of MATH 124, MATH 125, MATH 126; MATH 207, MATH 208. First year of a two-year accelerated sequence. May not receive credit for both MATH 126 and MATH 136. For students with above average preparation, interest, and ability in mathematics.",
+        "prerequisite": "a minimum grade of 2.0 in MATH 135.",
+        "offered": "Sp.",
+        "nodeStatus": "one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "MATH 126",
+      "type": "course",
+      "position": {
+        "x": 372.00087062025113,
+        "y": 258
+      },
+      "selected": false,
+      "data": {
+        "id": "MATH 126",
+        "name": "Calculus with Analytic Geometry III",
+        "credits": "5",
+        "description": "Third quarter in calculus sequence. Introduction to Taylor polynomials and Taylor series, vector geometry in three dimensions, introduction to multivariable differential calculus, double integrals in Cartesian and polar coordinates.",
+        "prerequisite": "either a minimum grade of 2.0 in MATH 125, or a score of 4 on BC advanced placement test.",
+        "offered": "AWSpS.",
+        "nodeStatus": "one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "AMATH 301",
+      "type": "course",
+      "position": {
+        "x": 744.0007101355953,
+        "y": 82
+      },
+      "selected": false,
+      "data": {
+        "id": "AMATH 301",
+        "name": "Beginning Scientific Computing",
+        "credits": "4",
+        "description": "Introduction to the use of computers to solve problems arising in the physical, biological, and engineering sciences. Application of mathematical judgment, programming architecture, and flow control in solving scientific problems. Introduction to MATLAB and Python routines for numerical programming, computation, and visualization.",
+        "prerequisite": "either MATH 125, Q SCI 292, or MATH 135.",
+        "offered": "AWSpS.",
+        "nodeStatus": "one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "MATH 308",
+      "type": "course",
+      "position": {
+        "x": 744.0003123205532,
+        "y": 258
+      },
+      "selected": false,
+      "data": {
+        "id": "MATH 308",
+        "name": "Matrix Algebra with Applications",
+        "credits": "3",
+        "description": "Systems of linear equations, vector spaces, matrices, subspaces, orthogonality, least squares, eigenvalues, eigenvectors, applications. For students in engineering, mathematics, and the sciences.",
+        "prerequisite": "minimum grade of 2.0 in MATH 126.",
+        "offered": "AWSpS.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "AND-DaF4HAZckmLoq9JgolESh",
+      "type": "and",
+      "position": {
+        "x": 945.1711562808041,
+        "y": 212.755106412665
+      },
+      "data": {
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "OR-2qxm65bYwH7-LzUJP4FQA",
+      "type": "or",
+      "position": {
+        "x": 1083.9761586510722,
+        "y": 128.14934174010517
+      },
+      "data": {
+        "nodeStatus": "one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "MATH 309",
+      "type": "course",
+      "position": {
+        "x": 1153.9135008991188,
+        "y": 127.53942353274407
+      },
+      "selected": false,
+      "data": {
+        "id": "MATH 309",
+        "name": "Linear Analysis",
+        "credits": "3",
+        "description": "First order systems of linear differential equations, Fourier series and partial differential equations, and the phase plane.",
+        "prerequisite": "either a minimum grade of 2.0 in both MATH 307 and MATH 308 or minimum grade of 2.0 in MATH 136.",
+        "offered": "AWSpS.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "MATH 126 -> MATH 308",
+      "source": "MATH 126",
+      "target": "MATH 308",
+      "className": "one-away",
+      "label": null,
+      "animated": false,
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "MATH 125 -> MATH 126",
+      "source": "MATH 125",
+      "target": "MATH 126",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "MATH 125 -> MATH 307",
+      "source": "MATH 125",
+      "target": "MATH 307",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "MATH 135 -> MATH 136",
+      "source": "MATH 135",
+      "target": "MATH 136",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "reactflow__edge-MATH 135null-OR-qULA8-4xCGfflyeaa7DK3null",
+      "source": "MATH 135",
+      "target": "OR-qULA8-4xCGfflyeaa7DK3",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "reactflow__edge-MATH 125null-OR-qULA8-4xCGfflyeaa7DK3null",
+      "source": "MATH 125",
+      "target": "OR-qULA8-4xCGfflyeaa7DK3",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "OR-qULA8-4xCGfflyeaa7DK3 -> AMATH 301",
+      "source": "OR-qULA8-4xCGfflyeaa7DK3",
+      "target": "AMATH 301",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "reactflow__edge-MATH 136null-OR-2qxm65bYwH7-LzUJP4FQAnull",
+      "source": "MATH 136",
+      "target": "OR-2qxm65bYwH7-LzUJP4FQA",
+      "className": "one-away",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "reactflow__edge-MATH 307null-AND-DaF4HAZckmLoq9JgolEShnull",
+      "source": "MATH 307",
+      "target": "AND-DaF4HAZckmLoq9JgolESh",
+      "className": "one-away",
+      "label": null,
+      "animated": false,
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "reactflow__edge-MATH 308null-AND-DaF4HAZckmLoq9JgolEShnull",
+      "source": "MATH 308",
+      "target": "AND-DaF4HAZckmLoq9JgolESh",
+      "className": "over-one-away",
+      "label": null,
+      "animated": false,
+      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "AND-DaF4HAZckmLoq9JgolESh -> OR-2qxm65bYwH7-LzUJP4FQA",
+      "source": "AND-DaF4HAZckmLoq9JgolESh",
+      "target": "OR-2qxm65bYwH7-LzUJP4FQA",
+      "className": "over-one-away",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "OR-2qxm65bYwH7-LzUJP4FQA -> MATH 309",
+      "source": "OR-2qxm65bYwH7-LzUJP4FQA",
+      "target": "MATH 309",
+      "className": "one-away",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    }
+  ]
+}

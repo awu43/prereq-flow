@@ -20,7 +20,6 @@ export function newCourseNode(courseData) {
     id: courseData.id,
     type: "course",
     position: ZERO_POSITION,
-    selected: false,
     data: {
       ...courseData,
       nodeStatus: "over-one-away",

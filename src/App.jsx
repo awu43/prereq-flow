@@ -41,11 +41,12 @@ import {
   CONCURRENT_LABEL,
   ZERO_POSITION,
 } from "./parse-courses.js";
-import demoFlow from "./data/demo-flow.json";
+// import demoFlow from "./data/demo-flow.json";
+import demoFlow from "./data/conditional-demo.json";
 
 import "./App.scss";
 
-const ranksep = 200;
+const ranksep = 250;
 const nodeWidth = 172;
 const nodeHeight = 36;
 
@@ -324,6 +325,16 @@ function App() {
     return newElements;
   }
 
+  function recalculatedElements(newElements) {
+    nodeData.current = newNodeData(newElements);
+    let recalculatedElems = sortElementsByDepth(newElements, nodeData.current);
+    elemIndexes.current = newElemIndexes(recalculatedElems);
+    recalculatedElems = updateAllNodes(
+      recalculatedElems, nodeData.current, elemIndexes.current
+    );
+    return resetElementStates(recalculatedElems);
+  }
+
   function recordFlowState(elems = null) {
     const flowElems = elems ?? flowInstance.current.toObject().elements;
     if (undoStack.current.length === MAX_UNDO_NUM) {
@@ -386,6 +397,18 @@ function App() {
     }
   }
 
+  function generateNewFlow(elems) {
+    recordFlowState();
+    let newElements = generateDagreLayout(elems);
+    nodeData.current = newNodeData(newElements);
+    newElements = sortElementsByDepth(newElements, nodeData.current);
+    elemIndexes.current = newElemIndexes(newElements);
+    newElements = updateAllNodes(
+      newElements, nodeData.current, elemIndexes.current
+    );
+    setElements(newElements);
+  }
+
   function openFlow(openedElements) {
     recordFlowState();
     nodeData.current = newNodeData(openedElements);
@@ -407,28 +430,6 @@ function App() {
     downloadLink.click();
   }
 
-  function generateNewFlow(elems) {
-    recordFlowState();
-    let newElements = generateDagreLayout(elems);
-    nodeData.current = newNodeData(newElements);
-    newElements = sortElementsByDepth(newElements, nodeData.current);
-    elemIndexes.current = newElemIndexes(newElements);
-    newElements = updateAllNodes(
-      newElements, nodeData.current, elemIndexes.current
-    );
-    setElements(newElements);
-  }
-
-  function recalculatedElements(newElements) {
-    nodeData.current = newNodeData(newElements);
-    let recalculatedElems = sortElementsByDepth(newElements, nodeData.current);
-    elemIndexes.current = newElemIndexes(recalculatedElems);
-    recalculatedElems = updateAllNodes(
-      recalculatedElems, nodeData.current, elemIndexes.current
-    );
-    return resetElementStates(recalculatedElems);
-  }
-
   function autoconnect(newElements, targetNode, reposition = false) {
     const targetId = targetNode.id;
     const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX);
@@ -445,7 +446,8 @@ function App() {
     const numNodes = nodeData.current.size;
     for (let i = 0; i < numNodes; i++) {
       const postreq = newElements[i];
-      if (postreq.data.prerequisite.includes(targetId)
+      if (postreq.type === "course"
+          && postreq.data.prerequisite.includes(targetId)
           && !elemIndexes.current.has(edgeArrowId(targetId, postreq.id))) {
         targetPostreqs.push(postreq);
       }
@@ -471,7 +473,7 @@ function App() {
         const y = (
           allPositions
             .map(pos => pos.y)
-            .reduce((a, b) => a + b, 0)
+            .reduce((a, b) => a + b)
             / allPositions.length
         );
         targetNode.position = { x, y };
@@ -480,7 +482,7 @@ function App() {
         const y = (
           prereqPositions
             .map(pos => pos.y)
-            .reduce((a, b) => a + b, 0)
+            .reduce((a, b) => a + b)
             / prereqPositions.length
         );
         targetNode.position = { x, y };
@@ -489,7 +491,7 @@ function App() {
         const y = (
           postreqPositions
             .map(pos => pos.y)
-            .reduce((a, b) => a + b, 0)
+            .reduce((a, b) => a + b)
             / postreqPositions.length
         );
         targetNode.position = { x, y };
@@ -519,14 +521,127 @@ function App() {
     setElements(recalculatedElements(newElems));
   }
 
+  function filterUnconditionalElements(elems, data, condNodes) {
+    let tempElements = elems.slice();
+    let tempNodeData = new Map(data.entries());
+
+    for (const elem of condNodes) {
+      const node = tempNodeData.get(elem.id);
+
+      for (const iNode of node.incomingNodes) {
+        for (const oNode of node.outgoingNodes) {
+          const edgeId = edgeArrowId(iNode, oNode);
+          if (!tempNodeData.has(edgeId)) {
+            tempElements.push(newEdge(iNode, oNode));
+          }
+        }
+      }
+      tempElements = removeElements([elem], tempElements);
+      tempNodeData = newNodeData(tempElements);
+    }
+
+    return tempElements;
+  }
+
+  function getSourcePositions(nodeId) {
+    const node = elements[elemIndexes.current.get(nodeId)];
+    return (
+      node.type === "course"
+        ? node.position
+        : (
+          nodeData.current.get(nodeId).incomingNodes
+            .map(getSourcePositions)
+            .flat()
+        )
+    );
+  }
+
+  function averagePosition(positions) {
+    const avgSourcePosition = positions.reduce((a, b) => (
+      { x: a.x + b.x, y: a.y + b.y }
+    ), ZERO_POSITION);
+    avgSourcePosition.x /= positions.length;
+    avgSourcePosition.y /= positions.length;
+    return avgSourcePosition;
+  }
+
   function reflowElements() {
     recordFlowState();
-    // https://flaviocopes.com/how-to-shuffle-array-javascript/
-    let newElements = generateDagreLayout(
-      elements.sort(() => Math.random() - 0.5)
+
+    // Conditional nodes should not influence course depth/positioning
+    const conditionalNodes = elements.filter(elem => (
+      isNode(elem) && elem.type !== "course"
+    ));
+    const filteredElements = filterUnconditionalElements(
+      elements.slice(), nodeData.current, conditionalNodes
     );
-    newElements = sortElementsByDepth(newElements, nodeData.current);
-    elemIndexes.current = newElemIndexes(newElements);
+
+    // https://flaviocopes.com/how-to-shuffle-array-javascript/
+    const dagreLayout = generateDagreLayout(
+      filteredElements.sort(() => Math.random() - 0.5)
+    );
+
+    const newElements = elements.slice();
+    for (const dagElem of dagreLayout) {
+      if (isNode(dagElem)) {
+        const i = elemIndexes.current.get(dagElem.id);
+        newElements[i].position = dagElem.position;
+      }
+    }
+
+    conditionalNodes.reverse();
+    for (const node of conditionalNodes) {
+      const i = elemIndexes.current.get(node.id);
+      const data = nodeData.current.get(node.id);
+      const { incomingNodes, outgoingNodes } = data;
+
+      if (incomingNodes.length && outgoingNodes.length) {
+        const incomingPositions = incomingNodes.map(getSourcePositions).flat();
+        const outgoingPositions = outgoingNodes.map(nodeId => (
+          newElements[elemIndexes.current.get(nodeId)].position
+        ));
+        const x = (
+          Math.min(...outgoingPositions.map(pos => pos.x)) - nodeWidth * 0.5
+        );
+        const avgSourcePosition = averagePosition(incomingPositions);
+        const avgDestPosition = averagePosition(outgoingPositions);
+        const slope = (
+          (avgDestPosition.y - avgSourcePosition.y)
+          / (avgDestPosition.x - avgSourcePosition.x)
+        );
+        const y = -nodeWidth * slope + avgDestPosition.y;
+        newElements[i].position = { x, y };
+      } else if (incomingNodes.length && !outgoingNodes.length) {
+        const incomingPositions = incomingNodes.map(nodeId => (
+          newElements[elemIndexes.current.get(nodeId)].position
+        ));
+        const x = (
+          Math.max(...incomingPositions.map(pos => pos.x)) + nodeWidth * 1.1
+        );
+        const y = (
+          incomingPositions
+            .map(pos => pos.y)
+            .reduce((a, b) => a + b)
+            / incomingPositions.length
+        );
+        newElements[i].position = { x, y };
+      } else if (!incomingNodes.length && outgoingNodes.length) {
+        const outgoingPositions = outgoingNodes.map(nodeId => (
+          newElements[elemIndexes.current.get(nodeId)].position
+        ));
+        const x = (
+          Math.min(...outgoingPositions.map(pos => pos.x)) - nodeWidth * 0.5
+        );
+        const y = (
+          outgoingPositions
+            .map(pos => pos.y)
+            .reduce((a, b) => a + b)
+            / outgoingPositions.length
+        );
+        newElements[i].position = { x, y };
+      }
+    }
+    // Magic multipliers to compensate for unkown conditional node width
 
     setElements(newElements);
   }
@@ -753,6 +868,7 @@ function App() {
       setElements(prevElems => (
         recalculatedElements(
           updateEdge(oldEdge, newConnection, prevElems)
+          // TODO: Revert updateEdge (it doesn't change edge ID)
         )
       ));
       // Need to use functional update here for some reason

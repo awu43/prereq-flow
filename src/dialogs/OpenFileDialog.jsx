@@ -25,6 +25,7 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
     }
   }
 
+  // TODO: Convert old versions
   function openFile(files) {
     const [file] = files;
 
