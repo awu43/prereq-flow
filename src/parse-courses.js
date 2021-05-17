@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 export const ZERO_POSITION = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
 export const COURSE_REGEX = new RegExp(CRS, "g"); // AAA 000
@@ -23,6 +25,18 @@ export function newCourseNode(courseData) {
     data: {
       ...courseData,
       nodeStatus: "over-one-away",
+      nodeConnected: false,
+    }
+  };
+}
+
+export function newConditionalNode(type, position = ZERO_POSITION) {
+  return {
+    id: `${type.toUpperCase()}-${nanoid()}`,
+    type,
+    position,
+    data: {
+      nodeStatus: "completed",
       nodeConnected: false,
     }
   };
@@ -63,13 +77,6 @@ export const CONCURRENT_LABEL = {
 
 export function generateInitialElements(courseData, ambiguousHandling) {
   const elements = courseData.map(c => newCourseNode(c));
-  // const elements = Object.keys(courseData).map(c => {
-  //   const prereqText = courseData[c].prereqText.replace(/ ?Instructor.+$/, "");
-  //   const prereqList = prereqText.split(";").map(s => s.trim());
-  //   const elemNode = newCourseNode(c);
-  //   elemNode.data = { ...elemNode.data, prereqs: prereqList };
-  //   return elemNode;
-  // });
   const elementIds = new Set(courseData.map(c => c.id));
   const secondPass = new Map();
 
@@ -117,20 +124,24 @@ export function generateInitialElements(courseData, ambiguousHandling) {
         // matches includes full string match
 
         const alreadyRequired = matches.slice(1).filter(m => elementIds.has(m));
-        if (alreadyRequired.length) {
-          // Some of the choices are already required, so go with those
-          // TODO: implement OR into react flow
-
+        if (alreadyRequired.length === 1) {
+          // One option is already required
+          let edge = newEdge(...alreadyRequired, course);
+          if (CONCURRENT_REGEX.test(section)) {
+            edge = { ...edge, ...CONCURRENT_LABEL };
+          }
+          elements.push(edge);
+        } else if (alreadyRequired.length > 1) {
+          // More than one option is already required
+          const orNode = newConditionalNode("or");
+          elements.push(orNode);
+          elements.push(newEdge(orNode.id, course));
           for (const req of alreadyRequired) {
-            let edge = newEdge(req, course);
+            let edge = newEdge(req, orNode.id);
             if (CONCURRENT_REGEX.test(section)) {
               edge = { ...edge, ...CONCURRENT_LABEL };
             }
             elements.push(edge);
-            if (!elementIds.has(req)) {
-              elements.push(newCourseNode(req));
-              elementIds.add(req);
-            }
           }
         } else if (ambiguousHandling === "aggressively") {
           addEdges(matches.slice(1), course, elements, elementIds);
