@@ -2,32 +2,12 @@
   "version": "Beta",
   "elements": [
     {
-      "id": "MATH 125",
-      "type": "course",
-      "position": {
-        "x": 123.00008824939377,
-        "y": 144
-      },
-      "selected": false,
-      "data": {
-        "id": "MATH 125",
-        "name": "Calculus with Analytic Geometry II",
-        "credits": "5",
-        "description": "Second quarter in the calculus of functions of a single variable. Emphasizes integral calculus. Emphasizes applications and problem solving using the tools of calculus.",
-        "prerequisite": "either minimum grade of 2.0 in MATH 124, score of 3 on AB advanced placement test, or score of 3 on BC advanced placement test.",
-        "offered": "AWSpS.",
-        "nodeStatus": "ready",
-        "nodeConnected": false
-      }
-    },
-    {
       "id": "MATH 135",
       "type": "course",
       "position": {
-        "x": 359.0004641161711,
-        "y": -1.7763568394002505e-15
+        "x": 53,
+        "y": 25
       },
-      "selected": false,
       "data": {
         "campus": "Seattle",
         "id": "MATH 135",
@@ -41,11 +21,30 @@
       }
     },
     {
-      "id": "OR-qULA8-4xCGfflyeaa7DK3",
+      "id": "MATH 125",
+      "type": "course",
+      "position": {
+        "x": 46,
+        "y": -95
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "MATH 125",
+        "name": "Calculus with Analytic Geometry II",
+        "credits": "5",
+        "description": "Second quarter in the calculus of functions of a single variable. Emphasizes integral calculus. Emphasizes applications and problem solving using the tools of calculus.",
+        "prerequisite": "either minimum grade of 2.0 in MATH 124, score of 3 on AB advanced placement test, or score of 3 on BC advanced placement test.",
+        "offered": "AWSpS.",
+        "nodeStatus": "ready",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "OR-Jg1vC8IVRuKkAivuA3K_O",
       "type": "or",
       "position": {
-        "x": 651.5738717442,
-        "y": 81.58512063427831
+        "x": 333.39754484792445,
+        "y": -97.7170578359065
       },
       "data": {
         "nodeStatus": "ready",
@@ -53,32 +52,12 @@
       }
     },
     {
-      "id": "MATH 307",
-      "type": "course",
-      "position": {
-        "x": 744.0008039537075,
-        "y": 172
-      },
-      "selected": false,
-      "data": {
-        "id": "MATH 307",
-        "name": "Introduction to Differential Equations",
-        "credits": "3",
-        "description": "Introductory course in ordinary differential equations. Includes first- and second-order equations and Laplace transform.",
-        "prerequisite": "minimum grade of 2.0 in MATH 125.",
-        "offered": "AWSpS.",
-        "nodeStatus": "one-away",
-        "nodeConnected": false
-      }
-    },
-    {
       "id": "MATH 136",
       "type": "course",
       "position": {
-        "x": 744.0004119203272,
-        "y": 0
+        "x": 427,
+        "y": 82.99999999999999
       },
-      "selected": false,
       "data": {
         "campus": "Seattle",
         "id": "MATH 136",
@@ -95,11 +74,11 @@
       "id": "MATH 126",
       "type": "course",
       "position": {
-        "x": 372.00087062025113,
-        "y": 258
+        "x": 427,
+        "y": -9
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 126",
         "name": "Calculus with Analytic Geometry III",
         "credits": "5",
@@ -111,14 +90,33 @@
       }
     },
     {
+      "id": "MATH 307",
+      "type": "course",
+      "position": {
+        "x": 420,
+        "y": -182
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "MATH 307",
+        "name": "Introduction to Differential Equations",
+        "credits": "3",
+        "description": "Introductory course in ordinary differential equations. Includes first- and second-order equations and Laplace transform.",
+        "prerequisite": "minimum grade of 2.0 in MATH 125.",
+        "offered": "AWSpS.",
+        "nodeStatus": "one-away",
+        "nodeConnected": false
+      }
+    },
+    {
       "id": "AMATH 301",
       "type": "course",
       "position": {
-        "x": 744.0007101355953,
-        "y": 82
+        "x": 418,
+        "y": -100
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "AMATH 301",
         "name": "Beginning Scientific Computing",
         "credits": "4",
@@ -133,11 +131,11 @@
       "id": "MATH 308",
       "type": "course",
       "position": {
-        "x": 744.0003123205532,
-        "y": 258
+        "x": 646,
+        "y": -10
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 308",
         "name": "Matrix Algebra with Applications",
         "credits": "3",
@@ -149,11 +147,11 @@
       }
     },
     {
-      "id": "AND-DaF4HAZckmLoq9JgolESh",
+      "id": "AND-SZ7MzhC510siGlVNEg0Qm",
       "type": "and",
       "position": {
-        "x": 945.1711562808041,
-        "y": 212.755106412665
+        "x": 868.6122613713026,
+        "y": -64.01460508201012
       },
       "data": {
         "nodeStatus": "over-one-away",
@@ -161,11 +159,11 @@
       }
     },
     {
-      "id": "OR-2qxm65bYwH7-LzUJP4FQA",
+      "id": "OR-wz5c0miLAHpZGOGGWS8-N",
       "type": "or",
       "position": {
-        "x": 1083.9761586510722,
-        "y": 128.14934174010517
+        "x": 996.6094361538899,
+        "y": 8.61297941044512
       },
       "data": {
         "nodeStatus": "one-away",
@@ -176,11 +174,11 @@
       "id": "MATH 309",
       "type": "course",
       "position": {
-        "x": 1153.9135008991188,
-        "y": 127.53942353274407
+        "x": 1103,
+        "y": 8
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 309",
         "name": "Linear Analysis",
         "credits": "3",
@@ -190,42 +188,6 @@
         "nodeStatus": "over-one-away",
         "nodeConnected": false
       }
-    },
-    {
-      "id": "MATH 126 -> MATH 308",
-      "source": "MATH 126",
-      "target": "MATH 308",
-      "className": "one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 125 -> MATH 126",
-      "source": "MATH 125",
-      "target": "MATH 126",
-      "className": "ready",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 125 -> MATH 307",
-      "source": "MATH 125",
-      "target": "MATH 307",
-      "className": "ready",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
     },
     {
       "id": "MATH 135 -> MATH 136",
@@ -239,32 +201,9 @@
       "type": "default"
     },
     {
-      "id": "reactflow__edge-MATH 135null-OR-qULA8-4xCGfflyeaa7DK3null",
-      "source": "MATH 135",
-      "target": "OR-qULA8-4xCGfflyeaa7DK3",
-      "className": "ready",
-      "label": null,
-      "animated": false,
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "reactflow__edge-MATH 125null-OR-qULA8-4xCGfflyeaa7DK3null",
+      "id": "MATH 125 -> MATH 126",
       "source": "MATH 125",
-      "target": "OR-qULA8-4xCGfflyeaa7DK3",
-      "className": "ready",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "OR-qULA8-4xCGfflyeaa7DK3 -> AMATH 301",
-      "source": "OR-qULA8-4xCGfflyeaa7DK3",
-      "target": "AMATH 301",
+      "target": "MATH 126",
       "className": "ready",
       "label": null,
       "animated": false,
@@ -273,9 +212,42 @@
       "type": "default"
     },
     {
-      "id": "reactflow__edge-MATH 136null-OR-2qxm65bYwH7-LzUJP4FQAnull",
-      "source": "MATH 136",
-      "target": "OR-2qxm65bYwH7-LzUJP4FQA",
+      "id": "MATH 125 -> OR-Jg1vC8IVRuKkAivuA3K_O",
+      "source": "MATH 125",
+      "target": "OR-Jg1vC8IVRuKkAivuA3K_O",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "MATH 135 -> OR-Jg1vC8IVRuKkAivuA3K_O",
+      "source": "MATH 135",
+      "target": "OR-Jg1vC8IVRuKkAivuA3K_O",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "MATH 125 -> MATH 307",
+      "source": "MATH 125",
+      "target": "MATH 307",
+      "className": "ready",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "MATH 126 -> MATH 308",
+      "source": "MATH 126",
+      "target": "MATH 308",
       "className": "one-away",
       "label": null,
       "animated": false,
@@ -284,33 +256,20 @@
       "type": "default"
     },
     {
-      "id": "reactflow__edge-MATH 307null-AND-DaF4HAZckmLoq9JgolEShnull",
+      "id": "MATH 307 -> AND-SZ7MzhC510siGlVNEg0Qm",
       "source": "MATH 307",
-      "target": "AND-DaF4HAZckmLoq9JgolESh",
+      "target": "AND-SZ7MzhC510siGlVNEg0Qm",
       "className": "one-away",
       "label": null,
       "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
       "type": "default"
     },
     {
-      "id": "reactflow__edge-MATH 308null-AND-DaF4HAZckmLoq9JgolEShnull",
+      "id": "MATH 308 -> AND-SZ7MzhC510siGlVNEg0Qm",
       "source": "MATH 308",
-      "target": "AND-DaF4HAZckmLoq9JgolESh",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "AND-DaF4HAZckmLoq9JgolESh -> OR-2qxm65bYwH7-LzUJP4FQA",
-      "source": "AND-DaF4HAZckmLoq9JgolESh",
-      "target": "OR-2qxm65bYwH7-LzUJP4FQA",
+      "target": "AND-SZ7MzhC510siGlVNEg0Qm",
       "className": "over-one-away",
       "label": null,
       "animated": false,
@@ -319,10 +278,43 @@
       "type": "default"
     },
     {
-      "id": "OR-2qxm65bYwH7-LzUJP4FQA -> MATH 309",
-      "source": "OR-2qxm65bYwH7-LzUJP4FQA",
+      "id": "MATH 136 -> OR-wz5c0miLAHpZGOGGWS8-N",
+      "source": "MATH 136",
+      "target": "OR-wz5c0miLAHpZGOGGWS8-N",
+      "className": "one-away",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "AND-SZ7MzhC510siGlVNEg0Qm -> OR-wz5c0miLAHpZGOGGWS8-N",
+      "source": "AND-SZ7MzhC510siGlVNEg0Qm",
+      "target": "OR-wz5c0miLAHpZGOGGWS8-N",
+      "className": "over-one-away",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "OR-wz5c0miLAHpZGOGGWS8-N -> MATH 309",
+      "source": "OR-wz5c0miLAHpZGOGGWS8-N",
       "target": "MATH 309",
       "className": "one-away",
+      "label": null,
+      "animated": false,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "OR-Jg1vC8IVRuKkAivuA3K_O -> AMATH 301",
+      "source": "OR-Jg1vC8IVRuKkAivuA3K_O",
+      "target": "AMATH 301",
+      "className": "ready",
       "label": null,
       "animated": false,
       "sourceHandle": null,

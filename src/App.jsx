@@ -13,7 +13,6 @@ import ReactFlow, {
   getConnectedEdges,
   getIncomers,
   getOutgoers,
-  updateEdge,
 } from "react-flow-renderer";
 import dagre from "dagre";
 
@@ -867,12 +866,17 @@ function App() {
     if (!elemIndexes.current.has(newEdgeId)
         && !elemIndexes.current.has(reverseEdgeId)) {
       recordFlowState();
-      setElements(prevElems => (
-        recalculatedElements(
-          updateEdge(oldEdge, newConnection, prevElems)
-          // TODO: Revert updateEdge (it doesn't change edge ID)
-        )
-      ));
+      setElements(prevElems => {
+        const newElements = prevElems.slice();
+        newElements[elemIndexes.current.get(oldEdge.id)] = {
+          ...oldEdge, // Keep CC status
+          id: newEdgeId,
+          source: newConnection.source,
+          target: newConnection.target,
+          className: prevElems[elemIndexes.current.get(newSource)].data.status,
+        };
+        return recalculatedElements(newElements);
+      });
       // Need to use functional update here for some reason
     }
   }
