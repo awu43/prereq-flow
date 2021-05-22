@@ -406,6 +406,7 @@ function App() {
   const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
 
   const flowInstance = useRef(null);
+  const updateNodePos = useRef(null);
   const selectedElements = useRef(null);
   const setSelectedElements = useRef(null);
   const resetSelectedElements = useRef(null);
@@ -483,6 +484,11 @@ function App() {
             resetElementStates(flowInstance.current.toObject().elements)
           );
           const pastElements = undoStack.current.pop();
+          for (const elem of pastElements) {
+            if (nodeData.current.has(elem.id)) {
+              updateNodePos.current({ id: elem.id, pos: elem.position });
+            }
+          }
           nodeData.current = newNodeData(pastElements);
           elemIndexes.current = newElemIndexes(pastElements);
           setElements(pastElements);
@@ -496,6 +502,11 @@ function App() {
             resetElementStates(flowInstance.current.toObject().elements)
           );
           const futureElements = redoStack.current.pop();
+          for (const elem of futureElements) {
+            if (nodeData.current.has(elem.id)) {
+              updateNodePos.current({ id: elem.id, pos: elem.position });
+            }
+          }
           nodeData.current = newNodeData(futureElements);
           elemIndexes.current = newElemIndexes(futureElements);
           setElements(futureElements);
@@ -572,7 +583,7 @@ function App() {
           .filter(
             elemId => !elemIndexes.current.has(edgeArrowId(elemId, targetId))
           )
-          .map(elemId => elements[elemIndexes.current.get(elemId)])
+          .map(elemId => newElements[elemIndexes.current.get(elemId)])
         : []
     );
     const targetPostreqs = [];
@@ -628,13 +639,13 @@ function App() {
     // FIXME: Position recording is broken (again)
     // Undo/redo is also broken for positioning
     recordFlowState();
-    let newElems;
+    let newElems = flowInstance.current.toObject().elements;
     if (connectToExisting) {
       newElems = autoconnect(
-        elements.slice(), newNode, newCoursePosition === "relative"
+        newElems, newNode, newCoursePosition === "relative"
       );
     } else {
-      newElems = elements.slice().concat([newNode]);
+      newElems = newElems.push(newNode);
     }
     setElements(recalculatedElements(newElems));
   }
@@ -1027,6 +1038,7 @@ function App() {
       </Header>
       <ReactFlowProvider>
         <FlowStoreLifter
+          updateNodePos={updateNodePos}
           selectedElements={selectedElements}
           setSelectedElements={setSelectedElements}
           resetSelectedElements={resetSelectedElements}
@@ -1126,6 +1138,7 @@ function App() {
             );
           }}
           deleteElems={elemIds => {
+            resetSelectedElements.current();
             onElementsRemove(
               elemIds.map(id => elements[elemIndexes.current.get(id)])
             );

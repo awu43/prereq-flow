@@ -6,11 +6,13 @@ import {
 } from "react-flow-renderer";
 
 export default function FlowStoreLifter({
+  updateNodePos,
   selectedElements,
   setSelectedElements,
   resetSelectedElements,
   unsetNodesSelection,
 }) {
+  updateNodePos.current = useStoreActions(state => state.updateNodePos);
   selectedElements.current = useStoreState(state => state.selectedElements);
   setSelectedElements.current = useStoreActions(action => (
     action.setSelectedElements
