@@ -635,9 +635,6 @@ function App() {
   }
 
   function addCourseNode(newNode, connectToExisting, newCoursePosition) {
-    // Check flowInstance.current.toObject().elements for position
-    // FIXME: Position recording is broken (again)
-    // Undo/redo is also broken for positioning
     recordFlowState();
     let newElems = flowInstance.current.toObject().elements;
     if (connectToExisting) {
@@ -1213,9 +1210,8 @@ function App() {
           <li><kbd>Ctrl</kbd> + click for multiple&nbsp;select</li>
           <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
           <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo* (max&nbsp;20)</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo*</li>
-          <small>*Still buggy for positioning</small>
+          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;20)</li>
+          <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
           <button
             // ref={closeControlsButtonRef}
             type="button"
