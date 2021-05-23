@@ -81,7 +81,7 @@ export default function AddCourseDialog({
   }, []);
 
   const [connectToExisting, setConnectToExisting] = useState(true);
-  const [newCoursePosition, setNewCoursePosition] = useState("zero");
+  const [newCoursePosition, setNewCoursePosition] = useState("relative");
 
   const [customCourseData, setCustomCourseData] = useState({
     id: "",
@@ -264,21 +264,21 @@ export default function AddCourseDialog({
             <input
               type="radio"
               name="new-position"
-              value="zero"
-              checked={newCoursePosition === "zero"}
-              onChange={() => setNewCoursePosition("zero")}
+              checked={newCoursePosition === "relative"}
+              onChange={() => setNewCoursePosition("relative")}
+              disabled={!connectToExisting}
             />
-            At zero position i.e. top-left
+            Relative to pre/postreqs
           </label>
           <label>
             <input
               type="radio"
               name="new-position"
-              checked={newCoursePosition === "relative"}
-              onChange={() => setNewCoursePosition("relative")}
-              disabled={!connectToExisting}
+              value="zero"
+              checked={newCoursePosition === "zero"}
+              onChange={() => setNewCoursePosition("zero")}
             />
-            Relative to pre/postreqs (experimental)
+            At (0, 0) position
           </label>
         </fieldset>
       </div>
