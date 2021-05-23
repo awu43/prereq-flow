@@ -36,11 +36,14 @@ export default function Header(props) {
         <nav className="Header__nav-buttons">
           {props.children}
         </nav>
-        <small className="Header__version">Beta</small>
+        <small className="Header__version">
+          <small>v</small>{props.version}
+        </small>
       </div>
     </header>
   );
 }
 Header.propTypes = {
+  version: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
 };

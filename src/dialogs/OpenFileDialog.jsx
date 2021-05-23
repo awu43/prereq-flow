@@ -7,6 +7,25 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 import Dropzone from "./Dropzone.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
+const SUPPORTED_VERSIONS = ["Beta", "Beta.1"];
+const DEPRECATED_VERSIONS = [];
+export const [CURRENT_VERSION] = SUPPORTED_VERSIONS.slice(-1);
+
+function betaToBeta1(elems) {
+  // Change node type from "custom" to "course"
+  // Remove selected field
+  return elems.map(elem => (
+    isNode(elem)
+      ? { id: elem.id,
+        type: "course",
+        position: elem.position,
+        data: elem.data,
+      }
+      : elem
+  ));
+}
+const CONVERSION_FUNCS = [betaToBeta1];
+
 export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
   const [busy, setBusy] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -25,7 +44,6 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
     }
   }
 
-  // TODO: Convert old versions
   function openFile(files) {
     const [file] = files;
 
@@ -42,6 +60,18 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
     let loadedData;
     reader.onload = event => {
       loadedData = JSON.parse(event.target.result);
+      const loadedVersion = loadedData.version;
+      const loadedElems = loadedData.elements;
+
+      if (DEPRECATED_VERSIONS.includes(loadedVersion)) {
+        setErrorMsg(`v${loadedVersion} data no longer supported`);
+        setBusy(false);
+        return;
+      } else if (!SUPPORTED_VERSIONS.includes(loadedVersion)) {
+        setErrorMsg("Invalid data version");
+        setBusy(false);
+        return;
+      }
 
       const structureValid = (
         typeof loadedData === "object"
@@ -51,16 +81,15 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
         )
       );
       if (!structureValid) {
-        setErrorMsg("Invalid data");
+        setErrorMsg("Invalid data structure");
         setBusy(false);
         return;
       }
 
-      const { version, elements } = loadedData;
       const dataValid = (
-        typeof version === "string"
-        && Array.isArray(elements)
-        && elements.every(e => isNode(e) || isEdge(e))
+        typeof loadedVersion === "string"
+        && Array.isArray(loadedElems)
+        && loadedElems.every(e => isNode(e) || isEdge(e))
       );
       if (!dataValid) {
         setErrorMsg("Invalid data");
@@ -68,7 +97,15 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
         return;
       }
 
-      openFlow(elements);
+      let convertedElems = loadedElems;
+      if (loadedVersion !== CURRENT_VERSION) {
+        const versionIndex = SUPPORTED_VERSIONS.indexOf(loadedVersion);
+        for (const func of CONVERSION_FUNCS.slice(versionIndex)) {
+          convertedElems = func(convertedElems);
+        }
+      }
+
+      openFlow(convertedElems);
       close();
     };
   }

@@ -28,7 +28,7 @@ import OrNode from "./OrNode.jsx";
 import AndNode from "./AndNode.jsx";
 import ContextMenu from "./ContextMenu.jsx";
 import NewFlowDialog from "./dialogs/NewFlowDialog.jsx";
-import OpenFileDialog from "./dialogs/OpenFileDialog.jsx";
+import OpenFileDialog, { CURRENT_VERSION } from "./dialogs/OpenFileDialog.jsx";
 import AddCourseDialog from "./dialogs/AddCourseDialog.jsx";
 import AboutDialog from "./dialogs/AboutDialog.jsx";
 
@@ -441,6 +441,7 @@ function App() {
     flowInstance.current = reactFlowInstance;
   }
 
+  // FIXME: Use new nodeData and elemIndexes
   function resetElementStates(newElements) {
     const numNodes = nodeData.current.size;
     const numElems = elemIndexes.current.size;
@@ -1001,7 +1002,7 @@ function App() {
       onClick={() => setContextActive(false)}
       onWheel={() => setContextActive(false)}
     >
-      <Header>
+      <Header version={CURRENT_VERSION}>
         <HeaderButton
           label="New flow"
           description="Start a new flow"
