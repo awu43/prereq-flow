@@ -40,8 +40,7 @@ import {
   CONCURRENT_LABEL,
   ZERO_POSITION,
 } from "./parse-courses.js";
-// import demoFlow from "./data/demo-flow.json";
-import demoFlow from "./data/conditional-demo.json";
+import demoFlow from "./data/demo-flow.json";
 
 import "./App.scss";
 

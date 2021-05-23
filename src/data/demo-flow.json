@@ -1,15 +1,15 @@
 {
-  "version": "Beta",
+  "version": "Beta.1",
   "elements": [
     {
       "id": "CHEM 142",
       "type": "course",
       "position": {
-        "x": 437.0000382277891,
-        "y": 5
+        "x": 848.000048551749,
+        "y": 195.75
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "CHEM 142",
         "name": "General Chemistry",
         "credits": "5",
@@ -21,14 +21,33 @@
       }
     },
     {
+      "id": "M E 123",
+      "type": "course",
+      "position": {
+        "x": 1287.000909751596,
+        "y": 402.5
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "M E 123",
+        "name": "Introduction to Visualization and Computer-Aided Design",
+        "credits": "4",
+        "description": "Methods of depicting three-dimensional objects and communicating design information. Development of three-dimensional skills through freehand sketching and computer-aided design using parametric solid modeling.",
+        "prerequisite": "None.",
+        "offered": "AWSpS.",
+        "nodeStatus": "ready",
+        "nodeConnected": false
+      }
+    },
+    {
       "id": "MATH 124",
       "type": "course",
       "position": {
-        "x": -169.99923683631994,
-        "y": 656.5
+        "x": 52.146607568855764,
+        "y": 879.8978957358919
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 124",
         "name": "Calculus with Analytic Geometry I",
         "credits": "5",
@@ -43,11 +62,11 @@
       "id": "ENGR 231",
       "type": "course",
       "position": {
-        "x": -169.99978881929002,
-        "y": 742.5
+        "x": 67.14567202211748,
+        "y": 1035.3978957358918
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "ENGR 231",
         "name": "Introduction to Technical Communication",
         "credits": "3",
@@ -59,33 +78,14 @@
       }
     },
     {
-      "id": "M E 123",
-      "type": "course",
-      "position": {
-        "x": 804.0005766928971,
-        "y": 90
-      },
-      "selected": false,
-      "data": {
-        "id": "M E 123",
-        "name": "Introduction to Visualization and Computer-Aided Design",
-        "credits": "4",
-        "description": "Methods of depicting three-dimensional objects and communicating design information. Development of three-dimensional skills through freehand sketching and computer-aided design using parametric solid modeling.",
-        "prerequisite": "None.",
-        "offered": "AWSpS.",
-        "nodeStatus": "ready",
-        "nodeConnected": false
-      }
-    },
-    {
       "id": "CHEM 152",
       "type": "course",
       "position": {
-        "x": 803.0009965416608,
-        "y": -85
+        "x": 1266.0005463422913,
+        "y": 106.49999999999999
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "CHEM 152",
         "name": "General Chemistry",
         "credits": "5",
@@ -97,33 +97,14 @@
       }
     },
     {
-      "id": "PHYS 121",
-      "type": "course",
-      "position": {
-        "x": 158.00093723091516,
-        "y": 339
-      },
-      "selected": false,
-      "data": {
-        "id": "PHYS 121",
-        "name": "Mechanics",
-        "credits": "5",
-        "description": "Basic principles of mechanics and experiments in mechanics for physical science and engineering majors. Lecture tutorial and lab components must all be taken to receive credit.  Maximum 5 credits allowed for any combination of PHYS 114, PHYS 117, PHYS 121, and PHYS 141.",
-        "prerequisite": "either MATH 124 or MATH 134, which may be taken concurrently.",
-        "offered": "AWSpS.",
-        "nodeStatus": "one-away",
-        "nodeConnected": false
-      }
-    },
-    {
       "id": "MATH 125",
       "type": "course",
       "position": {
-        "x": 144.0003283266609,
-        "y": 721.5
+        "x": 308.1458317027439,
+        "y": 881.3978957358919
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 125",
         "name": "Calculus with Analytic Geometry II",
         "credits": "5",
@@ -138,11 +119,11 @@
       "id": "MSE 170",
       "type": "course",
       "position": {
-        "x": 1270.000563508373,
-        "y": 10
+        "x": 1854.3619517168659,
+        "y": 161.73572358216921
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MSE 170",
         "name": "Fundamentals of Materials Science",
         "credits": "4",
@@ -154,14 +135,33 @@
       }
     },
     {
+      "id": "PHYS 121",
+      "type": "course",
+      "position": {
+        "x": 341.14618475115793,
+        "y": 722.1478957358919
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "PHYS 121",
+        "name": "Mechanics",
+        "credits": "5",
+        "description": "Basic principles of mechanics and experiments in mechanics for physical science and engineering majors. Lecture tutorial and lab components must all be taken to receive credit.  Maximum 5 credits allowed for any combination of PHYS 114, PHYS 117, PHYS 121, and PHYS 141.",
+        "prerequisite": "either MATH 124 or MATH 134, which may be taken concurrently.",
+        "offered": "AWSpS.",
+        "nodeStatus": "one-away",
+        "nodeConnected": false
+      }
+    },
+    {
       "id": "AMATH 301",
       "type": "course",
       "position": {
-        "x": 804.000053939114,
-        "y": 1067
+        "x": 746.1462826540036,
+        "y": 1461.3978957358922
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "AMATH 301",
         "name": "Beginning Scientific Computing",
         "credits": "4",
@@ -173,19 +173,19 @@
       }
     },
     {
-      "id": "PHYS 122",
+      "id": "AMATH 351",
       "type": "course",
       "position": {
-        "x": 465.0006951761884,
-        "y": 426
+        "x": 738.1457131000195,
+        "y": 1307.3978957358922
       },
-      "selected": false,
       "data": {
-        "id": "PHYS 122",
-        "name": "Electromagnetism",
-        "credits": "5",
-        "description": "Covers the basic principles of electromagnetism and experiments in these topics for physical science and engineering majors. Lecture tutorial and lab components must all be taken to receive credit. Maximum 5 credits allowed for any combination of PHYS 115, PHYS 118, PHYS 122, and PHYS 142.",
-        "prerequisite": "either PHYS 121 or PHYS 141; and either MATH 125 or MATH 134, which may be taken concurrently.",
+        "campus": "Seattle",
+        "id": "AMATH 351",
+        "name": "Introduction to Differential Equations and Applications",
+        "credits": "3",
+        "description": "Introductory survey of ordinary differential equations; linear and nonlinear equations; Taylor series; and. Laplace transforms. Emphasizes on formulation, solution, and interpretation of results. Examples drawn from physical and biological sciences and engineering.",
+        "prerequisite": "MATH 125 or MATH 135.",
         "offered": "AWSpS.",
         "nodeStatus": "over-one-away",
         "nodeConnected": false
@@ -195,11 +195,11 @@
       "id": "MATH 126",
       "type": "course",
       "position": {
-        "x": 474.0002789209806,
-        "y": 690
+        "x": 717.1466076504955,
+        "y": 879.8978957358919
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 126",
         "name": "Calculus with Analytic Geometry III",
         "credits": "5",
@@ -214,11 +214,11 @@
       "id": "MATH 307",
       "type": "course",
       "position": {
-        "x": 806.0000335543914,
-        "y": 798
+        "x": 736.1465357626265,
+        "y": 1246.6478957358922
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 307",
         "name": "Introduction to Differential Equations",
         "credits": "3",
@@ -230,96 +230,71 @@
       }
     },
     {
+      "id": "PHYS 122",
+      "type": "course",
+      "position": {
+        "x": 723.1462189412337,
+        "y": 715.8978957358919
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "PHYS 122",
+        "name": "Electromagnetism",
+        "credits": "5",
+        "description": "Covers the basic principles of electromagnetism and experiments in these topics for physical science and engineering majors. Lecture tutorial and lab components must all be taken to receive credit. Maximum 5 credits allowed for any combination of PHYS 115, PHYS 118, PHYS 122, and PHYS 142.",
+        "prerequisite": "either PHYS 121 or PHYS 141; and either MATH 125 or MATH 134, which may be taken concurrently.",
+        "offered": "AWSpS.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "OR-qR0ZeX8TFhw_v0xeAiGFs",
+      "type": "or",
+      "position": {
+        "x": 1088.7465931469117,
+        "y": 1137.1693520289527
+      },
+      "data": {
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
       "id": "A A 210",
       "type": "course",
       "position": {
-        "x": 808.0009908373477,
-        "y": 199.5
+        "x": 1275.0002453401455,
+        "y": 223.5
       },
       "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "A A 210",
         "name": "Engineering Statics",
         "credits": "4",
         "description": "Applies vector analysis to equilibrium of rigid body systems and subsystems. Includes force and moment resultants, free body diagrams, internal forces, and friction. Analyzes basic structural and machine systems and components.",
-        "prerequisite": "minimum grade of 2.0 in either MATH 126 or MATH 136; minimum grade of 2.0 in PHYS 121.",
-        "offered": "AWS.",
+        "prerequisite": "a minimum grade of 2.0 in either MATH 126 or MATH 136; and a minimum grade of 2.0 in either PHYS 121 or PHYS 141.",
+        "offered": "AWSpS.",
         "nodeStatus": "over-one-away",
         "nodeConnected": false
       }
     },
     {
-      "id": "MATH 324",
+      "id": "AMATH 352",
       "type": "course",
       "position": {
-        "x": 809.0001940079965,
-        "y": 715
+        "x": 1317.454387753464,
+        "y": 959.779853475863
       },
-      "selected": false,
       "data": {
-        "id": "MATH 324",
-        "name": "Advanced Multivariable Calculus I",
+        "campus": "Seattle",
+        "id": "AMATH 352",
+        "name": "Applied Linear Algebra and Numerical Analysis",
         "credits": "3",
-        "description": "Topics include double and triple integrals, the chain rule, vector fields, line and surface integrals. Culminates in the theorems of Green and Stokes, along with the Divergence Theorem.",
-        "prerequisite": "minimum grade of 2.0 in either MATH 126 or MATH 136.",
+        "description": "Analysis and application of numerical methods and algorithms to problems in the applied sciences and engineering. Applied linear algebra, including eigenvalue problems. Emphasis on use of conceptual methods in engineering, mathematics, and science. Extensive use of MATLAB and/or Python for programming and solution techniques.",
+        "prerequisite": "MATH 126 or MATH 136.",
         "offered": "AWSpS.",
-        "nodeStatus": "over-one-away",
-        "nodeConnected": false
-      }
-    },
-    {
-      "id": "STAT 390",
-      "type": "course",
-      "position": {
-        "x": 812.0004753495203,
-        "y": 426
-      },
-      "selected": false,
-      "data": {
-        "id": "STAT 390",
-        "name": "Statistical Methods in Engineering and Science",
-        "credits": "4",
-        "description": "Concepts of probability and statistics. Conditional probability, independence, random variables, distribution functions. Descriptive statistics, transformations, sampling errors, confidence intervals, least squares and maximum likelihood. Exploratory data analysis and interactive computing. Cannot be taken for credit if credit received for STAT509/CS&SS 509/ECON 580.",
-        "prerequisite": "either MATH 126 or MATH 136.",
-        "offered": "AWSpS.",
-        "nodeStatus": "over-one-away",
-        "nodeConnected": false
-      }
-    },
-    {
-      "id": "PHYS 123",
-      "type": "course",
-      "position": {
-        "x": 817.0004076215298,
-        "y": 585.5
-      },
-      "selected": false,
-      "data": {
-        "id": "PHYS 123",
-        "name": "Waves",
-        "credits": "5",
-        "description": "Explores electromagnetic waves, the mechanics of oscillatory motion, optics, waves in matter, and experiments in these topics for physical science and engineering majors. Lecture tutorial and lab components must all be taken to receive credit. Maximum 5 credits allowed for any combination of PHYS 116, PHYS 119, PHYS 123 and PHYS 143.",
-        "prerequisite": "either PHYS 122 or PHYS 142; and either MATH 126 or MATH 134, which may be taken concurrently.",
-        "offered": "AWSpS.",
-        "nodeStatus": "over-one-away",
-        "nodeConnected": false
-      }
-    },
-    {
-      "id": "E E 215",
-      "type": "course",
-      "position": {
-        "x": 1288.000176714366,
-        "y": 602.5
-      },
-      "selected": false,
-      "data": {
-        "id": "E E 215",
-        "name": "Fundamentals of Electrical Engineering",
-        "credits": "4",
-        "description": "Introduction to electrical engineering. Basic circuit and systems concepts. Mathematical models of components. Kirchhoff's laws. Resistors, sources, capacitors, inductors, and operational amplifiers. Solution of first and second order linear differential equations associated with basic circuit forms.",
-        "prerequisite": "either MATH 136, or MATH 126 and either MATH 307 or AMATH 351, either of which may be taken concurrently; PHYS 122.",
-        "offered": "",
         "nodeStatus": "over-one-away",
         "nodeConnected": false
       }
@@ -328,16 +303,16 @@
       "id": "M E 323",
       "type": "course",
       "position": {
-        "x": 806.0009394597434,
-        "y": 325.5
+        "x": 1281.0005638064465,
+        "y": 307.5
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "M E 323",
         "name": "Engineering Thermodynamics",
         "credits": "5",
         "description": "Engineering thermodynamics, including thermodynamic concepts and properties, the first and second laws of thermodynamics, energy conversion, refrigeration, humidification, and combustion. Engineering design applications.",
-        "prerequisite": "either CHEM 142 or CHEM 144; MATH 126; PHYS 121.",
+        "prerequisite": "either CHEM 142, CHEM 143, or CHEM 145; either MATH 126 or MATH 136; and either PHYS 121 or PHYS 141.",
         "offered": "",
         "nodeStatus": "over-one-away",
         "nodeConnected": false
@@ -347,11 +322,11 @@
       "id": "MATH 308",
       "type": "course",
       "position": {
-        "x": 796.0003330332447,
-        "y": 915.5
+        "x": 1310.0006255911997,
+        "y": 892.5
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 308",
         "name": "Matrix Algebra with Applications",
         "credits": "3",
@@ -363,14 +338,152 @@
       }
     },
     {
+      "id": "MATH 324",
+      "type": "course",
+      "position": {
+        "x": 1291.0000853713518,
+        "y": 597.5
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "MATH 324",
+        "name": "Advanced Multivariable Calculus I",
+        "credits": "3",
+        "description": "Topics include double and triple integrals, the chain rule, vector fields, line and surface integrals. Culminates in the theorems of Green and Stokes, along with the Divergence Theorem.",
+        "prerequisite": "minimum grade of 2.0 in either MATH 126 or MATH 136.",
+        "offered": "AWSpS.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "PHYS 123",
+      "type": "course",
+      "position": {
+        "x": 1287.00048009902,
+        "y": 506.5
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "PHYS 123",
+        "name": "Waves",
+        "credits": "5",
+        "description": "Explores electromagnetic waves, the mechanics of oscillatory motion, optics, waves in matter, and experiments in these topics for physical science and engineering majors. Lecture tutorial and lab components must all be taken to receive credit. Maximum 5 credits allowed for any combination of PHYS 116, PHYS 119, PHYS 123 and PHYS 143.",
+        "prerequisite": "either PHYS 122 or PHYS 142; and either MATH 126 or MATH 134, which may be taken concurrently.",
+        "offered": "AWSpS.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "STAT 390",
+      "type": "course",
+      "position": {
+        "x": 1303.000529097901,
+        "y": 717.5
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "STAT 390",
+        "name": "Statistical Methods in Engineering and Science",
+        "credits": "4",
+        "description": "Concepts of probability and statistics. Conditional probability, independence, random variables, distribution functions. Descriptive statistics, transformations, sampling errors, confidence intervals, least squares and maximum likelihood. Exploratory data analysis and interactive computing. Cannot be taken for credit if credit received for STAT509/CS&SS 509/ECON 580.",
+        "prerequisite": "either MATH 126 or MATH 136.",
+        "offered": "AWSpS.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "OR-hTI35R5FbO3fPa0FkYf1j",
+      "type": "or",
+      "position": {
+        "x": 1039.3270823163182,
+        "y": 1303.5420089426314
+      },
+      "data": {
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "AND-2MGbF6xiUnrjZNactyECT",
+      "type": "and",
+      "position": {
+        "x": 1212.2728452171434,
+        "y": 1103.6138018079248
+      },
+      "data": {
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "AMATH 353",
+      "type": "course",
+      "position": {
+        "x": 1307.3270823163182,
+        "y": 1228.761172619212
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "AMATH 353",
+        "name": "Partial Differential Equations and Waves",
+        "credits": "3",
+        "description": "Covers traveling waves of linear equations, dispersion relation, stability, superposition and Fourier analysis, d'Alembert solution, standing waves, vibrations and separation of variables, traveling waves of nonlinear equations, conservation laws, characteristics, breaking, shocks, and rarefaction.",
+        "prerequisite": "either AMATH 351, MATH 136, or MATH 307.",
+        "offered": "Sp.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "CEE 220",
+      "type": "course",
+      "position": {
+        "x": 1858.3624277634028,
+        "y": 253.73572358216927
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "CEE 220",
+        "name": "Introduction to Mechanics of Materials",
+        "credits": "4",
+        "description": "Introduction to the concepts of stress, deformation, and strain in solid materials. Development of basic relationships among loads, stresses, and deflections of structural and machine elements such as rods, shafts, and beams. Load-carrying capacity of these elements under tension, compression, torsion, bending, and shear forces.",
+        "prerequisite": "minimum grade of 2.0 in A A 210.",
+        "offered": "AWSp.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "IND E 315",
+      "type": "course",
+      "position": {
+        "x": 1298.2408923608027,
+        "y": 788.2696332254579
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "IND E 315",
+        "name": "Probability and Statistics for Engineers",
+        "credits": "3",
+        "description": "Application of probability theory and statistics to engineering problems, distribution theory and discussion of particular distributions of interest in engineering, statistical estimation and data analysis. Illustrative statistical applications may include quality control, linear regression, and analysis of engineering data sets.",
+        "prerequisite": "either MATH 136, MATH 307, or AMATH 351.",
+        "offered": "AWSpS.",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
       "id": "M E 230",
       "type": "course",
       "position": {
-        "x": 1280.0009616262582,
-        "y": 295
+        "x": 1864.3615699515985,
+        "y": 412.73572358216916
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "M E 230",
         "name": "Kinematics and Dynamics",
         "credits": "4",
@@ -382,33 +495,14 @@
       }
     },
     {
-      "id": "M E 395",
-      "type": "course",
-      "position": {
-        "x": 1288.000996751662,
-        "y": 509.5
-      },
-      "selected": false,
-      "data": {
-        "id": "M E 395",
-        "name": "Introduction to Mechanical Design",
-        "credits": "4",
-        "description": "Design process and methodology; decision making; optimization techniques; project planning; engineering economics; probabilistic and statistical aspects of mechanical design; ethical and legal issues.",
-        "prerequisite": "M E 123; M E 323; IND E 315 or MATH 390/STAT 390 either of which may be taken concurrently.",
-        "offered": "",
-        "nodeStatus": "over-one-away",
-        "nodeConnected": false
-      }
-    },
-    {
       "id": "M E 333",
       "type": "course",
       "position": {
-        "x": 1294.000312482514,
-        "y": 811.5
+        "x": 1869.3623290283915,
+        "y": 1315.735723582169
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "M E 333",
         "name": "Introduction to Fluid Mechanics",
         "credits": "5",
@@ -423,11 +517,11 @@
       "id": "MATH 309",
       "type": "course",
       "position": {
-        "x": 1276.000345007588,
-        "y": 915.5
+        "x": 1946.3621167409506,
+        "y": 1007.7357235821689
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "MATH 309",
         "name": "Linear Analysis",
         "credits": "3",
@@ -439,20 +533,44 @@
       }
     },
     {
-      "id": "CEE 220",
+      "id": "OR-NcdJvmIRQoGpbDutNlZki",
+      "type": "or",
+      "position": {
+        "x": 2089.3624716159884,
+        "y": 1130.2412837910572
+      },
+      "data": {
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "E E 215",
       "type": "course",
       "position": {
-        "x": 1277.000344732872,
-        "y": 155
+        "x": 1323.0004659549606,
+        "y": 1058.5
       },
-      "selected": false,
       "data": {
-        "id": "CEE 220",
-        "name": "Introduction to Mechanics of Materials",
+        "campus": "Seattle",
+        "id": "E E 215",
+        "name": "Fundamentals of Electrical Engineering",
         "credits": "4",
-        "description": "Introduction to the concepts of stress, deformation, and strain in solid materials. Development of basic relationships among loads, stresses, and deflections of structural and machine elements such as rods, shafts, and beams. Load-carrying capacity of these elements under tension, compression, torsion, bending, and shear forces.",
-        "prerequisite": "minimum grade of 2.0 in A A 210.",
-        "offered": "AWSp.",
+        "description": "Introduction to electrical engineering. Basic circuit and systems concepts. Mathematical models of components. Kirchhoff's laws. Resistors, sources, capacitors, inductors, and operational amplifiers. Solution of first and second order linear differential equations associated with basic circuit forms.",
+        "prerequisite": "either MATH 136, or MATH 126 and either MATH 307 or AMATH 351, either of which may be taken concurrently; PHYS 122.",
+        "offered": "",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "OR-VXfYd0P7Ad4ZZRmehvO_9",
+      "type": "or",
+      "position": {
+        "x": 1741.0695518193668,
+        "y": 827.9340170063881
+      },
+      "data": {
         "nodeStatus": "over-one-away",
         "nodeConnected": false
       }
@@ -461,11 +579,11 @@
       "id": "M E 331",
       "type": "course",
       "position": {
-        "x": 1610.0004054090462,
-        "y": 784
+        "x": 2261.3615936756255,
+        "y": 1315.985723582169
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "M E 331",
         "name": "Introduction to Heat Transfer",
         "credits": "4",
@@ -477,52 +595,14 @@
       }
     },
     {
-      "id": "M E 495",
-      "type": "course",
-      "position": {
-        "x": 1610.0008898091003,
-        "y": 413.5
-      },
-      "selected": false,
-      "data": {
-        "id": "M E 495",
-        "name": "Mechanical Engineering Design",
-        "credits": "4",
-        "description": "Design laboratory involving the identification and synthesis of engineering factors to plan and achieve specific project goals. Current literature and prerequisite texts used as reference sources.",
-        "prerequisite": "M E 395.",
-        "offered": "",
-        "nodeStatus": "over-one-away",
-        "nodeConnected": false
-      }
-    },
-    {
-      "id": "M E 373",
-      "type": "course",
-      "position": {
-        "x": 1610.0009211304186,
-        "y": 609
-      },
-      "selected": false,
-      "data": {
-        "id": "M E 373",
-        "name": "Introduction to System Dynamics",
-        "credits": "5",
-        "description": "Mathematical modeling, analysis, and design of physical dynamic systems involving energy storage and transfer by lumped-parameter linear elements. Time-domain response by analytical methods and numeric simulation. Laboratory experiments.",
-        "prerequisite": "either AMATH 351 or MATH 307; either AMATH 352 or MATH 308; E E 215; M E 230.",
-        "offered": "",
-        "nodeStatus": "over-one-away",
-        "nodeConnected": false
-      }
-    },
-    {
       "id": "M E 354",
       "type": "course",
       "position": {
-        "x": 1610.0005179102077,
-        "y": 36
+        "x": 2260.3619381900835,
+        "y": 254.23572358216927
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "M E 354",
         "name": "Mechanics of Materials Laboratory",
         "credits": "5",
@@ -534,14 +614,71 @@
       }
     },
     {
+      "id": "M E 373",
+      "type": "course",
+      "position": {
+        "x": 2261.362471615989,
+        "y": 1174.7357235821694
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "M E 373",
+        "name": "Introduction to System Dynamics",
+        "credits": "5",
+        "description": "Mathematical modeling, analysis, and design of physical dynamic systems involving energy storage and transfer by lumped-parameter linear elements. Time-domain response by analytical methods and numeric simulation. Laboratory experiments.",
+        "prerequisite": "either AMATH 351 or MATH 307; either AMATH 352 or MATH 308; E E 215; M E 230.",
+        "offered": "",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "M E 395",
+      "type": "course",
+      "position": {
+        "x": 1857.3625281547445,
+        "y": 794.9857235821693
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "M E 395",
+        "name": "Introduction to Mechanical Design",
+        "credits": "4",
+        "description": "Design process and methodology; decision making; optimization techniques; project planning; engineering economics; probabilistic and statistical aspects of mechanical design; ethical and legal issues.",
+        "prerequisite": "M E 123; M E 323; IND E 315 or MATH 390/STAT 390 either of which may be taken concurrently.",
+        "offered": "",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
+      "id": "M E 355",
+      "type": "course",
+      "position": {
+        "x": 2538.3624844965584,
+        "y": 328.23572358216927
+      },
+      "data": {
+        "campus": "Seattle",
+        "id": "M E 355",
+        "name": "Introduction to Manufacturing Processes",
+        "credits": "4",
+        "description": "Study of manufacturing processes, including interrelationships between the properties of the material, the manufacturing process, and the design of components. Interpretation of experimental data, comparison of measurements to numerical/analytical predictions, and formal, engineering report writing.",
+        "prerequisite": "M E 354.",
+        "offered": "",
+        "nodeStatus": "over-one-away",
+        "nodeConnected": false
+      }
+    },
+    {
       "id": "M E 356",
       "type": "course",
       "position": {
-        "x": 1932.0005994129076,
-        "y": 3
+        "x": 2544.362012420261,
+        "y": 165.73572358216927
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "M E 356",
         "name": "Machine Design Analysis",
         "credits": "4",
@@ -556,11 +693,11 @@
       "id": "M E 374",
       "type": "course",
       "position": {
-        "x": 1932.000297211125,
-        "y": 827.5
+        "x": 2588.3618093283044,
+        "y": 1391.235723582169
       },
-      "selected": false,
       "data": {
+        "campus": "Seattle",
         "id": "M E 374",
         "name": "Systems Dynamic Analysis and Design",
         "credits": "5",
@@ -572,71 +709,111 @@
       }
     },
     {
-      "id": "M E 355",
+      "id": "M E 495",
       "type": "course",
       "position": {
-        "x": 1932.0004267812083,
-        "y": 129
+        "x": 2258.362300874968,
+        "y": 797.9857235821693
       },
-      "selected": false,
       "data": {
-        "id": "M E 355",
-        "name": "Introduction to Manufacturing Processes",
+        "campus": "Seattle",
+        "id": "M E 495",
+        "name": "Mechanical Engineering Design",
         "credits": "4",
-        "description": "Study of manufacturing processes, including interrelationships between the properties of the material, the manufacturing process, and the design of components. Interpretation of experimental data, comparison of measurements to numerical/analytical predictions, and formal, engineering report writing.",
-        "prerequisite": "M E 354.",
+        "description": "Design laboratory involving the identification and synthesis of engineering factors to plan and achieve specific project goals. Current literature and prerequisite texts used as reference sources.",
+        "prerequisite": "M E 395.",
         "offered": "",
         "nodeStatus": "over-one-away",
         "nodeConnected": false
       }
     },
     {
-      "id": "MATH 126 -> E E 215",
-      "source": "MATH 126",
+      "id": "A A 210 -> CEE 220",
+      "source": "A A 210",
+      "target": "CEE 220",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "PHYS 122 -> E E 215",
+      "source": "PHYS 122",
       "target": "E E 215",
       "className": "over-one-away",
       "label": null,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
     },
     {
-      "id": "MATH 126 -> MATH 324",
-      "source": "MATH 126",
-      "target": "MATH 324",
+      "id": "A A 210 -> M E 230",
+      "source": "A A 210",
+      "target": "M E 230",
       "className": "over-one-away",
       "label": null,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
     },
     {
-      "id": "CHEM 142 -> MSE 170",
-      "source": "CHEM 142",
-      "target": "MSE 170",
-      "className": "ready",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 307 -> MATH 309",
-      "source": "MATH 307",
-      "target": "MATH 309",
+      "id": "AMATH 301 -> M E 333",
+      "source": "AMATH 301",
+      "target": "M E 333",
       "className": "over-one-away",
       "label": null,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "M E 323 -> M E 333",
+      "source": "M E 323",
+      "target": "M E 333",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "M E 354 -> M E 355",
+      "source": "M E 354",
+      "target": "M E 355",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "M E 354 -> M E 356",
+      "source": "M E 354",
+      "target": "M E 356",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "E E 215 -> M E 373",
+      "source": "E E 215",
+      "target": "M E 373",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
     },
     {
       "id": "M E 230 -> M E 373",
@@ -644,11 +821,197 @@
       "target": "M E 373",
       "className": "over-one-away",
       "label": null,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "AMATH 301 -> M E 374",
+      "source": "AMATH 301",
+      "target": "M E 374",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "M E 373 -> M E 374",
+      "source": "M E 373",
+      "target": "M E 374",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "M E 123 -> M E 395",
+      "source": "M E 123",
+      "target": "M E 395",
+      "className": "ready",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "M E 323 -> M E 395",
+      "source": "M E 323",
+      "target": "M E 395",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "M E 395 -> M E 495",
+      "source": "M E 395",
+      "target": "M E 495",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 124 -> MATH 125",
+      "source": "MATH 124",
+      "target": "MATH 125",
+      "className": "ready",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 125 -> MATH 126",
+      "source": "MATH 125",
+      "target": "MATH 126",
+      "className": "one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 125 -> MATH 307",
+      "source": "MATH 125",
+      "target": "MATH 307",
+      "className": "one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 126 -> MATH 308",
+      "source": "MATH 126",
+      "target": "MATH 308",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 126 -> A A 210",
+      "source": "MATH 126",
+      "target": "A A 210",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "PHYS 121 -> A A 210",
+      "source": "PHYS 121",
+      "target": "A A 210",
+      "className": "one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 125 -> AMATH 301",
+      "source": "MATH 125",
+      "target": "AMATH 301",
+      "className": "one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 125 -> AMATH 351",
+      "source": "MATH 125",
+      "target": "AMATH 351",
+      "className": "one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 126 -> AMATH 352",
+      "source": "MATH 126",
+      "target": "AMATH 352",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "OR-hTI35R5FbO3fPa0FkYf1j -> AMATH 353",
+      "source": "OR-hTI35R5FbO3fPa0FkYf1j",
+      "target": "AMATH 353",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "AMATH 351 -> OR-hTI35R5FbO3fPa0FkYf1j",
+      "source": "AMATH 351",
+      "target": "OR-hTI35R5FbO3fPa0FkYf1j",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 307 -> OR-hTI35R5FbO3fPa0FkYf1j",
+      "source": "MATH 307",
+      "target": "OR-hTI35R5FbO3fPa0FkYf1j",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
     },
     {
       "id": "CHEM 142 -> CHEM 152",
@@ -656,11 +1019,228 @@
       "target": "CHEM 152",
       "className": "ready",
       "label": null,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 126 -> AND-2MGbF6xiUnrjZNactyECT",
+      "source": "MATH 126",
+      "target": "AND-2MGbF6xiUnrjZNactyECT",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 307 -> OR-qR0ZeX8TFhw_v0xeAiGFs",
+      "source": "MATH 307",
+      "target": "OR-qR0ZeX8TFhw_v0xeAiGFs",
+      "className": "over-one-away",
+      "label": "CC",
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false,
+      "labelBgPadding": [
+        2,
+        2
+      ],
+      "labelBgBorderRadius": 4
+    },
+    {
+      "id": "AMATH 351 -> OR-qR0ZeX8TFhw_v0xeAiGFs",
+      "source": "AMATH 351",
+      "target": "OR-qR0ZeX8TFhw_v0xeAiGFs",
+      "className": "over-one-away",
+      "label": "CC",
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false,
+      "labelBgPadding": [
+        2,
+        2
+      ],
+      "labelBgBorderRadius": 4
+    },
+    {
+      "id": "CHEM 142 -> M E 323",
+      "source": "CHEM 142",
+      "target": "M E 323",
+      "className": "ready",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 126 -> M E 323",
+      "source": "MATH 126",
+      "target": "M E 323",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "PHYS 121 -> M E 323",
+      "source": "PHYS 121",
+      "target": "M E 323",
+      "className": "one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "M E 333 -> M E 331",
+      "source": "M E 333",
+      "target": "M E 331",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MSE 170 -> M E 354",
+      "source": "MSE 170",
+      "target": "M E 354",
+      "className": "one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "CEE 220 -> M E 354",
+      "source": "CEE 220",
+      "target": "M E 354",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "OR-NcdJvmIRQoGpbDutNlZki -> M E 373",
+      "source": "OR-NcdJvmIRQoGpbDutNlZki",
+      "target": "M E 373",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "AMATH 352 -> OR-NcdJvmIRQoGpbDutNlZki",
+      "source": "AMATH 352",
+      "target": "OR-NcdJvmIRQoGpbDutNlZki",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 308 -> OR-NcdJvmIRQoGpbDutNlZki",
+      "source": "MATH 308",
+      "target": "OR-NcdJvmIRQoGpbDutNlZki",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "IND E 315 -> OR-VXfYd0P7Ad4ZZRmehvO_9",
+      "source": "IND E 315",
+      "target": "OR-VXfYd0P7Ad4ZZRmehvO_9",
+      "className": "over-one-away",
+      "label": "CC",
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false,
+      "labelBgPadding": [
+        2,
+        2
+      ],
+      "labelBgBorderRadius": 4
+    },
+    {
+      "id": "STAT 390 -> OR-VXfYd0P7Ad4ZZRmehvO_9",
+      "source": "STAT 390",
+      "target": "OR-VXfYd0P7Ad4ZZRmehvO_9",
+      "className": "over-one-away",
+      "label": "CC",
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false,
+      "labelBgPadding": [
+        2,
+        2
+      ],
+      "labelBgBorderRadius": 4
+    },
+    {
+      "id": "MATH 307 -> MATH 309",
+      "source": "MATH 307",
+      "target": "MATH 309",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 308 -> MATH 309",
+      "source": "MATH 308",
+      "target": "MATH 309",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "MATH 126 -> MATH 324",
+      "source": "MATH 126",
+      "target": "MATH 324",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "CHEM 142 -> MSE 170",
+      "source": "CHEM 142",
+      "target": "MSE 170",
+      "className": "ready",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
     },
     {
       "id": "MATH 124 -> PHYS 121",
@@ -673,11 +1253,10 @@
         2
       ],
       "labelBgBorderRadius": 4,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
     },
     {
       "id": "PHYS 121 -> PHYS 122",
@@ -685,35 +1264,10 @@
       "target": "PHYS 122",
       "className": "one-away",
       "label": null,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "PHYS 122 -> PHYS 123",
-      "source": "PHYS 122",
-      "target": "PHYS 123",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 308 -> MATH 309",
-      "source": "MATH 308",
-      "target": "MATH 309",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
     },
     {
       "id": "MATH 125 -> PHYS 122",
@@ -726,23 +1280,21 @@
         2
       ],
       "labelBgBorderRadius": 4,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
     },
     {
-      "id": "MATH 126 -> STAT 390",
-      "source": "MATH 126",
-      "target": "STAT 390",
+      "id": "PHYS 122 -> PHYS 123",
+      "source": "PHYS 122",
+      "target": "PHYS 123",
       "className": "over-one-away",
       "label": null,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
     },
     {
       "id": "MATH 126 -> PHYS 123",
@@ -755,390 +1307,84 @@
         2
       ],
       "labelBgBorderRadius": 4,
-      "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "default",
+      "animated": false
     },
     {
-      "id": "STAT 390 -> M E 395",
-      "source": "STAT 390",
-      "target": "M E 395",
-      "className": "over-one-away",
-      "label": "CC",
-      "animated": false,
-      "style": {},
-      "labelBgPadding": [
-        2,
-        2
-      ],
-      "labelBgBorderRadius": 4,
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 307 -> M E 333",
-      "source": "MATH 307",
-      "target": "M E 333",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "M E 323 -> M E 395",
-      "source": "M E 323",
-      "target": "M E 395",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "M E 395 -> M E 495",
-      "source": "M E 395",
-      "target": "M E 495",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "M E 123 -> M E 395",
-      "source": "M E 123",
-      "target": "M E 395",
-      "className": "ready",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "M E 354 -> M E 356",
-      "source": "M E 354",
-      "target": "M E 356",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 125 -> MATH 126",
-      "source": "MATH 125",
-      "target": "MATH 126",
-      "className": "one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "M E 373 -> M E 374",
-      "source": "M E 373",
-      "target": "M E 374",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "CHEM 142 -> M E 323",
-      "source": "CHEM 142",
-      "target": "M E 323",
-      "className": "ready",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MSE 170 -> M E 354",
-      "source": "MSE 170",
-      "target": "M E 354",
-      "className": "one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 124 -> MATH 125",
-      "source": "MATH 124",
-      "target": "MATH 125",
-      "className": "ready",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 126 -> MATH 308",
+      "id": "MATH 126 -> STAT 390",
       "source": "MATH 126",
-      "target": "MATH 308",
+      "target": "STAT 390",
+      "className": "over-one-away",
+      "label": null,
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default",
+      "animated": false
+    },
+    {
+      "id": "OR-VXfYd0P7Ad4ZZRmehvO_9 -> M E 395",
+      "source": "OR-VXfYd0P7Ad4ZZRmehvO_9",
+      "target": "M E 395",
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
       "type": "default"
     },
     {
-      "id": "AMATH 301 -> M E 374",
-      "source": "AMATH 301",
-      "target": "M E 374",
+      "id": "OR-qR0ZeX8TFhw_v0xeAiGFs -> AND-2MGbF6xiUnrjZNactyECT",
+      "source": "OR-qR0ZeX8TFhw_v0xeAiGFs",
+      "target": "AND-2MGbF6xiUnrjZNactyECT",
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
       "type": "default"
     },
     {
-      "id": "M E 354 -> M E 355",
-      "source": "M E 354",
-      "target": "M E 355",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 307 -> E E 215",
-      "source": "MATH 307",
-      "target": "E E 215",
-      "className": "over-one-away",
-      "label": "CC",
-      "animated": false,
-      "style": {},
-      "labelBgPadding": [
-        2,
-        2
-      ],
-      "labelBgBorderRadius": 4,
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 126 -> A A 210",
-      "source": "MATH 126",
-      "target": "A A 210",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 307 -> M E 373",
-      "source": "MATH 307",
-      "target": "M E 373",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "AMATH 301 -> M E 333",
-      "source": "AMATH 301",
-      "target": "M E 333",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 125 -> AMATH 301",
-      "source": "MATH 125",
-      "target": "AMATH 301",
-      "className": "one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "M E 333 -> M E 331",
-      "source": "M E 333",
-      "target": "M E 331",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "PHYS 121 -> A A 210",
-      "source": "PHYS 121",
-      "target": "A A 210",
-      "className": "one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "CEE 220 -> M E 354",
-      "source": "CEE 220",
-      "target": "M E 354",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 125 -> MATH 307",
-      "source": "MATH 125",
-      "target": "MATH 307",
-      "className": "one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "PHYS 122 -> E E 215",
-      "source": "PHYS 122",
+      "id": "AND-2MGbF6xiUnrjZNactyECT -> E E 215",
+      "source": "AND-2MGbF6xiUnrjZNactyECT",
       "target": "E E 215",
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
       "type": "default"
     },
     {
-      "id": "MATH 308 -> M E 373",
-      "source": "MATH 308",
+      "id": "OR-hTI35R5FbO3fPa0FkYf1j -> M E 373",
+      "source": "OR-hTI35R5FbO3fPa0FkYf1j",
       "target": "M E 373",
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {},
       "sourceHandle": null,
       "targetHandle": null,
       "type": "default"
     },
     {
-      "id": "PHYS 121 -> M E 323",
-      "source": "PHYS 121",
-      "target": "M E 323",
-      "className": "one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "MATH 126 -> M E 323",
-      "source": "MATH 126",
-      "target": "M E 323",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "A A 210 -> M E 230",
-      "source": "A A 210",
-      "target": "M E 230",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "E E 215 -> M E 373",
-      "source": "E E 215",
-      "target": "M E 373",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "A A 210 -> CEE 220",
-      "source": "A A 210",
-      "target": "CEE 220",
-      "className": "over-one-away",
-      "label": null,
-      "animated": false,
-      "style": {},
-      "sourceHandle": null,
-      "targetHandle": null,
-      "type": "default"
-    },
-    {
-      "id": "M E 323 -> M E 333",
-      "source": "M E 323",
+      "id": "OR-hTI35R5FbO3fPa0FkYf1j -> M E 333",
+      "source": "OR-hTI35R5FbO3fPa0FkYf1j",
       "target": "M E 333",
       "className": "over-one-away",
       "label": null,
       "animated": false,
-      "style": {},
+      "sourceHandle": null,
+      "targetHandle": null,
+      "type": "default"
+    },
+    {
+      "id": "OR-hTI35R5FbO3fPa0FkYf1j -> IND E 315",
+      "source": "OR-hTI35R5FbO3fPa0FkYf1j",
+      "target": "IND E 315",
+      "className": "over-one-away",
+      "label": null,
+      "animated": false,
       "sourceHandle": null,
       "targetHandle": null,
       "type": "default"
