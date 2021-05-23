@@ -9,7 +9,7 @@ export default function ContextMenu({
   active, data, xy, COURSE_STATUS_CODES,
   setSelectionStatuses, deleteElems,
   connectAll, disconnectAll, toggleEdgeConcurrency,
-  newConditionalNode,
+  newConditionalNode, reroute,
 }) {
   const unsetNodesSelection = useStoreActions(actions => (
     actions.unsetNodesSelection
@@ -85,6 +85,9 @@ export default function ContextMenu({
             onClick={() => disconnectAll([target])}
           >
             <p>Disconnect&nbsp;all</p>
+          </li>
+          <li className="reroute" onClick={() => reroute(target)}>
+            <p>Reroute</p>
           </li>
           <li className="delete" onClick={() => deleteElems([target])}>
             <p>Delete</p>
@@ -249,4 +252,5 @@ ContextMenu.propTypes = {
   disconnectAll: PropTypes.func.isRequired,
   toggleEdgeConcurrency: PropTypes.func.isRequired,
   newConditionalNode: PropTypes.func.isRequired,
+  reroute: PropTypes.func.isRequired,
 };

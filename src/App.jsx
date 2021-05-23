@@ -1170,6 +1170,33 @@ function App() {
               recalculatedElements(elements.concat([newNode]))
             );
           }}
+          reroute={targetId => {
+            resetSelectedElements.current();
+            recordFlowState();
+
+            let newElements = elements.slice();
+
+            const targetNode = newElements[elemIndexes.current.get(targetId)];
+            const targetData = nodeData.current.get(targetId);
+
+            for (const iNode of targetData.incomingNodes) {
+              for (const oNode of targetData.outgoingNodes) {
+                const oldEdgeId = edgeArrowId(iNode, targetId);
+                const newEdgeId = edgeArrowId(iNode, oNode);
+                if (!nodeData.current.has(newEdgeId)) {
+                  // newElements.push(newEdge(iNode, oNode));
+                  newElements.push({
+                    ...newElements[elemIndexes.current.get(oldEdgeId)],
+                    id: newEdgeId,
+                    source: iNode,
+                    target: oNode,
+                  });
+                }
+              }
+            }
+            newElements = removeElements([targetNode], newElements);
+            setElements(recalculatedElements(newElements));
+          }}
         />
       </ReactFlowProvider>
       <aside className="legend">
