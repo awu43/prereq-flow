@@ -216,7 +216,8 @@ function updateAllNodes(elements, nodeData, elemIndexes) {
   return updatedElements;
 }
 
-const ranksep = 250;
+const nodesep = 75; // Vertical spacing
+const ranksep = 250; // Horizontal spacing
 const nodeWidth = 172;
 const nodeHeight = 36;
 
@@ -226,7 +227,7 @@ const nodeSpacing = ranksep + nodeWidth;
 function generateDagreLayout(elements) {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: "LR", ranksep });
+  dagreGraph.setGraph({ rankdir: "LR", ranksep, nodesep });
 
   for (const elem of elements) {
     if (isNode(elem)) {
