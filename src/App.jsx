@@ -555,7 +555,7 @@ function App() {
   function saveFlow() {
     const downloadLink = document.createElement("a");
     const fileContents = {
-      version: "Beta",
+      version: CURRENT_VERSION,
       elements: resetElementStates(flowInstance.current.toObject().elements),
     };
     const fileBlob = new Blob(
