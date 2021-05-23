@@ -441,21 +441,12 @@ function App() {
     flowInstance.current = reactFlowInstance;
   }
 
-  // FIXME: Use new nodeData and elemIndexes
   function resetElementStates(newElements) {
-    const numNodes = nodeData.current.size;
-    const numElems = elemIndexes.current.size;
-    for (let i = 0; i < numNodes; i++) {
-      newElements[i] = {
-        ...newElements[i],
-        data: { ...newElements[i].data, nodeConnected: false }
-      };
-    }
-    for (let i = numNodes; i < numElems; i++) {
-      newElements[i] = { ...newElements[i], animated: false };
-    }
-
-    return newElements;
+    return newElements.map(elem => (
+      isNode(elem)
+        ? { ...elem, data: { ...elem.data, nodeConnected: false } }
+        : { ...elem, animated: false }
+    ));
   }
 
   function recalculatedElements(newElements) {
@@ -850,7 +841,7 @@ function App() {
     if (!elemIndexes.current.has(newEdgeId)
         && !elemIndexes.current.has(reverseEdgeId)) {
       recordFlowState();
-      const newElements = resetElementStates(elements.slice());
+      const newElements = resetElementStates(elements);
       // Need to "unhover" to return to base state
       newElements.push({
         id: newEdgeId,
