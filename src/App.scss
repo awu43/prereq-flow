@@ -4,19 +4,19 @@
   overflow: hidden;
 }
 
-%gray-border {
+@mixin gray-border {
   border: 2px solid gray;
   border-radius: 3px;
 }
 
-%lightgray-border {
+@mixin lightgray-border {
   border: 2px solid lightgray;
   border-radius: 3px;
 }
 
-%base-button-style {
+@mixin base-button-style {
   appearance: none;
-  @extend %gray-border;
+  @include gray-border;
   // background-color: rgb(240, 240, 240);
   padding: 0.25rem;
 
@@ -65,7 +65,7 @@ $flow-colors: (
       transition: transform 250ms;
     }
 
-    @extend %lightgray-border;
+    @include lightgray-border;
     border-top: none;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -83,7 +83,7 @@ $flow-colors: (
     width: 1.5rem;
 
     appearance: none;
-    @extend %gray-border;
+    @include gray-border;
 
     &:not(:disabled):hover {
       color: white;
@@ -115,7 +115,7 @@ $flow-colors: (
     margin-top: 0.5rem;
 
     button {
-      @extend %base-button-style;
+      @include base-button-style;
       margin: 0 0.25rem;
       &:first-child {
         margin-left: 0;
@@ -146,7 +146,7 @@ $flow-colors: (
 
   display: flex;
 
-  @extend %lightgray-border;
+  @include lightgray-border;
   border-bottom: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -182,7 +182,7 @@ $flow-colors: (
   height: 2rem;
   width: 2rem;
 
-  @extend %base-button-style;
+  @include base-button-style;
   font-size: 1rem;
   font-weight: bold;
 
@@ -206,7 +206,7 @@ $flow-colors: (
   max-width: 20rem;
   z-index: 11;
 
-  @extend %lightgray-border;
+  @include lightgray-border;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right: none;
@@ -398,7 +398,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   list-style: none;
 
   background-color: hsl(0, 0%, 95%);
-  @extend %gray-border;
+  @include gray-border;
 
   cursor: default;
 
@@ -485,10 +485,10 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 
-%base-text-input-style {
+@mixin base-text-input-style {
   height: 1.5rem;
   padding: 0.75rem 0.25rem;
-  @extend %gray-border;
+  @include gray-border;
 }
 
 .NewFlowDialog,
@@ -499,7 +499,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   max-height: #{'calc(100% - 1rem)'};
 
   margin: 0.5rem;
-  @extend %lightgray-border;
+  @include lightgray-border;
   padding: 1rem;
   background: white;
 }
@@ -622,7 +622,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 
   &__accept-button {
-    @extend %base-button-style;
+    @include base-button-style;
     font-size: 1rem;
   }
 }
@@ -692,7 +692,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
     &__add-button,
     &__delete-button {
       appearance: none;
-      @extend %base-button-style;
+      @include base-button-style;
       margin-left : 0.25rem;
       height: 1.5rem;
       width: 1.5rem;
@@ -743,7 +743,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 
   &__get-courses-button {
-    @extend %base-button-style;
+    @include base-button-style;
     font-size: 1rem;
   }
 }
@@ -764,7 +764,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 
   &__get-courses-button {
-    @extend %base-button-style;
+    @include base-button-style;
     font-size: 1rem;
   }
 }
@@ -801,7 +801,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 
   &__generate-button {
-    @extend %base-button-style;
+    @include base-button-style;
     font-size: 1rem;
   }
 }
@@ -841,7 +841,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 
   input[type=text],
   input[type=search] {
-    @extend %base-text-input-style
+    @include base-text-input-style
   }
 
   input[type=radio],
@@ -865,12 +865,12 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 
       display: flex;
       input {
-        @extend %base-text-input-style;
+        @include base-text-input-style;
         flex: 1;
       }
     }
     &__add-button {
-      @extend %base-button-style;
+      @include base-button-style;
       height: 1.75rem;
       width: 2.5rem;
       padding: 0 0.25rem;
@@ -939,7 +939,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
     }
     &__description-input {
       margin: 0.5rem 0;
-      @extend %gray-border;
+      @include gray-border;
       padding: 0.25rem;
       resize: none;
       flex-grow: 1;
@@ -957,7 +957,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 
     &__add-button {
       height: 2rem;
-      @extend %base-button-style;
+      @include base-button-style;
     }
   }
 }
@@ -1018,11 +1018,11 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 
   // input,
   // textarea {
-  //   @extend %gray-border;
+  //   @include gray-border;
   // }
 
   // button[type=submit] {
-  //   @extend %base-button-style;
+  //   @include base-button-style;
   //   width: 100%;
   //   height: 2rem;
   //   margin: 0;

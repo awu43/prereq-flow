@@ -1184,7 +1184,6 @@ function App() {
                 const oldEdgeId = edgeArrowId(iNode, targetId);
                 const newEdgeId = edgeArrowId(iNode, oNode);
                 if (!nodeData.current.has(newEdgeId)) {
-                  // newElements.push(newEdge(iNode, oNode));
                   newElements.push({
                     ...newElements[elemIndexes.current.get(oldEdgeId)],
                     id: newEdgeId,
