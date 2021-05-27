@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 
 import { useStoreActions } from "react-flow-renderer";
 
+import "./ContextMenu.scss";
+
 export default function ContextMenu({
   active, data, xy, COURSE_STATUS_CODES,
   setSelectionStatuses, deleteElems,

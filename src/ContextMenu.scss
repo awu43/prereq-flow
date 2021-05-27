@@ -1,0 +1,39 @@
+@use "utils" as *;
+
+.ContextMenu {
+  position: fixed;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+
+  background-color: hsl(0, 0%, 95%);
+  @include gray-border;
+
+  cursor: default;
+
+  p {
+    font-size: 0.9rem;
+    margin: 0.25rem 0.5rem;
+    padding-left: 1rem;
+    user-select: none;
+  }
+
+  hr {
+    margin: 0.2rem 0.5rem;
+  }
+
+  li.current p {
+    padding-left: 0;
+    &::before {
+      content: "✓";
+      display: inline-block;
+      width: 1rem;
+    }
+  }
+
+  li:hover {
+    color: white;
+    background-color: gray;
+  }
+}
