@@ -1198,7 +1198,7 @@ function App() {
           }}
         />
       </ReactFlowProvider>
-      <aside className="legend">
+      <aside className="Legend">
         <div className="completed">Completed</div>
         <div className="enrolled">Enrolled</div>
         <div className="ready">Ready</div>
@@ -1209,14 +1209,16 @@ function App() {
       <button
         ref={openControlsButtonRef}
         type="button"
-        className="display-controls"
+        className="Controls__open-btn"
         onClick={() => setControlsClosed(!controlsClosed)}
         // Focusing on close button causes offscreen jerk
       >
         <img src="dist/icons/question.svg" alt="Open controls" />
       </button>
       <aside
-        className={classNames("controls-help", { closed: controlsClosed })}
+        className={classNames(
+          "Controls__content", { "Controls__content--closed": controlsClosed }
+        )}
       >
         <ul>
           <li>Click for single&nbsp;select</li>
@@ -1233,7 +1235,7 @@ function App() {
           <button
             // ref={closeControlsButtonRef}
             type="button"
-            className="close-controls"
+            className="Controls__close-btn"
             onClick={() => {
               setControlsClosed(true);
               openControlsButtonRef.current.focus();
