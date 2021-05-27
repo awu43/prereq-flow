@@ -5,9 +5,6 @@ import dagre from "dagre";
 import {
   isNode,
   isEdge,
-  getConnectedEdges,
-  getIncomers,
-  getOutgoers,
   removeElements,
 } from "react-flow-renderer";
 
@@ -165,20 +162,6 @@ export function generateInitialElements(courseData, ambiguousHandling) {
   return elements;
 }
 
-function getIncomingEdges(targetNode, elements) {
-  const connectedEdges = getConnectedEdges(
-    [targetNode], elements.filter(elem => isEdge(elem))
-  );
-  return connectedEdges.filter(edge => edge.target === targetNode.id);
-}
-
-function getOutgoingEdges(targetNode, elements) {
-  const connectedEdges = getConnectedEdges(
-    [targetNode], elements.filter(elem => isEdge(elem))
-  );
-  return connectedEdges.filter(edge => edge.source === targetNode.id);
-}
-
 function discoverMaxDepths(startNodeId, startDepth, nodeData) {
   for (const outgoerId of nodeData.get(startNodeId).outgoingNodes) {
     nodeData.get(outgoerId).depth = Math.max(
@@ -191,27 +174,40 @@ function discoverMaxDepths(startNodeId, startDepth, nodeData) {
 export function newNodeData(elements) {
   const initialNodeData = new Map();
   const roots = [];
-  for (const node of elements.filter(elem => isNode(elem))) {
-    const nodeId = node.id;
+
+  for (const elem of elements) {
+    if (!isNode(elem)) {
+      continue;
+    }
+
+    const nodeId = elem.id;
+    const incomingEdges = elements.filter(e => (
+      isEdge(e) && e.target === nodeId
+    ));
+    const outgoingEdges = elements.filter(e => (
+      isEdge(e) && e.source === nodeId
+    ));
+
     const newData = {
       depth: 0,
-      incomingNodes: getIncomers(node, elements).map(elem => elem.id),
-      incomingEdges: getIncomingEdges(node, elements).map(elem => elem.id),
-      outgoingEdges: getOutgoingEdges(node, elements).map(elem => elem.id),
-      outgoingNodes: getOutgoers(node, elements).map(elem => elem.id),
+      incomingNodes: incomingEdges.map(e => e.source),
+      incomingEdges: incomingEdges.map(e => e.id),
+      outgoingEdges: outgoingEdges.map(e => e.id),
+      outgoingNodes: outgoingEdges.map(e => e.target),
     };
-    newData.connectedEdges = [
-      ...newData.incomingEdges, ...newData.outgoingEdges,
-    ];
-    newData.connectedNodes = [
-      ...newData.incomingNodes, ...newData.outgoingNodes,
-    ];
+    // newData.connectedEdges = [
+    //   ...newData.incomingEdges, ...newData.outgoingEdges,
+    // ];
+    // newData.connectedNodes = [
+    //   ...newData.incomingNodes, ...newData.outgoingNodes,
+    // ];
     initialNodeData.set(nodeId, newData);
 
     if (newData.incomingNodes.length === 0) {
       roots.push(nodeId);
     }
   }
+
   for (const root of roots) {
     discoverMaxDepths(root, 0, initialNodeData);
   }
@@ -312,7 +308,7 @@ export function updateNodeStatus(nodeId, elements, nodeData, elemIndexes) {
       // Math.max() with no args -> negative infinity
 
       newStatus = COURSE_STATUSES[newStatusCode];
-      // Add node should be complete if no prereqs
+      // AND node should be complete if no prereqs
       break;
     }
     case "or": {
@@ -384,9 +380,9 @@ function generateDagreLayout(elements) {
   return arrangedElements;
 }
 
-function filterUnconditionalElements(condNodes, elems, nData) {
-  let tempElements = elems.slice();
-  let tempNodeData = new Map(nData.entries());
+function filterUnconditionalElements(condNodes, elements, nodeData) {
+  let tempElements = elements.slice();
+  let tempNodeData = new Map(nodeData.entries());
 
   for (const elem of condNodes) {
     const node = tempNodeData.get(elem.id);
@@ -406,14 +402,14 @@ function filterUnconditionalElements(condNodes, elems, nData) {
   return tempElements;
 }
 
-function getSourcePositions(nodeId, elems, indexes, nData) {
-  const node = elems[indexes.get(nodeId)];
+function getSourcePositions(nodeId, elements, elemIndexes, nodeData) {
+  const node = elements[elemIndexes.get(nodeId)];
   return (
     node.type === "course"
       ? node.position
       : (
-        nData.get(nodeId).incomingNodes
-          .map(nId => getSourcePositions(nId, elems, indexes, nData))
+        nodeData.get(nodeId).incomingNodes
+          .map(nId => getSourcePositions(nId, elements, elemIndexes, nodeData))
           .flat()
       )
   );
@@ -437,22 +433,22 @@ export function averageYPosition(positions) {
   );
 }
 
-export function generateNewLayout(elems, indexes, nData) {
-  const newElements = elems.slice();
+export function generateNewLayout(elements, elemIndexes, nodeData) {
+  const newElements = elements.slice();
 
   // Conditional nodes should not influence course depth/positioning
-  const conditionalNodes = elems.filter(elem => (
+  const conditionalNodes = elements.filter(elem => (
     isNode(elem) && elem.type !== "course"
   ));
 
   let dagreLayout;
   if (!conditionalNodes.length) {
     dagreLayout = generateDagreLayout(
-      elems.slice().sort(() => Math.random() - 0.5)
+      elements.slice().sort(() => Math.random() - 0.5)
     );
   } else {
     const filteredElements = filterUnconditionalElements(
-      conditionalNodes, elems, nData
+      conditionalNodes, elements, nodeData
     );
 
     // https://flaviocopes.com/how-to-shuffle-array-javascript/
@@ -463,24 +459,25 @@ export function generateNewLayout(elems, indexes, nData) {
 
   for (const dagElem of dagreLayout) {
     if (isNode(dagElem)) {
-      const i = indexes.get(dagElem.id);
+      const i = elemIndexes.get(dagElem.id);
       newElements[i].position = dagElem.position;
     }
   }
 
   conditionalNodes.reverse();
   for (const node of conditionalNodes) {
-    const i = indexes.get(node.id);
-    const data = nData.get(node.id);
+    const i = elemIndexes.get(node.id);
+    const data = nodeData.get(node.id);
     const { incomingNodes, outgoingNodes } = data;
 
     if (incomingNodes.length && outgoingNodes.length) {
       const incomingPositions = incomingNodes.map(nodeId => (
-        getSourcePositions(nodeId, elems, indexes, nData)
+        getSourcePositions(nodeId, elements, elemIndexes, nodeData)
       )).flat();
       const outgoingPositions = outgoingNodes.map(nodeId => (
-        newElements[indexes.get(nodeId)].position
+        newElements[elemIndexes.get(nodeId)].position
       ));
+
       const x = (
         Math.min(...outgoingPositions.map(pos => pos.x)) - nodeWidth * 0.5
       );
@@ -491,24 +488,29 @@ export function generateNewLayout(elems, indexes, nData) {
         / (avgDestPosition.x - avgSourcePosition.x)
       );
       const y = -nodeWidth * slope + avgDestPosition.y;
+
       newElements[i].position = { x, y };
     } else if (incomingNodes.length && !outgoingNodes.length) {
       const incomingPositions = incomingNodes.map(nodeId => (
-        newElements[indexes.get(nodeId)].position
+        newElements[elemIndexes.get(nodeId)].position
       ));
+
       const x = (
         Math.max(...incomingPositions.map(pos => pos.x)) + nodeWidth * 1.1
       );
       const y = averageYPosition(incomingPositions);
+
       newElements[i].position = { x, y };
     } else if (!incomingNodes.length && outgoingNodes.length) {
       const outgoingPositions = outgoingNodes.map(nodeId => (
-        newElements[indexes.get(nodeId)].position
+        newElements[elemIndexes.get(nodeId)].position
       ));
+
       const x = (
         Math.min(...outgoingPositions.map(pos => pos.x)) - nodeWidth * 0.5
       );
       const y = averageYPosition(outgoingPositions);
+
       newElements[i].position = { x, y };
     }
   }

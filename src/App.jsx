@@ -802,7 +802,10 @@ function App() {
 
             const connectedEdges = new Set();
             for (const id of targetIds) {
-              for (const edge of nodeData.current.get(id).connectedEdges) {
+              for (const edge of nodeData.current.get(id).incomingEdges) {
+                connectedEdges.add(edge);
+              }
+              for (const edge of nodeData.current.get(id).outgoingEdges) {
                 connectedEdges.add(edge);
               }
             }
