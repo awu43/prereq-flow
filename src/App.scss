@@ -556,20 +556,6 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 
-.CampusSelect {
-  margin: 0.25rem 0;
-  border: none;
-  display: flex;
-
-  &__radio-button {
-    margin-right: 0.25rem;
-  }
-
-  &__radio-label--seattle,
-  &__radio-label--bothell {
-    margin-right: 1rem;
-  }
-}
 
 .AmbiguitySelect {
   border: none;

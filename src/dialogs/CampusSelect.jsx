@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import "./CampusSelect.scss";
+
 export default function CampusSelect({
   selectedCampus, setSelectedCampus, busy
 }) {
