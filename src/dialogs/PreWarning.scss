@@ -1,0 +1,24 @@
+@use "../utils" as *;
+
+.PreWarning {
+  & > section {
+    position: relative;
+  }
+  overflow-y: scroll;
+
+  p:not(:first-of-type) {
+    margin-top: 1rem;
+  }
+
+
+  li {
+    margin-top: 0.25rem;
+    margin-left: 1.5rem;
+    list-style-type: square;
+  }
+
+  &__accept-button {
+    @include base-button-style;
+    font-size: 1rem;
+  }
+}

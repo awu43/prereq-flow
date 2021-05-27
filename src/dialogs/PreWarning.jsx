@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import "./PreWarning.scss";
+
 export default function PreWarning({
   warningAccepted, setWarningAccepted, closeButtonRef
 }) {
