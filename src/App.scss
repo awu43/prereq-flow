@@ -158,10 +158,6 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
     background: $summer-yellow;
     padding: 0 0.1rem;
   }
-
-  &--error {
-    background: darkred;
-  }
 }
 
 .react-flow__node.selected  {
@@ -289,6 +285,10 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   @include lightgray-border;
   padding: 1rem;
   background: white;
+}
+
+.tippy-box--error {
+  background: darkred;
 }
 
 // Used in AddCourseDialog
