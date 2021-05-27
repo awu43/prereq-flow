@@ -453,28 +453,6 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 
-.CurriculumSelect {
-  .CampusSelect {
-    margin: 0.5rem 0;
-  }
-
-  &__select-input {
-    height: 1.5rem;
-  }
-
-  &__external-checkbox {
-    margin: 3rem 0 0.5rem;
-    input {
-      margin-right: 0.25rem;
-    }
-  }
-
-  &__get-courses-button {
-    @include base-button-style;
-    font-size: 1rem;
-  }
-}
-
 .NewBlankFlow {
   p {
     margin-top: 0.5rem;

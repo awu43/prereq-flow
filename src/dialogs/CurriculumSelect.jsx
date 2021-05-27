@@ -8,6 +8,8 @@ import "tippy.js/dist/tippy.css";
 import CampusSelect from "./CampusSelect.jsx";
 import AmbiguitySelect from "./AmbiguitySelect.jsx";
 
+import "./CurriculumSelect.scss";
+
 export default function CurriculumSelect({
   connectionError, busy, setBusy,
   supportedCurricula, newCurriculumFlow, errorMsg
