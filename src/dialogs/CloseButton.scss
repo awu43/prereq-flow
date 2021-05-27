@@ -1,0 +1,37 @@
+.CloseButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  z-index: 20;
+
+  appearance: none;
+  border: none;
+  background: none;
+
+  &:disabled img {
+    filter:
+      invert(55%)
+      sepia(0%)
+      saturate(28%)
+      hue-rotate(137deg)
+      brightness(92%)
+      contrast(83%);
+  }
+
+  // https://codepen.io/sosuke/pen/Pjoqqp
+  // Red: #FF0000
+  &:not(:disabled):hover,
+  &:not(:disabled):active {
+    img {
+      filter:
+        invert(14%)
+        sepia(100%)
+        saturate(7418%)
+        hue-rotate(2deg)
+        brightness(100%)
+        contrast(113%);
+    }
+  }
+}

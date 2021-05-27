@@ -12,6 +12,7 @@ import {
   getConnectedEdges,
 } from "react-flow-renderer";
 
+import CloseButton from "./CloseButton.jsx";
 import PreWarning from "./PreWarning.jsx";
 import DegreeSelect from "./DegreeSelect.jsx";
 import CurriculumSelect from "./CurriculumSelect.jsx";
@@ -200,15 +201,7 @@ export default function NewFlowDialog({
       }}
     >
       <DialogContent className="NewFlowDialog" aria-label="New flow dialog">
-        <button
-          ref={closeButtonRef}
-          type="button"
-          className="close-button"
-          onClick={close}
-          disabled={busy}
-        >
-          <img src="dist/icons/x-black.svg" alt="close" />
-        </button>
+        <CloseButton btnRef={closeButtonRef} onClick={close} disabled={busy} />
         <h2 className={connectionError ? "connection-error" : ""}>
           New flow
         </h2>

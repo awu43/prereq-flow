@@ -18,6 +18,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
+import CloseButton from "./CloseButton.jsx";
 import CampusSelect from "./CampusSelect.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 import { newCourseNode } from "../parse-courses.js";
@@ -385,14 +386,7 @@ export default function AddCourseDialog({
       }}
     >
       <DialogContent className="AddCourseDialog" aria-label="Add course dialog">
-        <button
-          type="button"
-          className="close-button"
-          onClick={close}
-          disabled={busy}
-        >
-          <img src="dist/icons/x-black.svg" alt="close" />
-        </button>
+        <CloseButton onClick={close} disabled={busy} />
         <h2 className={connectionError ? "connection-error" : ""}>
           Add course
         </h2>

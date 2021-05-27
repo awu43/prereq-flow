@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { isEdge, isNode } from "react-flow-renderer";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
+import CloseButton from "./CloseButton.jsx";
 import Dropzone from "./Dropzone.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
@@ -124,14 +125,7 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
       }}
     >
       <DialogContent className="OpenFileDialog" aria-label="Open file dialog">
-        <button
-          type="button"
-          className="close-button"
-          onClick={close}
-          disabled={busy}
-        >
-          <img src="dist/icons/x-black.svg" alt="close" />
-        </button>
+        <CloseButton onClick={close} disabled={busy} />
         <section>
           <h2>Open flow</h2>
           <Dropzone

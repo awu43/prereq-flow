@@ -5,6 +5,8 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import "./AboutDialog.scss";
 
+import CloseButton from "./CloseButton.jsx";
+
 export default function AboutDialog({ modalCls, closeDialog }) {
   // const [msgName, setMsgName] = useState("");
   // const [msgEmail, setMsgEmail] = useState("");
@@ -29,9 +31,7 @@ export default function AboutDialog({ modalCls, closeDialog }) {
       }}
     >
       <DialogContent className="AboutDialog" aria-label="About dialog">
-        <button type="button" className="close-button" onClick={close}>
-          <img src="dist/icons/x-black.svg" alt="close" />
-        </button>
+        <CloseButton onClick={close} />
         <section className="AboutDialog__about-section">
           <h2>About</h2>
           <p>Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate&nbsp;degrees.</p>
