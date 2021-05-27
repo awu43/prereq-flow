@@ -9,6 +9,8 @@ import { nanoid } from "nanoid";
 
 import AmbiguitySelect from "./AmbiguitySelect.jsx";
 
+import "./DegreeSelect.scss";
+
 function toKebabCase(text) {
   return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
 }

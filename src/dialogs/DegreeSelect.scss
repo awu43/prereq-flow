@@ -1,0 +1,81 @@
+@use "../utils" as *;
+
+.DegreeSelect {
+  .majors,
+  .minors {
+    margin-bottom: 0.5rem;
+
+    &__selected-list {
+      max-width: 20rem;
+      height: 6rem;
+      margin: 0.5rem 0;
+    }
+    &__selected-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+      padding-left: 0.5rem;
+      font-size: 0.9rem;
+      line-height: 1.5rem;
+
+      background-color: hsl(0, 0%, 97%);
+    }
+
+    &__add-button,
+    &__delete-button {
+      appearance: none;
+      @include base-button-style;
+      margin-left : 0.25rem;
+      height: 1.5rem;
+      width: 1.5rem;
+      padding: 0;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:not(:disabled):hover img {
+        filter: invert(100%);
+      }
+
+      &:disabled img {
+        filter:
+          invert(55%)
+          sepia(0%)
+          saturate(28%)
+          hue-rotate(137deg)
+          brightness(92%)
+          contrast(83%);
+      }
+    }
+
+    &__add-button img {
+      height: 70%;
+      width: 70%;
+    }
+
+    &__delete-button img {
+      height: 75%;
+      width: 75%;
+    }
+
+    &__bar-and-button {
+      max-width: 20rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    &__select-input {
+      flex-grow: 1;
+      height: 1.5rem;
+    }
+  }
+
+  .AmbiguitySelect {
+    margin-top: 1rem;
+  }
+
+  &__get-courses-button {
+    @include base-button-style;
+    font-size: 1rem;
+  }
+}
