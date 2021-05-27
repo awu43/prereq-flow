@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 
+import "./AmbiguitySelect.scss";
+
 export default function AmbiguitySelect({
   ambiguousHandling, setAmbiguousHandling, busy
 }) {
