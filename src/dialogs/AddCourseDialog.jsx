@@ -22,6 +22,8 @@ import CampusSelect from "./CampusSelect.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 import { newCourseNode } from "../parse-courses.js";
 
+import "./AddCourseDialog.scss";
+
 const API_URL = (
   import.meta.env.MODE === "production"
     ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
