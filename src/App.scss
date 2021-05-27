@@ -321,7 +321,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 .AddCourseDialog,
 .AboutDialog {
   position: relative;
-  max-height: #{'calc(100% - 1rem)'};
+  max-height: calc(100% - 1rem);
 
   margin: 0.5rem;
   @include lightgray-border;
@@ -368,8 +368,8 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 .NewFlowDialog {
-  width: #{'min(30rem, 100% - 1rem)'};
   overflow: hidden;
+  width: min(30rem, 100% - 1rem);
 
   padding: 1rem 0;
   padding-bottom: 0;
@@ -632,7 +632,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 }
 
 .AddCourseDialog {
-  width: #{'min(30rem, 100% - 1rem)'};
+  width: min(30rem, 100% - 1rem);
   min-height: 19.5rem;
   display: flex;
   flex-direction: column;
@@ -802,7 +802,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 }
 
 .AboutDialog {
-  width: #{'min(22.5rem, 100% - 1rem)'};
+  width: min(22.5rem, 100% - 1rem);
 
   h2 {
     margin-bottom: 0.5rem;
