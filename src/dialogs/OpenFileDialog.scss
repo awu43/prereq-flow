@@ -23,7 +23,8 @@
         transition: border .24s ease-in-out;
       }
 
-      &:hover {
+      &:hover,
+      &:focus {
         background-color: hsl(0, 0%, 95%);
       }
     }
