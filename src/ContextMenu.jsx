@@ -7,8 +7,10 @@ import { useStoreActions } from "react-flow-renderer";
 
 import "./ContextMenu.scss";
 
+import { COURSE_STATUS_CODES } from "./utils.js";
+
 export default function ContextMenu({
-  active, data, xy, COURSE_STATUS_CODES,
+  active, data, xy,
   setSelectionStatuses, deleteElems,
   connectAll, disconnectAll, toggleEdgeConcurrency,
   newConditionalNode, reroute,
@@ -247,7 +249,6 @@ ContextMenu.propTypes = {
     x: PropTypes.number,
     y: PropTypes.number,
   }).isRequired,
-  COURSE_STATUS_CODES: PropTypes.objectOf(PropTypes.number).isRequired,
   setSelectionStatuses: PropTypes.func.isRequired,
   deleteElems: PropTypes.func.isRequired,
   connectAll: PropTypes.func.isRequired,

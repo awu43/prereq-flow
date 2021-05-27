@@ -18,7 +18,7 @@ import DegreeSelect from "./DegreeSelect.jsx";
 import CurriculumSelect from "./CurriculumSelect.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
-import { COURSE_REGEX, generateInitialElements } from "../parse-courses.js";
+import { COURSE_REGEX, generateInitialElements } from "../utils.js";
 
 import "./NewFlowDialog.scss";
 
