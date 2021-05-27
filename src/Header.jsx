@@ -9,6 +9,8 @@ import "tippy.js/dist/tippy.css";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 
+import "./Header.scss";
+
 export default function Header(props) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
