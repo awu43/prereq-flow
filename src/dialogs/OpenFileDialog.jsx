@@ -7,6 +7,8 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 import Dropzone from "./Dropzone.jsx";
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
+import "./OpenFileDialog.scss";
+
 const SUPPORTED_VERSIONS = ["Beta", "Beta.1"];
 const DEPRECATED_VERSIONS = [];
 export const [CURRENT_VERSION] = SUPPORTED_VERSIONS.slice(-1);
