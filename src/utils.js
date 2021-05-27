@@ -4,7 +4,6 @@ import dagre from "dagre";
 
 import {
   isNode,
-  isEdge,
   removeElements,
 } from "react-flow-renderer";
 
@@ -173,43 +172,43 @@ function discoverMaxDepths(startNodeId, startDepth, nodeData) {
 
 export function newNodeData(elements) {
   const initialNodeData = new Map();
-  const roots = [];
 
-  for (const elem of elements) {
-    if (!isNode(elem)) {
-      continue;
-    }
-
-    const nodeId = elem.id;
-    const incomingEdges = elements.filter(e => (
-      isEdge(e) && e.target === nodeId
-    ));
-    const outgoingEdges = elements.filter(e => (
-      isEdge(e) && e.source === nodeId
-    ));
-
-    const newData = {
-      depth: 0,
-      incomingNodes: incomingEdges.map(e => e.source),
-      incomingEdges: incomingEdges.map(e => e.id),
-      outgoingEdges: outgoingEdges.map(e => e.id),
-      outgoingNodes: outgoingEdges.map(e => e.target),
-    };
-    // newData.connectedEdges = [
-    //   ...newData.incomingEdges, ...newData.outgoingEdges,
-    // ];
-    // newData.connectedNodes = [
-    //   ...newData.incomingNodes, ...newData.outgoingNodes,
-    // ];
-    initialNodeData.set(nodeId, newData);
-
-    if (newData.incomingNodes.length === 0) {
-      roots.push(nodeId);
+  function setNewNode(nodeId) {
+    if (!initialNodeData.has(nodeId)) {
+      initialNodeData.set(nodeId, {
+        depth: 0,
+        incomingNodes: [],
+        incomingEdges: [],
+        outgoingEdges: [],
+        outgoingNodes: [],
+      });
     }
   }
 
+  for (const elem of elements) {
+    const elemId = elem.id;
+
+    if (isNode(elem)) {
+      setNewNode(elemId);
+    } else {
+      const { source, target } = elem;
+      setNewNode(source);
+      setNewNode(target);
+
+      const sourceNode = initialNodeData.get(source);
+      const targetNode = initialNodeData.get(target);
+      sourceNode.outgoingEdges.push(elemId);
+      sourceNode.outgoingNodes.push(target);
+      targetNode.incomingEdges.push(elemId);
+      targetNode.incomingNodes.push(source);
+    }
+  }
+
+  const roots = elements.filter(elem => (
+    isNode(elem) && !initialNodeData.get(elem.id).incomingEdges.length
+  ));
   for (const root of roots) {
-    discoverMaxDepths(root, 0, initialNodeData);
+    discoverMaxDepths(root.id, 0, initialNodeData);
   }
 
   return initialNodeData;
