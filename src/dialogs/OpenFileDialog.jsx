@@ -62,18 +62,6 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
     let loadedData;
     reader.onload = event => {
       loadedData = JSON.parse(event.target.result);
-      const loadedVersion = loadedData.version;
-      const loadedElems = loadedData.elements;
-
-      if (DEPRECATED_VERSIONS.includes(loadedVersion)) {
-        setErrorMsg(`v${loadedVersion} data no longer supported`);
-        setBusy(false);
-        return;
-      } else if (!SUPPORTED_VERSIONS.includes(loadedVersion)) {
-        setErrorMsg("Invalid data version");
-        setBusy(false);
-        return;
-      }
 
       const structureValid = (
         typeof loadedData === "object"
@@ -84,6 +72,19 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
       );
       if (!structureValid) {
         setErrorMsg("Invalid data structure");
+        setBusy(false);
+        return;
+      }
+
+      const loadedVersion = loadedData.version;
+      const loadedElems = loadedData.elements;
+
+      if (DEPRECATED_VERSIONS.includes(loadedVersion)) {
+        setErrorMsg(`v${loadedVersion} data no longer supported`);
+        setBusy(false);
+        return;
+      } else if (!SUPPORTED_VERSIONS.includes(loadedVersion)) {
+        setErrorMsg("Invalid data version");
         setBusy(false);
         return;
       }
