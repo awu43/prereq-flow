@@ -1,0 +1,36 @@
+@mixin gray-border {
+  border: 2px solid gray;
+  border-radius: 3px;
+}
+
+@mixin lightgray-border {
+  border: 2px solid lightgray;
+  border-radius: 3px;
+}
+
+@mixin base-button-style {
+  appearance: none;
+  @include gray-border;
+  // background-color: rgb(240, 240, 240);
+  padding: 0.25rem;
+
+  &:not(:disabled):hover {
+    color: white;
+    background-color: gray;
+  }
+}
+
+@mixin base-text-input-style {
+  height: 1.5rem;
+  padding: 0.75rem 0.25rem;
+  @include gray-border;
+}
+
+$flow-colors: (
+  "completed": black,
+  "enrolled": darkviolet,
+  "ready": limegreen,
+  "under-one-away": goldenrod,
+  "one-away": darkorange,
+  "over-one-away": red,
+);
