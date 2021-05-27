@@ -60,6 +60,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     img {
       height: 75%;
       width: 75%;
@@ -96,6 +97,7 @@
     @media (prefers-reduced-motion: no-preference) {
       transition: transform 150ms ease-out;
     }
+
     &--closed {
       transform: translateX(100%);
     }
@@ -266,7 +268,12 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 /* %%%%%%% */
 /* DIALOGS */
 /* %%%%%%% */
-.ModalDialog {
+:root {
+  --reach-dialog: 1;
+  // Exclude base dialog styles
+}
+
+[data-reach-dialog-overlay] {
   position: fixed;
   top: 0;
   height: 100%;

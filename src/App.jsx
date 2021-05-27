@@ -511,23 +511,23 @@ function App() {
 
   function openDialog(setState) {
     if (!prefersReducedMotion) {
-      setState("ModalDialog --transparent");
+      setState("--transparent");
       setTimeout(() => {
-        setState("ModalDialog");
+        setState("");
       }, 25);
     } else {
-      setState("ModalDialog");
+      setState("");
     }
   }
 
   function closeDialog(setState) {
     if (!prefersReducedMotion) {
-      setState("ModalDialog --transparent");
+      setState("--transparent");
       setTimeout(() => {
-        setState("ModalDialog --transparent --display-none");
+        setState("--transparent --display-none");
       }, 100);
     } else {
-      setState("ModalDialog --transparent --display-none");
+      setState("--transparent --display-none");
     }
   }
 
