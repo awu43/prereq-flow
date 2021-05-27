@@ -8,11 +8,19 @@
     "format": "eslint --fix \"src/**/*\"",
     "lint": "eslint \"src/**/*\""
   },
-  "browserslist": [
+  "browserslist": {
+    "production": [
     "defaults",
     "not ie 11",
     "not op_mini all"
-  ],
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "last 1 edge version"
+    ]
+  },
   "dependencies": {
     "@reach/combobox": "^0.15.1",
     "@reach/dialog": "^0.15.0",
