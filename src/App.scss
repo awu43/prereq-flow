@@ -316,10 +316,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 
-.NewFlowDialog,
-.OpenFileDialog,
-.AddCourseDialog,
-.AboutDialog {
+[data-reach-dialog-content] {
   position: relative;
   max-height: calc(100% - 1rem);
 
@@ -366,6 +363,11 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 
   &__slides {
+    width: 300%;
+
+    display: flex;
+    max-height: 26rem;
+
     @media (prefers-reduced-motion: no-preference) {
       transition: transform 250ms;
     }
@@ -377,20 +379,14 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
     &.slide-2 {
       transform: translateX(-(100%/3)*2);
     }
+
+    & > * {
+      width: calc(100%/3);
+      padding: 0 1rem;
+    }
   }
 }
-.NewFlowDialog__slides {
-  width: 300%;
 
-  display: flex;
-  max-height: 26rem;
-}
-.PreWarning,
-.FlowType,
-.CourseSelect {
-  width: calc(100%/3);
-  padding: 0 1rem;
-}
 .PreWarning {
   & > section {
     position: relative;
@@ -431,6 +427,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
     height: 100%;
   }
 }
+
 .PreWarning,
 .DegreeSelect,
 .CurriculumSelect,
@@ -444,6 +441,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
     justify-content: flex-end;
   }
 }
+
 .DegreeSelect,
 .CurriculumSelect,
 .NewBlankFlow {
@@ -534,6 +532,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
     font-size: 1rem;
   }
 }
+
 .CurriculumSelect {
   .CampusSelect {
     margin: 0.5rem 0;
