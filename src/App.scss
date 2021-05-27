@@ -368,8 +368,8 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   }
 }
 .NewFlowDialog {
-  overflow: hidden;
   width: min(30rem, 100% - 1rem);
+  overflow-x: hidden;
 
   padding: 1rem 0;
   padding-bottom: 0;
