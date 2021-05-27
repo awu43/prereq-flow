@@ -20,6 +20,8 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
+import "./App.scss";
+
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import FlowStoreLifter from "./FlowStoreLifter.jsx";
 import Header from "./Header.jsx";
@@ -41,8 +43,6 @@ import {
   ZERO_POSITION,
 } from "./parse-courses.js";
 import demoFlow from "./data/demo-flow.json";
-
-import "./App.scss";
 
 function getIncomingEdges(targetNode, elements) {
   const connectedEdges = getConnectedEdges(

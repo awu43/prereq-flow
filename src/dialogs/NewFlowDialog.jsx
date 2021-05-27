@@ -19,6 +19,8 @@ import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
 import { COURSE_REGEX, generateInitialElements } from "../parse-courses.js";
 
+import "./NewFlowDialog.scss";
+
 const API_URL = (
   import.meta.env.MODE === "production"
     ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
