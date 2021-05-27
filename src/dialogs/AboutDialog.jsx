@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
+import "./AboutDialog.scss";
+
 export default function AboutDialog({ modalCls, closeDialog }) {
   // const [msgName, setMsgName] = useState("");
   // const [msgEmail, setMsgEmail] = useState("");
