@@ -1,9 +1,6 @@
 // https://github.com/wbkd/react-flow/blob/main/src/store/actions.ts
 
-import {
-  useStoreState,
-  useStoreActions,
-} from "react-flow-renderer";
+import { useStoreState, useStoreActions } from "react-flow-renderer";
 
 export default function FlowInternalLifter({
   updateNodePos,

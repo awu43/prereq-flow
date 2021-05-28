@@ -12,19 +12,22 @@ import "./App.scss";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import useDialogStatus from "./useDialogStatus.jsx";
-import FlowInternalLifter from "./FlowInternalLifter.jsx";
 
-import Header from "./Header.jsx";
-import HeaderButton from "./HeaderButton.jsx";
-import UserControls from "./UserControls.jsx";
-import CourseNode from "./CourseNode.jsx";
-import OrNode from "./OrNode.jsx";
-import AndNode from "./AndNode.jsx";
-import ContextMenu from "./ContextMenu.jsx";
-import NewFlowDialog from "./dialogs/NewFlowDialog.jsx";
-import OpenFileDialog, { CURRENT_VERSION } from "./dialogs/OpenFileDialog.jsx";
-import AddCourseDialog from "./dialogs/AddCourseDialog.jsx";
-import AboutDialog from "./dialogs/AboutDialog.jsx";
+import Header from "./components/Header.jsx";
+import HeaderButton from "./components/HeaderButton.jsx";
+import FlowInternalLifter from "./components/FlowInternalLifter.jsx";
+import CourseNode from "./components/CourseNode.jsx";
+import OrNode from "./components/OrNode.jsx";
+import AndNode from "./components/AndNode.jsx";
+import ContextMenu from "./components/ContextMenu.jsx";
+import UserControls from "./components/UserControls.jsx";
+
+import NewFlowDialog from "./components/dialogs/NewFlowDialog.jsx";
+import OpenFileDialog, {
+  CURRENT_VERSION
+} from "./components/dialogs/OpenFileDialog.jsx";
+import AddCourseDialog from "./components/dialogs/AddCourseDialog.jsx";
+import AboutDialog from "./components/dialogs/AboutDialog.jsx";
 
 import {
   ZERO_POSITION,

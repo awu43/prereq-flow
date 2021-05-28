@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import { expect } from "chai";
 
-import { _testing } from "../parse-courses.js";
+import { _testing } from "../utils.js";
 
 const {
   EITHER_OR_REGEX,

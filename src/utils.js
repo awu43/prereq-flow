@@ -2,10 +2,7 @@ import { nanoid } from "nanoid";
 
 import dagre from "dagre";
 
-import {
-  isNode,
-  removeElements,
-} from "react-flow-renderer";
+import { isNode, removeElements } from "react-flow-renderer";
 
 export const ZERO_POSITION = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING

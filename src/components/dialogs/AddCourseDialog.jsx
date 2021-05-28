@@ -20,8 +20,8 @@ import "tippy.js/dist/tippy.css";
 
 import CloseButton from "./CloseButton.jsx";
 import CampusSelect from "./CampusSelect.jsx";
-import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
-import { newCourseNode } from "../utils.js";
+import usePrefersReducedMotion from "../../usePrefersReducedMotion.jsx";
+import { newCourseNode } from "../../utils.js";
 
 import "./AddCourseDialog.scss";
 
