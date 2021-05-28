@@ -33,14 +33,15 @@ import {
   newEdge,
   CONCURRENT_LABEL,
   newNodeData,
-  newElemIndexes,
   sortElementsByDepth,
-  updateAllNodes,
-  generateNewLayout,
-  averageYPosition,
+  newElemIndexes,
   setNodeStatus,
   updateNodeStatus,
+  updateAllNodes,
   nodeSpacing,
+  averageYPosition,
+  generateNewLayout,
+  resetElementStates,
 } from "./utils.js";
 import demoFlow from "./data/demo-flow.json";
 
@@ -91,14 +92,6 @@ function App() {
   function onLoad(reactFlowInstance) {
     reactFlowInstance.fitView();
     flowInstance.current = reactFlowInstance;
-  }
-
-  function resetElementStates(newElements) {
-    return newElements.map(elem => (
-      isNode(elem)
-        ? { ...elem, data: { ...elem.data, nodeConnected: false } }
-        : { ...elem, animated: false }
-    ));
   }
 
   function recalculatedElements(newElements) {

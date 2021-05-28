@@ -518,6 +518,14 @@ export function generateNewLayout(elements, elemIndexes, nodeData) {
   return newElements;
 }
 
+export function resetElementStates(newElements) {
+  return newElements.map(elem => (
+    isNode(elem)
+      ? { ...elem, data: { ...elem.data, nodeConnected: false } }
+      : { ...elem, animated: false }
+  ));
+}
+
 export const _testing = {
   EITHER_OR_REGEX,
   COURSE_REGEX,
