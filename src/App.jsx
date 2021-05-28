@@ -28,10 +28,8 @@ import AboutDialog from "./dialogs/AboutDialog.jsx";
 
 import {
   ZERO_POSITION,
-  COURSE_REGEX,
   newConditionalNode,
   edgeArrowId,
-  newEdge,
   CONCURRENT_LABEL,
   newNodeData,
   sortElementsByDepth,
@@ -39,10 +37,9 @@ import {
   setNodeStatus,
   updateNodeStatus,
   updateAllNodes,
-  nodeSpacing,
-  averageYPosition,
   generateNewLayout,
   resetElementStates,
+  autoconnect,
 } from "./utils.js";
 import demoFlow from "./data/demo-flow.json";
 
@@ -56,9 +53,7 @@ export default function App() {
   const [newFlowDlgCls, openNewFlowDlg, closeNewFlowDlg] = useDialogStatus();
   const [openFileDlgCls, openOpenFileDlg, closeOpenFileDlg] = useDialogStatus();
   const [
-    addCourseDlgCls,
-    openAddCourseDlg,
-    closeAddCourseDlg,
+    addCourseDlgCls, openAddCourseDlg, closeAddCourseDlg
   ] = useDialogStatus();
   const [aboutDlgCls, openAboutDlg, closeAboutDlg] = useDialogStatus();
 
@@ -189,72 +184,16 @@ export default function App() {
     downloadLink.click();
   }
 
-  function autoconnect(newElements, targetNode, reposition = false) {
-    const targetId = targetNode.id;
-    const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX);
-    const targetPrereqs = (
-      courseMatches
-        ? courseMatches.filter(elemId => elemIndexes.current.has(elemId))
-          .filter(
-            elemId => !elemIndexes.current.has(edgeArrowId(elemId, targetId))
-          )
-          .map(elemId => newElements[elemIndexes.current.get(elemId)])
-        : []
-    );
-    const targetPostreqs = [];
-    const numNodes = nodeData.current.size;
-    for (let i = 0; i < numNodes; i++) {
-      const postreq = newElements[i];
-      if (postreq.type === "course"
-          && postreq.data.prerequisite.includes(targetId)
-          && !elemIndexes.current.has(edgeArrowId(targetId, postreq.id))) {
-        targetPostreqs.push(postreq);
-      }
-    }
-    // Avoid traversing edges
-
-    for (const prereq of targetPrereqs) {
-      newElements.push(newEdge(prereq.id, targetId));
-    }
-    for (const postreq of targetPostreqs) {
-      newElements.push(newEdge(targetId, postreq.id));
-    }
-
-    if (reposition) {
-      const prereqPositions = targetPrereqs.map(elem => elem.position);
-      const postreqPositions = targetPostreqs.map(elem => elem.position);
-      if (prereqPositions.length && postreqPositions.length) {
-        const allPositions = prereqPositions.concat(postreqPositions);
-        const x = (
-          Math.max(...prereqPositions.map(pos => pos.x))
-          + Math.min(...postreqPositions.map(pos => pos.x))
-        ) / 2;
-        const y = averageYPosition(allPositions);
-        targetNode.position = { x, y };
-      } else if (prereqPositions.length && !postreqPositions.length) {
-        const x = Math.max(...prereqPositions.map(pos => pos.x)) + nodeSpacing;
-        const y = averageYPosition(prereqPositions);
-        targetNode.position = { x, y };
-      } else if (!prereqPositions.length && postreqPositions.length) {
-        const x = Math.min(...postreqPositions.map(pos => pos.x)) - nodeSpacing;
-        const y = averageYPosition(postreqPositions);
-        targetNode.position = { x, y };
-      }
-    }
-
-    if (!elemIndexes.current.has(targetId)) {
-      newElements.push(targetNode);
-    }
-
-    return newElements;
-  }
-
   function addCourseNode(newNode, connectToExisting, newCoursePosition) {
     recordFlowState();
     let newElems = flowInstance.current.toObject().elements;
     if (connectToExisting) {
       newElems = autoconnect(
-        newElems, newNode, newCoursePosition === "relative"
+        newNode,
+        newElems,
+        nodeData.current.size,
+        elemIndexes.current,
+        newCoursePosition === "relative",
       );
     } else {
       newElems = newElems.push(newNode);
@@ -508,7 +447,7 @@ export default function App() {
     event.preventDefault();
     unsetNodesSelection.current();
     const selectedIds = (
-      selectedElements.current
+      selectedElements.current // null if nothing selected, not empty array
         ? selectedElements.current.map(elem => elem.id)
         : []
     );
@@ -739,7 +678,10 @@ export default function App() {
             recordFlowState();
 
             const newElements = autoconnect(
-              elements.slice(), elements[elemIndexes.current.get(targetId)]
+              elements[elemIndexes.current.get(targetId)],
+              elements.slice(),
+              nodeData.current.size,
+              elemIndexes.current,
             );
             setElements(recalculatedElements(newElements));
           }}

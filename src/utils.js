@@ -526,6 +526,69 @@ export function resetElementStates(newElements) {
   ));
 }
 
+export function autoconnect(
+  targetNode, newElements, numNodes, elemIndexes, reposition = false
+) {
+  const targetId = targetNode.id;
+  const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX);
+  const targetPrereqs = (
+    courseMatches
+      ? courseMatches.filter(elemId => elemIndexes.has(elemId))
+        .filter(elemId => !elemIndexes.has(edgeArrowId(elemId, targetId)))
+        .map(elemId => newElements[elemIndexes.get(elemId)])
+      : []
+  );
+  const targetPostreqs = [];
+  for (let i = 0; i < numNodes; i++) {
+    const postreq = newElements[i];
+    if (postreq.type === "course"
+        && postreq.data.prerequisite.includes(targetId)
+        && !elemIndexes.has(edgeArrowId(targetId, postreq.id))) {
+      targetPostreqs.push(postreq);
+    }
+  }
+  // Avoid traversing edges
+
+  for (const prereq of targetPrereqs) {
+    newElements.push(newEdge(prereq.id, targetId));
+  }
+  for (const postreq of targetPostreqs) {
+    newElements.push(newEdge(targetId, postreq.id));
+  }
+
+  if (reposition) {
+    const prereqPositions = targetPrereqs.map(elem => elem.position);
+    const postreqPositions = targetPostreqs.map(elem => elem.position);
+    if (prereqPositions.length && postreqPositions.length) {
+      const allPositions = prereqPositions.concat(postreqPositions);
+
+      const x = (
+        Math.max(...prereqPositions.map(pos => pos.x))
+        + Math.min(...postreqPositions.map(pos => pos.x))
+      ) / 2;
+      const y = averageYPosition(allPositions);
+
+      targetNode.position = { x, y };
+    } else if (prereqPositions.length && !postreqPositions.length) {
+      const x = Math.max(...prereqPositions.map(pos => pos.x)) + nodeSpacing;
+      const y = averageYPosition(prereqPositions);
+
+      targetNode.position = { x, y };
+    } else if (!prereqPositions.length && postreqPositions.length) {
+      const x = Math.min(...postreqPositions.map(pos => pos.x)) - nodeSpacing;
+      const y = averageYPosition(postreqPositions);
+
+      targetNode.position = { x, y };
+    }
+  }
+
+  if (!elemIndexes.has(targetId)) {
+    newElements.push(targetNode);
+  }
+
+  return newElements;
+}
+
 export const _testing = {
   EITHER_OR_REGEX,
   COURSE_REGEX,
