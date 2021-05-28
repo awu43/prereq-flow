@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import classNames from "classnames";
-
 import ReactFlow, {
   Background,
   Controls,
@@ -18,6 +16,7 @@ import FlowStoreLifter from "./FlowStoreLifter.jsx";
 
 import Header from "./Header.jsx";
 import HeaderButton from "./HeaderButton.jsx";
+import UserControls from "./UserControls.jsx";
 import CourseNode from "./CourseNode.jsx";
 import OrNode from "./OrNode.jsx";
 import AndNode from "./AndNode.jsx";
@@ -87,10 +86,6 @@ function App() {
     targetStatus: "",
   });
   const [mouseXY, setMouseXY] = useState(ZERO_POSITION);
-
-  const [controlsClosed, setControlsClosed] = useState(true);
-  const openControlsButtonRef = useRef(null);
-  // const closeControlsButtonRef = useRef(null);
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -632,6 +627,7 @@ function App() {
           onClick={openAboutDlg}
         />
       </Header>
+
       <ReactFlowProvider>
         <FlowStoreLifter
           updateNodePos={updateNodePos}
@@ -807,6 +803,7 @@ function App() {
           }}
         />
       </ReactFlowProvider>
+
       <aside className="Legend">
         <div className="completed">Completed</div>
         <div className="enrolled">Enrolled</div>
@@ -815,46 +812,7 @@ function App() {
         <div className="one-away">1&nbsp;away</div>
         <div className="over-one-away">&gt;1&nbsp;away</div>
       </aside>
-      <button
-        ref={openControlsButtonRef}
-        type="button"
-        className="Controls__open-btn"
-        onClick={() => setControlsClosed(!controlsClosed)}
-        // Focusing on close button causes offscreen jerk
-      >
-        <img src="dist/icons/question.svg" alt="Open controls" />
-      </button>
-      <aside
-        className={classNames(
-          "Controls__content", { "Controls__content--closed": controlsClosed }
-        )}
-      >
-        <ul>
-          <li>Click for single&nbsp;select</li>
-          <li>Right click for context&nbsp;menus</li>
-          <li>Hover over a node for connections and course info (click to hide&nbsp;tooltip)</li>
-          <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
-          <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
-          <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
-          <li><kbd>Ctrl</kbd> + click for multiple&nbsp;select</li>
-          <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
-          <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;20)</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
-          <button
-            // ref={closeControlsButtonRef}
-            type="button"
-            className="Controls__close-btn"
-            onClick={() => {
-              setControlsClosed(true);
-              openControlsButtonRef.current.focus();
-            }}
-            tabIndex={controlsClosed ? "-1" : "0"}
-          >
-            <img src="dist/icons/chevron-right.svg" alt="Close controls" />
-          </button>
-        </ul>
-      </aside>
+      <UserControls />
 
       <NewFlowDialog
         modalCls={newFlowDlgCls}
