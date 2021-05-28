@@ -13,7 +13,9 @@ import ReactFlow, {
 import "./App.scss";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
+import useDialogStatus from "./useDialogStatus.jsx";
 import FlowStoreLifter from "./FlowStoreLifter.jsx";
+
 import Header from "./Header.jsx";
 import HeaderButton from "./HeaderButton.jsx";
 import CourseNode from "./CourseNode.jsx";
@@ -49,14 +51,17 @@ const initialElements = demoFlow.elements;
 const initialNodeData = newNodeData(initialElements);
 const initialIndexes = newElemIndexes(initialElements);
 
-const BASE_MODAL_CLS = "--transparent --display-none";
 const MAX_UNDO_NUM = 20;
 
 function App() {
-  const [aboutCls, setAboutCls] = useState(BASE_MODAL_CLS);
-  const [newFlowCls, setNewFlowCls] = useState(BASE_MODAL_CLS);
-  const [openFileCls, setOpenFileCls] = useState(BASE_MODAL_CLS);
-  const [addCourseCls, setAddCourseCls] = useState(BASE_MODAL_CLS);
+  const [newFlowDlgCls, openNewFlowDlg, closeNewFlowDlg] = useDialogStatus();
+  const [openFileDlgCls, openOpenFileDlg, closeOpenFileDlg] = useDialogStatus();
+  const [
+    addCourseDlgCls,
+    openAddCourseDlg,
+    closeAddCourseDlg,
+  ] = useDialogStatus();
+  const [aboutDlgCls, openAboutDlg, closeAboutDlg] = useDialogStatus();
 
   const flowInstance = useRef(null);
   const updateNodePos = useRef(null);
@@ -153,28 +158,6 @@ function App() {
     document.addEventListener("keydown", undoListener);
     document.addEventListener("keydown", redoListener);
   }, []);
-
-  function openDialog(setState) {
-    if (!prefersReducedMotion) {
-      setState("--transparent");
-      setTimeout(() => {
-        setState("");
-      }, 25);
-    } else {
-      setState("");
-    }
-  }
-
-  function closeDialog(setState) {
-    if (!prefersReducedMotion) {
-      setState("--transparent");
-      setTimeout(() => {
-        setState("--transparent --display-none");
-      }, 100);
-    } else {
-      setState("--transparent --display-none");
-    }
-  }
 
   function generateNewFlow(elems) {
     recordFlowState();
@@ -621,12 +604,12 @@ function App() {
         <HeaderButton
           label="New flow"
           description="Start a new flow"
-          onClick={() => openDialog(setNewFlowCls)}
+          onClick={openNewFlowDlg}
         />
         <HeaderButton
           label="Open"
           description="Open an existing flow"
-          onClick={() => openDialog(setOpenFileCls)}
+          onClick={openOpenFileDlg}
         />
         <HeaderButton
           label="Save"
@@ -636,7 +619,7 @@ function App() {
         <HeaderButton
           label="Add course"
           description="Add courses to flow"
-          onClick={() => openDialog(setAddCourseCls)}
+          onClick={openAddCourseDlg}
         />
         <HeaderButton
           label="Reflow"
@@ -646,7 +629,7 @@ function App() {
         <HeaderButton
           label="About"
           description="About Prereq Flow"
-          onClick={() => openDialog(setAboutCls)}
+          onClick={openAboutDlg}
         />
       </Header>
       <ReactFlowProvider>
@@ -873,25 +856,25 @@ function App() {
         </ul>
       </aside>
 
-      <AboutDialog
-        modalCls={aboutCls}
-        closeDialog={() => closeDialog(setAboutCls)}
-      />
       <NewFlowDialog
-        modalCls={newFlowCls}
-        closeDialog={() => closeDialog(setNewFlowCls)}
+        modalCls={newFlowDlgCls}
+        closeDialog={closeNewFlowDlg}
         generateNewFlow={generateNewFlow}
       />
       <OpenFileDialog
-        modalCls={openFileCls}
-        closeDialog={() => closeDialog(setOpenFileCls)}
+        modalCls={openFileDlgCls}
+        closeDialog={closeOpenFileDlg}
         openFlow={openFlow}
       />
       <AddCourseDialog
-        modalCls={addCourseCls}
-        closeDialog={() => closeDialog(setAddCourseCls)}
+        modalCls={addCourseDlgCls}
+        closeDialog={closeAddCourseDlg}
         nodeData={nodeData.current}
         addCourseNode={addCourseNode}
+      />
+      <AboutDialog
+        modalCls={aboutDlgCls}
+        closeDialog={closeAboutDlg}
       />
     </div>
   );
