@@ -5,7 +5,7 @@ import {
   useStoreActions,
 } from "react-flow-renderer";
 
-export default function FlowStoreLifter({
+export default function FlowInternalLifter({
   updateNodePos,
   selectedElements,
   setSelectedElements,

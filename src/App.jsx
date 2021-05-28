@@ -12,7 +12,7 @@ import "./App.scss";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import useDialogStatus from "./useDialogStatus.jsx";
-import FlowStoreLifter from "./FlowStoreLifter.jsx";
+import FlowInternalLifter from "./FlowInternalLifter.jsx";
 
 import Header from "./Header.jsx";
 import HeaderButton from "./HeaderButton.jsx";
@@ -568,7 +568,7 @@ export default function App() {
       </Header>
 
       <ReactFlowProvider>
-        <FlowStoreLifter
+        <FlowInternalLifter
           updateNodePos={updateNodePos}
           selectedElements={selectedElements}
           setSelectedElements={setSelectedElements}
