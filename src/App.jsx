@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 
 import classNames from "classnames";
 
@@ -11,15 +10,12 @@ import ReactFlow, {
   removeElements,
 } from "react-flow-renderer";
 
-import Tippy from "@tippyjs/react";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import "tippy.js/dist/tippy.css";
-
 import "./App.scss";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
 import FlowStoreLifter from "./FlowStoreLifter.jsx";
 import Header from "./Header.jsx";
+import HeaderButton from "./HeaderButton.jsx";
 import CourseNode from "./CourseNode.jsx";
 import OrNode from "./OrNode.jsx";
 import AndNode from "./AndNode.jsx";
@@ -620,27 +616,6 @@ function App() {
     setMouseXY({ x: event.clientX, y: event.clientY });
     setContextActive(true);
   }
-
-  function HeaderButton({ label, description, onClick }) {
-    return (
-      <Tippy
-        content={description}
-        trigger="mouseenter"
-        hideOnClick="true"
-        placement="bottom"
-        duration={prefersReducedMotion ? 0 : 100}
-      >
-        <button type="button" onClick={onClick}>
-          {label}
-        </button>
-      </Tippy>
-    );
-  }
-  HeaderButton.propTypes = {
-    label: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
-  };
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
