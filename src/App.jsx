@@ -52,7 +52,7 @@ const initialIndexes = newElemIndexes(initialElements);
 
 const MAX_UNDO_NUM = 20;
 
-function App() {
+export default function App() {
   const [newFlowDlgCls, openNewFlowDlg, closeNewFlowDlg] = useDialogStatus();
   const [openFileDlgCls, openOpenFileDlg, closeOpenFileDlg] = useDialogStatus();
   const [
@@ -837,5 +837,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
