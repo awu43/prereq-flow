@@ -621,7 +621,7 @@ export default function App() {
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
         >
-          <Background variant="lines" />
+          <Background variant="lines" gap={32} size={1} />
           <Controls showInteractive={false} />
         </ReactFlow>
         <ContextMenu
