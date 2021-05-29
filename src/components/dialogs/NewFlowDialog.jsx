@@ -16,7 +16,7 @@ import CloseButton from "./CloseButton.jsx";
 import PreWarning from "./PreWarning.jsx";
 import DegreeSelect from "./DegreeSelect.jsx";
 import CurriculumSelect from "./CurriculumSelect.jsx";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion.jsx";
+import usePrefersReducedMotion from "../../usePrefersReducedMotion.tsx";
 
 import { COURSE_REGEX, generateInitialElements } from "../../utils.ts";
 

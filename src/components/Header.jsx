@@ -7,7 +7,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
+import usePrefersReducedMotion from "../usePrefersReducedMotion.tsx";
 
 import "./Header.scss";
 

@@ -6,7 +6,7 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import CloseButton from "./CloseButton.jsx";
 import Dropzone from "./Dropzone.jsx";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion.jsx";
+import usePrefersReducedMotion from "../../usePrefersReducedMotion.tsx";
 
 import "./OpenFileDialog.scss";
 

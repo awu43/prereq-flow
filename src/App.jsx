@@ -10,7 +10,7 @@ import ReactFlow, {
 
 import "./App.scss";
 
-import usePrefersReducedMotion from "./usePrefersReducedMotion.jsx";
+import usePrefersReducedMotion from "./usePrefersReducedMotion.tsx";
 import useDialogStatus from "./useDialogStatus.jsx";
 
 import Header from "./components/Header.jsx";
