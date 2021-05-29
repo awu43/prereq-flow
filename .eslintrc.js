@@ -45,22 +45,13 @@ module.exports = {
     "react/jsx-boolean-value": ["error", "always"],
     "react/self-closing-comp": ["error", { component: true, html: false }],
 
+    "@typescript-eslint/semi": ["error", "always"],
     "@typescript-eslint/no-unused-vars": ["error", {
       varsIgnorePattern: "^_",
       argsIgnorePattern: "^_",
     }],
-    // Disable the rule for all files while JS/TS mixed
     "@typescript-eslint/explicit-module-boundary-types": "off"
   },
-  overrides: [
-    {
-      // Enable the rule specifically for TypeScript files
-      files: ["*.ts", "*.tsx"],
-      rules: {
-        "@typescript-eslint/explicit-module-boundary-types": ["error"]
-      }
-    }
-  ],
   settings: {
     react: {
       version: "detect"
