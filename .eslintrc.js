@@ -9,7 +9,9 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "plugin:import/recommended",
     "plugin:jsx-a11y/recommended",
+    "plugin:@typescript-eslint/recommended",
   ],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -22,12 +24,8 @@ module.exports = {
     "react-hooks",
     "import",
     "jsx-a11y",
+    "@typescript-eslint",
   ],
-  settings: {
-    react: {
-      version: "detect"
-    }
-  },
   rules: {
     indent: ["error", 2, { SwitchCase: 1 }],
     quotes: ["error", "double"],
@@ -38,13 +36,34 @@ module.exports = {
     "arrow-parens": ["error", "as-needed"],
     "no-param-reassign": ["error", { props: false }],
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
-    "no-unused-vars": ["error", {
-      varsIgnorePattern: "^_",
-      argsIgnorePattern: "^_",
-    }],
+    // "no-unused-vars": ["error", {
+    //   varsIgnorePattern: "^_",
+    //   argsIgnorePattern: "^_",
+    // }],
     "prefer-const": ["error", { destructuring: "all" }],
 
     "react/jsx-boolean-value": ["error", "always"],
     "react/self-closing-comp": ["error", { component: true, html: false }],
+
+    "@typescript-eslint/no-unused-vars": ["error", {
+      varsIgnorePattern: "^_",
+      argsIgnorePattern: "^_",
+    }],
+    // Disable the rule for all files while JS/TS mixed
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  },
+  overrides: [
+    {
+      // Enable the rule specifically for TypeScript files
+      files: ["*.ts", "*.tsx"],
+      rules: {
+        "@typescript-eslint/explicit-module-boundary-types": ["error"]
+      }
+    }
+  ],
+  settings: {
+    react: {
+      version: "detect"
+    }
   },
 };

@@ -10,8 +10,12 @@ module.exports = {
   plugins: [
     "@snowpack/plugin-react-refresh",
     "@snowpack/plugin-dotenv",
+    ["@snowpack/plugin-typescript", {
+      // Yarn PnP workaround
+      // https://www.npmjs.com/package/@snowpack/plugin-typescript
+      ...(process.versions.pnp ? { tsc: "yarn pnpify tsc" } : {}),
+    }],
     "@snowpack/plugin-sass",
-    // "@snowpack/plugin-webpack",
     "@snowpack/plugin-postcss",
     "./json-proxy-workaround.js",
     // https://github.com/snowpackjs/snowpack/issues/3109
