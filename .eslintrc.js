@@ -4,12 +4,9 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:import/recommended",
-    "plugin:jsx-a11y/recommended",
-    "plugin:@typescript-eslint/recommended",
+    "airbnb",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -22,16 +19,13 @@ module.exports = {
   plugins: [
     "react",
     "react-hooks",
-    "import",
-    "jsx-a11y",
     "@typescript-eslint",
   ],
   rules: {
-    indent: ["error", 2, { SwitchCase: 1 }],
     quotes: ["error", "double"],
-    "quote-props": ["error", "as-needed"],
-    semi: ["error", "always"],
-    "object-curly-spacing": ["error", "always"],
+    "no-restricted-syntax": [
+      "error", "ForInStatement", "LabeledStatement", "WithStatement"
+    ],
     "comma-dangle": ["error", "only-multiline"],
     "arrow-parens": ["error", "as-needed"],
     "no-param-reassign": ["error", { props: false }],
@@ -41,20 +35,27 @@ module.exports = {
     //   argsIgnorePattern: "^_",
     // }],
     "prefer-const": ["error", { destructuring: "all" }],
+    "no-underscore-dangle": "off",
+    "no-else-return": "off",
+    "object-curly-newline": "off",
+    "no-continue": "off",
 
+    "import/extensions": "off",
+    "react/jsx-filename-extension": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/destructuring-assignment": "off",
     "react/jsx-boolean-value": ["error", "always"],
+    "react/no-unescaped-entities": ["error", { forbid: [">"] }],
     "react/self-closing-comp": ["error", { component: true, html: false }],
+    "jsx-a11y/label-has-associated-control": ["error", { assert: "either" }],
+    "max-len": "off",
 
-    "@typescript-eslint/semi": ["error", "always"],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error", {
       varsIgnorePattern: "^_",
       argsIgnorePattern: "^_",
     }],
-    "@typescript-eslint/explicit-module-boundary-types": "off"
-  },
-  settings: {
-    react: {
-      version: "detect"
-    }
   },
 };
