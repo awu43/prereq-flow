@@ -10,24 +10,24 @@ import ReactFlow, {
 
 import "./App.scss";
 
-import usePrefersReducedMotion from "./usePrefersReducedMotion.tsx";
-import useDialogStatus from "./useDialogStatus.jsx";
+import usePrefersReducedMotion from "./usePrefersReducedMotion";
+import useDialogStatus from "./useDialogStatus";
 
-import Header from "./components/Header.jsx";
-import HeaderButton from "./components/HeaderButton.jsx";
-import FlowInternalLifter from "./components/FlowInternalLifter.jsx";
-import CourseNode from "./components/CourseNode.jsx";
-import OrNode from "./components/OrNode.jsx";
-import AndNode from "./components/AndNode.jsx";
-import ContextMenu from "./components/ContextMenu.jsx";
-import UserControls from "./components/UserControls.jsx";
+import Header from "./components/Header";
+import HeaderButton from "./components/HeaderButton";
+import FlowInternalLifter from "./components/FlowInternalLifter";
+import CourseNode from "./components/CourseNode";
+import OrNode from "./components/OrNode";
+import AndNode from "./components/AndNode";
+import ContextMenu from "./components/ContextMenu";
+import UserControls from "./components/UserControls";
 
-import NewFlowDialog from "./components/dialogs/NewFlowDialog.jsx";
+import NewFlowDialog from "./components/dialogs/NewFlowDialog";
 import OpenFileDialog, {
   CURRENT_VERSION
-} from "./components/dialogs/OpenFileDialog.jsx";
-import AddCourseDialog from "./components/dialogs/AddCourseDialog.jsx";
-import AboutDialog from "./components/dialogs/AboutDialog.jsx";
+} from "./components/dialogs/OpenFileDialog";
+import AddCourseDialog from "./components/dialogs/AddCourseDialog";
+import AboutDialog from "./components/dialogs/AboutDialog";
 
 import {
   ZERO_POSITION,
@@ -43,7 +43,7 @@ import {
   generateNewLayout,
   resetElementStates,
   autoconnect,
-} from "./utils.ts";
+} from "./utils";
 import demoFlow from "./data/demo-flow.json";
 
 const initialElements = demoFlow.elements;

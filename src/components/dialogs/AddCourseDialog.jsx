@@ -18,10 +18,10 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import CloseButton from "./CloseButton.jsx";
-import CampusSelect from "./CampusSelect.jsx";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion.tsx";
-import { newCourseNode } from "../../utils.ts";
+import CloseButton from "./CloseButton";
+import CampusSelect from "./CampusSelect";
+import usePrefersReducedMotion from "../../usePrefersReducedMotion";
+import { newCourseNode } from "../../utils";
 
 import "./AddCourseDialog.scss";
 

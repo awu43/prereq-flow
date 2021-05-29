@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { isEdge, isNode } from "react-flow-renderer";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
-import CloseButton from "./CloseButton.jsx";
-import Dropzone from "./Dropzone.jsx";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion.tsx";
+import CloseButton from "./CloseButton";
+import Dropzone from "./Dropzone";
+import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
 import "./OpenFileDialog.scss";
 

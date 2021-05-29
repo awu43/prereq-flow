@@ -10,9 +10,9 @@ import "tippy.js/dist/tippy.css";
 import { Handle } from "react-flow-renderer";
 
 // Not sure how to pass this from App into CustomNode
-import usePrefersReducedMotion from "../usePrefersReducedMotion.tsx";
+import usePrefersReducedMotion from "../usePrefersReducedMotion";
 
-import { COURSE_REGEX } from "../utils.ts";
+import { COURSE_REGEX } from "../utils";
 
 function markCoursesAndPreventBreaks(text) {
   let innerHTML = text.replaceAll(COURSE_REGEX, "<mark>$&</mark>");

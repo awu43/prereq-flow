@@ -7,7 +7,7 @@ import { useStoreActions } from "react-flow-renderer";
 
 import "./ContextMenu.scss";
 
-import { COURSE_STATUS_CODES } from "../utils.ts";
+import { COURSE_STATUS_CODES } from "../utils";
 
 export default function ContextMenu({
   active, data, xy,

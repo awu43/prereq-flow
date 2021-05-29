@@ -41,8 +41,6 @@ module.exports = {
     "object-curly-newline": "off",
     "no-continue": "off",
 
-    "import/extensions": "off",
-    "react/jsx-filename-extension": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/destructuring-assignment": "off",
     "react/jsx-boolean-value": ["error", "always"],

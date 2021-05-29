@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import { expect } from "chai";
 
-import { _testing } from "../utils.ts";
+import { _testing } from "../utils";
 
 const {
   EITHER_OR_REGEX,

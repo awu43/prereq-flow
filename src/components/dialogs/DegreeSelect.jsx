@@ -7,7 +7,7 @@ import "tippy.js/dist/tippy.css";
 
 import { nanoid } from "nanoid";
 
-import AmbiguitySelect from "./AmbiguitySelect.jsx";
+import AmbiguitySelect from "./AmbiguitySelect";
 
 import "./DegreeSelect.scss";
 

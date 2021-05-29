@@ -12,13 +12,13 @@ import {
   getConnectedEdges,
 } from "react-flow-renderer";
 
-import CloseButton from "./CloseButton.jsx";
-import PreWarning from "./PreWarning.jsx";
-import DegreeSelect from "./DegreeSelect.jsx";
-import CurriculumSelect from "./CurriculumSelect.jsx";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion.tsx";
+import CloseButton from "./CloseButton";
+import PreWarning from "./PreWarning";
+import DegreeSelect from "./DegreeSelect";
+import CurriculumSelect from "./CurriculumSelect";
+import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
-import { COURSE_REGEX, generateInitialElements } from "../../utils.ts";
+import { COURSE_REGEX, generateInitialElements } from "../../utils";
 
 import "./NewFlowDialog.scss";
 

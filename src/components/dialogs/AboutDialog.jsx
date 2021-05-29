@@ -5,7 +5,7 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import "./AboutDialog.scss";
 
-import CloseButton from "./CloseButton.jsx";
+import CloseButton from "./CloseButton";
 
 export default function AboutDialog({ modalCls, closeDialog }) {
   // const [msgName, setMsgName] = useState("");

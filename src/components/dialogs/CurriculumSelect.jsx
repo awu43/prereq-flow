@@ -5,8 +5,8 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import CampusSelect from "./CampusSelect.jsx";
-import AmbiguitySelect from "./AmbiguitySelect.jsx";
+import CampusSelect from "./CampusSelect";
+import AmbiguitySelect from "./AmbiguitySelect";
 
 import "./CurriculumSelect.scss";
 

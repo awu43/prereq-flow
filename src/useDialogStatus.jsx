@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import usePrefersReducedMotion from "./usePrefersReducedMotion.tsx";
+import usePrefersReducedMotion from "./usePrefersReducedMotion";
 
 export default function useDialogStatus() {
   const [dialogCls, setDialogCls] = useState("--transparent --display-none");
