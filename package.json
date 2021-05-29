@@ -5,8 +5,8 @@
     "build": "snowpack build",
     "postbuild": "node postbuild.js",
     "test": "web-test-runner \"src/**/*.test.{jsx,js}\"",
-    "format": "eslint --fix \"src/**/*\"",
-    "lint": "eslint \"src/**/*\""
+    "format": "eslint --fix \"src/**/*.{jsx,js}\"",
+    "lint": "eslint \"src/**/*.{jsx,js}\""
   },
   "browserslist": {
     "production": [
@@ -45,7 +45,6 @@
     "@web/test-runner": "^0.12.20",
     "chai": "^4.3.4",
     "eslint": "^7.26.0",
-    "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.2",

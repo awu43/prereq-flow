@@ -9,7 +9,7 @@ export default function PreWarning({
   return (
     <div className="PreWarning">
       <section>
-        <h3>⚠️ Important information ⚠️</h3>
+        <h3><span role="img" aria-label="Caution sign">⚠️</span> Important information <span role="img" aria-label="Caution">⚠️</span></h3>
         <p>Prereq Flow is not an official University of Washington resource and is undergoing active development. Any saved data may be become unusable at any time with no warning. No guarantees are made about the accuracy, completeness, or up-to-dateness of any information&nbsp;presented.</p>
 
         <p>Some limitations to keep in&nbsp;mind:</p>
