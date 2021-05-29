@@ -12,7 +12,7 @@ import { Handle } from "react-flow-renderer";
 // Not sure how to pass this from App into CustomNode
 import usePrefersReducedMotion from "../usePrefersReducedMotion.jsx";
 
-import { COURSE_REGEX } from "../utils.js";
+import { COURSE_REGEX } from "../utils.ts";
 
 function markCoursesAndPreventBreaks(text) {
   let innerHTML = text.replaceAll(COURSE_REGEX, "<mark>$&</mark>");

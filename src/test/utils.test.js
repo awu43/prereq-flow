@@ -1,8 +1,8 @@
-/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-undef */
 import { expect } from "chai";
 
-import { _testing } from "../utils.js";
+import { _testing } from "../utils.ts";
 
 const {
   EITHER_OR_REGEX,

@@ -21,7 +21,7 @@ import type {
   NodeDataMap,
   ElemIndexMap,
   ElementIndex,
-} from "../types/index";
+} from "../types/main";
 
 // Wrapped to narrow type
 function isNode(elem: Element): elem is Node {

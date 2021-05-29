@@ -59,6 +59,7 @@ export interface Edge {
 export type Element = Node | Edge;
 
 type WriteOnlyMap<K, V> = Omit<Map<K, V>, "get">;
+
 export type AlwaysDefinedMap<K, V> = WriteOnlyMap<K, V> & {
   get: (key: K) => V;
 };

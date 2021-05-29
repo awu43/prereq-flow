@@ -43,7 +43,7 @@ import {
   generateNewLayout,
   resetElementStates,
   autoconnect,
-} from "./utils.js";
+} from "./utils.ts";
 import demoFlow from "./data/demo-flow.json";
 
 const initialElements = demoFlow.elements;

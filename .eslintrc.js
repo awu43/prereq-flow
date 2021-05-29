@@ -6,7 +6,7 @@ module.exports = {
   extends: [
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "airbnb",
+    "airbnb-typescript",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -15,6 +15,7 @@ module.exports = {
     },
     ecmaVersion: 12,
     sourceType: "module",
+    project: "./tsconfig.json",
   },
   plugins: [
     "react",
@@ -50,12 +51,15 @@ module.exports = {
     "jsx-a11y/label-has-associated-control": ["error", { assert: "either" }],
     "max-len": "off",
 
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
-    "no-unused-vars": "off",
+    "@typescript-eslint/quotes": ["error", "double"],
+    "@typescript-eslint/comma-dangle": ["error", "only-multiline"],
+    // "no-use-before-define": "off",
+    // "@typescript-eslint/no-use-before-define": ["error"],
+    // "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error", {
       varsIgnorePattern: "^_",
       argsIgnorePattern: "^_",
     }],
+    "@typescript-eslint/naming-convention": "off",
   },
 };
