@@ -1,11 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import classNames from "classnames";
 
 import { Handle } from "react-flow-renderer";
 
-export default function OrNode({ data }) {
+import type { BaseNodeData } from "types/main";
+
+export default function OrNode({ data }: { data: BaseNodeData }) {
   return (
     <div
       className={classNames(
@@ -18,9 +19,3 @@ export default function OrNode({ data }) {
     </div>
   );
 }
-OrNode.propTypes = {
-  data: PropTypes.shape({
-    nodeStatus: PropTypes.string,
-    nodeConnected: PropTypes.bool,
-  }).isRequired,
-};
