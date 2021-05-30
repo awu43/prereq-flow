@@ -1,11 +1,20 @@
 import React from "react";
-import PropTypes from "prop-types";
+import type { RefObject } from "react";
 
 import "./PreWarning.scss";
 
+import type { SetState } from "../../../types/main";
+
+interface PreWarningProps {
+  warningAccepted: number;
+  setWarningAccepted: SetState<number>;
+  closeButtonRef: RefObject<HTMLButtonElement>;
+}
 export default function PreWarning({
-  warningAccepted, setWarningAccepted, closeButtonRef
-}) {
+  warningAccepted,
+  setWarningAccepted,
+  closeButtonRef,
+}: PreWarningProps) {
   return (
     <div className="PreWarning">
       <section>
@@ -19,7 +28,7 @@ export default function PreWarning({
           <li>Registration restrictions are not&nbsp;displayed.</li>
         </ul>
 
-        <p>All caveats for <a href="https://prereqmap.uw.edu/" target="_blank" rel="noreferrer" tabIndex={warningAccepted ? "-1" : "0"}>Prereq Map</a> also apply&nbsp;here:</p>
+        <p>All caveats for <a href="https://prereqmap.uw.edu/" target="_blank" rel="noreferrer" tabIndex={warningAccepted ? -1 : 0}>Prereq Map</a> also apply&nbsp;here:</p>
         <ul>
           <li>Prerequisites and graduation requirements may change over&nbsp;time.</li>
           <li>Non-course graduation requirements (e.g. 5 credits of VLPA) are not&nbsp;displayed.</li>
@@ -34,10 +43,12 @@ export default function PreWarning({
             onKeyDown={event => {
               if (event.key === "Tab" && !warningAccepted) {
                 event.preventDefault();
-                closeButtonRef.current.focus();
+                if (closeButtonRef.current) {
+                  closeButtonRef.current.focus();
+                }
               }
             }}
-            disabled={warningAccepted}
+            disabled={!!warningAccepted}
           >
             Continue
           </button>
@@ -46,10 +57,3 @@ export default function PreWarning({
     </div>
   );
 }
-PreWarning.propTypes = {
-  warningAccepted: PropTypes.number.isRequired,
-  setWarningAccepted: PropTypes.func.isRequired,
-  closeButtonRef: PropTypes.shape({
-    current: PropTypes.instanceOf(Element)
-  }).isRequired,
-};
