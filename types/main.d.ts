@@ -1,3 +1,11 @@
+export type Campus = "Seattle" | "Bothell" | "Tacoma";
+
+export interface CurriculumData {
+  campus: Campus;
+  id: string;
+  name: string;
+}
+
 export interface XYPosition {
   x: number;
   y: number;
@@ -8,7 +16,7 @@ export type EdgeId = string;
 export type ElementId = NodeId | EdgeId;
 
 export interface CourseData {
-  campus: string;
+  campus: Campus;
   id: string;
   name: string;
   credits: string;
@@ -83,4 +91,5 @@ export type SetState<Type> = (s: Type) => void;
 
 export type AmbiguityHandling = "aggressively" | "cautiously";
 
-export type Campus = "Seattle" | "Bothell" | "Tacoma";
+export type ModalClass = "--transparent --display-none" | "--transparent" | "";
+export type CloseModal = () => void;

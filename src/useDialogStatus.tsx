@@ -1,9 +1,13 @@
 import { useState } from "react";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
+import type { ModalClass } from "../types/main";
 
 export default function useDialogStatus() {
-  const [dialogCls, setDialogCls] = useState("--transparent --display-none");
+  const [
+    dialogCls,
+    setDialogCls
+  ] = useState<ModalClass>("--transparent --display-none");
 
   const prefersReducedMotion = usePrefersReducedMotion();
 

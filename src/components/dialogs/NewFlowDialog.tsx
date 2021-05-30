@@ -1,14 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types";
+import type { KeyboardEvent } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
 import {
-  isEdge,
-  isNode,
-  removeElements,
   getConnectedEdges,
 } from "react-flow-renderer";
 
@@ -18,7 +15,23 @@ import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
-import { COURSE_REGEX, generateInitialElements } from "../../utils";
+import {
+  isNode,
+  isEdge,
+  removeElements,
+  COURSE_REGEX,
+  generateInitialElements,
+} from "../../utils";
+
+import type {
+  Campus,
+  CurriculumData,
+  ModalClass,
+  CloseModal,
+  AmbiguityHandling,
+  Edge,
+  Element,
+} from "../../../types/main";
 
 import "./NewFlowDialog.scss";
 
@@ -28,9 +41,16 @@ const API_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
 );
 
+interface NewFlowDialogProps {
+  modalCls: ModalClass;
+  closeDialog: CloseModal;
+  generateNewFlow: (elems: Element[]) => void;
+}
 export default function NewFlowDialog({
-  modalCls, closeDialog, generateNewFlow
-}) {
+  modalCls,
+  closeDialog,
+  generateNewFlow,
+}: NewFlowDialogProps) {
   const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
@@ -54,7 +74,7 @@ export default function NewFlowDialog({
   //   setSlideState(slideState + 1);
   // }
 
-  const [supportedMajors, setSupportedMajors] = useState([]);
+  const [supportedMajors, setSupportedMajors] = useState<string[]>([]);
   const [degreeError, setDegreeError] = useState("");
 
   useEffect(() => {
@@ -68,29 +88,42 @@ export default function NewFlowDialog({
       });
   }, []);
 
-  const [supportedCurricula, setSupportedCurricula] = useState(new Map());
+  const [
+    supportedCurricula,
+    setSupportedCurricula
+  ] = useState<Map<Campus, HTMLOptionElement[]>>(new Map());
   const [curriculumError, setCurriculumError] = useState("");
 
   useEffect(() => {
     fetch(`${API_URL}/curricula/`)
       .then(resp => resp.json())
-      .then(data => {
+      .then((data: CurriculumData[]) => {
         const curricula = new Map(Object.entries({
           Seattle: [],
           Bothell: [],
           Tacoma: [],
-        }));
+        })) as Map<Campus, any>;
+
         for (const datum of data) {
           curricula.get(datum.campus).push(datum);
         }
+        // Values initially CurriculumData[]
+
         for (const campus of curricula.keys()) {
-          curricula.get(campus).sort((a, b) => a.id.localeCompare(b.id));
-          curricula.set(campus, curricula.get(campus).map(curr => (
-            <option key={curr.id} value={curr.id}>
-              {`${curr.id}: ${curr.name}`}
-            </option>
-          )));
+          curricula.get(campus).sort((a: CurriculumData, b: CurriculumData) => (
+            a.id.localeCompare(b.id)
+          ));
+          curricula.set(
+            campus,
+            curricula.get(campus).map((curr: CurriculumData) => (
+              <option key={curr.id} value={curr.id}>
+                {`${curr.id}: ${curr.name}`}
+              </option>
+            ))
+          );
         }
+        // Now HTMLOptionElement[]
+
         setSupportedCurricula(curricula);
       })
       .catch(error => {
@@ -100,7 +133,10 @@ export default function NewFlowDialog({
       });
   }, []);
 
-  async function newDegreeFlow(majors, ambiguityHandling) {
+  async function newDegreeFlow(
+    majors: string[],
+    ambiguityHandling: AmbiguityHandling
+  ) {
     setDegreeError("");
     try {
       const resp = await fetch(`${API_URL}/degrees/`, {
@@ -131,7 +167,9 @@ export default function NewFlowDialog({
   }
 
   async function newCurriculumFlow(
-    curriculum, includeExternal, ambiguityHandling
+    curriculum: string,
+    includeExternal: boolean,
+    ambiguityHandling: AmbiguityHandling,
   ) {
     setCurriculumError("");
     try {
@@ -141,7 +179,9 @@ export default function NewFlowDialog({
       if (includeExternal) {
         const externalPrereqs = [];
         for (const course of data) {
-          const courseMatches = course.prerequisite.match(COURSE_REGEX);
+          const courseMatches: RegExpMatchArray = (
+            course.prerequisite.match(COURSE_REGEX)
+          );
           const external = (
             courseMatches
               ? courseMatches.filter(
@@ -167,11 +207,13 @@ export default function NewFlowDialog({
       const externalOrphans = newElements.filter(elem => (
         isNode(elem)
         && !elem.id.startsWith(curriculum)
-        && !getConnectedEdges([elem], edges).length
+        && !getConnectedEdges([elem], edges as Edge[]).length
         // Not connected to any other nodes
       ));
 
-      generateNewFlow(removeElements(externalOrphans, newElements));
+      generateNewFlow(
+        removeElements(externalOrphans, newElements)
+      );
       close();
     } catch (error) {
       setCurriculumError("Something went wrong");
@@ -194,8 +236,9 @@ export default function NewFlowDialog({
     <DialogOverlay
       className={modalCls}
       isOpen={!modalCls.includes("--display-none")}
+      // Reach UI is not TS friendly here
       onDismiss={event => {
-        if (event.key === "Escape" && !busy) {
+        if ((event as KeyboardEvent).key === "Escape" && !busy) {
           closeDialog();
         }
       }}
@@ -276,8 +319,3 @@ export default function NewFlowDialog({
     </DialogOverlay>
   );
 }
-NewFlowDialog.propTypes = {
-  modalCls: PropTypes.string.isRequired,
-  closeDialog: PropTypes.func.isRequired,
-  generateNewFlow: PropTypes.func.isRequired,
-};

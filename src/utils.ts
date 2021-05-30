@@ -2,7 +2,11 @@ import { nanoid } from "nanoid";
 
 import dagre from "dagre";
 
-import { isNode as isNodeBase, removeElements } from "react-flow-renderer";
+import {
+  isNode as isNodeBase,
+  isEdge as isEdgeBase,
+  removeElements as removeElementsBase,
+} from "react-flow-renderer";
 
 import type {
   XYPosition,
@@ -25,8 +29,17 @@ import type {
 } from "../types/main";
 
 // Wrapped to narrow type
-function isNode(elem: Element): elem is Node {
+export function isNode(elem: Element): elem is Node {
   return isNodeBase(elem);
+}
+export function isEdge(elem: Element): elem is Edge {
+  return isEdgeBase(elem);
+}
+export function removeElements(
+  toRemove: Element[],
+  toRemoveFrom: Element[],
+): Element[] {
+  return removeElementsBase(toRemove, toRemoveFrom) as Element[];
 }
 
 function isCourseNode(node: Node): node is CourseNode {
@@ -471,7 +484,7 @@ function filterUnconditionalElements(
         }
       }
     }
-    tempElements = removeElements([elem], tempElements) as Element[];
+    tempElements = removeElements([elem], tempElements);
     tempNodeData = newNodeData(tempElements);
   }
 
