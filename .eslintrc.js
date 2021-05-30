@@ -40,6 +40,7 @@ module.exports = {
     "no-else-return": "off",
     "object-curly-newline": "off",
     "no-continue": "off",
+    "import/no-named-default": "off",
 
     "react/jsx-one-expression-per-line": "off",
     "react/destructuring-assignment": "off",

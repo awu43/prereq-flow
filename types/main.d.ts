@@ -64,6 +64,7 @@ export interface Edge {
   target: NodeId;
   className: CourseStatus;
   label: null | string;
+  animated?: boolean;
 }
 
 export type Element = Node | Edge;
@@ -95,6 +96,7 @@ export type AmbiguityHandling = "aggressively" | "cautiously";
 export type NewCoursePosition = "zero" | "relative";
 
 export type ModalClass = "--transparent --display-none" | "--transparent" | "";
+export type OpenModal = () => void;
 export type CloseModal = () => void;
 
 export interface ContextTarget {

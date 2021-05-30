@@ -298,7 +298,7 @@ export function sortElementsByDepth(
 
 export function newElemIndexes(
   elements: Element[],
-): Map<ElementId, ElementIndex> {
+): ElemIndexMap {
   return new Map(elements.map((elem, i) => [elem.id, i]));
 }
 
