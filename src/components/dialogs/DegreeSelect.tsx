@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import PropTypes from "prop-types";
+import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -8,10 +8,11 @@ import "tippy.js/dist/tippy.css";
 import { nanoid } from "nanoid";
 
 import AmbiguitySelect from "./AmbiguitySelect";
+import type { SetState, AmbiguityHandling } from "../../../types/main";
 
 import "./DegreeSelect.scss";
 
-function toKebabCase(text) {
+function toKebabCase(text: string) {
   return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
 }
 
@@ -21,26 +22,44 @@ const dummyMajors = [
   <li className="majors__selected-item" key={nanoid()}>&nbsp;</li>,
 ];
 
+interface DegreeSelectProps {
+  connectionError: boolean;
+  busy: boolean;
+  setBusy: SetState<boolean>;
+  supportedMajors: string[];
+  newDegreeFlow: (majors: string[], ambHandle: AmbiguityHandling) => void;
+  errorMsg: string;
+}
 export default function DegreeSelect({
-  connectionError, busy, setBusy, supportedMajors, newDegreeFlow, errorMsg
-}) {
-  const [majors, setMajors] = useState([]);
+  connectionError,
+  busy,
+  setBusy,
+  supportedMajors,
+  newDegreeFlow,
+  errorMsg,
+}: DegreeSelectProps) {
+  const [majors, setMajors] = useState<string[]>([]);
   // const [minors, setMinors] = useState([]);
-  const majorSelectRef = useRef(null);
-  const [ambiguityHandling, setAmbiguityHandling] = useState("aggressively");
+  const majorSelectRef = useRef<HTMLSelectElement>(null);
+  const [
+    ambiguityHandling,
+    setAmbiguityHandling
+  ] = useState<AmbiguityHandling>("aggressively");
 
   function addMajor() {
     if (!supportedMajors.length) {
       return;
     }
-    const selectInput = majorSelectRef.current;
-    const selectedMajor = selectInput.options[selectInput.selectedIndex].label;
-    if (!majors.includes(selectedMajor) && majors.length < 3) {
-      setMajors(majors.concat([selectedMajor]));
+    if (majorSelectRef.current) {
+      const selectInput = majorSelectRef.current;
+      const selectedMajor = selectInput.options[selectInput.selectedIndex].label;
+      if (!majors.includes(selectedMajor) && majors.length < 3) {
+        setMajors(majors.concat([selectedMajor]));
+      }
     }
   }
 
-  function deleteMajor(targetMajor) {
+  function deleteMajor(targetMajor: string) {
     setMajors(majors.filter(m => m !== targetMajor));
   }
 
@@ -48,7 +67,7 @@ export default function DegreeSelect({
 
   // }
 
-  function generateFlow(event) {
+  function generateFlow(event: MouseEvent) {
     event.preventDefault();
     setBusy(true);
 
@@ -87,13 +106,13 @@ export default function DegreeSelect({
           arrow={false}
           duration={0}
           offset={[0, 5]}
-          visible={errorMsg.length}
+          visible={!!errorMsg}
         >
           <div className="majors__bar-and-button">
             <select
               ref={majorSelectRef}
               className="majors__select-input"
-              disabled={connectionError || busy}
+              disabled={Boolean(connectionError || busy)}
             >
               {supportedMajors.map(m => (
                 <option key={toKebabCase(m)}>{m}</option>
@@ -103,7 +122,7 @@ export default function DegreeSelect({
               className="majors__add-button"
               type="button"
               onClick={addMajor}
-              disabled={connectionError || busy}
+              disabled={Boolean(connectionError || busy)}
             >
               <img src="dist/icons/plus.svg" alt="Add" />
             </button>
@@ -136,7 +155,7 @@ export default function DegreeSelect({
           className="DegreeSelect__get-courses-button"
           type="submit"
           onClick={generateFlow}
-          disabled={connectionError || busy || !majors.length}
+          disabled={Boolean(connectionError || busy || !majors.length)}
         >
           Get courses
         </button>
@@ -145,11 +164,3 @@ export default function DegreeSelect({
     </div>
   );
 }
-DegreeSelect.propTypes = {
-  connectionError: PropTypes.bool.isRequired,
-  busy: PropTypes.bool.isRequired,
-  setBusy: PropTypes.func.isRequired,
-  supportedMajors: PropTypes.arrayOf(PropTypes.string).isRequired,
-  newDegreeFlow: PropTypes.func.isRequired,
-  errorMsg: PropTypes.string.isRequired,
-};

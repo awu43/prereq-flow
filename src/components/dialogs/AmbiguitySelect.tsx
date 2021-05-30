@@ -7,7 +7,7 @@ import type { SetState, AmbiguityHandling } from "../../../types/main";
 
 interface AmbiGuitySelectProps {
   ambiguityHandling: AmbiguityHandling;
-  setAmbiguityHandling: SetState<string>;
+  setAmbiguityHandling: SetState<AmbiguityHandling>;
   busy: boolean;
 }
 export default function AmbiguitySelect({
