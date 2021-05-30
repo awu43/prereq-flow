@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -7,14 +6,23 @@ import "tippy.js/dist/tippy.css";
 
 import usePrefersReducedMotion from "../usePrefersReducedMotion";
 
-export default function HeaderButton({ label, description, onClick }) {
+interface HeaderButtonProps {
+  label: string;
+  description: string;
+  onClick: () => void;
+}
+export default function HeaderButton({
+  label,
+  description,
+  onClick,
+}: HeaderButtonProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <Tippy
       content={description}
       trigger="mouseenter"
-      hideOnClick="true"
+      hideOnClick={true}
       placement="bottom"
       duration={prefersReducedMotion ? 0 : 100}
     >
@@ -24,8 +32,3 @@ export default function HeaderButton({ label, description, onClick }) {
     </Tippy>
   );
 }
-HeaderButton.propTypes = {
-  label: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
