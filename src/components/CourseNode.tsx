@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import classNames from "classnames";
 
@@ -9,15 +8,17 @@ import "tippy.js/dist/tippy.css";
 
 import { Handle } from "react-flow-renderer";
 
+import type { CourseNodeData } from "types/main";
+
 // Not sure how to pass this from App into CustomNode
 import usePrefersReducedMotion from "../usePrefersReducedMotion";
 
 import { COURSE_REGEX } from "../utils";
 
-function markCoursesAndPreventBreaks(text) {
+function markCoursesAndPreventBreaks(text: string): string {
   let innerHTML = text.replaceAll(COURSE_REGEX, "<mark>$&</mark>");
   try {
-    for (const match of text.match(COURSE_REGEX)) {
+    for (const match of text.match(COURSE_REGEX) as RegExpMatchArray) {
       innerHTML = innerHTML.replace(match, match.replaceAll(" ", "\u00A0"));
       // Stop courses from being split
     }
@@ -31,7 +32,7 @@ function markCoursesAndPreventBreaks(text) {
   return innerHTML;
 }
 
-function markOfferedQuarters(text) {
+function markOfferedQuarters(text: string): string {
   let innerHTML = text.replace(
     /A(?=W|Sp|S|\b)(?=[WSp]*\.\s*$)/,
     "<span class=\"offered-autumn\">$&</span>"
@@ -51,7 +52,7 @@ function markOfferedQuarters(text) {
   return innerHTML;
 }
 
-export default function CourseNode({ data }) {
+export default function CourseNode({ data }: { data: CourseNodeData }) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const prereqHTML = markCoursesAndPreventBreaks(data.prerequisite);
@@ -104,15 +105,3 @@ export default function CourseNode({ data }) {
     </Tippy>
   );
 }
-CourseNode.propTypes = {
-  data: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    credits: PropTypes.string,
-    description: PropTypes.string,
-    prerequisite: PropTypes.string,
-    offered: PropTypes.string,
-    nodeStatus: PropTypes.string,
-    nodeConnected: PropTypes.bool,
-  }).isRequired,
-};
