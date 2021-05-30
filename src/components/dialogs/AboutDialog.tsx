@@ -1,13 +1,21 @@
 import React from "react";
-import PropTypes from "prop-types";
+import type { KeyboardEvent } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import "./AboutDialog.scss";
 
 import CloseButton from "./CloseButton";
+import type { ModalClass, CloseModal } from "../../../types/main";
 
-export default function AboutDialog({ modalCls, closeDialog }) {
+interface AboutDialogProps {
+  modalCls: ModalClass;
+  closeDialog: CloseModal;
+}
+export default function AboutDialog({
+  modalCls,
+  closeDialog,
+}: AboutDialogProps) {
   // const [msgName, setMsgName] = useState("");
   // const [msgEmail, setMsgEmail] = useState("");
   // const [msgContent, setMsgContent] = useState("");
@@ -25,7 +33,7 @@ export default function AboutDialog({ modalCls, closeDialog }) {
       className={modalCls}
       isOpen={!modalCls.includes("--display-none")}
       onDismiss={event => {
-        if (event.key === "Escape") {
+        if ((event as KeyboardEvent).key === "Escape") {
           closeDialog();
         }
       }}
@@ -82,7 +90,3 @@ export default function AboutDialog({ modalCls, closeDialog }) {
     </DialogOverlay>
   );
 }
-AboutDialog.propTypes = {
-  modalCls: PropTypes.string.isRequired,
-  closeDialog: PropTypes.func.isRequired,
-};
