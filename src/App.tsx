@@ -5,8 +5,15 @@ import ReactFlow, {
   Background,
   Controls,
   ReactFlowProvider,
-  isNode,
-  removeElements,
+  // isNode,
+  // removeElements,
+} from "react-flow-renderer";
+
+import type {
+  // XYPosition,
+  FlowElement,
+  OnLoadParams,
+  NodePosUpdate,
 } from "react-flow-renderer";
 
 import "./App.scss";
@@ -21,7 +28,9 @@ import type {
   NodeDataMap,
   ElemIndexMap,
   NewCoursePosition,
-  ContextTarget
+  ContextTargetStatus,
+  ContextTarget,
+  CourseStatus
 } from "types/main";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
@@ -44,6 +53,8 @@ import AddCourseDialog from "./components/dialogs/AddCourseDialog";
 import AboutDialog from "./components/dialogs/AboutDialog";
 
 import {
+  isNode,
+  removeElements,
   ZERO_POSITION,
   newConditionalNode,
   edgeArrowId,
@@ -74,19 +85,19 @@ export default function App() {
   ] = useDialogStatus();
   const [aboutDlgCls, openAboutDlg, closeAboutDlg] = useDialogStatus();
 
-  const flowInstance = useRef(null);
-  const updateNodePos = useRef(null);
-  const selectedElements = useRef(null);
-  const setSelectedElements = useRef(null);
-  const resetSelectedElements = useRef(null);
-  const unsetNodesSelection = useRef(null);
+  const flowInstance = useRef<OnLoadParams | null>(null);
+  const updateNodePos = useRef<({ id, pos }: NodePosUpdate) => void>(() => {});
+  const selectedElements = useRef<Element[]>([]);
+  const setSelectedElements = useRef<(e: Element[]) => void>(() => {});
+  const resetSelectedElements = useRef<() => void>(() => {});
+  const unsetNodesSelection = useRef<() => void>(() => {});
 
   const [elements, setElements] = useState<Element[]>(initialElements);
   const nodeData = useRef<NodeDataMap>(initialNodeData);
   const elemIndexes = useRef<ElemIndexMap>(initialIndexes);
   const undoStack = useRef<(Element[])[]>([]);
   const redoStack = useRef<(Element[])[]>([]);
-  const dragStartState = useRef<Element[]>(null);
+  const dragStartState = useRef<Element[]>([]);
   // Because drag start is triggered on mousedown even if no movement
   // occurs, the flow state at drag start should only be added to undo
   // history on drag end
@@ -101,12 +112,12 @@ export default function App() {
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  function onLoad(reactFlowInstance) {
+  function onLoad(reactFlowInstance: OnLoadParams) {
     reactFlowInstance.fitView();
     flowInstance.current = reactFlowInstance;
   }
 
-  function recalculatedElements(newElements: Element[]) {
+  function recalculatedElements(newElements: Element[]): Element[] {
     nodeData.current = newNodeData(newElements);
     let recalculatedElems = sortElementsByDepth(newElements, nodeData.current);
     elemIndexes.current = newElemIndexes(recalculatedElems);
@@ -116,12 +127,12 @@ export default function App() {
     return resetElementStates(recalculatedElems);
   }
 
-  function recordFlowState(elems = null) {
-    const flowElems = elems ?? flowInstance.current.toObject().elements;
+  function recordFlowState(elems: Element[] | null = null) {
+    const flowElems = elems ?? flowInstance.current?.toObject().elements;
     if (undoStack.current.length === MAX_UNDO_NUM) {
       undoStack.current.shift();
     }
-    undoStack.current.push(resetElementStates(flowElems));
+    undoStack.current.push(resetElementStates(flowElems as Element[]));
     redoStack.current = [];
   }
 
@@ -130,12 +141,17 @@ export default function App() {
       if (event.ctrlKey && event.key === "z") {
         if (undoStack.current.length) {
           redoStack.current.push(
-            resetElementStates(flowInstance.current.toObject().elements)
+            resetElementStates(
+              flowInstance.current?.toObject().elements as Element[]
+            )
           );
-          const pastElements = undoStack.current.pop();
+          const pastElements = undoStack.current.pop() as Element[];
           for (const elem of pastElements) {
             if (nodeData.current.has(elem.id)) {
-              updateNodePos.current({ id: elem.id, pos: elem.position });
+              updateNodePos.current({
+                id: elem.id,
+                pos: (elem as Node).position
+              });
             }
           }
           nodeData.current = newNodeData(pastElements);
@@ -148,12 +164,17 @@ export default function App() {
       if (event.ctrlKey && event.key === "y") {
         if (redoStack.current.length) {
           undoStack.current.push(
-            resetElementStates(flowInstance.current.toObject().elements)
+            resetElementStates(
+              flowInstance.current?.toObject().elements as Element[]
+            )
           );
-          const futureElements = redoStack.current.pop();
+          const futureElements = redoStack.current.pop() as Element[];
           for (const elem of futureElements) {
             if (nodeData.current.has(elem.id)) {
-              updateNodePos.current({ id: elem.id, pos: elem.position });
+              updateNodePos.current({
+                id: elem.id,
+                pos: (elem as Node).position
+              });
             }
           }
           nodeData.current = newNodeData(futureElements);
@@ -191,7 +212,9 @@ export default function App() {
     const downloadLink = document.createElement("a");
     const fileContents = {
       version: CURRENT_VERSION,
-      elements: resetElementStates(flowInstance.current.toObject().elements),
+      elements: resetElementStates(
+        flowInstance.current?.toObject().elements as Element[]
+      ),
     };
     const fileBlob = new Blob(
       [JSON.stringify(fileContents, null, 2)], { type: "application/json" }
@@ -207,7 +230,7 @@ export default function App() {
     newCoursePosition: NewCoursePosition,
   ) {
     recordFlowState();
-    let newElems = flowInstance.current.toObject().elements;
+    let newElems = flowInstance.current?.toObject().elements as Element[];
     if (connectToExisting) {
       newElems = autoconnect(
         newNode,
@@ -217,7 +240,7 @@ export default function App() {
         newCoursePosition === "relative",
       );
     } else {
-      newElems = newElems.push(newNode);
+      newElems.push(newNode);
     }
     setElements(recalculatedElements(newElems));
   }
@@ -232,14 +255,15 @@ export default function App() {
 
   /* ELEMENT */
   // Single change can only propagate 2 layers deep
-  function onElementClick(event: MouseEvent, targetElem: Element) {
-    // NOTE: targetElem isn't the actual element so can't use id equality
-    if (event.altKey && isNode(targetElem) && targetElem.type === "course") {
+  function onElementClick(event: MouseEvent, eventTarget: Element) {
+    // NOTE: eventTarget isn't the actual element so can't use id equality
+    if (event.altKey && isNode(eventTarget) && eventTarget.type === "course") {
       resetSelectedElements.current();
-      const nodeId = targetElem.id;
+      const nodeId = eventTarget.id;
       const newElements = elements.slice();
       let newStatus;
-      switch (elements[elemIndexes.current.get(nodeId)].data.nodeStatus) {
+      const targetElement = elements[elemIndexes.current.get(nodeId)];
+      switch ((targetElement as Node).data.nodeStatus) {
         case "ready":
           newStatus = "enrolled";
           break;
@@ -251,7 +275,11 @@ export default function App() {
       }
       recordFlowState();
       setNodeStatus(
-        nodeId, newStatus, newElements, nodeData.current, elemIndexes.current
+        nodeId,
+        newStatus as CourseStatus,
+        newElements,
+        nodeData.current,
+        elemIndexes.current,
       );
 
       const firstDiff = nodeData.current.get(nodeId).outgoingNodes;
@@ -286,11 +314,13 @@ export default function App() {
 
   /* NODE */
   function onNodeDragStart(_event: MouseEvent, _node: Node) {
-    dragStartState.current = flowInstance.current.toObject().elements;
+    dragStartState.current = (
+      flowInstance.current?.toObject().elements as Element[]
+    );
     setContextActive(false);
   }
 
-  function onNodeDragStop(_event: MouseEvent , _node: Node) {
+  function onNodeDragStop(_event: MouseEvent, _node: Node) {
     recordFlowState(dragStartState.current);
   }
 
@@ -306,10 +336,10 @@ export default function App() {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
         ...newElements[i],
-        data: { ...newElements[i].data, nodeConnected: true },
-      };
+        data: { ...(newElements[i] as Node).data, nodeConnected: true },
+      } as Node;
 
-      if (["or", "and"].includes(newElements[i].type)) {
+      if (["or", "and"].includes((newElements[i] as Node).type)) {
         applyHoverEffectBackward(id, newElements);
       }
     }
@@ -327,10 +357,10 @@ export default function App() {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
         ...newElements[i],
-        data: { ...newElements[i].data, nodeConnected: true },
-      };
+        data: { ...(newElements[i] as Node).data, nodeConnected: true },
+      } as Node;
 
-      if (["or", "and"].includes(newElements[i].type)) {
+      if (["or", "and"].includes((newElements[i] as Node).type)) {
         applyHoverEffectForward(id, newElements);
       }
     }
@@ -354,11 +384,11 @@ export default function App() {
     for (let i = 0; i < numNodes; i++) {
       newElements[i] = {
         ...newElements[i],
-        data: { ...newElements[i].data, nodeConnected: false },
-      };
+        data: { ...(newElements[i] as Node).data, nodeConnected: false },
+      } as Node;
     }
     for (let i = numNodes; i < numElems; i++) {
-      newElements[i] = { ...newElements[i], animated: false };
+      newElements[i] = { ...newElements[i] as Edge, animated: false };
     }
 
     setElements(newElements);
@@ -384,11 +414,9 @@ export default function App() {
         };
       } else if (!selectedIds.some(elemId => elemId.includes("->"))) {
         // Multiple nodes selected
-        const courseNodeSelected = (
-          selectedIds.some(nodeId => (
-            elements[elemIndexes.current.get(nodeId)].type === "course"
-          ))
-        );
+        const courseNodeSelected = selectedIds.some(nodeId => (
+          (elements[elemIndexes.current.get(nodeId)] as Node).type === "course"
+        ));
         contextData.current = {
           target: selectedIds,
           targetType: (
@@ -426,11 +454,12 @@ export default function App() {
       recordFlowState();
       const newElements = resetElementStates(elements);
       // Need to "unhover" to return to base state
+      const sourceNode = elements[elemIndexes.current.get(source)];
       newElements.push({
         id: newEdgeId,
         source,
         target,
-        className: elements[elemIndexes.current.get(source)].data.status,
+        className: (sourceNode as Node).data.nodeStatus,
         label: null,
       });
       setElements(recalculatedElements(newElements));
@@ -451,12 +480,13 @@ export default function App() {
       recordFlowState();
       setElements(prevElems => {
         const newElements = prevElems.slice();
+        const sourceNode = prevElems[elemIndexes.current.get(newSource)];
         newElements[elemIndexes.current.get(oldEdge.id)] = {
           ...oldEdge, // Keep CC status
           id: newEdgeId,
           source: newConnection.source,
           target: newConnection.target,
-          className: prevElems[elemIndexes.current.get(newSource)].data.status,
+          className: (sourceNode as Node).data.nodeStatus,
         };
         return recalculatedElements(newElements);
       });
@@ -472,12 +502,15 @@ export default function App() {
         ? selectedElements.current.map(elem => elem.id)
         : []
     );
+    const targetStatus = (
+      (elements[elemIndexes.current.get(edge.id)] as Edge).label
+    );
     if (selectedIds.includes(edge.id)) {
       if (selectedIds.length === 1) {
         contextData.current = {
           target: edge.id,
           targetType: "edge",
-          targetStatus: elements[elemIndexes.current.get(edge.id)].label,
+          targetStatus: targetStatus as ContextTargetStatus,
         };
       } else {
         contextData.current = {
@@ -491,7 +524,7 @@ export default function App() {
       contextData.current = {
         target: edge.id,
         targetType: "edge",
-        targetStatus: elements[elemIndexes.current.get(edge.id)].label,
+        targetStatus: targetStatus as ContextTargetStatus,
       };
     }
     setMouseXY({ x: event.clientX, y: event.clientY });
@@ -505,7 +538,9 @@ export default function App() {
 
   /* SELECTION */
   function onSelectionDragStart(_event: MouseEvent, _nodes: Node[]) {
-    dragStartState.current = flowInstance.current.toObject().elements;
+    dragStartState.current = (
+      flowInstance.current?.toObject().elements as Element[]
+    );
   }
 
   function onSelectionDragStop(_event: MouseEvent, _nodes: Node[]) {
@@ -516,7 +551,7 @@ export default function App() {
     event.preventDefault();
     const courseNodeSelected = (
       nodes.some(node => (
-        elements[elemIndexes.current.get(node.id)].type === "course"
+        (elements[elemIndexes.current.get(node.id)] as Node).type === "course"
       ))
     );
     contextData.current = {
@@ -610,7 +645,7 @@ export default function App() {
           }}
           // Event Handlers
           // --- Element ---
-          onElementClick={onElementClick}
+          onElementClick={onElementClick as (ev: MouseEvent, el: FlowElement) => void}
           onElementsRemove={onElementsRemove}
           // --- Node ---
           onNodeDragStart={onNodeDragStart}
@@ -652,7 +687,8 @@ export default function App() {
 
             const newElements = elements.slice();
             for (const id of nodeIds) {
-              if (elements[elemIndexes.current.get(id)].type === "course") {
+              const node = elements[elemIndexes.current.get(id)] as Node;
+              if (node.type === "course") {
                 setNodeStatus(
                   id, newStatus, newElements,
                   nodeData.current, elemIndexes.current
@@ -670,7 +706,7 @@ export default function App() {
 
             const newElements = elements.slice();
             const i = elemIndexes.current.get(edgeId);
-            const targetEdge = newElements[i];
+            const targetEdge = newElements[i] as Edge;
 
             if (targetEdge.label) {
               newElements[i] = {
@@ -699,7 +735,7 @@ export default function App() {
             recordFlowState();
 
             const newElements = autoconnect(
-              elements[elemIndexes.current.get(targetId)],
+              elements[elemIndexes.current.get(targetId)] as CourseNode,
               elements.slice(),
               nodeData.current.size,
               elemIndexes.current,
@@ -731,7 +767,7 @@ export default function App() {
             recordFlowState();
 
             const newNode = newConditionalNode(
-              type, flowInstance.current.project(xy)
+              type, flowInstance.current?.project(xy)
             );
 
             setElements(
@@ -757,7 +793,7 @@ export default function App() {
                     id: newEdgeId,
                     source: iNode,
                     target: oNode,
-                  });
+                  } as Edge);
                 }
               }
             }

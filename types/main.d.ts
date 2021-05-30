@@ -99,8 +99,9 @@ export type ModalClass = "--transparent --display-none" | "--transparent" | "";
 export type OpenModal = () => void;
 export type CloseModal = () => void;
 
+export type ContextTargetStatus = CourseStatus | "" | "CC";
 export interface ContextTarget {
   target: ElementId | ElementId[];
   targetType: string;
-  targetStatus: CourseStatus | "" | "CC";
+  targetStatus: ContextTargetStatus;
 }

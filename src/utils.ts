@@ -24,7 +24,6 @@ import type {
   AlwaysDefinedMap,
   NodeDataMap,
   ElemIndexMap,
-  ElementIndex,
   AmbiguityHandling,
 } from "../types/main";
 
@@ -299,7 +298,7 @@ export function sortElementsByDepth(
 export function newElemIndexes(
   elements: Element[],
 ): ElemIndexMap {
-  return new Map(elements.map((elem, i) => [elem.id, i]));
+  return new Map(elements.map((elem, i) => [elem.id, i])) as ElemIndexMap;
 }
 
 const COURSE_STATUSES: CourseStatus[] = [
