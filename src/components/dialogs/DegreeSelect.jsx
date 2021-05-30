@@ -27,7 +27,7 @@ export default function DegreeSelect({
   const [majors, setMajors] = useState([]);
   // const [minors, setMinors] = useState([]);
   const majorSelectRef = useRef(null);
-  const [ambiguousHandling, setAmbiguousHandling] = useState("aggressively");
+  const [ambiguityHandling, setAmbiguityHandling] = useState("aggressively");
 
   function addMajor() {
     if (!supportedMajors.length) {
@@ -52,7 +52,7 @@ export default function DegreeSelect({
     event.preventDefault();
     setBusy(true);
 
-    newDegreeFlow(majors, ambiguousHandling);
+    newDegreeFlow(majors, ambiguityHandling);
   }
 
   const majorsListElems = majors.map(m => {
@@ -113,8 +113,8 @@ export default function DegreeSelect({
       <small>See degree courses, suggest changes, and contribute new degree data&nbsp;<a href="https://github.com/awu43/prereq-flow-degrees" target="_blank" rel="noreferrer">here</a>.</small>
 
       <AmbiguitySelect
-        ambiguousHandling={ambiguousHandling}
-        setAmbiguousHandling={setAmbiguousHandling}
+        ambiguityHandling={ambiguityHandling}
+        setAmbiguityHandling={setAmbiguityHandling}
         busy={busy}
       />
 

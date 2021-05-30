@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 
 import "./AmbiguitySelect.scss";
 
+import type { AmbiguityHandling } from "../../../types/main";
+
+interface AmbiGuitySelectProps {
+  ambiguityHandling: AmbiguityHandling;
+  setAmbiguityHandling: (a: string) => void;
+  busy: boolean;
+}
 export default function AmbiguitySelect({
-  ambiguousHandling, setAmbiguousHandling, busy
-}) {
+  ambiguityHandling,
+  setAmbiguityHandling,
+  busy,
+}: AmbiGuitySelectProps) {
   const [fieldName, _setFieldName] = useState(() => nanoid());
   // Need a unique name for every new instance
 
@@ -17,8 +25,8 @@ export default function AmbiguitySelect({
         <input
           type="radio"
           name={fieldName}
-          checked={ambiguousHandling === "aggressively"}
-          onChange={() => setAmbiguousHandling("aggressively")}
+          checked={ambiguityHandling === "aggressively"}
+          onChange={() => setAmbiguityHandling("aggressively")}
         />
         Aggressively (all possible connections)
       </label>
@@ -26,16 +34,11 @@ export default function AmbiguitySelect({
         <input
           type="radio"
           name={fieldName}
-          checked={ambiguousHandling === "cautiously"}
-          onChange={() => setAmbiguousHandling("cautiously")}
+          checked={ambiguityHandling === "cautiously"}
+          onChange={() => setAmbiguityHandling("cautiously")}
         />
         Cautiously (no new connections)
       </label>
     </fieldset>
   );
 }
-AmbiguitySelect.propTypes = {
-  ambiguousHandling: PropTypes.string.isRequired,
-  setAmbiguousHandling: PropTypes.func.isRequired,
-  busy: PropTypes.bool.isRequired,
-};

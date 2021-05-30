@@ -21,6 +21,7 @@ import type {
   NodeDataMap,
   ElemIndexMap,
   ElementIndex,
+  AmbiguityHandling,
 } from "../types/main";
 
 // Wrapped to narrow type
@@ -121,7 +122,7 @@ export const CONCURRENT_LABEL = {
 
 export function generateInitialElements(
   courseData: CourseData[],
-  ambiguousHandling: "cautiously" | "aggressively",
+  ambiguityHandling: AmbiguityHandling,
 ): Element[] {
   const elements: Element[] = courseData.map(c => newCourseNode(c));
   const elementIds: Set<ElementId> = new Set(courseData.map(c => c.id));
@@ -193,10 +194,10 @@ export function generateInitialElements(
             }
             elements.push(edge);
           }
-        } else if (ambiguousHandling === "aggressively") {
+        } else if (ambiguityHandling === "aggressively") {
           addEdges(matches.slice(1), course, elements, elementIds);
         }
-      } else if (ambiguousHandling === "aggressively") {
+      } else if (ambiguityHandling === "aggressively") {
         addEdges(
           section.match(COURSE_REGEX) as RegExpMatchArray,
           course,

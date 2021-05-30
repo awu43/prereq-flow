@@ -78,3 +78,5 @@ type EdgeIndex = number;
 export type ElementIndex = NodeIndex | EdgeIndex;
 
 export type ElemIndexMap = AlwaysDefinedMap<ElementId, ElementIndex>;
+
+export type AmbiguityHandling = "aggressively" | "cautiously";

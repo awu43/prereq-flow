@@ -100,7 +100,7 @@ export default function NewFlowDialog({
       });
   }, []);
 
-  async function newDegreeFlow(majors, ambiguousHandling) {
+  async function newDegreeFlow(majors, ambiguityHandling) {
     setDegreeError("");
     try {
       const resp = await fetch(`${API_URL}/degrees/`, {
@@ -110,7 +110,7 @@ export default function NewFlowDialog({
       });
       const data = await resp.json();
 
-      const newElements = generateInitialElements(data, ambiguousHandling);
+      const newElements = generateInitialElements(data, ambiguityHandling);
       generateNewFlow(newElements);
       close();
     } catch (error) {
@@ -131,7 +131,7 @@ export default function NewFlowDialog({
   }
 
   async function newCurriculumFlow(
-    curriculum, includeExternal, ambiguousHandling
+    curriculum, includeExternal, ambiguityHandling
   ) {
     setCurriculumError("");
     try {
@@ -162,7 +162,7 @@ export default function NewFlowDialog({
         }
       }
 
-      const newElements = generateInitialElements(data, ambiguousHandling);
+      const newElements = generateInitialElements(data, ambiguityHandling);
       const edges = newElements.filter(elem => isEdge(elem));
       const externalOrphans = newElements.filter(elem => (
         isNode(elem)

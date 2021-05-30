@@ -18,7 +18,7 @@ export default function CurriculumSelect({
   const curriculumSelectRef = useRef(null);
 
   const [includeExternal, setIncludeExternal] = useState(false);
-  const [ambiguousHandling, setAmbiguousHandling] = useState("aggressively");
+  const [ambiguityHandling, setAmbiguityHandling] = useState("aggressively");
 
   function getCourses(event) {
     event.preventDefault();
@@ -28,7 +28,7 @@ export default function CurriculumSelect({
     const selectedCurriculum = (
       selectInput.options[selectInput.selectedIndex].value
     );
-    newCurriculumFlow(selectedCurriculum, includeExternal, ambiguousHandling);
+    newCurriculumFlow(selectedCurriculum, includeExternal, ambiguityHandling);
   }
 
   return (
@@ -65,8 +65,8 @@ export default function CurriculumSelect({
         Include external prerequisites
       </label>
       <AmbiguitySelect
-        ambiguousHandling={ambiguousHandling}
-        setAmbiguousHandling={setAmbiguousHandling}
+        ambiguityHandling={ambiguityHandling}
+        setAmbiguityHandling={setAmbiguityHandling}
         busy={busy}
       />
       <div className="CurriculumSelect__button-wrapper">
