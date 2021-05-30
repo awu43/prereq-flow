@@ -16,13 +16,10 @@ if (import.meta.hot) {
   import.meta.hot.accept();
 }
 
-// TODO: Degree select dialog (select courses)
 // TODO: Course add dialog (add connections)
 // TODO: Mobile/tablet warning
 // TODO: Add concurrent edge to legend
 // TODO: Dark mode
 
 // TODO: Context menu for edge style
-// TODO: Connection counters
-// TODO: Courses table
 // TODO: General cycle check on edge update/create

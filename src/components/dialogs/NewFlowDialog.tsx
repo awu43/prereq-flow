@@ -309,12 +309,8 @@ export default function NewFlowDialog({
               </TabPanels>
             </Tabs>
           </form>
-          {/* <CourseSelect
-          courseData={courseData}
-          generateNewFlow={generateNewFlow}
-        /> */}
         </div>
-        {/* Flex, 3x width + transform */}
+        {/* Flex, 2x width + transform */}
       </DialogContent>
     </DialogOverlay>
   );

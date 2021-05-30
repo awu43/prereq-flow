@@ -35,7 +35,7 @@
   }
 
   &__slides {
-    width: 300%;
+    width: 200%;
 
     display: flex;
     max-height: 26rem;
@@ -46,14 +46,11 @@
 
     // No transform for slide-0
     &.slide-1 {
-      transform: translateX(-(100%/3)*1);
-    }
-    &.slide-2 {
-      transform: translateX(-(100%/3)*2);
+      transform: translateX(-(100%/2)*1);
     }
 
     & > * {
-      width: calc(100%/3);
+      width: calc(100%/2);
       padding: 0 1rem;
     }
   }
