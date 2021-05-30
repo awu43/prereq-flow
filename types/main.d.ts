@@ -1,16 +1,15 @@
 import type { Dispatch, SetStateAction } from "react";
 
+import type { XYPosition } from "react-flow-renderer";
+
+export { XYPosition } from "react-flow-renderer";
+
 export type Campus = "Seattle" | "Bothell" | "Tacoma";
 
 export interface CurriculumData {
   campus: Campus;
   id: string;
   name: string;
-}
-
-export interface XYPosition {
-  x: number;
-  y: number;
 }
 
 export type NodeId = string;

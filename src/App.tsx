@@ -11,6 +11,8 @@ import ReactFlow, {
 
 import type {
   // XYPosition,
+  Node as FlowNode,
+  Edge as FlowEdge,
   FlowElement,
   OnLoadParams,
   NodePosUpdate,
@@ -255,9 +257,10 @@ export default function App() {
 
   /* ELEMENT */
   // Single change can only propagate 2 layers deep
-  function onElementClick(event: MouseEvent, eventTarget: Element) {
+  function onElementClick(event: MouseEvent, eventTarget: FlowElement) {
     // NOTE: eventTarget isn't the actual element so can't use id equality
-    if (event.altKey && isNode(eventTarget) && eventTarget.type === "course") {
+    // Change .type check if edges changed to have type property
+    if (event.altKey && eventTarget.type === "course") {
       resetSelectedElements.current();
       const nodeId = eventTarget.id;
       const newElements = elements.slice();
@@ -303,24 +306,24 @@ export default function App() {
     }
   }
 
-  function onElementsRemove(targetElems: Element[]) {
+  function onElementsRemove(targetElems: FlowElement[]) {
     recordFlowState();
     setElements(
       recalculatedElements(
-        removeElements(targetElems, elements)
+        removeElements(targetElems as Element[], elements)
       )
     );
   }
 
   /* NODE */
-  function onNodeDragStart(_event: MouseEvent, _node: Node) {
+  function onNodeDragStart(_event: MouseEvent, _node: FlowNode) {
     dragStartState.current = (
       flowInstance.current?.toObject().elements as Element[]
     );
     setContextActive(false);
   }
 
-  function onNodeDragStop(_event: MouseEvent, _node: Node) {
+  function onNodeDragStop(_event: MouseEvent, _node: FlowNode) {
     recordFlowState(dragStartState.current);
   }
 
@@ -366,7 +369,7 @@ export default function App() {
     }
   }
 
-  function onNodeMouseEnter(_event: MouseEvent, targetNode: Node) {
+  function onNodeMouseEnter(_event: MouseEvent, targetNode: FlowNode) {
     const nodeId = targetNode.id;
     const newElements = elements.slice();
 
@@ -376,7 +379,7 @@ export default function App() {
     setElements(newElements);
   }
 
-  function onNodeMouseLeave(_event: MouseEvent, _targetNode: Node) {
+  function onNodeMouseLeave(_event: MouseEvent, _targetNode: FlowNode) {
     const newElements = elements.slice();
 
     const numNodes = nodeData.current.size;
@@ -396,7 +399,7 @@ export default function App() {
     // Using an old for loop for speed over Array.map()
   }
 
-  function onNodeContextMenu(event: MouseEvent, node: Node) {
+  function onNodeContextMenu(event: MouseEvent, node: FlowNode) {
     event.preventDefault();
     unsetNodesSelection.current();
     const selectedIds = (
@@ -494,7 +497,7 @@ export default function App() {
     }
   }
 
-  function onEdgeContextMenu(event: MouseEvent, edge: Edge) {
+  function onEdgeContextMenu(event: MouseEvent, edge: FlowEdge) {
     event.preventDefault();
     unsetNodesSelection.current();
     const selectedIds = (
@@ -537,17 +540,17 @@ export default function App() {
   }
 
   /* SELECTION */
-  function onSelectionDragStart(_event: MouseEvent, _nodes: Node[]) {
+  function onSelectionDragStart(_event: MouseEvent, _nodes: FlowNode[]) {
     dragStartState.current = (
       flowInstance.current?.toObject().elements as Element[]
     );
   }
 
-  function onSelectionDragStop(_event: MouseEvent, _nodes: Node[]) {
+  function onSelectionDragStop(_event: MouseEvent, _nodes: FlowNode[]) {
     recordFlowState(dragStartState.current);
   }
 
-  function onSelectionContextMenu(event: MouseEvent, nodes: Node[]) {
+  function onSelectionContextMenu(event: MouseEvent, nodes: FlowNode[]) {
     event.preventDefault();
     const courseNodeSelected = (
       nodes.some(node => (
@@ -645,7 +648,7 @@ export default function App() {
           }}
           // Event Handlers
           // --- Element ---
-          onElementClick={onElementClick as (ev: MouseEvent, el: FlowElement) => void}
+          onElementClick={onElementClick}
           onElementsRemove={onElementsRemove}
           // --- Node ---
           onNodeDragStart={onNodeDragStart}
