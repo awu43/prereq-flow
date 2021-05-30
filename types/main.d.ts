@@ -1,6 +1,8 @@
 import type { Dispatch, SetStateAction } from "react";
 
-import type { XYPosition } from "react-flow-renderer";
+import type {
+  XYPosition,
+} from "react-flow-renderer";
 
 export { XYPosition } from "react-flow-renderer";
 

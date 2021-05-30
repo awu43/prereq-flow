@@ -16,6 +16,9 @@ import type {
   FlowElement,
   OnLoadParams,
   NodePosUpdate,
+  FlowTransform,
+  OnConnectStartParams,
+  Connection,
 } from "react-flow-renderer";
 
 import "./App.scss";
@@ -32,7 +35,7 @@ import type {
   NewCoursePosition,
   ContextTargetStatus,
   ContextTarget,
-  CourseStatus
+  CourseStatus,
 } from "types/main";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
@@ -55,7 +58,7 @@ import AddCourseDialog from "./components/dialogs/AddCourseDialog";
 import AboutDialog from "./components/dialogs/AboutDialog";
 
 import {
-  isNode,
+  // isNode,
   removeElements,
   ZERO_POSITION,
   newConditionalNode,
@@ -89,8 +92,8 @@ export default function App() {
 
   const flowInstance = useRef<OnLoadParams | null>(null);
   const updateNodePos = useRef<({ id, pos }: NodePosUpdate) => void>(() => {});
-  const selectedElements = useRef<Element[]>([]);
-  const setSelectedElements = useRef<(e: Element[]) => void>(() => {});
+  const selectedElements = useRef<FlowElement[]>([]);
+  const setSelectedElements = useRef<(e: FlowElement[]) => void>(() => {});
   const resetSelectedElements = useRef<() => void>(() => {});
   const unsetNodesSelection = useRef<() => void>(() => {});
 
@@ -436,7 +439,7 @@ export default function App() {
         };
       }
     } else {
-      setSelectedElements.current([node]);
+      setSelectedElements.current([node as Node]);
       contextData.current = {
         target: node.id,
         targetType: node.type === "course" ? "coursenode" : "conditionalnode",
@@ -448,7 +451,9 @@ export default function App() {
   }
 
   /* EDGE */
-  function onConnect({ source, target }: { source: NodeId, target: NodeId }) {
+  function onConnect(connection: FlowEdge | Connection) {
+    const source = connection.source as NodeId;
+    const target = connection.target as NodeId;
     const newEdgeId = edgeArrowId(source, target);
     const reverseEdgeId = edgeArrowId(target, source);
     // Creating a cycle causes infinite recursion in depth calculation
@@ -469,13 +474,14 @@ export default function App() {
     }
   }
 
-  function onConnectStart(_event, { _nodeId, _handleType }) {
+  // { nodeId, handleId, handleType }: OnConnectStartParams
+  function onConnectStart(_event: MouseEvent, _params: OnConnectStartParams) {
     setContextActive(false);
   }
 
-  function onEdgeUpdate(oldEdge: Edge, newConnection: Edge) {
-    const newSource = newConnection.source;
-    const newTarget = newConnection.target;
+  function onEdgeUpdate(oldEdge: FlowEdge, newConnection: Connection) {
+    const newSource = newConnection.source as NodeId;
+    const newTarget = newConnection.target as NodeId;
     const newEdgeId = edgeArrowId(newSource, newTarget);
     const reverseEdgeId = edgeArrowId(newTarget, newSource);
     if (!elemIndexes.current.has(newEdgeId)
@@ -487,10 +493,10 @@ export default function App() {
         newElements[elemIndexes.current.get(oldEdge.id)] = {
           ...oldEdge, // Keep CC status
           id: newEdgeId,
-          source: newConnection.source,
-          target: newConnection.target,
+          source: newConnection.source as NodeId,
+          target: newConnection.target as NodeId,
           className: (sourceNode as Node).data.nodeStatus,
-        };
+        } as Edge;
         return recalculatedElements(newElements);
       });
       // Need to use functional update here for some reason
@@ -523,7 +529,7 @@ export default function App() {
         };
       }
     } else {
-      setSelectedElements.current([edge]);
+      setSelectedElements.current([edge as Edge]);
       contextData.current = {
         target: edge.id,
         targetType: "edge",
@@ -535,7 +541,7 @@ export default function App() {
   }
 
   /* MOVE */
-  function onMoveStart(_flowTransform) {
+  function onMoveStart(_flowTransform: FlowTransform | undefined) {
     setContextActive(false);
   }
 
