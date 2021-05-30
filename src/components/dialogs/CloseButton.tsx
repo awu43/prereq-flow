@@ -4,7 +4,7 @@ import type { RefObject } from "react";
 import "./CloseButton.scss";
 
 interface CloseButtonProps {
-  btnRef: RefObject<HTMLButtonElement> | null;
+  btnRef?: RefObject<HTMLButtonElement> | null;
   onClick: () => void;
   disabled: boolean;
 }

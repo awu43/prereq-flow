@@ -1,20 +1,23 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+import type { KeyboardEvent } from "react";
 
-import { isEdge, isNode } from "react-flow-renderer";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import CloseButton from "./CloseButton";
 import Dropzone from "./Dropzone";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
+import { isNode, isEdge } from "../../utils";
+
+import type { ModalClass, CloseModal, Element } from "../../../types/main";
+
 import "./OpenFileDialog.scss";
 
 const SUPPORTED_VERSIONS = ["Beta", "Beta.1"];
-const DEPRECATED_VERSIONS = [];
+const DEPRECATED_VERSIONS: string[] = [];
 export const [CURRENT_VERSION] = SUPPORTED_VERSIONS.slice(-1);
 
-function betaToBeta1(elems) {
+function betaToBeta1(elems: Element[]) {
   // Change node type from "custom" to "course"
   // Remove selected field
   return elems.map(elem => (
@@ -29,7 +32,16 @@ function betaToBeta1(elems) {
 }
 const CONVERSION_FUNCS = [betaToBeta1];
 
-export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
+interface OpenFileDialogProps {
+  modalCls: ModalClass;
+  closeDialog: CloseModal;
+  openFlow: (openedElements: Element[]) => void;
+}
+export default function OpenFileDialog({
+  modalCls,
+  closeDialog,
+  openFlow,
+}: OpenFileDialogProps) {
   const [busy, setBusy] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -47,8 +59,8 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
     }
   }
 
-  function openFile(files) {
-    const [file] = files;
+  function openFile(files: File[]) {
+    const [file] = files as [File]; // Only single files allowed
 
     setBusy(true);
 
@@ -62,7 +74,9 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
 
     let loadedData;
     reader.onload = event => {
-      loadedData = JSON.parse(event.target.result);
+      // https://github.com/microsoft/TypeScript/issues/4163
+      // https://stackoverflow.com/a/35790786 <- Didn't work
+      loadedData = JSON.parse((event as any).target.result);
 
       const structureValid = (
         typeof loadedData === "object"
@@ -119,7 +133,7 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
       className={modalCls}
       isOpen={!modalCls.includes("--display-none")}
       onDismiss={event => {
-        if (event.key === "Escape" && !busy) {
+        if ((event as KeyboardEvent).key === "Escape" && !busy) {
           closeDialog();
         }
       }}
@@ -139,8 +153,3 @@ export default function OpenFileDialog({ modalCls, closeDialog, openFlow }) {
     </DialogOverlay>
   );
 }
-OpenFileDialog.propTypes = {
-  modalCls: PropTypes.string.isRequired,
-  closeDialog: PropTypes.func.isRequired,
-  openFlow: PropTypes.func.isRequired,
-};

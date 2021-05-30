@@ -59,5 +59,7 @@ module.exports = {
       argsIgnorePattern: "^_",
     }],
     "@typescript-eslint/naming-convention": "off",
+    "react/props-types": "off",
+    "react/require-default-props": "off",
   },
 };
