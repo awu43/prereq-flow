@@ -1,3 +1,5 @@
+import type { Dispatch, SetStateAction } from "react";
+
 export type Campus = "Seattle" | "Bothell" | "Tacoma";
 
 export interface CurriculumData {
@@ -87,7 +89,7 @@ export type ElementIndex = NodeIndex | EdgeIndex;
 
 export type ElemIndexMap = AlwaysDefinedMap<ElementId, ElementIndex>;
 
-export type SetState<Type> = (s: Type) => void;
+export type SetState<Type> = Dispatch<SetStateAction<Type>>;
 
 export type AmbiguityHandling = "aggressively" | "cautiously";
 
