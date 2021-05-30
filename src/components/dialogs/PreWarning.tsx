@@ -3,7 +3,7 @@ import type { RefObject } from "react";
 
 import "./PreWarning.scss";
 
-import type { SetState } from "../../../types/main";
+import type { SetState } from "types/main";
 
 interface PreWarningProps {
   warningAccepted: number;

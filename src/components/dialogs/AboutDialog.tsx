@@ -5,8 +5,8 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import "./AboutDialog.scss";
 
+import type { ModalClass, CloseModal } from "types/main";
 import CloseButton from "./CloseButton";
-import type { ModalClass, CloseModal } from "../../../types/main";
 
 interface AboutDialogProps {
   modalCls: ModalClass;

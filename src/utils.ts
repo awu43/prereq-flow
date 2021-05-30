@@ -25,7 +25,7 @@ import type {
   NodeDataMap,
   ElemIndexMap,
   AmbiguityHandling,
-} from "../types/main";
+} from "types/main";
 
 // Wrapped to narrow type
 export function isNode(elem: Element): elem is Node {

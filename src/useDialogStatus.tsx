@@ -1,7 +1,7 @@
 import { useState } from "react";
 
+import type { ModalClass, OpenModal, CloseModal } from "types/main";
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
-import type { ModalClass, OpenModal, CloseModal } from "../types/main";
 
 export default function useDialogStatus(): [ModalClass, OpenModal, CloseModal] {
   const [

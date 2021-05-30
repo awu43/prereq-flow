@@ -3,13 +3,13 @@ import type { KeyboardEvent } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
+import type { ModalClass, CloseModal, Element } from "types/main";
+
 import CloseButton from "./CloseButton";
 import Dropzone from "./Dropzone";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
 import { isNode, isEdge } from "../../utils";
-
-import type { ModalClass, CloseModal, Element } from "../../../types/main";
 
 import "./OpenFileDialog.scss";
 

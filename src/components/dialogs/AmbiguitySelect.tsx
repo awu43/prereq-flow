@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 
 import "./AmbiguitySelect.scss";
 
-import type { SetState, AmbiguityHandling } from "../../../types/main";
+import type { SetState, AmbiguityHandling } from "types/main";
 
 interface AmbiGuitySelectProps {
   ambiguityHandling: AmbiguityHandling;

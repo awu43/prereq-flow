@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { useDropzone } from "react-dropzone";
 // https://react-dropzone.js.org/#section-styling-dropzone
 
-import type { SetState } from "../../../types/main";
+import type { SetState } from "types/main";
 
 interface DropzoneProps {
   busy: boolean;

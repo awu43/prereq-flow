@@ -9,6 +9,16 @@ import {
   getConnectedEdges,
 } from "react-flow-renderer";
 
+import type {
+  Campus,
+  CurriculumData,
+  ModalClass,
+  CloseModal,
+  AmbiguityHandling,
+  Edge,
+  Element,
+} from "types/main";
+
 import CloseButton from "./CloseButton";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
@@ -22,16 +32,6 @@ import {
   COURSE_REGEX,
   generateInitialElements,
 } from "../../utils";
-
-import type {
-  Campus,
-  CurriculumData,
-  ModalClass,
-  CloseModal,
-  AmbiguityHandling,
-  Edge,
-  Element,
-} from "../../../types/main";
 
 import "./NewFlowDialog.scss";
 

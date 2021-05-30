@@ -7,8 +7,9 @@ import "tippy.js/dist/tippy.css";
 
 import { nanoid } from "nanoid";
 
+import type { SetState, AmbiguityHandling } from "types/main";
+
 import AmbiguitySelect from "./AmbiguitySelect";
-import type { SetState, AmbiguityHandling } from "../../../types/main";
 
 import "./DegreeSelect.scss";
 

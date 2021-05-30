@@ -19,11 +19,6 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import CloseButton from "./CloseButton";
-import CampusSelect from "./CampusSelect";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion";
-import { newCourseNode } from "../../utils";
-
 import type {
   Campus,
   CourseData,
@@ -32,7 +27,12 @@ import type {
   ModalClass,
   CloseModal,
   NewCoursePosition,
-} from "../../../types/main";
+} from "types/main";
+
+import CloseButton from "./CloseButton";
+import CampusSelect from "./CampusSelect";
+import usePrefersReducedMotion from "../../usePrefersReducedMotion";
+import { newCourseNode } from "../../utils";
 
 import "./AddCourseDialog.scss";
 
