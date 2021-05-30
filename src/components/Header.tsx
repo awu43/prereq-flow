@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+import type { ReactNode } from "react";
 
 import classNames from "classnames";
 
@@ -11,7 +11,11 @@ import usePrefersReducedMotion from "../usePrefersReducedMotion";
 
 import "./Header.scss";
 
-export default function Header(props) {
+interface HeaderProps {
+  version: string;
+  children: ReactNode;
+}
+export default function Header(props: HeaderProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const [pinned, setPinned] = useState(true);
@@ -22,7 +26,7 @@ export default function Header(props) {
         <Tippy
           content={pinned ? "Unpin header" : "Pin header"}
           trigger="mouseenter"
-          hideOnClick="false"
+          hideOnClick={false}
           placement="right"
           duration={prefersReducedMotion ? 0 : 100}
         >
@@ -45,7 +49,3 @@ export default function Header(props) {
     </header>
   );
 }
-Header.propTypes = {
-  version: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
