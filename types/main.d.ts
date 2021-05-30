@@ -40,12 +40,12 @@ interface BaseNode {
   position: XYPosition;
 }
 
-interface BaseNodeData {
+export interface BaseNodeData {
   nodeStatus: CourseStatus;
   nodeConnected: boolean;
 }
 
-interface CourseNodeData extends CourseData, BaseNodeData {}
+export interface CourseNodeData extends CourseData, BaseNodeData {}
 
 export interface CourseNode extends BaseNode {
   type: "course";

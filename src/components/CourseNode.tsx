@@ -6,7 +6,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import { Handle } from "react-flow-renderer";
+import { Handle, Position } from "react-flow-renderer";
 
 import type { CourseNodeData } from "types/main";
 
@@ -98,9 +98,9 @@ export default function CourseNode({ data }: { data: CourseNodeData }) {
           "CourseNode", data.nodeStatus, { connected: data.nodeConnected }
         )}
       >
-        <Handle type="target" position="left" />
+        <Handle type="target" position={Position.Left} />
         <div>{data.id}</div>
-        <Handle type="source" position="right" />
+        <Handle type="source" position={Position.Right} />
       </div>
     </Tippy>
   );

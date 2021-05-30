@@ -7,6 +7,7 @@ import ReactFlow, {
   ReactFlowProvider,
   // isNode,
   // removeElements,
+  BackgroundVariant,
 } from "react-flow-renderer";
 
 import type {
@@ -685,7 +686,7 @@ export default function App() {
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Control"
         >
-          <Background variant="lines" gap={32} size={1} />
+          <Background variant={BackgroundVariant.Lines} gap={32} size={1} />
           <Controls showInteractive={false} />
         </ReactFlow>
         <ContextMenu

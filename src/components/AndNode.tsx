@@ -2,7 +2,7 @@ import React from "react";
 
 import classNames from "classnames";
 
-import { Handle } from "react-flow-renderer";
+import { Handle, Position } from "react-flow-renderer";
 
 import type { BaseNodeData } from "types/main";
 
@@ -13,9 +13,9 @@ export default function AndNode({ data }: { data: BaseNodeData }) {
         "AndNode", data.nodeStatus, { connected: data.nodeConnected }
       )}
     >
-      <Handle type="target" position="left" />
+      <Handle type="target" position={Position.Left} />
       <div>AND</div>
-      <Handle type="source" position="right" />
+      <Handle type="source" position={Position.Right} />
     </div>
   );
 }
