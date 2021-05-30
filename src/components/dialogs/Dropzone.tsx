@@ -1,13 +1,24 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useMemo } from "react";
-import PropTypes from "prop-types";
 
 import classNames from "classnames";
 
 import { useDropzone } from "react-dropzone";
 // https://react-dropzone.js.org/#section-styling-dropzone
 
-export default function Dropzone({ busy, errorMsg, setErrorMsg, openFile }) {
+import type { SetState } from "../../../types/main";
+
+interface DropzoneProps {
+  busy: boolean;
+  errorMsg: string;
+  setErrorMsg: SetState<string>;
+  openFile: (files: File[]) => void;
+}
+export default function Dropzone({
+  busy,
+  errorMsg,
+  setErrorMsg,
+  openFile,
+}: DropzoneProps) {
   const [message, setMessage] = useState("Drop file or click to select");
 
   // Moved to CSS
@@ -71,7 +82,9 @@ export default function Dropzone({ busy, errorMsg, setErrorMsg, openFile }) {
 
   return (
     <div className={classNames("Dropzone", { "Dropzone--disabled": busy })}>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <div {...getRootProps({ style })}>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <input {...getInputProps()} />
         <p className={errorMsg.length ? "error" : ""}>
           {errorMsg.length ? errorMsg : message}
@@ -80,10 +93,3 @@ export default function Dropzone({ busy, errorMsg, setErrorMsg, openFile }) {
     </div>
   );
 }
-
-Dropzone.propTypes = {
-  busy: PropTypes.bool.isRequired,
-  errorMsg: PropTypes.string.isRequired,
-  setErrorMsg: PropTypes.func.isRequired,
-  openFile: PropTypes.func.isRequired,
-};
