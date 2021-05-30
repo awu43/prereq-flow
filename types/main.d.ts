@@ -18,7 +18,7 @@ export type EdgeId = string;
 export type ElementId = NodeId | EdgeId;
 
 export interface CourseData {
-  campus: Campus;
+  campus?: Campus;
   id: string;
   name: string;
   credits: string;
@@ -92,6 +92,7 @@ export type ElemIndexMap = AlwaysDefinedMap<ElementId, ElementIndex>;
 export type SetState<Type> = Dispatch<SetStateAction<Type>>;
 
 export type AmbiguityHandling = "aggressively" | "cautiously";
+export type NewCoursePosition = "zero" | "relative";
 
 export type ModalClass = "--transparent --display-none" | "--transparent" | "";
 export type CloseModal = () => void;

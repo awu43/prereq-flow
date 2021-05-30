@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types";
+import type { MouseEvent, KeyboardEvent, ChangeEvent } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
@@ -12,6 +12,7 @@ import {
   ComboboxOption,
   ComboboxOptionText,
 } from "@reach/combobox";
+import type { ComboboxOptionProps } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
 import Tippy from "@tippyjs/react";
@@ -22,6 +23,16 @@ import CloseButton from "./CloseButton";
 import CampusSelect from "./CampusSelect";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 import { newCourseNode } from "../../utils";
+
+import type {
+  Campus,
+  CourseData,
+  CourseNode,
+  NodeDataMap,
+  ModalClass,
+  CloseModal,
+  NewCoursePosition,
+} from "../../../types/main";
 
 import "./AddCourseDialog.scss";
 
@@ -41,23 +52,47 @@ const SEARCH_REGEX = /^\s*((?:[A-Z&]+ )+\d{3})(?:\D+|$)/;
 // Strips away leading whitespace
 // Will not match if >3 numbers in ID
 
+// AddCourseDialog.propTypes = {
+//   modalCls: PropTypes.string.isRequired,
+//   closeDialog: PropTypes.func.isRequired,
+//   nodeData: PropTypes.instanceOf(Map).isRequired,
+//   addCourseNode: PropTypes.func.isRequired,
+// };
+
+interface AddCourseDialogProps {
+  modalCls: ModalClass;
+  closeDialog: CloseModal;
+  nodeData: NodeDataMap;
+  addCourseNode: (
+    newNode: CourseNode,
+    connectToExisting: boolean,
+    newCoursePosition: NewCoursePosition,
+  ) => void;
+}
 export default function AddCourseDialog({
-  modalCls, closeDialog, nodeData, addCourseNode
-}) {
+  modalCls,
+  closeDialog,
+  nodeData,
+  addCourseNode,
+}: AddCourseDialogProps) {
   const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [selectedCampus, setSelectedCampus] = useState("Seattle");
+  const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
 
   const [selectedCourse, setSelectedCourse] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [autocompleteOpts, setAutocompleteOpts] = useState([]);
+  const [
+    autocompleteOpts,
+    setAutocompleteOpts
+  ] = useState<ComboboxOptionProps[]>([]);
 
-  const searchBarRef = useRef(null);
-  const addButtonRef = useRef(null);
-  const customCourseIdRef = useRef(null);
+  const searchBarRef = useRef<HTMLInputElement>(null);
+  const addButtonRef = useRef<HTMLButtonElement>(null);
+  const customCourseIdRef = useRef<HTMLInputElement>(null);
 
-  const websocket = useRef(null);
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065#issuecomment-446425911
+  const websocket = useRef<WebSocket | null>(null);
   useEffect(() => {
     const wsConnection = new WebSocket(WS_URL);
     websocket.current = wsConnection;
@@ -66,7 +101,7 @@ export default function AddCourseDialog({
     });
     wsConnection.addEventListener("message", event => {
       setAutocompleteOpts(
-        JSON.parse(event.data).map(courseData => (
+        JSON.parse(event.data).map((courseData: CourseData) => (
           <ComboboxOption key={courseData.id} value={courseData.id}>
             <ComboboxOptionText />: {courseData.name}
           </ComboboxOption>
@@ -84,9 +119,12 @@ export default function AddCourseDialog({
   }, []);
 
   const [connectToExisting, setConnectToExisting] = useState(true);
-  const [newCoursePosition, setNewCoursePosition] = useState("relative");
+  const [
+    newCoursePosition,
+    setNewCoursePosition
+  ] = useState<NewCoursePosition>("relative");
 
-  const [customCourseData, setCustomCourseData] = useState({
+  const [customCourseData, setCustomCourseData] = useState<CourseData>({
     id: "",
     name: "",
     credits: "",
@@ -124,12 +162,12 @@ export default function AddCourseDialog({
     }
   }
 
-  function onSearchChange(event) {
+  function onSearchChange(event: ChangeEvent) {
     // Heroku responds fast enough, no throttling/debouncing needed
     setErrorMsg("");
-    const newValue = event.target.value.toUpperCase();
+    const newValue = (event.target as HTMLInputElement).value.toUpperCase();
     setSelectedCourse(newValue);
-    if (newValue.trim().length) {
+    if (newValue.trim() && websocket.current) {
       websocket.current.send(
         JSON.stringify({ campus: selectedCampus, id: `${newValue.trim()} ` })
       );
@@ -139,7 +177,7 @@ export default function AddCourseDialog({
     }
   }
 
-  function addNewNode(data) {
+  function addNewNode(data: CourseData) {
     const node = newCourseNode(data);
     if (newCoursePosition === "zero") {
       node.position.x += (Math.random() - 0.5) * 200;
@@ -149,20 +187,24 @@ export default function AddCourseDialog({
     addCourseNode(node, connectToExisting, newCoursePosition);
   }
 
-  async function fetchCourse(event) {
+  async function fetchCourse(event: MouseEvent) {
     event.preventDefault();
 
     const courseMatch = selectedCourse.match(SEARCH_REGEX);
     if (!courseMatch) {
       setErrorMsg("Invalid course ID");
-      searchBarRef.current.focus();
+      if (searchBarRef.current) {
+        searchBarRef.current.focus();
+      }
       return;
     }
 
     const searchQuery = courseMatch[1];
     if (nodeData.has(searchQuery)) {
       setErrorMsg("Course already exists");
-      searchBarRef.current.focus();
+      if (searchBarRef.current) {
+        searchBarRef.current.focus();
+      }
       return;
     }
 
@@ -184,7 +226,9 @@ export default function AddCourseDialog({
     }
 
     setBusy(false);
-    searchBarRef.current.focus();
+    if (searchBarRef.current) {
+      searchBarRef.current.focus();
+    }
   }
 
   function addCustomCourse() {
@@ -192,7 +236,9 @@ export default function AddCourseDialog({
     addNewNode(customCourseData);
     resetCustomCourseData();
     setBusy(false);
-    customCourseIdRef.current.focus();
+    if (customCourseIdRef.current) {
+      customCourseIdRef.current.focus();
+    }
   }
 
   const uwCourseForm = (
@@ -210,7 +256,7 @@ export default function AddCourseDialog({
           arrow={false}
           duration={0}
           offset={[0, 5]}
-          visible={errorMsg.length}
+          visible={!!errorMsg}
         >
           <Combobox
             onSelect={item => { setSelectedCourse(item); }}
@@ -222,7 +268,7 @@ export default function AddCourseDialog({
               placeholder="Course ID (Enter key to add)"
               value={selectedCourse}
               onChange={onSearchChange}
-              disabled={connectionError || busy}
+              disabled={Boolean(connectionError || busy)}
             />
             <ComboboxPopover>
               <ComboboxList>
@@ -235,7 +281,7 @@ export default function AddCourseDialog({
           className="add-uw-course__add-button"
           ref={addButtonRef}
           type="submit"
-          disabled={connectionError || busy}
+          disabled={Boolean(connectionError || busy)}
           onClick={fetchCourse}
         >
           Add
@@ -365,7 +411,7 @@ export default function AddCourseDialog({
         className="add-custom-course__add-button"
         onClick={addCustomCourse}
         disabled={
-          !customCourseData.id.trim().length
+          !customCourseData.id.trim()
           || nodeData.has(customCourseData.id)
         }
       >
@@ -379,7 +425,7 @@ export default function AddCourseDialog({
       className={modalCls}
       isOpen={!modalCls.includes("--display-none")}
       onDismiss={event => {
-        if (event.key === "Escape" && !busy) {
+        if ((event as KeyboardEvent).key === "Escape" && !busy) {
           closeDialog();
         }
         // Don't close on clicking modal background
@@ -405,9 +451,3 @@ export default function AddCourseDialog({
     </DialogOverlay>
   );
 }
-AddCourseDialog.propTypes = {
-  modalCls: PropTypes.string.isRequired,
-  closeDialog: PropTypes.func.isRequired,
-  nodeData: PropTypes.instanceOf(Map).isRequired,
-  addCourseNode: PropTypes.func.isRequired,
-};
