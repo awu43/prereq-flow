@@ -5,13 +5,10 @@ import ReactFlow, {
   Background,
   Controls,
   ReactFlowProvider,
-  // isNode,
-  // removeElements,
   BackgroundVariant,
 } from "react-flow-renderer";
 
 import type {
-  // XYPosition,
   Node as FlowNode,
   Edge as FlowEdge,
   FlowElement,
@@ -61,7 +58,6 @@ import AddCourseDialog from "./components/dialogs/AddCourseDialog";
 import AboutDialog from "./components/dialogs/AboutDialog";
 
 import {
-  // isNode,
   removeElements,
   ZERO_POSITION,
   newConditionalNode,
@@ -709,7 +705,9 @@ export default function App() {
             }
 
             setElements(
-              updateAllNodes(newElements, nodeData.current, elemIndexes.current)
+              updateAllNodes(
+                newElements, nodeData.current, elemIndexes.current
+              )
             );
           }}
           toggleEdgeConcurrency={edgeId => {
@@ -733,7 +731,9 @@ export default function App() {
             }
 
             setElements(
-              updateAllNodes(newElements, nodeData.current, elemIndexes.current)
+              updateAllNodes(
+                newElements, nodeData.current, elemIndexes.current
+              )
             );
           }}
           deleteElems={elemIds => {

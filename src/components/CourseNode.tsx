@@ -10,7 +10,6 @@ import { Handle, Position } from "react-flow-renderer";
 
 import type { CourseNodeData } from "types/main";
 
-// Not sure how to pass this from App into CustomNode
 import usePrefersReducedMotion from "../usePrefersReducedMotion";
 
 import { COURSE_REGEX } from "../utils";

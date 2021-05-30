@@ -29,7 +29,8 @@ export interface CourseData {
 }
 
 export type CourseStatus = (
-  "completed" | "enrolled"| "ready" | `${"under-one" | "one" | "over-one"}-away`
+  "completed" | "enrolled" | "ready"
+  | `${"under-one" | "one" | "over-one"}-away`
 );
 
 export type ConditionalTypes = "or" | "and";
