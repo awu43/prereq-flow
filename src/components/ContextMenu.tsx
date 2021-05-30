@@ -1,20 +1,47 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from "react";
-import PropTypes from "prop-types";
 
 import { useStoreActions } from "react-flow-renderer";
 
 import "./ContextMenu.scss";
 
+import type {
+  CourseStatus,
+  XYPosition,
+  NodeId,
+  EdgeId,
+  ElementId,
+  ConditionalTypes,
+  ContextTarget,
+} from "types/main";
+
 import { COURSE_STATUS_CODES } from "../utils";
 
+interface ContextMenuProps {
+  active: boolean;
+  data: ContextTarget;
+  xy: XYPosition;
+  setSelectionStatuses: (nodeIds: NodeId[], newStatus: CourseStatus) => void;
+  toggleEdgeConcurrency: (edgeId: EdgeId) => void;
+  deleteElems: (elemIds: ElementId[]) => void;
+  connectAll: (targetId: NodeId) => void;
+  disconnectAll: (targetIds: NodeId[]) => void;
+  newConditionalNode: (type: ConditionalTypes, xy: XYPosition) => void;
+  reroute: (targetId: NodeId) => void;
+}
 export default function ContextMenu({
-  active, data, xy,
-  setSelectionStatuses, deleteElems,
-  connectAll, disconnectAll, toggleEdgeConcurrency,
-  newConditionalNode, reroute,
-}) {
+  active,
+  data,
+  xy,
+  setSelectionStatuses,
+  toggleEdgeConcurrency,
+  deleteElems,
+  connectAll,
+  disconnectAll,
+  newConditionalNode,
+  reroute,
+}: ContextMenuProps) {
   const unsetNodesSelection = useStoreActions(actions => (
     actions.unsetNodesSelection
   ));
@@ -23,7 +50,7 @@ export default function ContextMenu({
 
   function deleteAndClearSelection() {
     unsetNodesSelection();
-    deleteElems(target);
+    deleteElems(target as ElementId[]);
   }
 
   if (!active) {
@@ -40,21 +67,21 @@ export default function ContextMenu({
           <li
             key="planned"
             className={targetStatusCode >= 2 ? "current" : ""}
-            onClick={() => setSelectionStatuses([target], "ready")}
+            onClick={() => setSelectionStatuses([target as NodeId], "ready")}
           >
             <p>Planned</p>
           </li>
           <li
             key="enrolled"
             className={targetStatus === "enrolled" ? "current" : ""}
-            onClick={() => setSelectionStatuses([target], "enrolled")}
+            onClick={() => setSelectionStatuses([target as NodeId], "enrolled")}
           >
             <p>Enrolled</p>
           </li>
           <li
             key="complete"
             className={targetStatus === "completed" ? "current" : ""}
-            onClick={() => setSelectionStatuses([target], "completed")}
+            onClick={() => setSelectionStatuses([target as NodeId], "completed")}
           >
             <p>Completed</p>
           </li>
@@ -64,16 +91,22 @@ export default function ContextMenu({
       menuOptions = (
         <>
           {targetStatusCode < 3 && courseStatusOptions}
-          <li className="connect-all" onClick={() => connectAll(target)}>
+          <li
+            className="connect-all"
+            onClick={() => connectAll(target as NodeId)}
+          >
             <p>Connect&nbsp;all</p>
           </li>
           <li
             className="disconnect-all"
-            onClick={() => disconnectAll([target])}
+            onClick={() => disconnectAll([target as NodeId])}
           >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li className="delete" onClick={() => deleteElems([target])}>
+          <li
+            className="delete"
+            onClick={() => deleteElems([target as NodeId])}
+          >
             <p>Delete</p>
           </li>
         </>
@@ -86,14 +119,17 @@ export default function ContextMenu({
         <>
           <li
             className="disconnect-all"
-            onClick={() => disconnectAll([target])}
+            onClick={() => disconnectAll([target as NodeId])}
           >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li className="reroute" onClick={() => reroute(target)}>
+          <li className="reroute" onClick={() => reroute(target as NodeId)}>
             <p>Reroute</p>
           </li>
-          <li className="delete" onClick={() => deleteElems([target])}>
+          <li
+            className="delete"
+            onClick={() => deleteElems([target as NodeId])}
+          >
             <p>Delete</p>
           </li>
         </>
@@ -106,12 +142,15 @@ export default function ContextMenu({
           <li
             key="concurrent"
             className={targetStatus === "CC" ? "current" : ""}
-            onClick={() => toggleEdgeConcurrency(target)}
+            onClick={() => toggleEdgeConcurrency(target as EdgeId)}
           >
             <p>Concurrent</p>
           </li>
           <hr />
-          <li className="delete" onClick={() => deleteElems([target])}>
+          <li
+            className="delete"
+            onClick={() => deleteElems([target as EdgeId])}
+          >
             <p>Delete</p>
           </li>
         </>
@@ -123,27 +162,32 @@ export default function ContextMenu({
         <>
           <li
             key="planned"
-            onClick={() => setSelectionStatuses(target, "ready")}
+            onClick={() => setSelectionStatuses(target as NodeId[], "ready")}
           >
             <p>Planned</p>
           </li>
           <li
             key="enrolled"
-            onClick={() => setSelectionStatuses(target, "enrolled")}
+            onClick={() => setSelectionStatuses(target as NodeId[], "enrolled")}
           >
             <p>Enrolled</p>
           </li>
           <li
             key="complete"
-            onClick={() => setSelectionStatuses(target, "completed")}
+            onClick={() => setSelectionStatuses(target as NodeId[], "completed")}
           >
             <p>Completed</p>
           </li>
           <hr />
-          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+          <li
+            className="disconnect-all"
+            onClick={() => disconnectAll(target as NodeId[])}
+          >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li onClick={() => deleteElems(target)}><p>Delete</p></li>
+          <li onClick={() => deleteElems(target as NodeId[])}>
+            <p>Delete</p>
+          </li>
         </>
       );
       break;
@@ -151,10 +195,15 @@ export default function ContextMenu({
       // At least one conditional node
       menuOptions = (
         <>
-          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+          <li
+            className="disconnect-all"
+            onClick={() => disconnectAll(target as NodeId[])}
+          >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li onClick={() => deleteElems(target)}><p>Delete</p></li>
+          <li onClick={() => deleteElems(target as NodeId[])}>
+            <p>Delete</p>
+          </li>
         </>
       );
       break;
@@ -163,7 +212,7 @@ export default function ContextMenu({
       // At least one node and at least one edge
       menuOptions = (
         <>
-          <li onClick={() => deleteElems(target)}>
+          <li onClick={() => deleteElems(target as ElementId[])}>
             <p>Delete</p>
           </li>
         </>
@@ -175,27 +224,32 @@ export default function ContextMenu({
         <>
           <li
             key="planned"
-            onClick={() => setSelectionStatuses(target, "ready")}
+            onClick={() => setSelectionStatuses(target as NodeId[], "ready")}
           >
             <p>Planned</p>
           </li>
           <li
             key="enrolled"
-            onClick={() => setSelectionStatuses(target, "enrolled")}
+            onClick={() => setSelectionStatuses(target as NodeId[], "enrolled")}
           >
             <p>Enrolled</p>
           </li>
           <li
             key="complete"
-            onClick={() => setSelectionStatuses(target, "completed")}
+            onClick={() => setSelectionStatuses(target as NodeId[], "completed")}
           >
             <p>Completed</p>
           </li>
           <hr />
-          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+          <li
+            className="disconnect-all"
+            onClick={() => disconnectAll(target as NodeId[])}
+          >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li onClick={deleteAndClearSelection}><p>Delete</p></li>
+          <li onClick={deleteAndClearSelection}>
+            <p>Delete</p>
+          </li>
         </>
       );
       break;
@@ -203,10 +257,15 @@ export default function ContextMenu({
       // At least one conditional node
       menuOptions = (
         <>
-          <li className="disconnect-all" onClick={() => disconnectAll(target)}>
+          <li
+            className="disconnect-all"
+            onClick={() => disconnectAll(target as NodeId[])}
+          >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li onClick={deleteAndClearSelection}><p>Delete</p></li>
+          <li onClick={deleteAndClearSelection}>
+            <p>Delete</p>
+          </li>
         </>
       );
       break;
@@ -234,26 +293,3 @@ export default function ContextMenu({
     </ul>
   );
 }
-
-ContextMenu.propTypes = {
-  active: PropTypes.bool.isRequired,
-  data: PropTypes.shape({
-    target: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]),
-    targetType: PropTypes.string,
-    targetStatus: PropTypes.string,
-  }).isRequired,
-  xy: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-  }).isRequired,
-  setSelectionStatuses: PropTypes.func.isRequired,
-  deleteElems: PropTypes.func.isRequired,
-  connectAll: PropTypes.func.isRequired,
-  disconnectAll: PropTypes.func.isRequired,
-  toggleEdgeConcurrency: PropTypes.func.isRequired,
-  newConditionalNode: PropTypes.func.isRequired,
-  reroute: PropTypes.func.isRequired,
-};

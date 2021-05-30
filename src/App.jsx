@@ -80,7 +80,7 @@ export default function App() {
   const [contextActive, setContextActive] = useState(false);
   const contextData = useRef({
     target: "",
-    typeType: "node",
+    targetType: "node",
     targetStatus: "",
   });
   const [mouseXY, setMouseXY] = useState(ZERO_POSITION);
