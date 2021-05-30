@@ -106,3 +106,7 @@ export interface ContextTarget {
   targetType: string;
   targetStatus: ContextTargetStatus;
 }
+
+export type UpdateNodePos = ({ id, pos }: NodePosUpdate) => void;
+export type SelectedElements = FlowElement[];
+export type SetSelectedElements = (e: FlowElement[]) => void;

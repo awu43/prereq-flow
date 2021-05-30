@@ -15,7 +15,6 @@ import type {
   Edge as FlowEdge,
   FlowElement,
   OnLoadParams,
-  NodePosUpdate,
   FlowTransform,
   OnConnectStartParams,
   Connection,
@@ -36,6 +35,9 @@ import type {
   ContextTargetStatus,
   ContextTarget,
   CourseStatus,
+  UpdateNodePos,
+  SelectedElements,
+  SetSelectedElements,
 } from "types/main";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
@@ -91,9 +93,9 @@ export default function App() {
   const [aboutDlgCls, openAboutDlg, closeAboutDlg] = useDialogStatus();
 
   const flowInstance = useRef<OnLoadParams | null>(null);
-  const updateNodePos = useRef<({ id, pos }: NodePosUpdate) => void>(() => {});
-  const selectedElements = useRef<FlowElement[]>([]);
-  const setSelectedElements = useRef<(e: FlowElement[]) => void>(() => {});
+  const updateNodePos = useRef<UpdateNodePos>(() => {});
+  const selectedElements = useRef<SelectedElements>([]);
+  const setSelectedElements = useRef<SetSelectedElements>(() => {});
   const resetSelectedElements = useRef<() => void>(() => {});
   const unsetNodesSelection = useRef<() => void>(() => {});
 
