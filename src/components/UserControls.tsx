@@ -6,7 +6,7 @@ import "./UserControls.scss";
 
 export default function UserControls() {
   const [controlsClosed, setControlsClosed] = useState(true);
-  const openControlsButtonRef = useRef(null);
+  const openControlsButtonRef = useRef<HTMLButtonElement>(null);
   // const closeControlsButtonRef = useRef(null);
 
   return (
@@ -44,9 +44,11 @@ export default function UserControls() {
             className="UserControls__close-btn"
             onClick={() => {
               setControlsClosed(true);
-              openControlsButtonRef.current.focus();
+              if (openControlsButtonRef.current) {
+                openControlsButtonRef.current.focus();
+              }
             }}
-            tabIndex={controlsClosed ? "-1" : "0"}
+            tabIndex={controlsClosed ? -1 : 0}
           >
             <img src="dist/icons/chevron-right.svg" alt="Close controls" />
           </button>
