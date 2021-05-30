@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import PropTypes from "prop-types";
+import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -7,28 +7,54 @@ import "tippy.js/dist/tippy.css";
 
 import CampusSelect from "./CampusSelect";
 import AmbiguitySelect from "./AmbiguitySelect";
+import type {
+  SetState,
+  AmbiguityHandling,
+  Campus,
+} from "../../../types/main";
 
 import "./CurriculumSelect.scss";
 
+interface CurriculumSelectProps {
+  connectionError: boolean;
+  busy: boolean;
+  setBusy: SetState<boolean>;
+  supportedCurricula: Map<Campus, HTMLOptionElement[]>;
+  newCurriculumFlow: (
+    curriculum: string,
+    includeExternal: boolean,
+    ambiguityHandling: AmbiguityHandling,
+  ) => void;
+  errorMsg: string;
+}
 export default function CurriculumSelect({
-  connectionError, busy, setBusy,
-  supportedCurricula, newCurriculumFlow, errorMsg
-}) {
-  const [selectedCampus, setSelectedCampus] = useState("Seattle");
-  const curriculumSelectRef = useRef(null);
+  connectionError,
+  busy,
+  setBusy,
+  supportedCurricula,
+  newCurriculumFlow,
+  errorMsg,
+}: CurriculumSelectProps) {
+  const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
+  const curriculumSelectRef = useRef<HTMLSelectElement>(null);
 
   const [includeExternal, setIncludeExternal] = useState(false);
-  const [ambiguityHandling, setAmbiguityHandling] = useState("aggressively");
+  const [
+    ambiguityHandling,
+    setAmbiguityHandling
+  ] = useState<AmbiguityHandling>("aggressively");
 
-  function getCourses(event) {
+  function getCourses(event: MouseEvent) {
     event.preventDefault();
     setBusy(true);
 
-    const selectInput = curriculumSelectRef.current;
-    const selectedCurriculum = (
-      selectInput.options[selectInput.selectedIndex].value
-    );
-    newCurriculumFlow(selectedCurriculum, includeExternal, ambiguityHandling);
+    if (curriculumSelectRef.current) {
+      const selectInput = curriculumSelectRef.current;
+      const selectedCurriculum = (
+        selectInput.options[selectInput.selectedIndex].value
+      );
+      newCurriculumFlow(selectedCurriculum, includeExternal, ambiguityHandling);
+    }
   }
 
   return (
@@ -45,7 +71,7 @@ export default function CurriculumSelect({
         arrow={false}
         duration={0}
         offset={[0, 5]}
-        visible={errorMsg.length}
+        visible={!!errorMsg}
       >
         <select
           className="CurriculumSelect__select-input"
@@ -83,11 +109,3 @@ export default function CurriculumSelect({
     </div>
   );
 }
-CurriculumSelect.propTypes = {
-  connectionError: PropTypes.bool.isRequired,
-  busy: PropTypes.bool.isRequired,
-  setBusy: PropTypes.func.isRequired,
-  supportedCurricula: PropTypes.instanceOf(Map).isRequired,
-  newCurriculumFlow: PropTypes.func.isRequired,
-  errorMsg: PropTypes.string.isRequired,
-};

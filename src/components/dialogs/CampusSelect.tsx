@@ -2,11 +2,11 @@ import React from "react";
 
 import "./CampusSelect.scss";
 
-import type { SetState, Campuses } from "../../../types/main";
+import type { SetState, Campus } from "../../../types/main";
 
 interface CampusSelectProps {
-  selectedCampus: Campuses;
-  setSelectedCampus: SetState<string>;
+  selectedCampus: Campus;
+  setSelectedCampus: SetState<Campus>;
   busy: boolean;
 }
 export default function CampusSelect({

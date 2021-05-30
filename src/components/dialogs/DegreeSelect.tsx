@@ -27,7 +27,10 @@ interface DegreeSelectProps {
   busy: boolean;
   setBusy: SetState<boolean>;
   supportedMajors: string[];
-  newDegreeFlow: (majors: string[], ambHandle: AmbiguityHandling) => void;
+  newDegreeFlow: (
+    majors: string[],
+    ambiguityHandling: AmbiguityHandling,
+  ) => void;
   errorMsg: string;
 }
 export default function DegreeSelect({
