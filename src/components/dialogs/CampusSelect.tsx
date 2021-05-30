@@ -1,11 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import "./CampusSelect.scss";
 
+import type { SetState, Campuses } from "../../../types/main";
+
+interface CampusSelectProps {
+  selectedCampus: Campuses;
+  setSelectedCampus: SetState<string>;
+  busy: boolean;
+}
 export default function CampusSelect({
-  selectedCampus, setSelectedCampus, busy
-}) {
+  selectedCampus,
+  setSelectedCampus,
+  busy,
+}: CampusSelectProps) {
   return (
     <fieldset className="CampusSelect" disabled={busy}>
       <label className="CampusSelect__radio-label--seattle">
@@ -41,8 +49,3 @@ export default function CampusSelect({
     </fieldset>
   );
 }
-CampusSelect.propTypes = {
-  selectedCampus: PropTypes.string.isRequired,
-  setSelectedCampus: PropTypes.func.isRequired,
-  busy: PropTypes.bool.isRequired,
-};

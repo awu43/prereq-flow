@@ -79,4 +79,8 @@ export type ElementIndex = NodeIndex | EdgeIndex;
 
 export type ElemIndexMap = AlwaysDefinedMap<ElementId, ElementIndex>;
 
+export type SetState<Type> = (s: Type) => void;
+
 export type AmbiguityHandling = "aggressively" | "cautiously";
+
+export type Campuses = "Seattle" | "Bothell" | "Tacoma";
