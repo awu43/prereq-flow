@@ -10,3 +10,5 @@
 //     expect(document.body.contains(linkElement));
 //   });
 // });
+
+// WTR will error on empty test file
