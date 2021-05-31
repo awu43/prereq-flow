@@ -23,7 +23,11 @@ import "./App.scss";
 import type {
   XYPosition,
   NodeId,
+  EdgeId,
+  ElementId,
+  CourseStatus,
   CourseNode,
+  ConditionalTypes,
   Node,
   Edge,
   Element,
@@ -32,7 +36,6 @@ import type {
   NewCoursePosition,
   ContextTargetStatus,
   ContextTarget,
-  CourseStatus,
   UpdateNodePos,
   SelectedElements,
   SetSelectedElements,
@@ -689,28 +692,30 @@ export default function App() {
           active={contextActive}
           data={contextData.current}
           xy={mouseXY}
-          setSelectionStatuses={(nodeIds, newStatus) => {
-            resetSelectedElements.current();
-            recordFlowState();
+          setSelectionStatuses={
+            (nodeIds: NodeId[], newStatus: CourseStatus) => {
+              resetSelectedElements.current();
+              recordFlowState();
 
-            const newElements = elements.slice();
-            for (const id of nodeIds) {
-              const node = elements[elemIndexes.current.get(id)] as Node;
-              if (node.type === "course") {
-                setNodeStatus(
-                  id, newStatus, newElements,
-                  nodeData.current, elemIndexes.current
-                );
+              const newElements = elements.slice();
+              for (const id of nodeIds) {
+                const node = elements[elemIndexes.current.get(id)] as Node;
+                if (node.type === "course") {
+                  setNodeStatus(
+                    id, newStatus, newElements,
+                    nodeData.current, elemIndexes.current
+                  );
+                }
               }
-            }
 
-            setElements(
-              updateAllNodes(
-                newElements, nodeData.current, elemIndexes.current
-              )
-            );
-          }}
-          toggleEdgeConcurrency={edgeId => {
+              setElements(
+                updateAllNodes(
+                  newElements, nodeData.current, elemIndexes.current
+                )
+              );
+            }
+          }
+          toggleEdgeConcurrency={(edgeId: EdgeId) => {
             resetSelectedElements.current();
             recordFlowState();
 
@@ -736,13 +741,13 @@ export default function App() {
               )
             );
           }}
-          deleteElems={elemIds => {
+          deleteElems={(elemIds: ElementId[]) => {
             resetSelectedElements.current();
             onElementsRemove(
               elemIds.map(id => elements[elemIndexes.current.get(id)])
             );
           }}
-          connectAll={targetId => {
+          connectAll={(targetId: NodeId) => {
             resetSelectedElements.current();
             recordFlowState();
 
@@ -754,7 +759,7 @@ export default function App() {
             );
             setElements(recalculatedElements(newElements));
           }}
-          disconnectAll={targetIds => {
+          disconnectAll={(targetIds: NodeId[]) => {
             resetSelectedElements.current();
             recordFlowState();
 
@@ -774,7 +779,7 @@ export default function App() {
               )
             );
           }}
-          newConditionalNode={(type, xy) => {
+          newConditionalNode={(type: ConditionalTypes, xy: XYPosition) => {
             resetSelectedElements.current();
             recordFlowState();
 
@@ -786,7 +791,7 @@ export default function App() {
               recalculatedElements(elements.concat([newNode]))
             );
           }}
-          reroute={targetId => {
+          reroute={(targetId: NodeId) => {
             resetSelectedElements.current();
             recordFlowState();
 
