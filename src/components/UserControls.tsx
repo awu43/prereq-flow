@@ -44,9 +44,7 @@ export default function UserControls() {
             className="UserControls__close-btn"
             onClick={() => {
               setControlsClosed(true);
-              if (openControlsButtonRef.current) {
-                openControlsButtonRef.current.focus();
-              }
+              openControlsButtonRef.current?.focus();
             }}
             tabIndex={controlsClosed ? -1 : 0}
           >

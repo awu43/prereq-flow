@@ -193,18 +193,14 @@ export default function AddCourseDialog({
     const courseMatch = selectedCourse.match(SEARCH_REGEX);
     if (!courseMatch) {
       setErrorMsg("Invalid course ID");
-      if (searchBarRef.current) {
-        searchBarRef.current.focus();
-      }
+      searchBarRef.current?.focus();
       return;
     }
 
     const searchQuery = courseMatch[1];
     if (nodeData.has(searchQuery)) {
       setErrorMsg("Course already exists");
-      if (searchBarRef.current) {
-        searchBarRef.current.focus();
-      }
+      searchBarRef.current?.focus();
       return;
     }
 
@@ -226,9 +222,7 @@ export default function AddCourseDialog({
     }
 
     setBusy(false);
-    if (searchBarRef.current) {
-      searchBarRef.current.focus();
-    }
+    searchBarRef.current?.focus();
   }
 
   function addCustomCourse() {
@@ -236,9 +230,7 @@ export default function AddCourseDialog({
     addNewNode(customCourseData);
     resetCustomCourseData();
     setBusy(false);
-    if (customCourseIdRef.current) {
-      customCourseIdRef.current.focus();
-    }
+    customCourseIdRef.current?.focus();
   }
 
   const uwCourseForm = (

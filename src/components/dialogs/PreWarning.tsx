@@ -43,9 +43,7 @@ export default function PreWarning({
             onKeyDown={event => {
               if (event.key === "Tab" && !warningAccepted) {
                 event.preventDefault();
-                if (closeButtonRef.current) {
-                  closeButtonRef.current.focus();
-                }
+                closeButtonRef.current?.focus();
               }
             }}
             disabled={!!warningAccepted}
