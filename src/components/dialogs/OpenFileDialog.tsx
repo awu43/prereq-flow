@@ -3,7 +3,7 @@ import type { KeyboardEvent } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
-import type { ModalClass, CloseModal, Element } from "types/main";
+import type { ModalClass, CloseModal, CourseNode, Element } from "types/main";
 
 import CloseButton from "./CloseButton";
 import Dropzone from "./Dropzone";
@@ -17,7 +17,7 @@ const SUPPORTED_VERSIONS = ["Beta", "Beta.1"];
 const DEPRECATED_VERSIONS: string[] = [];
 export const [CURRENT_VERSION] = SUPPORTED_VERSIONS.slice(-1);
 
-function betaToBeta1(elems: Element[]) {
+function betaToBeta1(elems: Element[]): Element[] {
   // Change node type from "custom" to "course"
   // Remove selected field
   return elems.map(elem => (
@@ -26,7 +26,7 @@ function betaToBeta1(elems: Element[]) {
         type: "course",
         position: elem.position,
         data: elem.data,
-      }
+      } as CourseNode
       : elem
   ));
 }
@@ -46,7 +46,7 @@ export default function OpenFileDialog({
   const [errorMsg, setErrorMsg] = useState("");
 
   const prefersReducedMotion = usePrefersReducedMotion();
-  function close() {
+  function close(): void {
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
@@ -59,7 +59,7 @@ export default function OpenFileDialog({
     }
   }
 
-  function openFile(files: File[]) {
+  function openFile(files: File[]): void {
     const [file] = files as [File]; // Only single files allowed
 
     setBusy(true);

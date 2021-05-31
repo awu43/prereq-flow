@@ -20,7 +20,7 @@ export default function AboutDialog({
   // const [msgEmail, setMsgEmail] = useState("");
   // const [msgContent, setMsgContent] = useState("");
 
-  function close() {
+  function close(): void {
     closeDialog();
   }
 

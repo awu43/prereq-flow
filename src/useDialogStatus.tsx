@@ -11,7 +11,7 @@ export default function useDialogStatus(): [ModalClass, OpenModal, CloseModal] {
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  function openDialog() {
+  function openDialog(): void {
     if (!prefersReducedMotion) {
       setDialogCls("--transparent");
       setTimeout(() => {
@@ -22,7 +22,7 @@ export default function useDialogStatus(): [ModalClass, OpenModal, CloseModal] {
     }
   }
 
-  function closeDialog() {
+  function closeDialog(): void {
     if (!prefersReducedMotion) {
       setDialogCls("--transparent");
       setTimeout(() => {

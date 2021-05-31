@@ -57,7 +57,7 @@ export default function NewFlowDialog({
   const [slideState, setSlideState] = useState(0);
 
   const prefersReducedMotion = usePrefersReducedMotion();
-  function close() {
+  function close(): void {
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
@@ -136,7 +136,7 @@ export default function NewFlowDialog({
   async function newDegreeFlow(
     majors: string[],
     ambiguityHandling: AmbiguityHandling
-  ) {
+  ): Promise<void> {
     setDegreeError("");
     try {
       const resp = await fetch(`${API_URL}/degrees/`, {
@@ -170,7 +170,7 @@ export default function NewFlowDialog({
     curriculum: string,
     includeExternal: boolean,
     ambiguityHandling: AmbiguityHandling,
-  ) {
+  ): Promise<void> {
     setCurriculumError("");
     try {
       const resp = await fetch(`${API_URL}/curricula/${curriculum}`);
@@ -223,7 +223,7 @@ export default function NewFlowDialog({
     }
   }
 
-  function newBlankFlow() {
+  function newBlankFlow(): void {
     setBusy(true);
     generateNewFlow([]);
     close();

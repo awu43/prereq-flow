@@ -238,7 +238,7 @@ function discoverMaxDepths(
 export function newNodeData(elements: Element[]): NodeDataMap {
   const initialNodeData = new Map();
 
-  function setNewNode(nodeId: NodeId) {
+  function setNewNode(nodeId: NodeId): void {
     if (!initialNodeData.has(nodeId)) {
       initialNodeData.set(nodeId, {
         depth: 0,

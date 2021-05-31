@@ -50,7 +50,7 @@ export default function DegreeSelect({
     setAmbiguityHandling
   ] = useState<AmbiguityHandling>("aggressively");
 
-  function addMajor() {
+  function addMajor(): void {
     if (!supportedMajors.length) {
       return;
     }
@@ -63,7 +63,7 @@ export default function DegreeSelect({
     }
   }
 
-  function deleteMajor(targetMajor: string) {
+  function deleteMajor(targetMajor: string): void {
     setMajors(majors.filter(m => m !== targetMajor));
   }
 
@@ -71,7 +71,7 @@ export default function DegreeSelect({
 
   // }
 
-  function generateFlow(event: MouseEvent) {
+  function generateFlow(event: MouseEvent): void {
     event.preventDefault();
     setBusy(true);
 

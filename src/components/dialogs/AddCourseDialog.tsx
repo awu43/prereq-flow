@@ -133,7 +133,7 @@ export default function AddCourseDialog({
     offered: "",
   });
 
-  function resetCustomCourseData() {
+  function resetCustomCourseData(): void {
     setCustomCourseData({
       id: "",
       name: "",
@@ -145,7 +145,7 @@ export default function AddCourseDialog({
   }
 
   const prefersReducedMotion = usePrefersReducedMotion();
-  function close() {
+  function close(): void {
     setErrorMsg("");
     closeDialog();
     if (!prefersReducedMotion) {
@@ -162,7 +162,7 @@ export default function AddCourseDialog({
     }
   }
 
-  function onSearchChange(event: ChangeEvent) {
+  function onSearchChange(event: ChangeEvent): void {
     // Heroku responds fast enough, no throttling/debouncing needed
     setErrorMsg("");
     const newValue = (event.target as HTMLInputElement).value.toUpperCase();
@@ -177,7 +177,7 @@ export default function AddCourseDialog({
     }
   }
 
-  function addNewNode(data: CourseData) {
+  function addNewNode(data: CourseData): void {
     const node = newCourseNode(data);
     if (newCoursePosition === "zero") {
       node.position.x += (Math.random() - 0.5) * 200;
@@ -187,7 +187,7 @@ export default function AddCourseDialog({
     addCourseNode(node, connectToExisting, newCoursePosition);
   }
 
-  async function fetchCourse(event: MouseEvent) {
+  async function fetchCourse(event: MouseEvent): Promise<void> {
     event.preventDefault();
 
     const courseMatch = selectedCourse.match(SEARCH_REGEX);
@@ -225,7 +225,7 @@ export default function AddCourseDialog({
     searchBarRef.current?.focus();
   }
 
-  function addCustomCourse() {
+  function addCustomCourse(): void {
     setBusy(true);
     addNewNode(customCourseData);
     resetCustomCourseData();

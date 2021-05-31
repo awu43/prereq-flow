@@ -48,7 +48,7 @@ export default function ContextMenu({
 
   const { target, targetType, targetStatus } = data;
 
-  function deleteAndClearSelection() {
+  function deleteAndClearSelection(): void {
     unsetNodesSelection();
     deleteElems(target as ElementId[]);
   }

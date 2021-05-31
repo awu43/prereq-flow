@@ -45,7 +45,7 @@ export default function CurriculumSelect({
     setAmbiguityHandling
   ] = useState<AmbiguityHandling>("aggressively");
 
-  function getCourses(event: MouseEvent) {
+  function getCourses(event: MouseEvent): void {
     event.preventDefault();
     setBusy(true);
 
