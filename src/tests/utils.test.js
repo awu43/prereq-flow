@@ -10,6 +10,8 @@ const {
   DOUBLE_EITHER_REGEX,
   TRIPLE_EITHER_REGEX,
   CONCURRENT_REGEX,
+  newPosition,
+  averagePosition,
 } = _testing;
 
 describe("EITHER_OR_REGEX", () => {
@@ -80,5 +82,12 @@ describe("CONCURRENT_REGEX", () => {
       "IND E 315 or MATH 390 either of which may be taken concurrently. Instructors: Cooper"
     );
     expect(test).to.be.true;
+  });
+});
+
+describe("averagePosition", () => {
+  it("Returns average position (50, 80) for [(150, -10), (-50, 170)]", () => {
+    const inputPositions = [newPosition(150, -10), newPosition(-50, 170)];
+    expect(averagePosition(inputPositions)).to.eql(newPosition(50, 80));
   });
 });

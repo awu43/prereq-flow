@@ -521,7 +521,7 @@ function averagePosition(positions: XYPosition[]): XYPosition {
   return avgSourcePosition;
 }
 
-export function averageYPosition(positions: XYPosition[]): number {
+function averageYPosition(positions: XYPosition[]): number {
   return (
     positions
       .map(pos => pos.y)
@@ -701,4 +701,6 @@ export const _testing = {
   DOUBLE_EITHER_REGEX,
   TRIPLE_EITHER_REGEX,
   CONCURRENT_REGEX,
+  newPosition,
+  averagePosition,
 };
