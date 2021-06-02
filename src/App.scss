@@ -41,6 +41,10 @@
   }
 }
 
+.tippy-box {
+  background: rgba(#333, 0.96);
+}
+
 
 /* %%%%%%%%%% */
 /* REACT FLOW */
@@ -57,9 +61,7 @@ $winter-blue: hsl(210, 100%, 80%); // No change
 $spring-green: hsl(120, 100%, 85%); // -5% lightness
 $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 
-.tippy-box {
-  background: rgba(#333, 0.96);
-
+.tippy-box.tippy-box--flow {
   p {
     margin: 0.5rem 0;
   }
@@ -223,7 +225,7 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   background: white;
 }
 
-.tippy-box--error {
+.tippy-box.tippy-box--error {
   background: darkred;
 }
 
