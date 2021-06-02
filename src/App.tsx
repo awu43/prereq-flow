@@ -72,6 +72,7 @@ import {
   setNodeStatus,
   updateNodeStatus,
   updateAllNodes,
+  newPosition,
   generateNewLayout,
   resetElementStates,
   autoconnect,
@@ -454,7 +455,7 @@ export default function App() {
         targetStatus: node.data.nodeStatus,
       };
     }
-    setMouseXY({ x: event.clientX, y: event.clientY });
+    setMouseXY(newPosition(event.clientX, event.clientY));
     setContextActive(true);
   }
 
@@ -547,7 +548,7 @@ export default function App() {
         targetStatus: targetStatus as ContextTargetStatus,
       };
     }
-    setMouseXY({ x: event.clientX, y: event.clientY });
+    setMouseXY(newPosition(event.clientX, event.clientY));
     setContextActive(true);
   }
 
@@ -581,7 +582,7 @@ export default function App() {
       ),
       targetStatus: "",
     };
-    setMouseXY({ x: event.clientX, y: event.clientY });
+    setMouseXY(newPosition(event.clientX, event.clientY));
     setContextActive(true);
   }
 
@@ -599,7 +600,7 @@ export default function App() {
       targetType: "pane",
       targetStatus: "",
     };
-    setMouseXY({ x: event.clientX, y: event.clientY });
+    setMouseXY(newPosition(event.clientX, event.clientY));
     setContextActive(true);
   }
 

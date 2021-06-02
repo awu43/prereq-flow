@@ -508,6 +508,10 @@ function getSourcePositions(
   );
 }
 
+export function newPosition(x: number, y: number): XYPosition {
+  return { x, y };
+}
+
 function averagePosition(positions: XYPosition[]): XYPosition {
   const avgSourcePosition = positions.reduce((a, b) => (
     { x: a.x + b.x, y: a.y + b.y }
