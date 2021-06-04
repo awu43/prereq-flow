@@ -12,6 +12,7 @@ const {
   CONCURRENT_REGEX,
   newPosition,
   averagePosition,
+  averageYPosition,
 } = _testing;
 
 describe("EITHER_OR_REGEX", () => {
@@ -89,5 +90,12 @@ describe("averagePosition", () => {
   it("Returns average position (50, 80) for [(150, -10), (-50, 170)]", () => {
     const inputPositions = [newPosition(150, -10), newPosition(-50, 170)];
     expect(averagePosition(inputPositions)).to.eql(newPosition(50, 80));
+  });
+});
+
+describe("averageYPosition", () => {
+  it("Returns average Y of 20 for [(230, 10), (0, 30)]", () => {
+    const inputPositions = [newPosition(230, 10), newPosition(0, 30)];
+    expect(averageYPosition(inputPositions)).to.equal(20);
   });
 });

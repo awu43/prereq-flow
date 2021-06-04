@@ -703,4 +703,5 @@ export const _testing = {
   CONCURRENT_REGEX,
   newPosition,
   averagePosition,
+  averageYPosition,
 };
