@@ -1,8 +1,8 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
-  // exclude: [
-
-  // ],
+  exclude: [
+    "**/src/tests/*",
+  ],
   mount: {
     public: { url: "/", static: true },
     src: { url: "/dist" },
