@@ -62,7 +62,6 @@
     "esm": "^3.2.25",
     "mocha": "^8.4.0",
     "postcss": "^8.3.0",
-    "postcss-cli": "^8.3.1",
     "postcss-preset-env": "^6.7.0",
     "snowpack": "^3.5.2",
     "ts-mocha": "^8.0.0",
