@@ -16,18 +16,6 @@ export default function AboutDialog({
   modalCls,
   closeDialog,
 }: AboutDialogProps) {
-  // const [msgName, setMsgName] = useState("");
-  // const [msgEmail, setMsgEmail] = useState("");
-  // const [msgContent, setMsgContent] = useState("");
-
-  function close(): void {
-    closeDialog();
-  }
-
-  // function submitMessage() {
-
-  // }
-
   return (
     <DialogOverlay
       className={modalCls}
@@ -39,7 +27,7 @@ export default function AboutDialog({
       }}
     >
       <DialogContent className="AboutDialog" aria-label="About dialog">
-        <CloseButton onClick={close} />
+        <CloseButton onClick={closeDialog} />
         <section className="AboutDialog__about-section">
           <h2>About</h2>
           <p>Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate&nbsp;degrees.</p>
@@ -58,34 +46,16 @@ export default function AboutDialog({
             </a>
           </p>
         </section>
-        {/* TODO: Contact backend */}
-        {/* TODO: Honeypot/catchpha */}
-        {/* <form className="AboutDialog__contact-form">
         <h2>Contact</h2>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          value={msgName}
-          onChange={e => setMsgName(e.target.value)}
-        />
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          value={msgEmail}
-          onChange={e => setMsgEmail(e.target.value)}
-        />
-        <label htmlFor="Message">Message</label>
-        <textarea
-          name="message"
-          rows="5"
-          value={msgContent}
-          onChange={e => setMsgContent(e.target.value)}
-        >
-        </textarea>
-        <button type="submit" onClick={submitMessage}>Submit</button>
-      </form> */}
+        <p>
+          <a
+            href="mailto:comments@prereqflow.com"
+            className="AboutDialog__email-link"
+          >
+            <img src="dist/icons/envelope.svg" alt="Envelope" />
+            comments@prereqflow.com
+          </a>
+        </p>
       </DialogContent>
     </DialogOverlay>
   );

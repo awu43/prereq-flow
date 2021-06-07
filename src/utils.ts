@@ -57,7 +57,9 @@ const TRIPLE_EITHER_REGEX = new RegExp(
   `(?:[Ee]ither )?(${CRS}), (${CRS}),? or (${CRS})`
 );
 // "AAA 000, AAA 111, or AAA 222"
+// TODO: Extend to any number
 
+// TODO: Concurrency for single course prereqs
 const CONCURRENT_REGEX = (
   /(?:either of )?which may be taken concurrently(?:\. Instructor|\.?$)/
 );

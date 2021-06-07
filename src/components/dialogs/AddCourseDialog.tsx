@@ -52,13 +52,6 @@ const SEARCH_REGEX = /^\s*((?:[A-Z&]+ )+\d{3})(?:\D+|$)/;
 // Strips away leading whitespace
 // Will not match if >3 numbers in ID
 
-// AddCourseDialog.propTypes = {
-//   modalCls: PropTypes.string.isRequired,
-//   closeDialog: PropTypes.func.isRequired,
-//   nodeData: PropTypes.instanceOf(Map).isRequired,
-//   addCourseNode: PropTypes.func.isRequired,
-// };
-
 interface AddCourseDialogProps {
   modalCls: ModalClass;
   closeDialog: CloseModal;
