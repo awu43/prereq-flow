@@ -630,7 +630,6 @@ export function resetElementStates(newElements: Element[]): Element[] {
   ));
 }
 
-// FIXME: Adding NMETH 450 after NMETH 403 causes duplicate edge
 export function autoconnect(
   targetNode: CourseNode,
   newElements: Element[],
@@ -639,13 +638,13 @@ export function autoconnect(
   reposition = false,
 ): Element[] {
   const targetId = targetNode.id;
-  const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX);
+  const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX) ?? [];
+  // Remove duplicates (example: NMETH 450 prereqs)
   const targetPrereqs = (
-    courseMatches
-      ? courseMatches.filter(elemId => elemIndexes.has(elemId))
-        .filter(elemId => !elemIndexes.has(edgeArrowId(elemId, targetId)))
-        .map(elemId => newElements[elemIndexes.get(elemId)]) as CourseNode[]
-      : []
+    [...new Set(courseMatches)]
+      .filter(elemId => elemIndexes.has(elemId))
+      .filter(elemId => !elemIndexes.has(edgeArrowId(elemId, targetId)))
+      .map(elemId => newElements[elemIndexes.get(elemId)] as CourseNode)
   );
   const targetPostreqs = [];
   for (let i = 0; i < numNodes; i++) {
