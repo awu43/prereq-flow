@@ -172,11 +172,9 @@ export default function AddCourseDialog({
 
   function addNewNode(data: CourseData): void {
     const node = newCourseNode(data);
-    if (newCoursePosition === "zero") {
-      node.position.x += (Math.random() - 0.5) * 200;
-      node.position.y += (Math.random() - 0.5) * 200;
-      // Add fuzzing to stop multiple nodes from piling
-    }
+    node.position.x += (Math.random() - 0.5) * 200;
+    node.position.y += (Math.random() - 0.5) * 200;
+    // Add fuzzing to stop multiple nodes from piling
     addCourseNode(node, connectToExisting, newCoursePosition);
   }
 

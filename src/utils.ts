@@ -630,6 +630,7 @@ export function resetElementStates(newElements: Element[]): Element[] {
   ));
 }
 
+// FIXME: Adding NMETH 450 after NMETH 403 causes duplicate edge
 export function autoconnect(
   targetNode: CourseNode,
   newElements: Element[],

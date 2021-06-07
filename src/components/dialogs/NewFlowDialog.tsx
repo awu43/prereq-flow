@@ -264,6 +264,7 @@ export default function NewFlowDialog({
                 setCurriculumError("");
               }}
             >
+              {/* TODO: New flow from text */}
               <TabList>
                 <Tab disabled={busy}>Degree</Tab>
                 <Tab disabled={busy}>Curriculum</Tab>
