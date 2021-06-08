@@ -49,15 +49,27 @@ export const ZERO_POSITION: XYPosition = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
 export const COURSE_REGEX = new RegExp(CRS, "g"); // AAA 000
 
-const EITHER_OR_REGEX = /\b(?:[Ei]ther|or)\b/;
-
-const DOUBLE_EITHER_REGEX = new RegExp(`(?:[Ee]ither )?(${CRS}) or (${CRS})`);
-// "AAA 000 or AAA 111"
-const TRIPLE_EITHER_REGEX = new RegExp(
-  `(?:[Ee]ither )?(${CRS}), (${CRS}),? or (${CRS})`
+const EITHER_OR_REGEX = new RegExp(
+  `(?:[Ee]ither )?(${CRS})(?:, (${CRS}))*,? or (${CRS})`
 );
+// "AAA 000 or AAA 111"
 // "AAA 000, AAA 111, or AAA 222"
-// TODO: Extend to any number
+// ...etc.
+
+// Input string assumed to contain 2+ matches
+function eitherOrMatches(str: string): RegExpMatchArray | null {
+  const matches = str.match(EITHER_OR_REGEX) as RegExpMatchArray;
+  if (matches) {
+    // Repeated groups only return last result
+    // If not all courses captured by either/or regex, it's a false match
+    const courseMatches = matches[0].match(COURSE_REGEX) as RegExpMatchArray;
+    const allCourseMatches = str.match(COURSE_REGEX) as RegExpMatchArray;
+    if (courseMatches.length === allCourseMatches.length) {
+      return courseMatches;
+    }
+  }
+  return null;
+}
 
 // TODO: Concurrency for single course prereqs
 const CONCURRENT_REGEX = (
@@ -96,18 +108,27 @@ export function edgeArrowId(source: NodeId, target: NodeId): EdgeId {
   return `${source} -> ${target}`;
 }
 
+export const CONCURRENT_LABEL = {
+  label: "CC",
+  labelBgPadding: [2, 2],
+  labelBgBorderRadius: 4,
+};
+
 export function newEdge(
   source: NodeId,
   target: NodeId,
+  concurrent: boolean = false,
   id: EdgeId = "",
 ): Edge {
   const edgeId = id || edgeArrowId(source, target);
+
   return {
     id: edgeId,
     source,
     target,
     className: "over-one-away",
-    label: null, // Need to have this in order to notify React Flow about CC
+    ...(concurrent ? CONCURRENT_LABEL : { label: null }),
+    // Need to have null to notify React Flow about CC
   };
 }
 
@@ -116,23 +137,18 @@ function addEdges(
   target: NodeId,
   elements: Element[],
   elementIds: Set<ElementId>,
+  concurrent: boolean = false,
 ): void {
   for (const source of sources) {
     const edgeId = edgeArrowId(source, target);
-    if (elementIds.has(source)
-        && !elementIds.has(edgeId)
-        && !elementIds.has(edgeArrowId(target, source))) { // For BIOL cycles
-      elements.push(newEdge(source, target, edgeId));
+    const reverseExists = elementIds.has(edgeArrowId(target, source));
+    // For BIOL cycles
+    if (elementIds.has(source) && !elementIds.has(edgeId) && !reverseExists) {
+      elements.push(newEdge(source, target, concurrent, edgeId));
       elementIds.add(edgeId);
     }
   }
 }
-
-export const CONCURRENT_LABEL = {
-  label: "CC",
-  labelBgPadding: [2, 2],
-  labelBgBorderRadius: 4,
-};
 
 export function generateInitialElements(
   courseData: CourseData[],
@@ -147,7 +163,7 @@ export function generateInitialElements(
     const courseId = data.id;
     const { prerequisite } = data;
     if (!COURSE_REGEX.test(prerequisite)) {
-      // No prerequisites
+      // No course prerequisites
       continue;
     }
 
@@ -157,7 +173,8 @@ export function generateInitialElements(
       if (!courseMatches) {
         continue;
       } else if (courseMatches.length === 1) {
-        addEdges(courseMatches, courseId, elements, elementIds);
+        const concurrent = CONCURRENT_REGEX.test(section);
+        addEdges(courseMatches, courseId, elements, elementIds, concurrent);
       } else {
         if (!secondPass.has(courseId)) {
           secondPass.set(courseId, []);
@@ -166,61 +183,33 @@ export function generateInitialElements(
       }
     }
   }
-  // TODO: E E 215 "a or (b and (c or d))"
-  // TODO: MATH 309 "(a and b) or c"
-  // State machine maybe (look into JSON parsing)
   // TODO: Co-requisites
 
-  // Second pass: single "or" prerequisites and unparsable
-  for (const [course, problemSection] of secondPass.entries()) {
-    for (const section of problemSection) {
-      const doubleEitherMatch = section.match(DOUBLE_EITHER_REGEX);
-      const tripleEitherMatch = section.match(TRIPLE_EITHER_REGEX);
-      const matches = tripleEitherMatch || doubleEitherMatch;
-      // Double can match triple but not the other way around
-      const numCourses = (
-        (section.match(COURSE_REGEX) as RegExpMatchArray).length
-      );
-
-      if (matches && matches.length === numCourses + 1) {
-        // If not all courses captured (i.e. 3+), it's a false match
-        // matches includes full string match
-
-        const alreadyRequired: ElementId[] = (
-          matches.slice(1).filter(m => elementIds.has(m))
-        );
+  // Second pass: either/or prerequisites and unparsable 2+
+  for (const [course, problemSections] of secondPass.entries()) {
+    for (const section of problemSections) {
+      const matches = eitherOrMatches(section);
+      if (matches) {
+        const alreadyRequired = matches.filter(m => elementIds.has(m));
+        const concurrent = CONCURRENT_REGEX.test(section);
         if (alreadyRequired.length === 1) {
-          // One option is already required
-          let edge = newEdge(alreadyRequired[0], course);
-          if (CONCURRENT_REGEX.test(section)) {
-            edge = { ...edge, ...CONCURRENT_LABEL };
-          }
-          elements.push(edge);
+          addEdges(alreadyRequired, course, elements, elementIds, concurrent);
         } else if (alreadyRequired.length > 1) {
-          // More than one option is already required
           const orNode = newConditionalNode("or");
           elements.push(orNode);
-          elements.push(newEdge(orNode.id, course));
-          for (const req of alreadyRequired) {
-            let edge = newEdge(req, orNode.id);
-            if (CONCURRENT_REGEX.test(section)) {
-              edge = { ...edge, ...CONCURRENT_LABEL };
-            }
-            elements.push(edge);
-          }
-        } else if (ambiguityHandling === "aggressively") {
-          addEdges(matches.slice(1), course, elements, elementIds);
+          elementIds.add(orNode.id);
+          addEdges([orNode.id], course, elements, elementIds);
+          addEdges(
+            alreadyRequired, orNode.id, elements, elementIds, concurrent
+          );
         }
       } else if (ambiguityHandling === "aggressively") {
-        addEdges(
-          section.match(COURSE_REGEX) as RegExpMatchArray,
-          course,
-          elements,
-          elementIds
-        );
+        const allMatches = section.match(COURSE_REGEX) as RegExpMatchArray;
+        addEdges(allMatches, course, elements, elementIds);
       }
     }
   }
+
   return elements;
 }
 
@@ -638,7 +627,7 @@ export function autoconnect(
   reposition = false,
 ): Element[] {
   const targetId = targetNode.id;
-  const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX) ?? [];
+  const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX) || [];
   // Remove duplicates (example: NMETH 450 prereqs)
   const targetPrereqs = (
     [...new Set(courseMatches)]
@@ -698,10 +687,8 @@ export function autoconnect(
 }
 
 export const _testing = {
-  EITHER_OR_REGEX,
   COURSE_REGEX,
-  DOUBLE_EITHER_REGEX,
-  TRIPLE_EITHER_REGEX,
+  eitherOrMatches,
   CONCURRENT_REGEX,
   newNodeData,
   sortElementsByDepth,

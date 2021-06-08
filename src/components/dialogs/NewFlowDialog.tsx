@@ -306,7 +306,6 @@ export default function NewFlowDialog({
                 setTextSearchError("");
               }}
             >
-              {/* TODO: New flow from text */}
               <TabList>
                 <Tab disabled={busy}>Degree</Tab>
                 <Tab disabled={busy}>Curriculum</Tab>
