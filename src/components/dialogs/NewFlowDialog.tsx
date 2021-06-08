@@ -19,10 +19,12 @@ import type {
   Element,
 } from "types/main";
 
+import "./NewFlowDialog.scss";
 import CloseButton from "./CloseButton";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
+import TextSearch from "./TextSearch";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
 import {
@@ -32,8 +34,6 @@ import {
   COURSE_REGEX,
   generateInitialElements,
 } from "../../utils";
-
-import "./NewFlowDialog.scss";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -56,8 +56,21 @@ export default function NewFlowDialog({
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
 
+  const [supportedMajors, setSupportedMajors] = useState<string[]>([]);
+  const [degreeError, setDegreeError] = useState("");
+  const [
+    supportedCurricula,
+    setSupportedCurricula
+  ] = useState<Map<Campus, HTMLOptionElement[]>>(new Map());
+  const [curriculumError, setCurriculumError] = useState("");
+  const [textSearchError, setTextSearchError] = useState("");
+
   const prefersReducedMotion = usePrefersReducedMotion();
+
   function close(): void {
+    setDegreeError("");
+    setCurriculumError("");
+    setTextSearchError("");
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
@@ -74,9 +87,6 @@ export default function NewFlowDialog({
   //   setSlideState(slideState + 1);
   // }
 
-  const [supportedMajors, setSupportedMajors] = useState<string[]>([]);
-  const [degreeError, setDegreeError] = useState("");
-
   useEffect(() => {
     fetch(`${API_URL}/degrees/`)
       .then(resp => resp.json())
@@ -87,12 +97,6 @@ export default function NewFlowDialog({
         console.error(error);
       });
   }, []);
-
-  const [
-    supportedCurricula,
-    setSupportedCurricula
-  ] = useState<Map<Campus, HTMLOptionElement[]>>(new Map());
-  const [curriculumError, setCurriculumError] = useState("");
 
   useEffect(() => {
     fetch(`${API_URL}/curricula/`)
@@ -223,6 +227,43 @@ export default function NewFlowDialog({
     }
   }
 
+  async function newTextSearchFlow(
+    courses: string[],
+    ambiguityHandling: AmbiguityHandling,
+  ): Promise<void> {
+    if (!courses.length) {
+      setTextSearchError("No course IDs found");
+      setBusy(false);
+      return;
+    }
+
+    setTextSearchError("");
+    try {
+      const resp = await fetch(`${API_URL}/courses/`, {
+        method: "POST",
+        headers: { contentType: "application/json" },
+        body: JSON.stringify(courses),
+      });
+
+      if (resp.status === 404) {
+        setTextSearchError("No matching courses found");
+        setBusy(false);
+        return;
+      }
+
+      const data = await resp.json();
+
+      const newElements = generateInitialElements(data, ambiguityHandling);
+      generateNewFlow(newElements);
+      close();
+    } catch (error) {
+      setTextSearchError("Something went wrong");
+      // eslint-disable-next-line no-console
+      console.error(error);
+      setBusy(false);
+    }
+  }
+
   function newBlankFlow(): void {
     setBusy(true);
     generateNewFlow([]);
@@ -262,12 +303,14 @@ export default function NewFlowDialog({
               onChange={() => {
                 setDegreeError("");
                 setCurriculumError("");
+                setTextSearchError("");
               }}
             >
               {/* TODO: New flow from text */}
               <TabList>
                 <Tab disabled={busy}>Degree</Tab>
                 <Tab disabled={busy}>Curriculum</Tab>
+                <Tab disabled={busy}>Text search</Tab>
                 <Tab disabled={busy}>Blank</Tab>
               </TabList>
 
@@ -290,6 +333,15 @@ export default function NewFlowDialog({
                     supportedCurricula={supportedCurricula}
                     newCurriculumFlow={newCurriculumFlow}
                     errorMsg={curriculumError}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <TextSearch
+                    connectionError={connectionError}
+                    busy={busy}
+                    setBusy={setBusy}
+                    newTextSearchFlow={newTextSearchFlow}
+                    errorMsg={textSearchError}
                   />
                 </TabPanel>
                 <TabPanel>

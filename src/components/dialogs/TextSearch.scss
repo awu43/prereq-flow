@@ -1,0 +1,23 @@
+@use "../../utils" as *;
+
+.TextSearch {
+  &__textarea {
+    flex: 1 0;
+
+    width: 100%;
+    resize: none;
+    margin: 0.5rem 0 2.5rem;
+    padding: 0.25rem;
+
+    font-family: sans-serif;
+    font-size: 0.8rem;
+  }
+
+  &__button-wrapper {
+    margin-bottom: 0;
+  }
+  &__get-courses-button {
+    @include base-button-style;
+    font-size: 1rem;
+  }
+}
