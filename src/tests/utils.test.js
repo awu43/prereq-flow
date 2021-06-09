@@ -10,15 +10,22 @@ import { isEdge, _testing } from "../utils";
 const testElements = JSON.parse(
   fs.readFileSync(path.join(__dirname, "test-flow.json"))
 ).elements;
-
 function newTestElems() {
   return JSON.parse(JSON.stringify(testElements));
+}
+
+const testCourseData = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "test-course-data.json"))
+);
+function getCourseData(courseIds) {
+  return testCourseData.filter(cd => courseIds.includes(cd.id));
 }
 
 const {
   COURSE_REGEX,
   eitherOrMatches,
   CONCURRENT_REGEX,
+  generateInitialElements,
   newNodeData,
   sortElementsByDepth,
   newElemIndexes,
@@ -92,6 +99,26 @@ describe("CONCURRENT_REGEX", () => {
       "IND E 315 or MATH 390 either of which may be taken concurrently. Instructors: Cooper"
     );
     expect(test).to.be.true;
+  });
+});
+
+describe("generateInitialElements", () => {
+  it("Generates OR nodes for either/or prerequisites", () => {
+    const courseData = getCourseData(["MATH 307", "AMATH 351", "AMATH 353"]);
+    const initialElements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(initialElements);
+    const elements = sortElementsByDepth(initialElements, nodeData);
+    expect(elements[2].type).to.equal("or");
+    expect(nodeData.get(elements[2].id).incomingEdges.length).to.equal(2);
+    expect(nodeData.get(elements[2].id).outgoingEdges.length).to.equal(1);
+  });
+  it("Aggressively makes connections when parsing fails", () => {
+    const courseData = getCourseData([
+      "MATH 126", "MATH 307", "AMATH 351", "E E 215"
+    ]);
+    const initialElements = generateInitialElements(courseData, "aggressively");
+    const nodeData = newNodeData(initialElements);
+    expect(nodeData.get("E E 215").incomingEdges.length).to.equal(3);
   });
 });
 

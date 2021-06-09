@@ -690,6 +690,7 @@ export const _testing = {
   COURSE_REGEX,
   eitherOrMatches,
   CONCURRENT_REGEX,
+  generateInitialElements,
   newNodeData,
   sortElementsByDepth,
   newElemIndexes,
