@@ -116,10 +116,7 @@ export default function AddCourseDialog({
     prereq: true,
     postreq: true,
   });
-  const [
-    newCoursePosition,
-    setNewCoursePosition
-  ] = useState<NewCoursePosition>("relative");
+  const [alwaysAtZero, setAlwaysAtZero] = useState(false);
 
   const [customCourseData, setCustomCourseData] = useState<CourseData>({
     id: "",
@@ -179,7 +176,7 @@ export default function AddCourseDialog({
     node.position.x += (Math.random() - 0.5) * 200;
     node.position.y += (Math.random() - 0.5) * 200;
     // Add fuzzing to stop multiple nodes from piling
-    addCourseNode(node, connectTo, newCoursePosition);
+    addCourseNode(node, connectTo, alwaysAtZero ? "zero" : "relative");
   }
 
   async function fetchCourse(event: MouseEvent): Promise<void> {
@@ -280,10 +277,6 @@ export default function AddCourseDialog({
           checked={connectTo.prereq}
           disabled={busy}
           onChange={() => {
-            if (connectTo.prereq && !connectTo.postreq) {
-              // About to be disabled
-              setNewCoursePosition("zero");
-            }
             setConnectTo(prev => ({ ...prev, prereq: !prev.prereq }));
           }}
         />
@@ -295,44 +288,20 @@ export default function AddCourseDialog({
           checked={connectTo.postreq}
           disabled={busy}
           onChange={() => {
-            if (!connectTo.prereq && connectTo.postreq) {
-              // About to be disabled
-              setNewCoursePosition("zero");
-            }
             setConnectTo(prev => ({ ...prev, postreq: !prev.postreq }));
           }}
         />
         Connect to existing postreqs
       </label>
-      <div className="add-uw-course__connection-opts">
-        {/* <div className={`connection-opts__cover ${!connectTo || busy ? "--enabled" : ""}`}></div> */}
-        <fieldset
-          className="connection-opts__position"
+      <label>
+        <input
+          type="checkbox"
+          checked={alwaysAtZero}
           disabled={busy}
-        >
-          <legend>New courses should be placed</legend>
-          <label>
-            <input
-              type="radio"
-              name="new-position"
-              checked={newCoursePosition === "relative"}
-              onChange={() => setNewCoursePosition("relative")}
-              disabled={!connectTo.prereq && !connectTo.postreq}
-            />
-            Relative to pre/postreqs
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="new-position"
-              value="zero"
-              checked={newCoursePosition === "zero"}
-              onChange={() => setNewCoursePosition("zero")}
-            />
-            At (0, 0) position
-          </label>
-        </fieldset>
-      </div>
+          onChange={() => setAlwaysAtZero(!alwaysAtZero)}
+        />
+        Always place new courses at (0, 0)
+      </label>
     </form>
   );
 
