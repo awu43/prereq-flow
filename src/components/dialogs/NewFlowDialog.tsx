@@ -28,10 +28,10 @@ import TextSearch from "./TextSearch";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
 import {
+  courseIdMatch,
   isNode,
   isEdge,
   removeElements,
-  COURSE_REGEX,
   generateInitialElements,
 } from "../../utils";
 
@@ -183,9 +183,9 @@ export default function NewFlowDialog({
       if (includeExternal) {
         const externalPrereqs = [];
         for (const course of data) {
-          const courseMatches: RegExpMatchArray = (
-            course.prerequisite.match(COURSE_REGEX)
-          );
+          const courseMatches = courseIdMatch(
+            course.prerequisite
+          ) as RegExpMatchArray;
           const external = (
             courseMatches
               ? courseMatches.filter(

@@ -50,7 +50,7 @@ export const ZERO_POSITION: XYPosition = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
 export const COURSE_REGEX = new RegExp(CRS, "g"); // AAA 000
 
-export function courseIdMatch(text: string) {
+export function courseIdMatch(text: string): RegExpMatchArray | null {
   return text.match(COURSE_REGEX);
 }
 
@@ -62,13 +62,13 @@ const EITHER_OR_REGEX = new RegExp(
 // ...etc.
 
 // Input string assumed to contain 2+ matches
-function eitherOrMatches(str: string): RegExpMatchArray | null {
-  const matches = str.match(EITHER_OR_REGEX) as RegExpMatchArray;
+function eitherOrMatches(text: string): RegExpMatchArray | null {
+  const matches = text.match(EITHER_OR_REGEX) as RegExpMatchArray;
   if (matches) {
     // Repeated groups only return last result
     // If not all courses captured by either/or regex, it's a false match
-    const courseMatches = matches[0].match(COURSE_REGEX) as RegExpMatchArray;
-    const allCourseMatches = str.match(COURSE_REGEX) as RegExpMatchArray;
+    const courseMatches = courseIdMatch(matches[0]) as RegExpMatchArray;
+    const allCourseMatches = courseIdMatch(text) as RegExpMatchArray;
     if (courseMatches.length === allCourseMatches.length) {
       return courseMatches;
     }
@@ -173,7 +173,7 @@ export function generateInitialElements(
 
     const reqSections = prerequisite.split(";");
     for (const section of reqSections) {
-      const courseMatches = section.match(COURSE_REGEX);
+      const courseMatches = courseIdMatch(section);
       if (!courseMatches) {
         continue;
       } else if (courseMatches.length === 1) {
@@ -208,7 +208,7 @@ export function generateInitialElements(
           );
         }
       } else if (ambiguityHandling === "aggressively") {
-        const allMatches = section.match(COURSE_REGEX) as RegExpMatchArray;
+        const allMatches = courseIdMatch(section) as RegExpMatchArray;
         addEdges(allMatches, course, elements, elementIds);
       }
     }
@@ -632,7 +632,7 @@ export function autoconnect(
   reposition = false,
 ): Element[] {
   const targetId = targetNode.id;
-  const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX) || [];
+  const courseMatches = courseIdMatch(targetNode.data.prerequisite) || [];
   // Remove duplicates (example: NMETH 450 prereqs)
 
   let targetPrereqs = [] as CourseNode[];
@@ -699,7 +699,7 @@ export function autoconnect(
 }
 
 export const _testing = {
-  COURSE_REGEX,
+  courseIdMatch,
   eitherOrMatches,
   CONCURRENT_REGEX,
   generateInitialElements,

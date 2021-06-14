@@ -22,7 +22,7 @@ function getCourseData(courseIds) {
 }
 
 const {
-  COURSE_REGEX,
+  courseIdMatch,
   eitherOrMatches,
   CONCURRENT_REGEX,
   generateInitialElements,
@@ -38,18 +38,22 @@ const {
   averageYPosition,
 } = _testing;
 
-describe("COURSE_REGEX", () => {
+describe("courseIdMatches", () => {
   it("Matches 'MATH 125'", () => {
-    expect("MATH 125".match(COURSE_REGEX)).to.eql(["MATH 125"]);
+    expect(courseIdMatch("MATH 125")).to.eql(["MATH 125"]);
   });
   it("Matches 'A A 210'", () => {
-    expect("A A 210".match(COURSE_REGEX)).to.eql(["A A 210"]);
+    expect(courseIdMatch("A A 210")).to.eql(["A A 210"]);
   });
   it("Matches 'CS&SS 221'", () => {
-    expect("CS&SS 221".match(COURSE_REGEX)).to.eql(["CS&SS 221"]);
+    expect(courseIdMatch("CS&SS 221")).to.eql(["CS&SS 221"]);
   });
-  it("Tests false for 'None'", () => {
-    expect(COURSE_REGEX.test("None")).to.be.false;
+  it("Matches 'either STAT 340, or STAT 395/MATH 395'", () => {
+    expect(courseIdMatch("either STAT 340, or STAT 395/MATH 395"))
+      .to.eql(["STAT 340", "STAT 395", "MATH 395"]);
+  });
+  it("Does not match 'None'", () => {
+    expect(courseIdMatch("None")).to.be.null;
   });
 });
 

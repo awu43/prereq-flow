@@ -9,7 +9,7 @@ import "./TextSearch.scss";
 import type { SetState, AmbiguityHandling } from "types/main";
 
 import AmbiguitySelect from "./AmbiguitySelect";
-import { COURSE_REGEX } from "../../utils";
+import { courseIdMatch } from "../../utils";
 
 interface TextSearchProps {
   connectionError: boolean;
@@ -38,7 +38,7 @@ export default function TextSearch({
     event.preventDefault();
     setBusy(true);
 
-    const courseMatches = text.match(COURSE_REGEX) ?? [];
+    const courseMatches = courseIdMatch(text) ?? [];
     newTextSearchFlow([...new Set(courseMatches)], ambiguityHandling);
   }
 
