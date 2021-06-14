@@ -236,7 +236,7 @@ export default function App() {
   function addCourseNode(
     newNode: CourseNode,
     connectTo: ConnectTo,
-    newCoursePosition: NewCoursePosition,
+    newCoursePosition: NewCoursePosition = "relative",
   ): void {
     recordFlowState();
     let newElems = flowInstance.current?.toObject().elements as Element[];

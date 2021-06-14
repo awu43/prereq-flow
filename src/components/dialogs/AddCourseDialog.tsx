@@ -30,12 +30,12 @@ import type {
   NewCoursePosition,
 } from "types/main";
 
+import "./AddCourseDialog.scss";
 import CloseButton from "./CloseButton";
 import CampusSelect from "./CampusSelect";
+import CustomCourseForm from "./CustomCourseForm";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 import { newCourseNode } from "../../utils";
-
-import "./AddCourseDialog.scss";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -83,7 +83,6 @@ export default function AddCourseDialog({
 
   const searchBarRef = useRef<HTMLInputElement>(null);
   const addButtonRef = useRef<HTMLButtonElement>(null);
-  const customCourseIdRef = useRef<HTMLInputElement>(null);
 
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065#issuecomment-446425911
   const websocket = useRef<WebSocket | null>(null);
@@ -118,26 +117,6 @@ export default function AddCourseDialog({
   });
   const [alwaysAtZero, setAlwaysAtZero] = useState(false);
 
-  const [customCourseData, setCustomCourseData] = useState<CourseData>({
-    id: "",
-    name: "",
-    credits: "",
-    description: "",
-    prerequisite: "",
-    offered: "",
-  });
-
-  function resetCustomCourseData(): void {
-    setCustomCourseData({
-      id: "",
-      name: "",
-      credits: "",
-      description: "",
-      prerequisite: "",
-      offered: "",
-    });
-  }
-
   const prefersReducedMotion = usePrefersReducedMotion();
   function close(): void {
     setErrorMsg("");
@@ -147,19 +126,17 @@ export default function AddCourseDialog({
         // Don't reset selected options
         setSelectedCourse("");
         setAutocompleteOpts([]);
-        resetCustomCourseData();
       }, 100);
     } else {
       setSelectedCourse("");
       setAutocompleteOpts([]);
-      resetCustomCourseData();
     }
   }
 
-  function onSearchChange(event: ChangeEvent): void {
+  function onSearchChange(event: ChangeEvent<HTMLInputElement>): void {
     // Heroku responds fast enough, no throttling/debouncing needed
     setErrorMsg("");
-    const newValue = (event.target as HTMLInputElement).value.toUpperCase();
+    const newValue = event.target.value.toUpperCase();
     setSelectedCourse(newValue);
     if (newValue.trim() && websocket.current) {
       websocket.current.send(
@@ -171,14 +148,17 @@ export default function AddCourseDialog({
     }
   }
 
-  function addNewNode(data: CourseData): void {
+  function addNewNode(
+    data: CourseData,
+    position: NewCoursePosition
+  ): void {
     const node = newCourseNode(data);
     node.position = {
       x: Math.random() * 150,
       y: Math.random() * 300
     };
     // Add fuzzing to stop multiple nodes from piling
-    addCourseNode(node, connectTo, alwaysAtZero ? "zero" : "relative");
+    addCourseNode(node, connectTo, position);
   }
 
   async function fetchCourse(event: MouseEvent): Promise<void> {
@@ -204,7 +184,7 @@ export default function AddCourseDialog({
     try {
       const resp = await fetch(`${API_URL}/courses/${searchQuery}`);
       if (resp.ok) {
-        addNewNode(await resp.json());
+        addNewNode(await resp.json(), alwaysAtZero ? "zero" : "relative");
         setSelectedCourse("");
       } else if (resp.status === 404) {
         setErrorMsg("Course not found");
@@ -217,14 +197,6 @@ export default function AddCourseDialog({
 
     setBusy(false);
     searchBarRef.current?.focus();
-  }
-
-  function addCustomCourse(): void {
-    setBusy(true);
-    addNewNode(customCourseData);
-    resetCustomCourseData();
-    setBusy(false);
-    customCourseIdRef.current?.focus();
   }
 
   const uwCourseForm = (
@@ -307,92 +279,6 @@ export default function AddCourseDialog({
     </form>
   );
 
-  const customCourseForm = (
-    <form className="add-custom-course">
-      <div className="add-custom-course__header-row">
-        <Tippy
-          className="tippy-box--error"
-          content="Course already exists"
-          placement="bottom-start"
-          arrow={false}
-          duration={0}
-          offset={[0, 5]}
-          visible={nodeData.has(customCourseData.id)}
-        >
-          <input
-            ref={customCourseIdRef}
-            className="add-custom-course__id-input"
-            type="text"
-            required={true}
-            placeholder="Course ID (required)"
-            value={customCourseData.id}
-            onChange={e => setCustomCourseData({
-              ...customCourseData, id: e.target.value
-            })}
-          />
-        </Tippy>
-        <input
-          className="add-custom-course__name-input"
-          type="text"
-          placeholder="Course name"
-          value={customCourseData.name}
-          onChange={e => setCustomCourseData({
-            ...customCourseData, name: e.target.value
-          })}
-        />
-        <input
-          className="add-custom-course__credits-input"
-          type="text"
-          placeholder="Credits"
-          value={customCourseData.credits}
-          onChange={e => setCustomCourseData({
-            ...customCourseData, credits: e.target.value
-          })}
-        />
-      </div>
-      <textarea
-        className="add-custom-course__description-input"
-        placeholder="Description"
-        value={customCourseData.description}
-        onChange={e => setCustomCourseData({
-          ...customCourseData, description: e.target.value
-        })}
-      >
-      </textarea>
-      <div className="add-custom-course__footer-row">
-        <input
-          className="add-custom-course__prerequisite-input"
-          type="text"
-          placeholder="Prerequisite"
-          value={customCourseData.prerequisite}
-          onChange={e => setCustomCourseData({
-            ...customCourseData, prerequisite: e.target.value
-          })}
-        />
-        <input
-          className="add-custom-course__offered-input"
-          type="text"
-          placeholder="Offered"
-          value={customCourseData.offered}
-          onChange={e => setCustomCourseData({
-            ...customCourseData, offered: e.target.value
-          })}
-        />
-      </div>
-      <button
-        type="button"
-        className="add-custom-course__add-button"
-        onClick={addCustomCourse}
-        disabled={
-          !customCourseData.id.trim()
-          || nodeData.has(customCourseData.id)
-        }
-      >
-        Add custom course
-      </button>
-    </form>
-  );
-
   return (
     <DialogOverlay
       className={modalCls}
@@ -418,7 +304,12 @@ export default function AddCourseDialog({
           <TabPanels>
             <TabPanel>{uwCourseForm}</TabPanel>
             <TabPanel className="AddCourseDialog__custom-course-tab-panel">
-              {customCourseForm}
+              <CustomCourseForm
+                busy={busy}
+                setBusy={setBusy}
+                nodeData={nodeData}
+                addNewNode={addNewNode}
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>
