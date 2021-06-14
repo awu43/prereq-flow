@@ -13,15 +13,24 @@ import type {
   EdgeId,
   ElementId,
   ConditionalTypes,
+  CourseNode,
+  Element,
   NodeDataMap,
+  ElemIndexMap,
   ConnectTo,
   ContextTarget,
 } from "types/main";
 
-import { COURSE_STATUS_CODES } from "../utils";
+import {
+  courseIdMatch,
+  edgeArrowId,
+  COURSE_STATUS_CODES,
+} from "../utils";
 
 interface ContextMenuProps {
+  elements: Element[];
   nodeData: NodeDataMap;
+  elemIndexes: ElemIndexMap;
   active: boolean;
   data: ContextTarget;
   xy: XYPosition;
@@ -34,7 +43,9 @@ interface ContextMenuProps {
   reroute: (targetId: NodeId) => void;
 }
 export default function ContextMenu({
+  elements,
   nodeData,
+  elemIndexes,
   active,
   data,
   xy,
@@ -151,14 +162,25 @@ export default function ContextMenu({
           <hr />
         </>
       );
+      const allPrereqs = courseIdMatch(
+        (elements[elemIndexes.get(target[0])] as CourseNode).data.prerequisite
+      );
+      const allPrereqsConnected = (
+        allPrereqs
+          ? allPrereqs.every(p => (
+            !elemIndexes.has(p)
+            || elemIndexes.has(edgeArrowId(p, target[0]))
+          ))
+          : true
+      );
       const hasPrereqs = !!nodeData.get(target[0]).incomingEdges.length;
       const hasPostreqs = !!nodeData.get(target[0]).outgoingEdges.length;
       menuOptions = (
         <>
           {targetStatusCode < 3 && courseStatusOptions}
-          {connectPrereqsOpt}
+          {!allPrereqsConnected && connectPrereqsOpt}
           {connectPostreqsOpt}
-          {connectAllOpt}
+          {!allPrereqsConnected && connectAllOpt}
           {hasPrereqs && disconnectPrereqsOpt}
           {hasPostreqs && disconnectPostreqsOpt}
           {hasPrereqs && hasPostreqs && disconnectAllOpt}

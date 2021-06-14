@@ -701,7 +701,9 @@ export default function App() {
           <Controls showInteractive={false} />
         </ReactFlow>
         <ContextMenu
+          elements={elements}
           nodeData={nodeData.current}
+          elemIndexes={elemIndexes.current}
           active={contextActive}
           data={contextData.current}
           xy={mouseXY}
