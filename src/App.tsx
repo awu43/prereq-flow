@@ -113,7 +113,7 @@ export default function App() {
 
   const [contextActive, setContextActive] = useState(false);
   const contextData = useRef<ContextTarget>({
-    target: "",
+    target: [],
     targetType: "node",
     targetStatus: "",
   });
@@ -425,7 +425,7 @@ export default function App() {
       if (selectedIds.length === 1) {
         // Only one node selected
         contextData.current = {
-          target: node.id,
+          target: [node.id],
           targetType: node.type === "course" ? "coursenode" : "conditionalnode",
           targetStatus: node.data.nodeStatus,
         };
@@ -452,7 +452,7 @@ export default function App() {
     } else {
       setSelectedElements.current([node as Node]);
       contextData.current = {
-        target: node.id,
+        target: [node.id],
         targetType: node.type === "course" ? "coursenode" : "conditionalnode",
         targetStatus: node.data.nodeStatus,
       };
@@ -531,7 +531,7 @@ export default function App() {
     if (selectedIds.includes(edge.id)) {
       if (selectedIds.length === 1) {
         contextData.current = {
-          target: edge.id,
+          target: [edge.id],
           targetType: "edge",
           targetStatus: targetStatus as ContextTargetStatus,
         };
@@ -545,7 +545,7 @@ export default function App() {
     } else {
       setSelectedElements.current([edge as Edge]);
       contextData.current = {
-        target: edge.id,
+        target: [edge.id],
         targetType: "edge",
         targetStatus: targetStatus as ContextTargetStatus,
       };
@@ -598,7 +598,7 @@ export default function App() {
     resetSelectedElements.current();
     unsetNodesSelection.current();
     contextData.current = {
-      target: "",
+      target: [],
       targetType: "pane",
       targetStatus: "",
     };

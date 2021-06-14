@@ -107,7 +107,7 @@ export type CloseModal = () => void;
 
 export type ContextTargetStatus = CourseStatus | "" | "CC";
 export interface ContextTarget {
-  target: ElementId | ElementId[];
+  target: ElementId[];
   targetType: string;
   targetStatus: ContextTargetStatus;
 }

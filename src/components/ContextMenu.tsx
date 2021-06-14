@@ -50,7 +50,7 @@ export default function ContextMenu({
 
   function deleteAndClearSelection(): void {
     unsetNodesSelection();
-    deleteElems(target as ElementId[]);
+    deleteElems(target);
   }
 
   if (!active) {
@@ -67,21 +67,21 @@ export default function ContextMenu({
           <li
             key="planned"
             className={targetStatusCode >= 2 ? "current" : ""}
-            onClick={() => setSelectionStatuses([target as NodeId], "ready")}
+            onClick={() => setSelectionStatuses(target, "ready")}
           >
             <p>Planned</p>
           </li>
           <li
             key="enrolled"
             className={targetStatus === "enrolled" ? "current" : ""}
-            onClick={() => setSelectionStatuses([target as NodeId], "enrolled")}
+            onClick={() => setSelectionStatuses(target, "enrolled")}
           >
             <p>Enrolled</p>
           </li>
           <li
             key="complete"
             className={targetStatus === "completed" ? "current" : ""}
-            onClick={() => setSelectionStatuses([target as NodeId], "completed")}
+            onClick={() => setSelectionStatuses(target, "completed")}
           >
             <p>Completed</p>
           </li>
@@ -93,19 +93,19 @@ export default function ContextMenu({
           {targetStatusCode < 3 && courseStatusOptions}
           <li
             className="connect-all"
-            onClick={() => connectAll(target as NodeId)}
+            onClick={() => connectAll(target[0])}
           >
             <p>Connect&nbsp;all</p>
           </li>
           <li
             className="disconnect-all"
-            onClick={() => disconnectAll([target as NodeId])}
+            onClick={() => disconnectAll(target)}
           >
             <p>Disconnect&nbsp;all</p>
           </li>
           <li
             className="delete"
-            onClick={() => deleteElems([target as NodeId])}
+            onClick={() => deleteElems(target)}
           >
             <p>Delete</p>
           </li>
@@ -119,16 +119,16 @@ export default function ContextMenu({
         <>
           <li
             className="disconnect-all"
-            onClick={() => disconnectAll([target as NodeId])}
+            onClick={() => disconnectAll(target)}
           >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li className="reroute" onClick={() => reroute(target as NodeId)}>
+          <li className="reroute" onClick={() => reroute(target[0])}>
             <p>Reroute</p>
           </li>
           <li
             className="delete"
-            onClick={() => deleteElems([target as NodeId])}
+            onClick={() => deleteElems(target)}
           >
             <p>Delete</p>
           </li>
@@ -142,14 +142,14 @@ export default function ContextMenu({
           <li
             key="concurrent"
             className={targetStatus === "CC" ? "current" : ""}
-            onClick={() => toggleEdgeConcurrency(target as EdgeId)}
+            onClick={() => toggleEdgeConcurrency(target[0])}
           >
             <p>Concurrent</p>
           </li>
           <hr />
           <li
             className="delete"
-            onClick={() => deleteElems([target as EdgeId])}
+            onClick={() => deleteElems(target)}
           >
             <p>Delete</p>
           </li>
@@ -162,30 +162,30 @@ export default function ContextMenu({
         <>
           <li
             key="planned"
-            onClick={() => setSelectionStatuses(target as NodeId[], "ready")}
+            onClick={() => setSelectionStatuses(target, "ready")}
           >
             <p>Planned</p>
           </li>
           <li
             key="enrolled"
-            onClick={() => setSelectionStatuses(target as NodeId[], "enrolled")}
+            onClick={() => setSelectionStatuses(target, "enrolled")}
           >
             <p>Enrolled</p>
           </li>
           <li
             key="complete"
-            onClick={() => setSelectionStatuses(target as NodeId[], "completed")}
+            onClick={() => setSelectionStatuses(target, "completed")}
           >
             <p>Completed</p>
           </li>
           <hr />
           <li
             className="disconnect-all"
-            onClick={() => disconnectAll(target as NodeId[])}
+            onClick={() => disconnectAll(target)}
           >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li onClick={() => deleteElems(target as NodeId[])}>
+          <li onClick={() => deleteElems(target)}>
             <p>Delete</p>
           </li>
         </>
@@ -197,11 +197,11 @@ export default function ContextMenu({
         <>
           <li
             className="disconnect-all"
-            onClick={() => disconnectAll(target as NodeId[])}
+            onClick={() => disconnectAll(target)}
           >
             <p>Disconnect&nbsp;all</p>
           </li>
-          <li onClick={() => deleteElems(target as NodeId[])}>
+          <li onClick={() => deleteElems(target)}>
             <p>Delete</p>
           </li>
         </>
@@ -212,7 +212,7 @@ export default function ContextMenu({
       // At least one node and at least one edge
       menuOptions = (
         <>
-          <li onClick={() => deleteElems(target as ElementId[])}>
+          <li onClick={() => deleteElems(target)}>
             <p>Delete</p>
           </li>
         </>
@@ -224,26 +224,26 @@ export default function ContextMenu({
         <>
           <li
             key="planned"
-            onClick={() => setSelectionStatuses(target as NodeId[], "ready")}
+            onClick={() => setSelectionStatuses(target, "ready")}
           >
             <p>Planned</p>
           </li>
           <li
             key="enrolled"
-            onClick={() => setSelectionStatuses(target as NodeId[], "enrolled")}
+            onClick={() => setSelectionStatuses(target, "enrolled")}
           >
             <p>Enrolled</p>
           </li>
           <li
             key="complete"
-            onClick={() => setSelectionStatuses(target as NodeId[], "completed")}
+            onClick={() => setSelectionStatuses(target, "completed")}
           >
             <p>Completed</p>
           </li>
           <hr />
           <li
             className="disconnect-all"
-            onClick={() => disconnectAll(target as NodeId[])}
+            onClick={() => disconnectAll(target)}
           >
             <p>Disconnect&nbsp;all</p>
           </li>
@@ -259,7 +259,7 @@ export default function ContextMenu({
         <>
           <li
             className="disconnect-all"
-            onClick={() => disconnectAll(target as NodeId[])}
+            onClick={() => disconnectAll(target)}
           >
             <p>Disconnect&nbsp;all</p>
           </li>
