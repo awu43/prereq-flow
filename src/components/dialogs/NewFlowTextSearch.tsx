@@ -5,7 +5,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import "./TextSearch.scss";
+import "./NewFlowTextSearch.scss";
 import type { SetState, AmbiguityHandling } from "types/main";
 
 import AmbiguitySelect from "./AmbiguitySelect";
@@ -21,7 +21,7 @@ interface TextSearchProps {
   ) => Promise<void>;
   errorMsg: string;
 }
-export default function TextSearch({
+export default function NewFlowTextSearch({
   connectionError,
   busy,
   setBusy,
@@ -43,7 +43,7 @@ export default function TextSearch({
   }
 
   return (
-    <div className="TextSearch">
+    <div className="NewFlowTextSearch">
       <Tippy
         className="tippy-box--error"
         content={errorMsg}
@@ -54,7 +54,7 @@ export default function TextSearch({
         visible={!!errorMsg}
       >
         <textarea
-          className="TextSearch__textarea"
+          className="NewFlowTextSearch__textarea"
           placeholder="Text to search for UW course IDs"
           value={text}
           onChange={e => setText(e.target.value)}
@@ -69,10 +69,10 @@ export default function TextSearch({
         busy={busy}
       />
 
-      <div className="TextSearch__button-wrapper">
+      <div className="NewFlowTextSearch__button-wrapper">
         <button
           type="submit"
-          className="TextSearch__get-courses-button"
+          className="NewFlowTextSearch__get-courses-button"
           onClick={generateFlow}
           disabled={Boolean(connectionError || busy)}
         >

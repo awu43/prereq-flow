@@ -24,7 +24,7 @@ import CloseButton from "./CloseButton";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
-import TextSearch from "./TextSearch";
+import NewFlowTextSearch from "./NewFlowTextSearch";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
 import {
@@ -335,7 +335,7 @@ export default function NewFlowDialog({
                   />
                 </TabPanel>
                 <TabPanel>
-                  <TextSearch
+                  <NewFlowTextSearch
                     connectionError={connectionError}
                     busy={busy}
                     setBusy={setBusy}
