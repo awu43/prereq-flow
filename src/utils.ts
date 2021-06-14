@@ -24,6 +24,7 @@ import type {
   AlwaysDefinedMap,
   NodeDataMap,
   ElemIndexMap,
+  ConnectTo,
   AmbiguityHandling,
 } from "types/main";
 
@@ -623,27 +624,35 @@ export function autoconnect(
   newElements: Element[],
   numNodes: number,
   elemIndexes: ElemIndexMap,
+  connectTo: ConnectTo = { prereq: true, postreq: true },
   reposition = false,
 ): Element[] {
   const targetId = targetNode.id;
   const courseMatches = targetNode.data.prerequisite.match(COURSE_REGEX) || [];
   // Remove duplicates (example: NMETH 450 prereqs)
-  const targetPrereqs = (
-    [...new Set(courseMatches)]
-      .filter(elemId => elemIndexes.has(elemId))
-      .filter(elemId => !elemIndexes.has(edgeArrowId(elemId, targetId)))
-      .map(elemId => newElements[elemIndexes.get(elemId)] as CourseNode)
-  );
-  const targetPostreqs = [];
-  for (let i = 0; i < numNodes; i++) {
-    const postreq = newElements[i] as Node;
-    if (isCourseNode(postreq)
-        && (postreq).data.prerequisite.includes(targetId)
-        && !elemIndexes.has(edgeArrowId(targetId, postreq.id))) {
-      targetPostreqs.push(postreq);
-    }
+
+  let targetPrereqs = [] as CourseNode[];
+  if (connectTo.prereq) {
+    targetPrereqs = (
+      [...new Set(courseMatches)]
+        .filter(elemId => elemIndexes.has(elemId))
+        .filter(elemId => !elemIndexes.has(edgeArrowId(elemId, targetId)))
+        .map(elemId => newElements[elemIndexes.get(elemId)] as CourseNode)
+    );
   }
-  // Avoid traversing edges
+
+  const targetPostreqs = [] as CourseNode[];
+  if (connectTo.postreq) {
+    for (let i = 0; i < numNodes; i++) {
+      const postreq = newElements[i] as Node;
+      if (isCourseNode(postreq)
+          && (postreq).data.prerequisite.includes(targetId)
+          && !elemIndexes.has(edgeArrowId(targetId, postreq.id))) {
+        targetPostreqs.push(postreq);
+      }
+    }
+    // Avoid traversing edges
+  }
 
   for (const prereq of targetPrereqs) {
     newElements.push(newEdge(prereq.id, targetId));

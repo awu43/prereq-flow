@@ -33,6 +33,7 @@ import type {
   Element,
   NodeDataMap,
   ElemIndexMap,
+  ConnectTo,
   NewCoursePosition,
   ContextTargetStatus,
   ContextTarget,
@@ -234,17 +235,18 @@ export default function App() {
 
   function addCourseNode(
     newNode: CourseNode,
-    connectToExisting: boolean,
+    connectTo: ConnectTo,
     newCoursePosition: NewCoursePosition,
   ): void {
     recordFlowState();
     let newElems = flowInstance.current?.toObject().elements as Element[];
-    if (connectToExisting) {
+    if (connectTo.prereq || connectTo.postreq) {
       newElems = autoconnect(
         newNode,
         newElems,
         nodeData.current.size,
         elemIndexes.current,
+        connectTo,
         newCoursePosition === "relative",
       );
     } else {

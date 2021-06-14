@@ -59,7 +59,7 @@ interface AddCourseDialogProps {
   nodeData: NodeDataMap;
   addCourseNode: (
     newNode: CourseNode,
-    connectTo: boolean,
+    connectTo: ConnectTo,
     newCoursePosition: NewCoursePosition,
   ) => void;
 }
