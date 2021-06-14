@@ -2,9 +2,22 @@
 
 .AddCourseDialog {
   width: min(30rem, 100% - 1rem);
-  min-height: 19.5rem;
+  min-height: 21rem;
   display: flex;
   flex-direction: column;
+
+  [data-reach-tabs] {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  [data-reach-tab-panels] {
+    flex: 1;
+
+    position: relative;
+  }
 
   h2 {
     position: relative;
@@ -110,8 +123,14 @@
     }
   }
 
+  &__custom-course-tab-panel {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+
   .add-custom-course {
-    flex-grow: 1;
+    height: 100%;
     display: flex;
     flex-direction: column;
 
@@ -141,7 +160,7 @@
       @include gray-border;
       padding: 0.25rem;
       resize: none;
-      flex-grow: 1;
+      flex: 1;
       font-size: 0.8rem;
     }
 

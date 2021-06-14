@@ -446,7 +446,9 @@ export default function AddCourseDialog({
 
           <TabPanels>
             <TabPanel>{uwCourseForm}</TabPanel>
-            <TabPanel>{customCourseForm}</TabPanel>
+            <TabPanel className="AddCourseDialog__custom-course-tab-panel">
+              {customCourseForm}
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </DialogContent>
