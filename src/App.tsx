@@ -759,7 +759,10 @@ export default function App() {
               elemIds.map(id => elements[elemIndexes.current.get(id)])
             );
           }}
-          connectAll={(targetId: NodeId): void => {
+          connect={(
+            targetId: NodeId,
+            to: ConnectTo = { prereq: true, postreq: true },
+          ): void => {
             resetSelectedElements.current();
             recordFlowState();
 
@@ -768,20 +771,28 @@ export default function App() {
               elements.slice(),
               nodeData.current.size,
               elemIndexes.current,
+              to,
             );
             setElements(recalculatedElements(newElements));
           }}
-          disconnectAll={(targetIds: NodeId[]): void => {
+          disconnect={(
+            targetIds: NodeId[],
+            from: ConnectTo = { prereq: true, postreq: true },
+          ): void => {
             resetSelectedElements.current();
             recordFlowState();
 
             const connectedEdges = new Set();
             for (const id of targetIds) {
-              for (const edge of nodeData.current.get(id).incomingEdges) {
-                connectedEdges.add(edge);
+              if (from.prereq) {
+                for (const edge of nodeData.current.get(id).incomingEdges) {
+                  connectedEdges.add(edge);
+                }
               }
-              for (const edge of nodeData.current.get(id).outgoingEdges) {
-                connectedEdges.add(edge);
+              if (from.postreq) {
+                for (const edge of nodeData.current.get(id).outgoingEdges) {
+                  connectedEdges.add(edge);
+                }
               }
             }
 

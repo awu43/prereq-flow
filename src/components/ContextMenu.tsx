@@ -13,6 +13,7 @@ import type {
   EdgeId,
   ElementId,
   ConditionalTypes,
+  ConnectTo,
   ContextTarget,
 } from "types/main";
 
@@ -25,8 +26,8 @@ interface ContextMenuProps {
   setSelectionStatuses: (nodeIds: NodeId[], newStatus: CourseStatus) => void;
   toggleEdgeConcurrency: (edgeId: EdgeId) => void;
   deleteElems: (elemIds: ElementId[]) => void;
-  connectAll: (targetId: NodeId) => void;
-  disconnectAll: (targetIds: NodeId[]) => void;
+  connect: (targetId: NodeId, to?: ConnectTo) => void;
+  disconnect: (targetIds: NodeId[], from?: ConnectTo) => void;
   newConditionalNode: (type: ConditionalTypes, xy: XYPosition) => void;
   reroute: (targetId: NodeId) => void;
 }
@@ -37,8 +38,8 @@ export default function ContextMenu({
   setSelectionStatuses,
   toggleEdgeConcurrency,
   deleteElems,
-  connectAll,
-  disconnectAll,
+  connect,
+  disconnect,
   newConditionalNode,
   reroute,
 }: ContextMenuProps) {
@@ -56,6 +57,65 @@ export default function ContextMenu({
   if (!active) {
     return null;
   }
+
+  function setSelectionStatusOpt(
+    status: CourseStatus,
+    label: string,
+  ): JSX.Element {
+    return (
+      <li onClick={() => setSelectionStatuses(target, status)}>
+        <p>{label}</p>
+      </li>
+    );
+  }
+  const setReadyOpt = setSelectionStatusOpt("ready", "Planned");
+  const setEnrolledOpt = setSelectionStatusOpt("enrolled", "Enrolled");
+  const setCompletedOpt = setSelectionStatusOpt("completed", "Completed");
+
+  function connectOpt(
+    prereq: boolean,
+    postreq: boolean,
+    label: string,
+  ): JSX.Element {
+    return (
+      <li onClick={() => connect(target[0], { prereq, postreq })}>
+        <p>{label}</p>
+      </li>
+    );
+  }
+  const connectPrereqsOpt = connectOpt(true, false, "Connect\u00A0prereqs");
+  const connectPostreqsOpt = connectOpt(false, true, "Connect\u00A0postreqs");
+  const connectAllOpt = connectOpt(true, true, "Connect\u00A0all");
+
+  function disconnectOpt(
+    prereq: boolean,
+    postreq: boolean,
+    label: string,
+  ): JSX.Element {
+    return (
+      <li onClick={() => disconnect(target, { prereq, postreq })}>
+        <p>{label}</p>
+      </li>
+    );
+  }
+  const disconnectPrereqsOpt = disconnectOpt(
+    true, false, "Disconnect\u00A0prereqs"
+  );
+  const disconnectPostreqsOpt = disconnectOpt(
+    false, true, "Disconnect\u00A0postreqs"
+  );
+  const disconnectAllOpt = disconnectOpt(true, true, "Disconnect\u00A0all");
+
+  const deleteElemsOpt = (
+    <li onClick={() => deleteElems(target)}>
+      <p>Delete</p>
+    </li>
+  );
+  const deleteAndClearOpt = (
+    <li onClick={deleteAndClearSelection}>
+      <p>Delete</p>
+    </li>
+  );
 
   let menuOptions;
   switch (targetType) {
@@ -91,24 +151,13 @@ export default function ContextMenu({
       menuOptions = (
         <>
           {targetStatusCode < 3 && courseStatusOptions}
-          <li
-            className="connect-all"
-            onClick={() => connectAll(target[0])}
-          >
-            <p>Connect&nbsp;all</p>
-          </li>
-          <li
-            className="disconnect-all"
-            onClick={() => disconnectAll(target)}
-          >
-            <p>Disconnect&nbsp;all</p>
-          </li>
-          <li
-            className="delete"
-            onClick={() => deleteElems(target)}
-          >
-            <p>Delete</p>
-          </li>
+          {connectPrereqsOpt}
+          {connectPostreqsOpt}
+          {connectAllOpt}
+          {disconnectPrereqsOpt}
+          {disconnectPostreqsOpt}
+          {disconnectAllOpt}
+          {deleteElemsOpt}
         </>
       );
       break;
@@ -117,21 +166,13 @@ export default function ContextMenu({
       // Single conditional node
       menuOptions = (
         <>
-          <li
-            className="disconnect-all"
-            onClick={() => disconnectAll(target)}
-          >
-            <p>Disconnect&nbsp;all</p>
-          </li>
+          {disconnectPrereqsOpt}
+          {disconnectPostreqsOpt}
+          {disconnectAllOpt}
           <li className="reroute" onClick={() => reroute(target[0])}>
             <p>Reroute</p>
           </li>
-          <li
-            className="delete"
-            onClick={() => deleteElems(target)}
-          >
-            <p>Delete</p>
-          </li>
+          {deleteElemsOpt}
         </>
       );
       break;
@@ -147,12 +188,7 @@ export default function ContextMenu({
             <p>Concurrent</p>
           </li>
           <hr />
-          <li
-            className="delete"
-            onClick={() => deleteElems(target)}
-          >
-            <p>Delete</p>
-          </li>
+          {deleteElemsOpt}
         </>
       );
       break;
@@ -160,34 +196,14 @@ export default function ContextMenu({
       // Multiple nodes containing at least one course node
       menuOptions = (
         <>
-          <li
-            key="planned"
-            onClick={() => setSelectionStatuses(target, "ready")}
-          >
-            <p>Planned</p>
-          </li>
-          <li
-            key="enrolled"
-            onClick={() => setSelectionStatuses(target, "enrolled")}
-          >
-            <p>Enrolled</p>
-          </li>
-          <li
-            key="complete"
-            onClick={() => setSelectionStatuses(target, "completed")}
-          >
-            <p>Completed</p>
-          </li>
+          {setReadyOpt}
+          {setEnrolledOpt}
+          {setCompletedOpt}
           <hr />
-          <li
-            className="disconnect-all"
-            onClick={() => disconnectAll(target)}
-          >
-            <p>Disconnect&nbsp;all</p>
-          </li>
-          <li onClick={() => deleteElems(target)}>
-            <p>Delete</p>
-          </li>
+          {disconnectPrereqsOpt}
+          {disconnectPostreqsOpt}
+          {disconnectAllOpt}
+          {deleteElemsOpt}
         </>
       );
       break;
@@ -195,15 +211,10 @@ export default function ContextMenu({
       // At least one conditional node
       menuOptions = (
         <>
-          <li
-            className="disconnect-all"
-            onClick={() => disconnectAll(target)}
-          >
-            <p>Disconnect&nbsp;all</p>
-          </li>
-          <li onClick={() => deleteElems(target)}>
-            <p>Delete</p>
-          </li>
+          {disconnectPrereqsOpt}
+          {disconnectPostreqsOpt}
+          {disconnectAllOpt}
+          {deleteElemsOpt}
         </>
       );
       break;
@@ -212,9 +223,7 @@ export default function ContextMenu({
       // At least one node and at least one edge
       menuOptions = (
         <>
-          <li onClick={() => deleteElems(target)}>
-            <p>Delete</p>
-          </li>
+          {deleteElemsOpt}
         </>
       );
       break;
@@ -222,34 +231,14 @@ export default function ContextMenu({
       // Multiple nodes containing at least one course node
       menuOptions = (
         <>
-          <li
-            key="planned"
-            onClick={() => setSelectionStatuses(target, "ready")}
-          >
-            <p>Planned</p>
-          </li>
-          <li
-            key="enrolled"
-            onClick={() => setSelectionStatuses(target, "enrolled")}
-          >
-            <p>Enrolled</p>
-          </li>
-          <li
-            key="complete"
-            onClick={() => setSelectionStatuses(target, "completed")}
-          >
-            <p>Completed</p>
-          </li>
+          {setReadyOpt}
+          {setEnrolledOpt}
+          {setCompletedOpt}
           <hr />
-          <li
-            className="disconnect-all"
-            onClick={() => disconnectAll(target)}
-          >
-            <p>Disconnect&nbsp;all</p>
-          </li>
-          <li onClick={deleteAndClearSelection}>
-            <p>Delete</p>
-          </li>
+          {disconnectPrereqsOpt}
+          {disconnectPostreqsOpt}
+          {disconnectAllOpt}
+          {deleteAndClearOpt}
         </>
       );
       break;
@@ -257,15 +246,10 @@ export default function ContextMenu({
       // At least one conditional node
       menuOptions = (
         <>
-          <li
-            className="disconnect-all"
-            onClick={() => disconnectAll(target)}
-          >
-            <p>Disconnect&nbsp;all</p>
-          </li>
-          <li onClick={deleteAndClearSelection}>
-            <p>Delete</p>
-          </li>
+          {disconnectPrereqsOpt}
+          {disconnectPostreqsOpt}
+          {disconnectAllOpt}
+          {deleteAndClearOpt}
         </>
       );
       break;
