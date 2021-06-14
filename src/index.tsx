@@ -20,6 +20,7 @@ if (import.meta.hot) {
 // TODO: Mobile/tablet warning
 // TODO: Add concurrent edge to legend
 // TODO: Dark mode
+// TODO: N of prereq (PHYS 321)
 
 // TODO: Context menu for edge style
 // TODO: General cycle check on edge update/create

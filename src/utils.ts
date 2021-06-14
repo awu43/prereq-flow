@@ -71,7 +71,6 @@ function eitherOrMatches(str: string): RegExpMatchArray | null {
   return null;
 }
 
-// TODO: Concurrency for single course prereqs
 const CONCURRENT_REGEX = (
   /(?:either of )?which may be taken concurrently(?:\. Instructor|\.?$)/
 );

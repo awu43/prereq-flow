@@ -94,6 +94,10 @@ export type ElemIndexMap = AlwaysDefinedMap<ElementId, ElementIndex>;
 
 export type SetState<Type> = Dispatch<SetStateAction<Type>>;
 
+export interface ConnectTo {
+  prereq: boolean;
+  postreq: boolean;
+}
 export type AmbiguityHandling = "aggressively" | "cautiously";
 export type NewCoursePosition = "zero" | "relative";
 

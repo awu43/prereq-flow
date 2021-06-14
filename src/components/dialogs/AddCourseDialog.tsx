@@ -26,6 +26,7 @@ import type {
   NodeDataMap,
   ModalClass,
   CloseModal,
+  ConnectTo,
   NewCoursePosition,
 } from "types/main";
 
@@ -58,7 +59,7 @@ interface AddCourseDialogProps {
   nodeData: NodeDataMap;
   addCourseNode: (
     newNode: CourseNode,
-    connectToExisting: boolean,
+    connectTo: boolean,
     newCoursePosition: NewCoursePosition,
   ) => void;
 }
@@ -111,7 +112,10 @@ export default function AddCourseDialog({
     };
   }, []);
 
-  const [connectToExisting, setConnectToExisting] = useState(true);
+  const [connectTo, setConnectTo] = useState<ConnectTo>({
+    prereq: true,
+    postreq: true,
+  });
   const [
     newCoursePosition,
     setNewCoursePosition
@@ -175,7 +179,7 @@ export default function AddCourseDialog({
     node.position.x += (Math.random() - 0.5) * 200;
     node.position.y += (Math.random() - 0.5) * 200;
     // Add fuzzing to stop multiple nodes from piling
-    addCourseNode(node, connectToExisting, newCoursePosition);
+    addCourseNode(node, connectTo, newCoursePosition);
   }
 
   async function fetchCourse(event: MouseEvent): Promise<void> {
@@ -273,20 +277,35 @@ export default function AddCourseDialog({
       <label>
         <input
           type="checkbox"
-          checked={connectToExisting}
+          checked={connectTo.prereq}
           disabled={busy}
           onChange={() => {
-            if (connectToExisting) {
+            if (connectTo.prereq && !connectTo.postreq) {
               // About to be disabled
               setNewCoursePosition("zero");
             }
-            setConnectToExisting(!connectToExisting);
+            setConnectTo(prev => ({ ...prev, prereq: !prev.prereq }));
           }}
         />
-        Connect to existing pre/postreqs
+        Connect to existing prereqs
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          checked={connectTo.postreq}
+          disabled={busy}
+          onChange={() => {
+            if (!connectTo.prereq && connectTo.postreq) {
+              // About to be disabled
+              setNewCoursePosition("zero");
+            }
+            setConnectTo(prev => ({ ...prev, postreq: !prev.postreq }));
+          }}
+        />
+        Connect to existing postreqs
       </label>
       <div className="add-uw-course__connection-opts">
-        {/* <div className={`connection-opts__cover ${!connectToExisting || busy ? "--enabled" : ""}`}></div> */}
+        {/* <div className={`connection-opts__cover ${!connectTo || busy ? "--enabled" : ""}`}></div> */}
         <fieldset
           className="connection-opts__position"
           disabled={busy}
@@ -298,7 +317,7 @@ export default function AddCourseDialog({
               name="new-position"
               checked={newCoursePosition === "relative"}
               onChange={() => setNewCoursePosition("relative")}
-              disabled={!connectToExisting}
+              disabled={!connectTo.prereq && !connectTo.postreq}
             />
             Relative to pre/postreqs
           </label>
