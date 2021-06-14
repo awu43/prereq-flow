@@ -69,6 +69,8 @@ export default function AddCourseDialog({
   nodeData,
   addCourseNode,
 }: AddCourseDialogProps) {
+  const [tabIndex, setTabIndex] = useState(0);
+
   const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
@@ -214,7 +216,7 @@ export default function AddCourseDialog({
           arrow={false}
           duration={0}
           offset={[0, 5]}
-          visible={!!errorMsg}
+          visible={tabIndex === 0 && !!errorMsg}
         >
           <Combobox
             onSelect={item => { setSelectedCourse(item); }}
@@ -295,7 +297,7 @@ export default function AddCourseDialog({
         <h2 className={connectionError ? "connection-error" : ""}>
           Add course
         </h2>
-        <Tabs onChange={() => setErrorMsg("")}>
+        <Tabs onChange={i => setTabIndex(i)}>
           <TabList>
             <Tab disabled={busy}>UW course</Tab>
             <Tab disabled={busy}>Custom course</Tab>
@@ -305,6 +307,7 @@ export default function AddCourseDialog({
             <TabPanel>{uwCourseForm}</TabPanel>
             <TabPanel className="AddCourseDialog__custom-course-tab-panel">
               <CustomCourseForm
+                tabIndex={tabIndex}
                 busy={busy}
                 setBusy={setBusy}
                 nodeData={nodeData}

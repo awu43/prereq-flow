@@ -14,12 +14,14 @@ import type {
 import "./CustomCourseForm.scss";
 
 interface CustomCourseFormProps {
+  tabIndex: number;
   busy: boolean;
   setBusy: SetState<boolean>;
   nodeData: NodeDataMap;
   addNewNode: (data: CourseData, position: NewCoursePosition) => void
 }
 export default function CustomCourseForm({
+  tabIndex,
   busy,
   setBusy,
   nodeData,
@@ -65,7 +67,7 @@ export default function CustomCourseForm({
           arrow={false}
           duration={0}
           offset={[0, 5]}
-          visible={nodeData.has(customCourseData.id)}
+          visible={tabIndex === 1 && nodeData.has(customCourseData.id)}
         >
           <input
             disabled={busy}
