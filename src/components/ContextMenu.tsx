@@ -14,6 +14,7 @@ import type {
   ElementId,
   ConditionalTypes,
   CourseNode,
+  Node,
   Element,
   NodeDataMap,
   ElemIndexMap,
@@ -22,6 +23,7 @@ import type {
 } from "types/main";
 
 import {
+  isCourseNode,
   courseIdMatch,
   edgeArrowId,
   COURSE_STATUS_CODES,
@@ -135,6 +137,7 @@ export default function ContextMenu({
   switch (targetType) {
     case "coursenode": {
       // Single course node
+      const targetNode = target[0];
       const targetStatusCode = COURSE_STATUS_CODES[targetStatus];
       const courseStatusOptions = (
         <>
@@ -163,24 +166,37 @@ export default function ContextMenu({
         </>
       );
       const allPrereqs = courseIdMatch(
-        (elements[elemIndexes.get(target[0])] as CourseNode).data.prerequisite
+        (elements[elemIndexes.get(targetNode)] as CourseNode).data.prerequisite
       );
       const allPrereqsConnected = (
         allPrereqs
           ? allPrereqs.every(p => (
-            !elemIndexes.has(p)
-            || elemIndexes.has(edgeArrowId(p, target[0]))
+            !elemIndexes.has(p) || elemIndexes.has(edgeArrowId(p, targetNode))
           ))
           : true
       );
-      const hasPrereqs = !!nodeData.get(target[0]).incomingEdges.length;
-      const hasPostreqs = !!nodeData.get(target[0]).outgoingEdges.length;
+      const notConnectedPostreqs = [] as CourseNode[];
+      const numNodes = nodeData.size;
+      for (let i = 0; i < numNodes; i++) {
+        const postreq = elements[i] as Node;
+        if (isCourseNode(postreq)
+            && postreq.data.prerequisite.includes(targetNode)
+            && !elemIndexes.has(edgeArrowId(targetNode, postreq.id))) {
+          notConnectedPostreqs.push(postreq);
+        }
+      }
+      const hasPrereqs = !!nodeData.get(targetNode).incomingEdges.length;
+      const hasPostreqs = !!nodeData.get(targetNode).outgoingEdges.length;
       menuOptions = (
         <>
           {targetStatusCode < 3 && courseStatusOptions}
           {!allPrereqsConnected && connectPrereqsOpt}
-          {connectPostreqsOpt}
-          {!allPrereqsConnected && connectAllOpt}
+          {!!notConnectedPostreqs.length && connectPostreqsOpt}
+          {(
+            !allPrereqsConnected
+            && !!notConnectedPostreqs.length
+            && connectAllOpt
+          )}
           {hasPrereqs && disconnectPrereqsOpt}
           {hasPostreqs && disconnectPostreqsOpt}
           {hasPrereqs && hasPostreqs && disconnectAllOpt}

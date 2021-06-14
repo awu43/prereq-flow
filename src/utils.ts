@@ -42,7 +42,7 @@ export function removeElements(
   return removeElementsBase(toRemove, toRemoveFrom) as Element[];
 }
 
-function isCourseNode(node: Node): node is CourseNode {
+export function isCourseNode(node: Node): node is CourseNode {
   return node.type === "course";
 }
 
@@ -650,7 +650,7 @@ export function autoconnect(
     for (let i = 0; i < numNodes; i++) {
       const postreq = newElements[i] as Node;
       if (isCourseNode(postreq)
-          && (postreq).data.prerequisite.includes(targetId)
+          && postreq.data.prerequisite.includes(targetId)
           && !elemIndexes.has(edgeArrowId(targetId, postreq.id))) {
         targetPostreqs.push(postreq);
       }
