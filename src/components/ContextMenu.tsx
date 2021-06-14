@@ -13,6 +13,7 @@ import type {
   EdgeId,
   ElementId,
   ConditionalTypes,
+  NodeDataMap,
   ConnectTo,
   ContextTarget,
 } from "types/main";
@@ -20,6 +21,7 @@ import type {
 import { COURSE_STATUS_CODES } from "../utils";
 
 interface ContextMenuProps {
+  nodeData: NodeDataMap;
   active: boolean;
   data: ContextTarget;
   xy: XYPosition;
@@ -32,6 +34,7 @@ interface ContextMenuProps {
   reroute: (targetId: NodeId) => void;
 }
 export default function ContextMenu({
+  nodeData,
   active,
   data,
   xy,
@@ -148,27 +151,31 @@ export default function ContextMenu({
           <hr />
         </>
       );
+      const hasPrereqs = !!nodeData.get(target[0]).incomingEdges.length;
+      const hasPostreqs = !!nodeData.get(target[0]).outgoingEdges.length;
       menuOptions = (
         <>
           {targetStatusCode < 3 && courseStatusOptions}
           {connectPrereqsOpt}
           {connectPostreqsOpt}
           {connectAllOpt}
-          {disconnectPrereqsOpt}
-          {disconnectPostreqsOpt}
-          {disconnectAllOpt}
+          {hasPrereqs && disconnectPrereqsOpt}
+          {hasPostreqs && disconnectPostreqsOpt}
+          {hasPrereqs && hasPostreqs && disconnectAllOpt}
           {deleteElemsOpt}
         </>
       );
       break;
     }
-    case "conditionalnode":
+    case "conditionalnode": {
       // Single conditional node
+      const hasPrereqs = !!nodeData.get(target[0]).incomingEdges.length;
+      const hasPostreqs = !!nodeData.get(target[0]).outgoingEdges.length;
       menuOptions = (
         <>
-          {disconnectPrereqsOpt}
-          {disconnectPostreqsOpt}
-          {disconnectAllOpt}
+          {hasPrereqs && disconnectPrereqsOpt}
+          {hasPostreqs && disconnectPostreqsOpt}
+          {hasPrereqs && hasPostreqs && disconnectAllOpt}
           <li className="reroute" onClick={() => reroute(target[0])}>
             <p>Reroute</p>
           </li>
@@ -176,6 +183,7 @@ export default function ContextMenu({
         </>
       );
       break;
+    }
     case "edge":
       // Single edge
       menuOptions = (
