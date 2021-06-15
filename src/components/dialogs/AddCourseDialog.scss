@@ -123,7 +123,8 @@
     }
   }
 
-  &__custom-course-tab-panel {
+  &__custom-course-tab-panel,
+  &__text-search-tab-panel {
     position: absolute;
     height: 100%;
     width: 100%;

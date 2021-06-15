@@ -21,6 +21,7 @@ if (import.meta.hot) {
 // TODO: Add concurrent edge to legend
 // TODO: Dark mode
 // TODO: N of prereq (PHYS 321)
+// FIXME: Controls extending across dialog width
 
 // TODO: Context menu for edge style
 // TODO: General cycle check on edge update/create

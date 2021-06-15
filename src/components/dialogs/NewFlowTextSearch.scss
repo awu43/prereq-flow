@@ -4,6 +4,7 @@
   &__textarea {
     flex: 1 0;
 
+    @include gray-border;
     width: 100%;
     resize: none;
     margin: 0.5rem 0 2.5rem;

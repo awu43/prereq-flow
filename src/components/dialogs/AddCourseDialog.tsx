@@ -34,6 +34,7 @@ import "./AddCourseDialog.scss";
 import CloseButton from "./CloseButton";
 import CampusSelect from "./CampusSelect";
 import CustomCourseForm from "./CustomCourseForm";
+import AddCourseTextSearch from "./AddCourseTextSearch";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 import { newCourseNode } from "../../utils";
 
@@ -301,6 +302,7 @@ export default function AddCourseDialog({
           <TabList>
             <Tab disabled={busy}>UW course</Tab>
             <Tab disabled={busy}>Custom course</Tab>
+            <Tab disabled={busy}>Text search</Tab>
           </TabList>
 
           <TabPanels>
@@ -312,6 +314,13 @@ export default function AddCourseDialog({
                 setBusy={setBusy}
                 nodeData={nodeData}
                 addNewNode={addNewNode}
+              />
+            </TabPanel>
+            <TabPanel className="AddCourseDialog__text-search-tab-panel">
+              <AddCourseTextSearch
+                connectionError={connectionError}
+                busy={busy}
+                setBusy={setBusy}
               />
             </TabPanel>
           </TabPanels>
