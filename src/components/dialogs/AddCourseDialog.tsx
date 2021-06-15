@@ -50,7 +50,7 @@ const WS_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_WS_URL
 );
 
-const SEARCH_REGEX = /^\s*((?:[A-Z&]+ )+\d{3})(?:\D+|$)/;
+const SEARCH_REGEX = /^\s*(?:[A-Z&]+ )+\d{3}\s*$/;
 // Strips away leading whitespace
 // Will not match if >3 numbers in ID
 
@@ -174,7 +174,7 @@ export default function AddCourseDialog({
       return;
     }
 
-    const searchQuery = courseMatch[1];
+    const searchQuery = courseMatch[0].trim();
     if (nodeData.has(searchQuery)) {
       setErrorMsg("Course already exists");
       searchBarRef.current?.focus();
