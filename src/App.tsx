@@ -62,6 +62,8 @@ import AddCourseDialog from "./components/dialogs/AddCourseDialog";
 import AboutDialog from "./components/dialogs/AboutDialog";
 
 import {
+  isNode,
+  isCourseNode,
   removeElements,
   ZERO_POSITION,
   newConditionalNode,
@@ -253,6 +255,64 @@ export default function App() {
       newElems.push(newNode);
     }
     setElements(recalculatedElements(newElems));
+  }
+
+  function addExternalFlow(extElems: Element[], connectTo: ConnectTo): void {
+    let tempElems = flowInstance.current?.toObject().elements as Element[];
+    if (connectTo.prereq || connectTo.postreq) {
+      for (const elem of extElems) {
+        if (isCourseNode(elem as Node)) {
+          tempElems = autoconnect(
+            elem as CourseNode,
+            tempElems,
+            nodeData.current.size,
+            elemIndexes.current,
+            connectTo,
+            false,
+          );
+          tempElems.pop();
+        }
+      }
+    }
+
+    const newElements = [...tempElems, ...extElems];
+    const newIndexes = newElemIndexes(newElements);
+
+    const tempLayout = generateNewLayout(
+      JSON.parse(JSON.stringify(newElements)),
+      newElemIndexes(newElements),
+      newNodeData(newElements),
+    );
+    const tempIndexes = newElemIndexes(tempLayout);
+    const tempData = newNodeData(tempLayout);
+
+    let dy = 0;
+    for (const elem of tempElems) {
+      if (isNode(elem)) {
+        const { y } = elem.position;
+        dy = Math.max(y, dy);
+      }
+    }
+
+    for (const elem of extElems) {
+      if (!isNode(elem)) {
+        continue;
+      }
+
+      const { id } = elem;
+      const ni = newIndexes.get(id);
+      const tempNode = tempLayout[tempIndexes.get(id)] as Node;
+      const tempPos = tempNode.position;
+
+      const newElemPos = (
+        !tempData.get(id).incomingEdges && !tempData.get(id).outgoingEdges
+          ? newPosition(Math.random() * 150, Math.random() * 300)
+          : newPosition(tempPos.x, tempPos.y + dy)
+      );
+      (newElements[ni] as Node).position = newElemPos;
+    }
+
+    setElements(recalculatedElements(newElements));
   }
 
   function reflowElements(): void {
@@ -873,6 +933,7 @@ export default function App() {
         closeDialog={closeAddCourseDlg}
         nodeData={nodeData.current}
         addCourseNode={addCourseNode}
+        addExternalFlow={addExternalFlow}
       />
       <AboutDialog
         modalCls={aboutDlgCls}

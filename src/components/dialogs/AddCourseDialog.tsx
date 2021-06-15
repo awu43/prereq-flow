@@ -23,6 +23,7 @@ import type {
   Campus,
   CourseData,
   CourseNode,
+  Element,
   NodeDataMap,
   ModalClass,
   CloseModal,
@@ -36,7 +37,10 @@ import CampusSelect from "./CampusSelect";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
-import { newCourseNode } from "../../utils";
+import {
+  newCourseNode,
+  generateInitialElements,
+} from "../../utils";
 
 const API_URL = (
   import.meta.env.MODE === "production"
@@ -63,12 +67,14 @@ interface AddCourseDialogProps {
     connectTo: ConnectTo,
     newCoursePosition: NewCoursePosition,
   ) => void;
+  addExternalFlow: (extElems: Element[], connectTo: ConnectTo) => void;
 }
 export default function AddCourseDialog({
   modalCls,
   closeDialog,
   nodeData,
   addCourseNode,
+  addExternalFlow,
 }: AddCourseDialogProps) {
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -77,7 +83,8 @@ export default function AddCourseDialog({
   const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
 
   const [selectedCourse, setSelectedCourse] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [uwCourseErrorMsg, setUwErrorMsg] = useState("");
+  const [textSearchErrorMsg, setTextSearchErrorMsg] = useState("");
 
   const [
     autocompleteOpts,
@@ -122,15 +129,17 @@ export default function AddCourseDialog({
 
   const prefersReducedMotion = usePrefersReducedMotion();
   function close(): void {
-    setErrorMsg("");
+    setUwErrorMsg("");
+    setTextSearchErrorMsg("");
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
-        // Don't reset selected options
+        setTabIndex(0);
         setSelectedCourse("");
         setAutocompleteOpts([]);
       }, 100);
     } else {
+      setTabIndex(0);
       setSelectedCourse("");
       setAutocompleteOpts([]);
     }
@@ -138,7 +147,7 @@ export default function AddCourseDialog({
 
   function onSearchChange(event: ChangeEvent<HTMLInputElement>): void {
     // Heroku responds fast enough, no throttling/debouncing needed
-    setErrorMsg("");
+    setUwErrorMsg("");
     const newValue = event.target.value.toUpperCase();
     setSelectedCourse(newValue);
     if (newValue.trim() && websocket.current) {
@@ -169,19 +178,19 @@ export default function AddCourseDialog({
 
     const courseMatch = selectedCourse.match(SEARCH_REGEX);
     if (!courseMatch) {
-      setErrorMsg("Invalid course ID");
+      setUwErrorMsg("Invalid course ID");
       searchBarRef.current?.focus();
       return;
     }
 
     const searchQuery = courseMatch[0].trim();
     if (nodeData.has(searchQuery)) {
-      setErrorMsg("Course already exists");
+      setUwErrorMsg("Course already exists");
       searchBarRef.current?.focus();
       return;
     }
 
-    setErrorMsg("");
+    setUwErrorMsg("");
     setBusy(true);
 
     try {
@@ -190,16 +199,59 @@ export default function AddCourseDialog({
         addNewNode(await resp.json(), alwaysAtZero ? "zero" : "relative");
         setSelectedCourse("");
       } else if (resp.status === 404) {
-        setErrorMsg("Course not found");
+        setUwErrorMsg("Course not found");
       } else {
-        setErrorMsg("Something went wrong");
+        setUwErrorMsg("Something went wrong");
       }
     } catch (_error) {
-      setErrorMsg("Something went wrong");
+      setUwErrorMsg("Something went wrong");
     }
 
     setBusy(false);
     searchBarRef.current?.focus();
+  }
+
+  async function addCoursesFromText(
+    matches: RegExpMatchArray,
+    connect: ConnectTo,
+  ): Promise<void> {
+    if (!matches.length) {
+      setTextSearchErrorMsg("No course IDs found");
+      return;
+    }
+
+    const courses = matches.filter(m => !nodeData.has(m));
+    if (!courses.length) {
+      setTextSearchErrorMsg("All found courses already exist");
+      return;
+    }
+
+    setTextSearchErrorMsg("");
+    setBusy(true);
+
+    try {
+      const resp = await fetch(`${API_URL}/courses/`, {
+        method: "POST",
+        headers: { contentType: "application/json" },
+        body: JSON.stringify(courses),
+      });
+
+      if (resp.status === 404) {
+        setTextSearchErrorMsg("No matching courses found");
+        setBusy(false);
+        return;
+      }
+
+      const data = await resp.json();
+
+      const newElements = generateInitialElements(data, "aggressively");
+      addExternalFlow(newElements, connect);
+    } catch (error) {
+      setTextSearchErrorMsg("Something went wrong");
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+    setBusy(false);
   }
 
   const uwCourseForm = (
@@ -212,12 +264,12 @@ export default function AddCourseDialog({
       <div className="add-uw-course__bar-and-button">
         <Tippy
           className="tippy-box--error"
-          content={errorMsg}
+          content={uwCourseErrorMsg}
           placement="bottom-start"
           arrow={false}
           duration={0}
           offset={[0, 5]}
-          visible={tabIndex === 0 && !!errorMsg}
+          visible={tabIndex === 0 && !!uwCourseErrorMsg}
         >
           <Combobox
             onSelect={item => { setSelectedCourse(item); }}
@@ -306,7 +358,9 @@ export default function AddCourseDialog({
           </TabList>
 
           <TabPanels>
-            <TabPanel>{uwCourseForm}</TabPanel>
+            <TabPanel>
+              {uwCourseForm}
+            </TabPanel>
             <TabPanel className="AddCourseDialog__custom-course-tab-panel">
               <CustomCourseForm
                 tabIndex={tabIndex}
@@ -318,9 +372,12 @@ export default function AddCourseDialog({
             </TabPanel>
             <TabPanel className="AddCourseDialog__text-search-tab-panel">
               <AddCourseTextSearch
+                tabIndex={tabIndex}
                 connectionError={connectionError}
+                errorMsg={textSearchErrorMsg}
+                setErrorMsg={setTextSearchErrorMsg}
                 busy={busy}
-                setBusy={setBusy}
+                addCoursesFromText={addCoursesFromText}
               />
             </TabPanel>
           </TabPanels>

@@ -12,36 +12,36 @@ import type {
 
 import "./AddCourseTextSearch.scss";
 
-// import { courseIdMatch } from "../../utils";
+import { courseIdMatch } from "../../utils";
 
 interface TextSearchProps {
+  tabIndex: number;
   connectionError: boolean;
+  errorMsg: string;
+  setErrorMsg: SetState<string>
   busy: boolean;
-  setBusy: SetState<boolean>;
-  // newTextSearchFlow: (
-  //   courses: string[],
-  //   ambiguityHandling: AmbiguityHandling
-  // ) => Promise<void>;
+  addCoursesFromText: (
+    matches: RegExpMatchArray,
+    connectTo: ConnectTo,
+  ) => Promise<void>;
 }
 export default function NewFlowTextSearch({
+  tabIndex,
   connectionError,
+  errorMsg,
+  setErrorMsg,
   busy,
-  setBusy,
-  // newTextSearchFlow,
+  addCoursesFromText,
 }: TextSearchProps) {
   const [text, setText] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const [connectTo, setConnectTo] = useState<ConnectTo>({
     prereq: true,
     postreq: true,
   });
-  const [alwaysAtZero, setAlwaysAtZero] = useState(false);
 
   function AddCourses(event: MouseEvent): void {
     event.preventDefault();
-    setBusy(true);
-
-    // const courseMatches = courseIdMatch(text) ?? [];
+    addCoursesFromText([...new Set(courseIdMatch(text))], connectTo);
   }
 
   return (
@@ -53,18 +53,22 @@ export default function NewFlowTextSearch({
         arrow={false}
         duration={0}
         offset={[0, 5]}
-        visible={!!errorMsg}
+        visible={tabIndex === 2 && !!errorMsg}
       >
         <textarea
           className="AddCourseTextSearch__textarea"
           placeholder="Text to search for UW course IDs"
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={e => {
+            setText(e.target.value);
+            setErrorMsg("");
+          }}
           disabled={connectionError || busy}
         >
         </textarea>
       </Tippy>
 
+      <p>⚠️Added courses are placed below existing courses⚠️</p>
       <label>
         <input
           type="checkbox"
@@ -86,15 +90,6 @@ export default function NewFlowTextSearch({
           }}
         />
         Connect to existing postreqs
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          checked={alwaysAtZero}
-          disabled={busy}
-          onChange={() => setAlwaysAtZero(!alwaysAtZero)}
-        />
-        Always place new courses at (0, 0)
       </label>
 
       <button
