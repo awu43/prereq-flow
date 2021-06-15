@@ -61,7 +61,12 @@
   }
 
   .add-uw-course {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
     &__bar-and-button {
+      width: 100%;
       display: flex;
       margin-bottom: 2.5rem;
     }
@@ -81,45 +86,6 @@
       height: 1.75rem;
       width: 2.5rem;
       padding: 0 0.25rem;
-    }
-
-    & > label {
-      display: block;
-    }
-
-    &__connection-opts {
-      // position: relative;
-      margin-top: 0.25rem;
-      // border-top: 1px solid gray;
-
-      fieldset {
-        border: none;
-      }
-
-      label {
-        margin-left: 0.5rem;
-      }
-    }
-
-    .connection-opts {
-      // &__cover {
-      //   position: absolute;
-      //   top: 0;
-      //   right: 0;
-      //   bottom: 0;
-      //   left: 0;
-      //   display: none;
-
-      //   background: rgba(lightgray, 0.75);
-
-      //   &.--enabled {
-      //     display: inherit;
-      //   }
-      // }
-
-      &__position {
-        margin-top: 0.5rem;
-      }
     }
   }
 

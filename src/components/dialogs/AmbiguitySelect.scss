@@ -1,7 +1,11 @@
 .AmbiguitySelect {
   border: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
   label {
-    display: block;
     margin-left: 0.5rem;
     input {
       margin-right: 0.25rem;
