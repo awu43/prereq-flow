@@ -691,8 +691,8 @@ export default function App() {
           onClick={saveFlow}
         />
         <HeaderButton
-          label="Add course"
-          description="Add courses to flow"
+          label="Add courses"
+          description="Add courses to current flow"
           onClick={openAddCourseDlg}
         />
         <HeaderButton

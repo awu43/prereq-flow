@@ -353,7 +353,7 @@ export default function AddCourseDialog({
       <DialogContent className="AddCourseDialog" aria-label="Add course dialog">
         <CloseButton onClick={close} disabled={busy} />
         <h2 className={connectionError ? "connection-error" : ""}>
-          Add course
+          Add courses
         </h2>
         <Tabs onChange={i => setTabIndex(i)}>
           <TabList>
