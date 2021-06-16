@@ -13,8 +13,14 @@ interface ModalDialogProps {
   contentAriaLabel: string;
   children: React.ReactNode
 }
-export default function ModalDialog(props: ModalDialogProps) {
-  const { modalCls, close, busy, contentCls, contentAriaLabel } = props;
+export default function ModalDialog({
+  modalCls,
+  close,
+  busy,
+  contentCls,
+  contentAriaLabel,
+  children,
+}: ModalDialogProps) {
   return (
     <DialogOverlay
       className={modalCls}
@@ -27,7 +33,7 @@ export default function ModalDialog(props: ModalDialogProps) {
       }}
     >
       <DialogContent className={contentCls} aria-label={contentAriaLabel}>
-        {props.children}
+        {children}
       </DialogContent>
     </DialogOverlay>
   );
