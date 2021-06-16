@@ -880,7 +880,7 @@ export default function App() {
               );
             }
           }
-          reroute={(targetId: NodeId): void => {
+          rerouteSingle={(targetId: NodeId): void => {
             resetSelectedElements.current();
             recordFlowState();
 
@@ -904,6 +904,41 @@ export default function App() {
               }
             }
             newElements = removeElements([targetNode], newElements);
+            setElements(recalculatedElements(newElements));
+          }}
+          reroutePointless={(): void => {
+            resetSelectedElements.current();
+            recordFlowState();
+
+            let newElements = elements.slice();
+            let tempData = newNodeData(elements);
+            let tempIndexes = newElemIndexes(elements);
+            const numNodes = tempData.size;
+            for (let i = 0; i < numNodes; i++) {
+              const elem = elements[i];
+              if (
+                (elem as Node).type === "or"
+                && tempData.get(elem.id).incomingEdges.length === 1
+              ) {
+                const [source] = tempData.get(elem.id).incomingNodes;
+                const oldEdgeId = edgeArrowId(source, elem.id);
+                for (const target of tempData.get(elem.id).outgoingNodes) {
+                  const newEdgeId = edgeArrowId(source, target);
+                  if (!tempData.has(newEdgeId)) {
+                    newElements.push({
+                      ...newElements[tempIndexes.get(oldEdgeId)],
+                      id: newEdgeId,
+                      source,
+                      target,
+                    } as Edge);
+                  }
+                }
+                newElements = removeElements([elem], newElements);
+                tempData = newNodeData(newElements);
+                tempIndexes = newElemIndexes(newElements);
+              }
+            }
+
             setElements(recalculatedElements(newElements));
           }}
         />

@@ -13,6 +13,7 @@ import type {
   EdgeId,
   ElementId,
   ConditionalTypes,
+  Node,
   CourseNode,
   Element,
   NodeDataMap,
@@ -41,7 +42,8 @@ interface ContextMenuProps {
   connect: (targetId: NodeId, to?: ConnectTo) => void;
   disconnect: (targetIds: NodeId[], from?: ConnectTo) => void;
   newConditionalNode: (type: ConditionalTypes, xy: XYPosition) => void;
-  reroute: (targetId: NodeId) => void;
+  rerouteSingle: (targetId: NodeId) => void;
+  reroutePointless: () => void;
 }
 export default function ContextMenu({
   elements,
@@ -56,7 +58,8 @@ export default function ContextMenu({
   connect,
   disconnect,
   newConditionalNode,
-  reroute,
+  rerouteSingle,
+  reroutePointless,
 }: ContextMenuProps) {
   const unsetNodesSelection = useStoreActions(actions => (
     actions.unsetNodesSelection
@@ -208,14 +211,32 @@ export default function ContextMenu({
       // Single conditional node
       const hasPrereqs = !!nodeData.get(target[0]).incomingEdges.length;
       const hasPostreqs = !!nodeData.get(target[0]).outgoingEdges.length;
+      let pointlessOrNodeFound = false;
+      const numNodes = nodeData.size;
+      for (let i = 0; i < numNodes; i++) {
+        const elem = elements[i];
+        if (
+          (elem as Node).type === "or"
+          && nodeData.get(elem.id).incomingEdges.length === 1
+        ) {
+          pointlessOrNodeFound = true;
+          break;
+        }
+      }
+      const reroutePointlessOpt = (
+        <li onClick={reroutePointless}>
+          <p>Reroute pointless OR nodes</p>
+        </li>
+      );
       menuOptions = (
         <>
           {hasPrereqs && disconnectPrereqsOpt}
           {hasPostreqs && disconnectPostreqsOpt}
           {hasPrereqs && hasPostreqs && disconnectAllOpt}
-          <li className="reroute" onClick={() => reroute(target[0])}>
+          <li className="reroute" onClick={() => rerouteSingle(target[0])}>
             <p>Reroute</p>
           </li>
+          {pointlessOrNodeFound && reroutePointlessOpt}
           {deleteElemsOpt}
         </>
       );
@@ -298,7 +319,24 @@ export default function ContextMenu({
         </>
       );
       break;
-    case "pane":
+    case "pane": {
+      let pointlessOrNodeFound = false;
+      const numNodes = nodeData.size;
+      for (let i = 0; i < numNodes; i++) {
+        const elem = elements[i];
+        if (
+          (elem as Node).type === "or"
+          && nodeData.get(elem.id).incomingEdges.length === 1
+        ) {
+          pointlessOrNodeFound = true;
+          break;
+        }
+      }
+      const reroutePointlessOpt = (
+        <li onClick={reroutePointless}>
+          <p>Reroute pointless OR nodes</p>
+        </li>
+      );
       menuOptions = (
         <>
           <li onClick={() => newConditionalNode("or", xy)}>
@@ -307,9 +345,11 @@ export default function ContextMenu({
           <li onClick={() => newConditionalNode("and", xy)}>
             <p>New AND node</p>
           </li>
+          {pointlessOrNodeFound && reroutePointlessOpt}
         </>
       );
       break;
+    }
     default:
       // eslint-disable-next-line no-console
       console.error("Invalid context target");
