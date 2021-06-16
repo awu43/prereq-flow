@@ -1,5 +1,5 @@
 import React from "react";
-import type { KeyboardEvent } from "react";
+import type { ReactNode, KeyboardEvent } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
@@ -11,7 +11,7 @@ interface ModalDialogProps {
   busy: boolean;
   contentCls: string;
   contentAriaLabel: string;
-  children: React.ReactNode
+  children: ReactNode
 }
 export default function ModalDialog({
   modalCls,

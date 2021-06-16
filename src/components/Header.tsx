@@ -15,7 +15,7 @@ interface HeaderProps {
   version: string;
   children: ReactNode;
 }
-export default function Header(props: HeaderProps) {
+export default function Header({ version, children }: HeaderProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const [pinned, setPinned] = useState(true);
@@ -40,10 +40,10 @@ export default function Header(props: HeaderProps) {
         </Tippy>
         <h1>Prereq Flow</h1>
         <nav className="Header__nav-buttons">
-          {props.children}
+          {children}
         </nav>
         <small className="Header__version">
-          <small>v</small>{props.version}
+          <small>v</small>{version}
         </small>
       </div>
     </header>
