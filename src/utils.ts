@@ -46,6 +46,10 @@ export function isCourseNode(node: Element): node is CourseNode {
   return (node as Node).type === "course";
 }
 
+export function isConditionalNode(node: Element): node is ConditionalNode {
+  return (node as Node).type === "or" || (node as Node).type === "and";
+}
+
 export const ZERO_POSITION: XYPosition = { x: 0, y: 0 };
 const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
 export const COURSE_REGEX = new RegExp(CRS, "g"); // AAA 000
@@ -534,7 +538,7 @@ export function generateNewLayout(
 
   // Conditional nodes should not influence course depth/positioning
   const conditionalNodes = elements.filter(elem => (
-    isNode(elem) && !isCourseNode(elem)
+    isConditionalNode(elem)
   )) as ConditionalNode[];
 
   let dagreLayout;
