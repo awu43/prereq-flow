@@ -65,15 +65,15 @@ export default function ContextMenu({
     actions.unsetNodesSelection
   ));
 
+  if (!active) {
+    return null;
+  }
+
   const { target, targetType, targetStatus } = data;
 
   function deleteAndClearSelection(): void {
     unsetNodesSelection();
     deleteElems(target);
-  }
-
-  if (!active) {
-    return null;
   }
 
   function setSelectionStatusOpt(
@@ -223,6 +223,11 @@ export default function ContextMenu({
           break;
         }
       }
+      const rerouteSingleOpt = (
+        <li className="reroute" onClick={() => rerouteSingle(target[0])}>
+          <p>Reroute</p>
+        </li>
+      );
       const reroutePointlessOpt = (
         <li onClick={reroutePointless}>
           <p>Reroute pointless OR nodes</p>
@@ -233,9 +238,7 @@ export default function ContextMenu({
           {hasPrereqs && disconnectPrereqsOpt}
           {hasPostreqs && disconnectPostreqsOpt}
           {hasPrereqs && hasPostreqs && disconnectAllOpt}
-          <li className="reroute" onClick={() => rerouteSingle(target[0])}>
-            <p>Reroute</p>
-          </li>
+          {hasPrereqs && hasPostreqs && rerouteSingleOpt}
           {pointlessOrNodeFound && reroutePointlessOpt}
           {deleteElemsOpt}
         </>
