@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import type { MouseEvent, KeyboardEvent, ChangeEvent } from "react";
+import type { MouseEvent, ChangeEvent } from "react";
 
-import { DialogOverlay, DialogContent } from "@reach/dialog";
+
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 import {
@@ -32,6 +32,7 @@ import type {
 } from "types/main";
 
 import "./AddCourseDialog.scss";
+import ModalDialog from "./ModalDialog";
 import CloseButton from "./CloseButton";
 import CampusSelect from "./CampusSelect";
 import CustomCourseForm from "./CustomCourseForm";
@@ -340,54 +341,49 @@ export default function AddCourseDialog({
   );
 
   return (
-    <DialogOverlay
-      className={modalCls}
-      isOpen={!modalCls.includes("--display-none")}
-      onDismiss={event => {
-        if ((event as KeyboardEvent).key === "Escape" && !busy) {
-          closeDialog();
-        }
-        // Don't close on clicking modal background
-      }}
+    <ModalDialog
+      modalCls={modalCls}
+      closeDialog={closeDialog}
+      busy={busy}
+      contentCls="AddCourseDialog"
+      contentAriaLabel="Add course dialog"
     >
-      <DialogContent className="AddCourseDialog" aria-label="Add course dialog">
-        <CloseButton onClick={close} disabled={busy} />
-        <h2 className={connectionError ? "connection-error" : ""}>
-          Add courses
-        </h2>
-        <Tabs onChange={i => setTabIndex(i)}>
-          <TabList>
-            <Tab disabled={busy}>UW course</Tab>
-            <Tab disabled={busy}>Custom course</Tab>
-            <Tab disabled={busy}>Text search</Tab>
-          </TabList>
+      <CloseButton onClick={close} disabled={busy} />
+      <h2 className={connectionError ? "connection-error" : ""}>
+        Add courses
+      </h2>
+      <Tabs onChange={i => setTabIndex(i)}>
+        <TabList>
+          <Tab disabled={busy}>UW course</Tab>
+          <Tab disabled={busy}>Custom course</Tab>
+          <Tab disabled={busy}>Text search</Tab>
+        </TabList>
 
-          <TabPanels>
-            <TabPanel>
-              {uwCourseForm}
-            </TabPanel>
-            <TabPanel className="AddCourseDialog__custom-course-tab-panel">
-              <CustomCourseForm
-                tabIndex={tabIndex}
-                busy={busy}
-                setBusy={setBusy}
-                nodeData={nodeData}
-                addNewNode={addNewNode}
-              />
-            </TabPanel>
-            <TabPanel className="AddCourseDialog__text-search-tab-panel">
-              <AddCourseTextSearch
-                tabIndex={tabIndex}
-                connectionError={connectionError}
-                errorMsg={textSearchErrorMsg}
-                setErrorMsg={setTextSearchErrorMsg}
-                busy={busy}
-                addCoursesFromText={addCoursesFromText}
-              />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </DialogContent>
-    </DialogOverlay>
+        <TabPanels>
+          <TabPanel>
+            {uwCourseForm}
+          </TabPanel>
+          <TabPanel className="AddCourseDialog__custom-course-tab-panel">
+            <CustomCourseForm
+              tabIndex={tabIndex}
+              busy={busy}
+              setBusy={setBusy}
+              nodeData={nodeData}
+              addNewNode={addNewNode}
+            />
+          </TabPanel>
+          <TabPanel className="AddCourseDialog__text-search-tab-panel">
+            <AddCourseTextSearch
+              tabIndex={tabIndex}
+              connectionError={connectionError}
+              errorMsg={textSearchErrorMsg}
+              setErrorMsg={setTextSearchErrorMsg}
+              busy={busy}
+              addCoursesFromText={addCoursesFromText}
+            />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </ModalDialog>
   );
 }
