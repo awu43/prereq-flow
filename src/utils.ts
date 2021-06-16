@@ -42,8 +42,8 @@ export function removeElements(
   return removeElementsBase(toRemove, toRemoveFrom) as Element[];
 }
 
-export function isCourseNode(node: Node): node is CourseNode {
-  return node.type === "course";
+export function isCourseNode(node: Element): node is CourseNode {
+  return (node as Node).type === "course";
 }
 
 export const ZERO_POSITION: XYPosition = { x: 0, y: 0 };
@@ -648,7 +648,7 @@ export function autoconnect(
   const targetPostreqs = [] as CourseNode[];
   if (connectTo.postreq) {
     for (let i = 0; i < numNodes; i++) {
-      const postreq = newElements[i] as Node;
+      const postreq = newElements[i];
       if (isCourseNode(postreq)
           && postreq.data.prerequisite.includes(targetId)
           && !elemIndexes.has(edgeArrowId(targetId, postreq.id))) {

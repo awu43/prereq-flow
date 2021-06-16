@@ -262,9 +262,9 @@ export default function App() {
     let tempElems = flowInstance.current?.toObject().elements as Element[];
     if (connectTo.prereq || connectTo.postreq) {
       for (const elem of extElems) {
-        if (isCourseNode(elem as Node)) {
+        if (isCourseNode(elem)) {
           tempElems = autoconnect(
-            elem as CourseNode,
+            elem,
             tempElems,
             nodeData.current.size,
             elemIndexes.current,

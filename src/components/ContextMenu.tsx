@@ -14,7 +14,6 @@ import type {
   ElementId,
   ConditionalTypes,
   CourseNode,
-  Node,
   Element,
   NodeDataMap,
   ElemIndexMap,
@@ -178,7 +177,7 @@ export default function ContextMenu({
       const notConnectedPostreqs = [] as CourseNode[];
       const numNodes = nodeData.size;
       for (let i = 0; i < numNodes; i++) {
-        const postreq = elements[i] as Node;
+        const postreq = elements[i];
         if (isCourseNode(postreq)
             && postreq.data.prerequisite.includes(targetNode)
             && !elemIndexes.has(edgeArrowId(targetNode, postreq.id))) {
