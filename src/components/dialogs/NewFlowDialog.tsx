@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import type { KeyboardEvent } from "react";
 
-import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
@@ -20,6 +18,7 @@ import type {
 } from "types/main";
 
 import "./NewFlowDialog.scss";
+import ModalDialog from "./ModalDialog";
 import CloseButton from "./CloseButton";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
@@ -274,96 +273,89 @@ export default function NewFlowDialog({
   const closeButtonRef = useRef(null);
 
   return (
-    <DialogOverlay
-      className={modalCls}
-      isOpen={!modalCls.includes("--display-none")}
-      // Reach UI is not TS friendly here
-      onDismiss={event => {
-        if ((event as KeyboardEvent).key === "Escape" && !busy) {
-          closeDialog();
-        }
-      }}
+    <ModalDialog
+      modalCls={modalCls}
+      closeDialog={closeDialog}
+      busy={busy}
+      contentCls="NewFlowDialog"
+      contentAriaLabel="New flow dialog"
     >
-      <DialogContent className="NewFlowDialog" aria-label="New flow dialog">
-        <CloseButton btnRef={closeButtonRef} onClick={close} disabled={busy} />
-        <h2 className={connectionError ? "connection-error" : ""}>
-          New flow
-        </h2>
-        <hr />
-        <div
-          className={`NewFlowDialog__slides slide-${slideNum}`}
-        >
-          <PreWarning
-            warningAccepted={warningAccepted}
-            setWarningAccepted={setWarningAccepted}
-            closeButtonRef={closeButtonRef}
-          />
-          <form className="FlowType">
-            <Tabs
-              onChange={() => {
-                setDegreeError("");
-                setCurriculumError("");
-                setTextSearchError("");
-              }}
-            >
-              <TabList>
-                <Tab disabled={busy}>Degree</Tab>
-                <Tab disabled={busy}>Curriculum</Tab>
-                <Tab disabled={busy}>Text search</Tab>
-                <Tab disabled={busy}>Blank</Tab>
-              </TabList>
+      <CloseButton btnRef={closeButtonRef} onClick={close} disabled={busy} />
+      <h2 className={connectionError ? "connection-error" : ""}>
+        New flow
+      </h2>
+      <hr />
+      <div className={`NewFlowDialog__slides slide-${slideNum}`}>
+        <PreWarning
+          warningAccepted={warningAccepted}
+          setWarningAccepted={setWarningAccepted}
+          closeButtonRef={closeButtonRef}
+        />
+        <form className="FlowType">
+          <Tabs
+            onChange={() => {
+              setDegreeError("");
+              setCurriculumError("");
+              setTextSearchError("");
+            }}
+          >
+            <TabList>
+              <Tab disabled={busy}>Degree</Tab>
+              <Tab disabled={busy}>Curriculum</Tab>
+              <Tab disabled={busy}>Text search</Tab>
+              <Tab disabled={busy}>Blank</Tab>
+            </TabList>
 
-              <TabPanels>
-                <TabPanel>
-                  <DegreeSelect
-                    connectionError={connectionError}
-                    busy={busy}
-                    setBusy={setBusy}
-                    supportedMajors={supportedMajors}
-                    newDegreeFlow={newDegreeFlow}
-                    errorMsg={degreeError}
-                  />
-                </TabPanel>
-                <TabPanel>
-                  <CurriculumSelect
-                    connectionError={connectionError}
-                    busy={busy}
-                    setBusy={setBusy}
-                    supportedCurricula={supportedCurricula}
-                    newCurriculumFlow={newCurriculumFlow}
-                    errorMsg={curriculumError}
-                  />
-                </TabPanel>
-                <TabPanel>
-                  <NewFlowTextSearch
-                    connectionError={connectionError}
-                    busy={busy}
-                    setBusy={setBusy}
-                    newTextSearchFlow={newTextSearchFlow}
-                    errorMsg={textSearchError}
-                  />
-                </TabPanel>
-                <TabPanel>
-                  <div className="NewBlankFlow">
-                    <p>Generate a new blank flow.</p>
-                    <div className="NewBlankFlow__button-wrapper">
-                      <button
-                        type="button"
-                        className="NewBlankFlow__generate-button"
-                        onClick={newBlankFlow}
-                      >
-                        Generate
-                      </button>
-                    </div>
-                    <div className="NewBlankFlow__end-padding"></div>
+            <TabPanels>
+              <TabPanel>
+                <DegreeSelect
+                  connectionError={connectionError}
+                  busy={busy}
+                  setBusy={setBusy}
+                  supportedMajors={supportedMajors}
+                  newDegreeFlow={newDegreeFlow}
+                  errorMsg={degreeError}
+                />
+              </TabPanel>
+              <TabPanel>
+                <CurriculumSelect
+                  connectionError={connectionError}
+                  busy={busy}
+                  setBusy={setBusy}
+                  supportedCurricula={supportedCurricula}
+                  newCurriculumFlow={newCurriculumFlow}
+                  errorMsg={curriculumError}
+                />
+              </TabPanel>
+              <TabPanel>
+                <NewFlowTextSearch
+                  connectionError={connectionError}
+                  busy={busy}
+                  setBusy={setBusy}
+                  newTextSearchFlow={newTextSearchFlow}
+                  errorMsg={textSearchError}
+                />
+              </TabPanel>
+              <TabPanel>
+                <div className="NewBlankFlow">
+                  <p>Generate a new blank flow.</p>
+                  <div className="NewBlankFlow__button-wrapper">
+                    <button
+                      type="button"
+                      className="NewBlankFlow__generate-button"
+                      onClick={newBlankFlow}
+                    >
+                      Generate
+                    </button>
                   </div>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </form>
-        </div>
-        {/* Flex, 2x width + transform */}
-      </DialogContent>
-    </DialogOverlay>
+                  <div className="NewBlankFlow__end-padding"></div>
+                </div>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </form>
+      </div>
+      {/* Flex, 2x width + transform */}
+    </ModalDialog>
   );
 }
