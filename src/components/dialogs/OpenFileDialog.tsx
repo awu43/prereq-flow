@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import type { KeyboardEvent } from "react";
-
-import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import type { ModalClass, CloseModal, CourseNode, Element } from "types/main";
 
+import ModalDialog from "./ModalDialog";
 import CloseButton from "./CloseButton";
 import Dropzone from "./Dropzone";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
@@ -129,27 +127,23 @@ export default function OpenFileDialog({
   }
 
   return (
-    <DialogOverlay
-      className={modalCls}
-      isOpen={!modalCls.includes("--display-none")}
-      onDismiss={event => {
-        if ((event as KeyboardEvent).key === "Escape" && !busy) {
-          closeDialog();
-        }
-      }}
+    <ModalDialog
+      modalCls={modalCls}
+      closeDialog={closeDialog}
+      busy={busy}
+      contentCls="OpenFileDialog"
+      contentAriaLabel="Open file dialog"
     >
-      <DialogContent className="OpenFileDialog" aria-label="Open file dialog">
-        <CloseButton onClick={close} disabled={busy} />
-        <section>
-          <h2>Open flow</h2>
-          <Dropzone
-            busy={busy}
-            errorMsg={errorMsg}
-            setErrorMsg={setErrorMsg}
-            openFile={openFile}
-          />
-        </section>
-      </DialogContent>
-    </DialogOverlay>
+      <CloseButton onClick={close} disabled={busy} />
+      <section>
+        <h2>Open flow</h2>
+        <Dropzone
+          busy={busy}
+          errorMsg={errorMsg}
+          setErrorMsg={setErrorMsg}
+          openFile={openFile}
+        />
+      </section>
+    </ModalDialog>
   );
 }
