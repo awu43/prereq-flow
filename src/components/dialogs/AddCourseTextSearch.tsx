@@ -23,7 +23,7 @@ interface TextSearchProps {
   addCoursesFromText: (
     matches: RegExpMatchArray,
     connectTo: ConnectTo,
-  ) => Promise<void>;
+  ) => Promise<boolean>;
 }
 export default function NewFlowTextSearch({
   tabIndex,
@@ -39,9 +39,14 @@ export default function NewFlowTextSearch({
     postreq: true,
   });
 
-  function AddCourses(event: MouseEvent): void {
+  async function AddCourses(event: MouseEvent): Promise<void> {
     event.preventDefault();
-    addCoursesFromText([...new Set(courseIdMatch(text))], connectTo);
+    const success = await addCoursesFromText(
+      [...new Set(courseIdMatch(text) || [])], connectTo
+    );
+    if (success) {
+      setText("");
+    }
   }
 
   return (

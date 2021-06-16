@@ -214,20 +214,22 @@ export default function AddCourseDialog({
   async function addCoursesFromText(
     matches: RegExpMatchArray,
     connect: ConnectTo,
-  ): Promise<void> {
+  ): Promise<boolean> {
+    setTextSearchErrorMsg("");
+    setBusy(true);
+
     if (!matches.length) {
       setTextSearchErrorMsg("No course IDs found");
-      return;
+      setBusy(false);
+      return false;
     }
 
     const courses = matches.filter(m => !nodeData.has(m));
     if (!courses.length) {
       setTextSearchErrorMsg("All found courses already exist");
-      return;
+      setBusy(false);
+      return false;
     }
-
-    setTextSearchErrorMsg("");
-    setBusy(true);
 
     try {
       const resp = await fetch(`${API_URL}/courses/`, {
@@ -239,19 +241,22 @@ export default function AddCourseDialog({
       if (resp.status === 404) {
         setTextSearchErrorMsg("No matching courses found");
         setBusy(false);
-        return;
+        return false;
       }
 
       const data = await resp.json();
 
       const newElements = generateInitialElements(data, "aggressively");
       addExternalFlow(newElements, connect);
+      setBusy(false);
+      return true;
     } catch (error) {
       setTextSearchErrorMsg("Something went wrong");
       // eslint-disable-next-line no-console
       console.error(error);
+      setBusy(false);
+      return false;
     }
-    setBusy(false);
   }
 
   const uwCourseForm = (

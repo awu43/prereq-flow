@@ -258,6 +258,7 @@ export default function App() {
   }
 
   function addExternalFlow(extElems: Element[], connectTo: ConnectTo): void {
+    recordFlowState();
     let tempElems = flowInstance.current?.toObject().elements as Element[];
     if (connectTo.prereq || connectTo.postreq) {
       for (const elem of extElems) {
