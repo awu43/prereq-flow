@@ -17,7 +17,7 @@ export default function AboutDialog({
   return (
     <ModalDialog
       modalCls={modalCls}
-      closeDialog={closeDialog}
+      close={closeDialog}
       busy={false}
       contentCls="AboutDialog"
       contentAriaLabel="About dialog"

@@ -275,7 +275,7 @@ export default function NewFlowDialog({
   return (
     <ModalDialog
       modalCls={modalCls}
-      closeDialog={closeDialog}
+      close={close}
       busy={busy}
       contentCls="NewFlowDialog"
       contentAriaLabel="New flow dialog"

@@ -342,7 +342,7 @@ export default function AddCourseDialog({
   return (
     <ModalDialog
       modalCls={modalCls}
-      closeDialog={closeDialog}
+      close={close}
       busy={busy}
       contentCls="AddCourseDialog"
       contentAriaLabel="Add course dialog"

@@ -129,7 +129,7 @@ export default function OpenFileDialog({
   return (
     <ModalDialog
       modalCls={modalCls}
-      closeDialog={closeDialog}
+      close={close}
       busy={busy}
       contentCls="OpenFileDialog"
       contentAriaLabel="Open file dialog"
