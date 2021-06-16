@@ -32,7 +32,6 @@ import type {
 
 import "./AddCourseDialog.scss";
 import ModalDialog from "./ModalDialog";
-import CloseButton from "./CloseButton";
 import CampusSelect from "./CampusSelect";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
@@ -347,7 +346,6 @@ export default function AddCourseDialog({
       contentCls="AddCourseDialog"
       contentAriaLabel="Add course dialog"
     >
-      <CloseButton onClick={close} disabled={busy} />
       <h2 className={connectionError ? "connection-error" : ""}>
         Add courses
       </h2>

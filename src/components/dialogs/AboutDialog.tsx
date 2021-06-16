@@ -4,7 +4,6 @@ import type { ModalClass, CloseModal } from "types/main";
 
 import "./AboutDialog.scss";
 import ModalDialog from "./ModalDialog";
-import CloseButton from "./CloseButton";
 
 interface AboutDialogProps {
   modalCls: ModalClass;
@@ -22,7 +21,6 @@ export default function AboutDialog({
       contentCls="AboutDialog"
       contentAriaLabel="About dialog"
     >
-      <CloseButton onClick={closeDialog} />
       <section className="AboutDialog__about-section">
         <h2>About</h2>
         <p>Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate&nbsp;degrees.</p>

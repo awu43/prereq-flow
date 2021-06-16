@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import type { ModalClass, CloseModal, CourseNode, Element } from "types/main";
 
 import ModalDialog from "./ModalDialog";
-import CloseButton from "./CloseButton";
 import Dropzone from "./Dropzone";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
@@ -134,7 +133,6 @@ export default function OpenFileDialog({
       contentCls="OpenFileDialog"
       contentAriaLabel="Open file dialog"
     >
-      <CloseButton onClick={close} disabled={busy} />
       <section>
         <h2>Open flow</h2>
         <Dropzone

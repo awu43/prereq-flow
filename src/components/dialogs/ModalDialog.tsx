@@ -1,13 +1,16 @@
 import React from "react";
-import type { ReactNode, KeyboardEvent } from "react";
+import type { ReactNode, KeyboardEvent, RefObject } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 import type { ModalClass } from "types/main";
 
+import CloseButton from "./CloseButton";
+
 interface ModalDialogProps {
   modalCls: ModalClass;
   close: () => void;
+  closeBtnRef?: RefObject<HTMLButtonElement> | null;
   busy: boolean;
   contentCls: string;
   contentAriaLabel: string;
@@ -16,6 +19,7 @@ interface ModalDialogProps {
 export default function ModalDialog({
   modalCls,
   close,
+  closeBtnRef = null,
   busy,
   contentCls,
   contentAriaLabel,
@@ -33,6 +37,12 @@ export default function ModalDialog({
       }}
     >
       <DialogContent className={contentCls} aria-label={contentAriaLabel}>
+        <CloseButton
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...(closeBtnRef ? { btnRef: closeBtnRef } : {})}
+          onClick={close}
+          disabled={busy}
+        />
         {children}
       </DialogContent>
     </DialogOverlay>

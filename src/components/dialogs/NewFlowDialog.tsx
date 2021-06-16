@@ -19,7 +19,6 @@ import type {
 
 import "./NewFlowDialog.scss";
 import ModalDialog from "./ModalDialog";
-import CloseButton from "./CloseButton";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
@@ -276,11 +275,11 @@ export default function NewFlowDialog({
     <ModalDialog
       modalCls={modalCls}
       close={close}
+      closeBtnRef={closeButtonRef}
       busy={busy}
       contentCls="NewFlowDialog"
       contentAriaLabel="New flow dialog"
     >
-      <CloseButton btnRef={closeButtonRef} onClick={close} disabled={busy} />
       <h2 className={connectionError ? "connection-error" : ""}>
         New flow
       </h2>
