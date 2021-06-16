@@ -893,7 +893,7 @@ export default function App() {
               for (const oNode of targetData.outgoingNodes) {
                 const oldEdgeId = edgeArrowId(iNode, targetId);
                 const newEdgeId = edgeArrowId(iNode, oNode);
-                if (!nodeData.current.has(newEdgeId)) {
+                if (!elemIndexes.current.has(newEdgeId)) {
                   newElements.push({
                     ...newElements[elemIndexes.current.get(oldEdgeId)],
                     id: newEdgeId,
@@ -911,20 +911,20 @@ export default function App() {
             recordFlowState();
 
             let newElements = elements.slice();
-            let tempData = newNodeData(elements);
+            let tempNodeData = newNodeData(elements);
             let tempIndexes = newElemIndexes(elements);
-            const numNodes = tempData.size;
+            const numNodes = tempNodeData.size;
             for (let i = 0; i < numNodes; i++) {
               const elem = elements[i];
               if (
                 (elem as Node).type === "or"
-                && tempData.get(elem.id).incomingEdges.length === 1
+                && tempNodeData.get(elem.id).incomingEdges.length === 1
               ) {
-                const [source] = tempData.get(elem.id).incomingNodes;
+                const [source] = tempNodeData.get(elem.id).incomingNodes;
                 const oldEdgeId = edgeArrowId(source, elem.id);
-                for (const target of tempData.get(elem.id).outgoingNodes) {
+                for (const target of tempNodeData.get(elem.id).outgoingNodes) {
                   const newEdgeId = edgeArrowId(source, target);
-                  if (!tempData.has(newEdgeId)) {
+                  if (!tempIndexes.has(newEdgeId)) {
                     newElements.push({
                       ...newElements[tempIndexes.get(oldEdgeId)],
                       id: newEdgeId,
@@ -934,7 +934,7 @@ export default function App() {
                   }
                 }
                 newElements = removeElements([elem], newElements);
-                tempData = newNodeData(newElements);
+                tempNodeData = newNodeData(newElements);
                 tempIndexes = newElemIndexes(newElements);
               }
             }
