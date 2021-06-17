@@ -290,8 +290,7 @@ export default function App() {
     let dy = 0;
     for (const elem of tempElems) {
       if (isNode(elem)) {
-        const { y } = elem.position;
-        dy = Math.max(y, dy);
+        dy = Math.max(elem.position.y, dy);
       }
     }
 
@@ -306,8 +305,9 @@ export default function App() {
       const tempPos = tempNode.position;
 
       const newElemPos = (
-        !tempData.get(id).incomingEdges && !tempData.get(id).outgoingEdges
-          ? newPosition(Math.random() * 150, Math.random() * 300)
+        !tempData.get(id).incomingEdges.length
+        && !tempData.get(id).outgoingEdges.length
+          ? newPosition(Math.random() * 150, Math.random() * 300 + dy)
           : newPosition(tempPos.x, tempPos.y + dy)
       );
       (newElements[ni] as Node).position = newElemPos;
