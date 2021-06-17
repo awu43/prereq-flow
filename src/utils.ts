@@ -466,10 +466,10 @@ function generateDagreLayout(elements: Element[]): Element[] {
 function filterUnconditionalElements(
   condNodes: ConditionalNode[],
   elements: Element[],
-  nodeData: NodeDataMap,
 ): Element[] {
   let tempElements = elements.slice();
-  let tempNodeData = new Map(nodeData.entries()) as NodeDataMap;
+  let tempNodeData = newNodeData(tempElements);
+  let tempIndexes = newElemIndexes(tempElements);
 
   for (const elem of condNodes) {
     const node = tempNodeData.get(elem.id);
@@ -477,13 +477,14 @@ function filterUnconditionalElements(
     for (const iNode of node.incomingNodes) {
       for (const oNode of node.outgoingNodes) {
         const edgeId = edgeArrowId(iNode, oNode);
-        if (!tempNodeData.has(edgeId)) {
+        if (!tempIndexes.has(edgeId)) {
           tempElements.push(newEdge(iNode, oNode));
         }
       }
     }
     tempElements = removeElements([elem], tempElements);
     tempNodeData = newNodeData(tempElements);
+    tempIndexes = newElemIndexes(tempElements);
   }
 
   return tempElements;
@@ -548,7 +549,7 @@ export function generateNewLayout(
     );
   } else {
     const filteredElements = filterUnconditionalElements(
-      conditionalNodes, elements, nodeData
+      conditionalNodes, elements
     );
 
     // https://flaviocopes.com/how-to-shuffle-array-javascript/
