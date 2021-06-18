@@ -54,7 +54,7 @@ export default function NewFlowTextSearch({
       <Tippy
         className="tippy-box--error"
         content={errorMsg}
-        placement="bottom-end"
+        placement="bottom-start"
         arrow={false}
         duration={0}
         offset={[0, 5]}
