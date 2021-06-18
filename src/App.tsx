@@ -60,6 +60,7 @@ import OpenFileDialog, {
 } from "./components/dialogs/OpenFileDialog";
 import AddCourseDialog from "./components/dialogs/AddCourseDialog";
 import AboutDialog from "./components/dialogs/AboutDialog";
+import TableDialog from "./components/dialogs/TableDialog";
 
 import {
   isNode,
@@ -95,6 +96,7 @@ export default function App() {
     addCourseDlgCls, openAddCourseDlg, closeAddCourseDlg
   ] = useDialogStatus();
   const [aboutDlgCls, openAboutDlg, closeAboutDlg] = useDialogStatus();
+  const [tableDlgCls, openTableDlg, closeTableDlg] = useDialogStatus();
 
   const flowInstance = useRef<OnLoadParams | null>(null);
   const updateNodePos = useRef<UpdateNodePos>(() => {});
@@ -707,6 +709,14 @@ export default function App() {
         />
       </Header>
 
+      <button
+        type="button"
+        className="open-table-dlg-btn"
+        onClick={openTableDlg}
+      >
+        <img src="dist/icons/table.svg" alt="Open controls" />
+      </button>
+
       <ReactFlowProvider>
         <FlowInternalLifter
           updateNodePos={updateNodePos}
@@ -974,6 +984,13 @@ export default function App() {
       <AboutDialog
         modalCls={aboutDlgCls}
         closeDialog={closeAboutDlg}
+      />
+
+      <TableDialog
+        modalCls={tableDlgCls}
+        closeDialog={closeTableDlg}
+        elements={elements}
+        onElementsRemove={onElementsRemove}
       />
     </div>
   );

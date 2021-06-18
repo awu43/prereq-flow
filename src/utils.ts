@@ -463,7 +463,7 @@ function generateDagreLayout(elements: Element[]): Element[] {
   return arrangedElements;
 }
 
-function filterUnconditionalElements(
+export function filterUnconditionalElements(
   condNodes: ConditionalNode[],
   elements: Element[],
 ): Element[] {

@@ -16,16 +16,9 @@ import { COURSE_REGEX } from "../utils";
 
 function markCoursesAndPreventBreaks(text: string): string {
   let innerHTML = text.replaceAll(COURSE_REGEX, "<mark>$&</mark>");
-  try {
-    for (const match of text.match(COURSE_REGEX) as RegExpMatchArray) {
-      innerHTML = innerHTML.replace(match, match.replaceAll(" ", "\u00A0"));
-      // Stop courses from being split
-    }
-  } catch (err) {
-    // null = no matches
-    if (!(err instanceof TypeError)) {
-      throw err;
-    }
+  for (const match of text.match(COURSE_REGEX) ?? []) {
+    innerHTML = innerHTML.replace(match, match.replaceAll(" ", "\u00A0"));
+    // Stop courses from being split
   }
   innerHTML = innerHTML.replace(/ ([\S\u00A0.]+)$/, "\u00A0$1"); // Stop orphans
   return innerHTML;
