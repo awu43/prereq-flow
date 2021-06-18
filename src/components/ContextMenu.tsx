@@ -217,7 +217,7 @@ export default function ContextMenu({
         const elem = elements[i];
         if (
           (elem as Node).type === "or"
-          && nodeData.get(elem.id).incomingEdges.length === 1
+          && nodeData.get(elem.id).incomingEdges.length <= 1
         ) {
           pointlessOrNodeFound = true;
           break;
@@ -329,7 +329,7 @@ export default function ContextMenu({
         const elem = elements[i];
         if (
           (elem as Node).type === "or"
-          && nodeData.get(elem.id).incomingEdges.length === 1
+          && nodeData.get(elem.id).incomingEdges.length <= 1
         ) {
           pointlessOrNodeFound = true;
           break;

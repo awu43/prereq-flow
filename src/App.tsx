@@ -928,19 +928,23 @@ export default function App() {
               const elem = elements[i];
               if (
                 (elem as Node).type === "or"
-                && tempNodeData.get(elem.id).incomingEdges.length === 1
+                && tempNodeData.get(elem.id).incomingNodes.length <= 1
               ) {
-                const [source] = tempNodeData.get(elem.id).incomingNodes;
-                const oldEdgeId = edgeArrowId(source, elem.id);
-                for (const target of tempNodeData.get(elem.id).outgoingNodes) {
-                  const newEdgeId = edgeArrowId(source, target);
-                  if (!tempIndexes.has(newEdgeId)) {
-                    newElements.push({
-                      ...newElements[tempIndexes.get(oldEdgeId)],
-                      id: newEdgeId,
-                      source,
-                      target,
-                    } as Edge);
+                const incoming = tempNodeData.get(elem.id).incomingNodes;
+                if (incoming.length) {
+                  const [source] = incoming;
+                  const oldEdgeId = edgeArrowId(source, elem.id);
+                  const outgoing = tempNodeData.get(elem.id).outgoingNodes;
+                  for (const target of outgoing) {
+                    const newEdgeId = edgeArrowId(source, target);
+                    if (!tempIndexes.has(newEdgeId)) {
+                      newElements.push({
+                        ...newElements[tempIndexes.get(oldEdgeId)],
+                        id: newEdgeId,
+                        source,
+                        target,
+                      } as Edge);
+                    }
                   }
                 }
                 newElements = removeElements([elem], newElements);
