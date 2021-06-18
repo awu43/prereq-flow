@@ -3,6 +3,13 @@
 .TableDialog {
   overflow-y: auto;
 
+  // https://css-tricks.com/sticky-as-a-local-fixed/
+  .CloseButton {
+    position: sticky;
+    top: 0;
+    left: calc(100% - 1.5rem);
+  }
+
   .SortBy {
     margin: 0.25rem 0;
     border: none;
