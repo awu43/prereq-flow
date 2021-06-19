@@ -38,6 +38,7 @@ interface ContextMenuProps {
   xy: XYPosition;
   setSelectionStatuses: (nodeIds: NodeId[], newStatus: CourseStatus) => void;
   toggleEdgeConcurrency: (edgeId: EdgeId) => void;
+  editCourseData: (courseId: NodeId) => void;
   deleteElems: (elemIds: ElementId[]) => void;
   connect: (targetId: NodeId, to?: ConnectTo) => void;
   disconnect: (targetIds: NodeId[], from?: ConnectTo) => void;
@@ -54,6 +55,7 @@ export default function ContextMenu({
   xy,
   setSelectionStatuses,
   toggleEdgeConcurrency,
+  editCourseData,
   deleteElems,
   connect,
   disconnect,
@@ -202,6 +204,9 @@ export default function ContextMenu({
           {hasPrereqs && disconnectPrereqsOpt}
           {hasPostreqs && disconnectPostreqsOpt}
           {hasPrereqs && hasPostreqs && disconnectAllOpt}
+          <li onClick={() => editCourseData(targetNode)}>
+            <p>Edit data</p>
+          </li>
           {deleteElemsOpt}
         </>
       );

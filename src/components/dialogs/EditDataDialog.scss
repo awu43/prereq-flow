@@ -1,0 +1,70 @@
+@use "../../utils" as *;
+
+.EditDataDialog {
+  width: min(30rem, 100% - 1rem);
+  min-height: 21rem;
+
+  display: flex;
+  flex-direction: column;
+
+  input,
+  textarea {
+    font-family: sans-serif;
+  }
+
+  input[type=text],
+  input[type=search] {
+    @include base-text-input-style
+  }
+
+  .EditDataForm {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    &__header-row {
+      display: flex;
+      justify-content: start;
+      align-items: flex-start;
+    }
+    &__footer-row {
+      display: flex;
+      margin-bottom: 1.5rem;
+    }
+
+
+    &__id-input {
+      width: 8rem;
+    }
+    &__name-input {
+      margin: 0 0.5rem;
+      flex-grow: 1;
+    }
+    &__credits-input {
+      width: 3.5rem;
+    }
+    &__description-input {
+      margin: 0.5rem 0;
+      @include gray-border;
+      padding: 0.25rem;
+      resize: none;
+      flex: 1;
+      font-size: 0.8rem;
+    }
+
+    &__prerequisite-input {
+      flex-grow: 1;
+      margin-right: 0.25rem;
+    }
+    &__offered-input {
+      flex-grow: 1;
+      margin-left: 0.25rem;
+    }
+
+    &__add-button {
+      height: 2rem;
+      @include base-button-style;
+    }
+  }
+}

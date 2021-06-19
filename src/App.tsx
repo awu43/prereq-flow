@@ -25,6 +25,7 @@ import type {
   NodeId,
   EdgeId,
   ElementId,
+  CourseData,
   CourseStatus,
   CourseNode,
   ConditionalTypes,
@@ -61,6 +62,7 @@ import OpenFileDialog, {
 import AddCourseDialog from "./components/dialogs/AddCourseDialog";
 import AboutDialog from "./components/dialogs/AboutDialog";
 import TableDialog from "./components/dialogs/TableDialog";
+import EditDataDialog from "./components/dialogs/EditDataDialog";
 
 import {
   isNode,
@@ -97,6 +99,7 @@ export default function App() {
   ] = useDialogStatus();
   const [aboutDlgCls, openAboutDlg, closeAboutDlg] = useDialogStatus();
   const [tableDlgCls, openTableDlg, closeTableDlg] = useDialogStatus();
+  const [editDlgCls, openEditDlg, closeEditDlg] = useDialogStatus();
 
   const flowInstance = useRef<OnLoadParams | null>(null);
   const updateNodePos = useRef<UpdateNodePos>(() => {});
@@ -122,6 +125,15 @@ export default function App() {
     targetStatus: "",
   });
   const [mouseXY, setMouseXY] = useState<XYPosition>(ZERO_POSITION);
+
+  const editTargetData = useRef<CourseData>({
+    id: "",
+    name: "",
+    credits: "",
+    description: "",
+    prerequisite: "",
+    offered: "",
+  });
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -324,6 +336,39 @@ export default function App() {
       elements, elemIndexes.current, nodeData.current
     );
     setElements(newElements);
+  }
+
+  function saveCourseData(originalId: NodeId, newData: CourseData): void {
+    recordFlowState();
+    const newElements = elements.slice();
+    const i = elemIndexes.current.get(originalId);
+    newElements[i] = {
+      ...newElements[i],
+      id: newData.id,
+      data: { ...(newElements[i] as CourseNode).data, ...newData },
+    };
+    if (originalId !== newData.id) {
+      for (const iNode of nodeData.current.get(originalId).incomingNodes) {
+        const oldEdgeId = edgeArrowId(iNode, originalId);
+        const j = elemIndexes.current.get(oldEdgeId);
+        newElements[j] = {
+          ...newElements[j],
+          id: edgeArrowId(iNode, newData.id),
+          target: newData.id,
+        } as Edge;
+      }
+      for (const oNode of nodeData.current.get(originalId).outgoingNodes) {
+        const oldEdgeId = edgeArrowId(originalId, oNode);
+        const j = elemIndexes.current.get(oldEdgeId);
+        newElements[j] = {
+          ...newElements[j],
+          id: edgeArrowId(newData.id, oNode),
+          source: newData.id,
+        } as Edge;
+      }
+    }
+
+    setElements(recalculatedElements(newElements));
   }
 
   /* ELEMENT */
@@ -827,6 +872,13 @@ export default function App() {
               )
             );
           }}
+          editCourseData={(courseId: NodeId): void => {
+            const targetNode = (
+              elements[elemIndexes.current.get(courseId)] as CourseNode
+            );
+            editTargetData.current = { ...targetNode.data };
+            openEditDlg();
+          }}
           deleteElems={(elemIds: ElementId[]): void => {
             resetSelectedElements.current();
             onElementsRemove(
@@ -995,6 +1047,14 @@ export default function App() {
         closeDialog={closeTableDlg}
         elements={elements}
         onElementsRemove={onElementsRemove}
+      />
+      <EditDataDialog
+        modalCls={editDlgCls}
+        closeDialog={closeEditDlg}
+        originalData={editTargetData.current}
+        nodeData={nodeData.current}
+        saveCourseData={saveCourseData}
+        resetSelectedElements={resetSelectedElements.current}
       />
     </div>
   );
