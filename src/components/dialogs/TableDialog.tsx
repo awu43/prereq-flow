@@ -111,7 +111,7 @@ export default function TableDialog({
       <h2>Courses</h2>
       <fieldset className="SortBy" disabled={busy}>
         Sort by:
-        <label className="SortBy__radio-label">
+        <label className="SortBy__radio-label SortBy__radio-label--depth">
           <input
             type="radio"
             className="SortBy__radio-button"
@@ -121,7 +121,7 @@ export default function TableDialog({
           />
           Depth
         </label>
-        <label className="SortBy__radio-label">
+        <label className="SortBy__radio-label SortBy__radio-label--id">
           <input
             type="radio"
             className="SortBy__radio-button"
@@ -131,7 +131,7 @@ export default function TableDialog({
           />
           ID
         </label>
-        <label className="SortBy__radio-label">
+        <label className="SortBy__radio-label SortBy__radio-label--name">
           <input
             type="radio"
             className="SortBy__radio-button"

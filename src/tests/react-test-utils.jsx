@@ -26,3 +26,7 @@ export function clickContextOption(optName, node, container) {
   );
   userEvent.click(contextOpt);
 }
+
+export function openDialog(openBtnCls, container) {
+  userEvent.click(container.querySelector(`.${openBtnCls}`));
+}

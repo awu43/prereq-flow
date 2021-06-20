@@ -754,7 +754,7 @@ export default function App({ initialElements }: AppProps) {
 
       <button
         type="button"
-        className="open-table-dlg-btn"
+        className="TableDialog__open-btn"
         onClick={openTableDlg}
       >
         <img src="dist/icons/table.svg" alt="Open controls" />
