@@ -192,6 +192,7 @@ export function generateInitialElements(
     }
   }
   // TODO: Co-requisites
+  // TODO: Cannot be taken for credit
 
   // Second pass: either/or prerequisites and unparsable 2+
   for (const [course, problemSections] of secondPass.entries()) {
