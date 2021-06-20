@@ -1,11 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+
+import type { Element } from "types/main";
+
 import "./index.scss";
+import App from "./App";
+
+import demoFlow from "./data/demo-flow.json";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App initialElements={demoFlow.elements as Element[]} />
   </React.StrictMode>,
   document.getElementById("root"),
 );
@@ -16,11 +21,9 @@ if (import.meta.hot) {
   import.meta.hot.accept();
 }
 
-// TODO: Course add dialog (add connections)
 // TODO: Mobile/tablet warning
 // TODO: Add concurrent edge to legend
 // TODO: Dark mode
 // TODO: N of prereq (PHYS 321)
 
 // TODO: Context menu for edge style
-// TODO: General cycle check on edge update/create

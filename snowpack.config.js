@@ -31,7 +31,11 @@ module.exports = {
     target: "es2017",
   },
   packageOptions: {
-    /* ... */
+    knownEntrypoints: [
+      "@testing-library/react",
+      "@testing-library/user-event",
+      "chai",
+    ],
   },
   devOptions: {
     open: "none",

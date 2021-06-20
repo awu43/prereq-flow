@@ -5,6 +5,8 @@ import path from "path";
 
 import { expect } from "chai";
 
+import { TEST_COND_IDS } from "./test-utils";
+
 import { isEdge, _testing } from "../utils";
 
 const testElements = JSON.parse(
@@ -192,7 +194,7 @@ describe("updateNodeStatus", () => {
     setNodeStatus(
       "MATH 125", "completed", elements, nodeData, elemIndexes
     );
-    const orNodeId = "OR-Jg1vC8IVRuKkAivuA3K_O";
+    const orNodeId = TEST_COND_IDS.OR1;
     updateNodeStatus(orNodeId, elements, nodeData, elemIndexes);
     expect(elements[elemIndexes.get(orNodeId)].data.nodeStatus)
       .to.equal("completed");
@@ -254,7 +256,7 @@ describe("getSourcePositions", () => {
     const elemIndexes = newElemIndexes(elements);
 
     const conditionalSourcePositions = [getSourcePositions(
-      "OR-wz5c0miLAHpZGOGGWS8-N", elements, elemIndexes, nodeData,
+      TEST_COND_IDS.OR2, elements, elemIndexes, nodeData,
     )].flat();
     expect(conditionalSourcePositions)
       .to.have.members([

@@ -83,15 +83,13 @@ import {
   resetElementStates,
   autoconnect,
 } from "./utils";
-import demoFlow from "./data/demo-flow.json";
-
-const initialElements = demoFlow.elements as Element[];
-const initialNodeData = newNodeData(initialElements);
-const initialIndexes = newElemIndexes(initialElements);
 
 const MAX_UNDO_NUM = 20;
 
-export default function App() {
+interface AppProps {
+  initialElements: Element[];
+}
+export default function App({ initialElements }: AppProps) {
   const [newFlowDlgCls, openNewFlowDlg, closeNewFlowDlg] = useDialogStatus();
   const [openFileDlgCls, openOpenFileDlg, closeOpenFileDlg] = useDialogStatus();
   const [
@@ -109,8 +107,8 @@ export default function App() {
   const unsetNodesSelection = useRef<() => void>(() => {});
 
   const [elements, setElements] = useState<Element[]>(initialElements);
-  const nodeData = useRef<NodeDataMap>(initialNodeData);
-  const elemIndexes = useRef<ElemIndexMap>(initialIndexes);
+  const nodeData = useRef<NodeDataMap>(newNodeData(initialElements));
+  const elemIndexes = useRef<ElemIndexMap>(newElemIndexes(initialElements));
   const undoStack = useRef<(Element[])[]>([]);
   const redoStack = useRef<(Element[])[]>([]);
   const dragStartState = useRef<Element[]>([]);
