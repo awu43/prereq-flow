@@ -79,8 +79,8 @@ export default function CourseNode({ data }: { data: CourseNodeData }) {
       className="tippy-box--flow"
       content={tippyContent}
       duration={prefersReducedMotion ? 0 : 100}
-      hideOnClick={true}
       maxWidth="15rem"
+      hideOnClick={true}
       trigger="mouseenter"
       // For testing
       // hideOnClick={false}
