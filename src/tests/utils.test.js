@@ -35,11 +35,13 @@ const {
   setNodeStatus,
   updateNodeStatus,
   updateAllNodes,
+  nodeSpacing,
   filterUnconditionalElements,
   getSourcePositions,
   newPosition,
   averagePosition,
   averageYPosition,
+  autoconnect,
 } = _testing;
 
 describe("courseIdMatches", () => {
@@ -339,5 +341,135 @@ describe("averageYPosition", () => {
   it("Returns average Y position", () => {
     const inputPositions = [newPosition(230, 10), newPosition(0, 30)];
     expect(averageYPosition(inputPositions)).to.equal(20);
+  });
+});
+
+describe("autoconnect", () => {
+  it("Connects to prereqs", () => {
+    const courseData = getCourseData([
+      "MATH 307", "MATH 308", "MATH 136", "MATH 309"
+    ]);
+    const elements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(elements);
+    const elemIndexes = newElemIndexes(elements);
+    const newElements = autoconnect(
+      elements[elemIndexes.get("MATH 309")],
+      elements,
+      nodeData.size,
+      elemIndexes,
+      { prereq: true, postreq: false },
+      false,
+    );
+    const newData = newNodeData(newElements);
+    expect(newData.get("MATH 309").incomingNodes)
+      .to.have.members(["MATH 307", "MATH 308", "MATH 136"]);
+  });
+  it("Connects to postreqs", () => {
+    const courseData = getCourseData([
+      "MATH 125", "MATH 307", "AMATH 301", "MATH 126"
+    ]);
+    const elements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(elements);
+    const elemIndexes = newElemIndexes(elements);
+    const newElements = autoconnect(
+      elements[elemIndexes.get("MATH 125")],
+      elements,
+      nodeData.size,
+      elemIndexes,
+      { prereq: false, postreq: true },
+      false,
+    );
+    const newData = newNodeData(newElements);
+    expect(newData.get("MATH 125").outgoingNodes)
+      .to.have.members(["MATH 307", "AMATH 301", "MATH 126"]);
+  });
+  it("Connects to prereqs and postreqs", () => {
+    const courseData = getCourseData(["MATH 126", "MATH 308", "MATH 309"]);
+    const elements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(elements);
+    const elemIndexes = newElemIndexes(elements);
+    const newElements = autoconnect(
+      elements[elemIndexes.get("MATH 308")],
+      elements,
+      nodeData.size,
+      elemIndexes,
+      { prereq: true, postreq: true },
+      false,
+    );
+    const newData = newNodeData(newElements);
+    expect(newData.get("MATH 308").incomingNodes).to.eql(["MATH 126"]);
+    expect(newData.get("MATH 308").outgoingNodes).to.eql(["MATH 309"]);
+  });
+  it("Repositions a node relative to prereqs", () => {
+    const courseData = getCourseData([
+      "MATH 136", "MATH 307", "MATH 308", "MATH 309"
+    ]);
+    let elements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(elements);
+    elements = sortElementsByDepth(elements, nodeData);
+    const elemIndexes = newElemIndexes(elements);
+    elements[elemIndexes.get("MATH 307")].position = { x: 0, y: 0 };
+    elements[elemIndexes.get("MATH 308")].position = { x: 10, y: 20 };
+    elements[elemIndexes.get("MATH 136")].position = { x: 0, y: 100 };
+    const newElements = autoconnect(
+      elements[elemIndexes.get("MATH 309")],
+      elements,
+      nodeData.size,
+      elemIndexes,
+      { prereq: true, postreq: false },
+      true,
+    );
+    const newIndexes = newElemIndexes(newElements);
+    const newPos = newElements[newIndexes.get("MATH 309")].position;
+    expect(newPos).to.eql({ x: 10 + nodeSpacing, y: 120 / 3 });
+  });
+  it("Repositions a node relative to postreqs", () => {
+    const courseData = getCourseData([
+      "MATH 125", "MATH 307", "AMATH 301", "MATH 126"
+    ]);
+    let elements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(elements);
+    elements = sortElementsByDepth(elements, nodeData);
+    elements = elements.slice(0, 4);
+    const elemIndexes = newElemIndexes(elements);
+    elements[elemIndexes.get("MATH 307")].position = { x: 100, y: -20 };
+    elements[elemIndexes.get("AMATH 301")].position = { x: 105, y: 10 };
+    elements[elemIndexes.get("MATH 126")].position = { x: 90, y: 160 };
+    const newElements = autoconnect(
+      elements[elemIndexes.get("MATH 125")],
+      elements,
+      nodeData.size,
+      elemIndexes,
+      { prereq: false, postreq: true },
+      true,
+    );
+    const newIndexes = newElemIndexes(newElements);
+    const newPos = newElements[newIndexes.get("MATH 125")].position;
+    expect(newPos).to.eql({ x: 90 - nodeSpacing, y: 150 / 3 });
+  });
+  it("Repositions a node relative to prereqs and postreqs", () => {
+    const courseData = getCourseData([
+      "PHYS 121", "MATH 126", "M E 323", "M E 395", "M E 333"
+    ]);
+    let elements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(elements);
+    elements = sortElementsByDepth(elements, nodeData);
+    elements = elements.slice(0, 5);
+    const elemIndexes = newElemIndexes(elements);
+    elements[elemIndexes.get("PHYS 121")].position = { x: 15, y: -5 };
+    elements[elemIndexes.get("MATH 126")].position = { x: 5, y: 50 };
+    elements[elemIndexes.get("M E 395")].position = { x: 110, y: 10 };
+    elements[elemIndexes.get("M E 333")].position = { x: 95, y: 65 };
+    const newElements = autoconnect(
+      elements[elemIndexes.get("M E 323")],
+      elements,
+      nodeData.size,
+      elemIndexes,
+      { prereq: true, postreq: true },
+      true,
+    );
+    const newIndexes = newElemIndexes(newElements);
+    const newPos = newElements[newIndexes.get("M E 323")].position;
+    expect(newPos).to.eql({ x: (15 + 95) / 2, y: 120 / 4 });
   });
 });

@@ -737,9 +737,11 @@ export const _testing = {
   setNodeStatus,
   updateNodeStatus,
   updateAllNodes,
+  nodeSpacing,
   filterUnconditionalElements,
   getSourcePositions,
   newPosition,
   averagePosition,
   averageYPosition,
+  autoconnect,
 };
