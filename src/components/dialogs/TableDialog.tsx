@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 import type { FlowElement } from "react-flow-renderer";
 
@@ -32,12 +32,15 @@ export default function TableDialog({
   const [busy, setBusy] = useState(false);
   const [sortBy, setSortBy] = useState("id");
 
-  const tableElems = filterUnconditionalElements(elements);
-  const tableData = newNodeData(tableElems);
+  const tableElems = useMemo(() => (
+    filterUnconditionalElements(elements)
+  ), [elements]);
+  const tableData = useMemo(() => newNodeData(tableElems), [tableElems]);
 
   const tableNodes = tableElems.filter(
     elem => tableData.has(elem.id)
   ) as CourseNode[];
+
   switch (sortBy) {
     case "depth":
       tableNodes.sort((a, b) => (
