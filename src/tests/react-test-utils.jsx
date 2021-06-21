@@ -19,8 +19,8 @@ export function getNode(nodeId, container) {
   );
 }
 
-export function clickContextOption(optName, node, container) {
-  userEvent.click(node, { button: 2 });
+export function clickContextOption(optName, target, container) {
+  userEvent.click(target, { button: 2 });
   const contextOpt = (
     within(container.querySelector(".ContextMenu")).getByText(optName)
   );

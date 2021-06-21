@@ -11,6 +11,7 @@ import {
 } from "./react-test-utils";
 
 describe("<ContextMenu />", () => {
+  /* Node */
   it("Sets a single course status to enrolled", () => {
     const { container } = render(newApp());
     const MATH_125 = getNode("MATH 125", container);
@@ -28,6 +29,19 @@ describe("<ContextMenu />", () => {
     const MATH_125 = getNode("MATH 125", container);
     clickContextOption("Delete", MATH_125, container);
     expect(getNode("MATH 125", container)).to.be.null;
+  });
+  /* Pane */
+  it("Creates a new OR node", () => {
+    const { container } = render(newApp([]));
+    const pane = container.querySelector(".react-flow__pane");
+    clickContextOption("New OR node", pane, container);
+    expect(container.querySelector(".OrNode")).to.not.be.null;
+  });
+  it("Creates a new AND node", () => {
+    const { container } = render(newApp([]));
+    const pane = container.querySelector(".react-flow__pane");
+    clickContextOption("New AND node", pane, container);
+    expect(container.querySelector(".AndNode")).to.not.be.null;
   });
 });
 // Alt + Click advance, Ctrl multiselect, edge selection all fail
