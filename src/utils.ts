@@ -84,6 +84,16 @@ const CONCURRENT_REGEX = (
   /(?:either of )?which may be taken concurrently(?:\. Instructor|\.?$)/
 );
 
+// Cannot be taken for credit
+// Not open for credit
+// may not be taken (for credit)
+function isRestriction(text: string): boolean {
+  return (
+    /(cannot be taken|not open) for credit/gi.test(text)
+    || /may not be taken/gi.test(text)
+  );
+}
+
 export function newCourseNode(courseData: CourseData): CourseNode {
   return {
     id: courseData.id,
@@ -181,8 +191,10 @@ export function generateInitialElements(
       if (!courseMatches) {
         continue;
       } else if (courseMatches.length === 1) {
-        const concurrent = CONCURRENT_REGEX.test(section);
-        addEdges(courseMatches, courseId, elements, elementIds, concurrent);
+        if (!isRestriction(section)) {
+          const concurrent = CONCURRENT_REGEX.test(section);
+          addEdges(courseMatches, courseId, elements, elementIds, concurrent);
+        }
       } else {
         if (!secondPass.has(courseId)) {
           secondPass.set(courseId, []);
@@ -192,13 +204,16 @@ export function generateInitialElements(
     }
   }
   // TODO: Co-requisites
-  // TODO: Cannot be taken for credit
 
   // Second pass: either/or prerequisites and unparsable 2+
   for (const [course, problemSections] of secondPass.entries()) {
     for (const section of problemSections) {
       const matches = eitherOrMatches(section);
       if (matches) {
+        if (isRestriction(section)) {
+          continue;
+        }
+
         const alreadyRequired = matches.filter(m => elementIds.has(m));
         const concurrent = CONCURRENT_REGEX.test(section);
         if (alreadyRequired.length === 1) {
@@ -708,6 +723,7 @@ export const _testing = {
   courseIdMatch,
   eitherOrMatches,
   CONCURRENT_REGEX,
+  isRestriction,
   generateInitialElements,
   newNodeData,
   sortElementsByDepth,

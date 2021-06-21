@@ -313,5 +313,45 @@
     "description": "Design laboratory involving the identification and synthesis of engineering factors to plan and achieve specific project goals. Current literature and prerequisite texts used as reference sources.",
     "prerequisite": "M E 395.",
     "offered": ""
+  },
+  {
+    "id": "ACCTG 219",
+    "name": "Essentials of Accounting",
+    "credits": "4",
+    "description": "Provides an introduction to basic accounting principles and procedures; use of accounting information to make decisions from the perspective of both external investors and internal managers. Cannot be taken for credit if credit received for ACCTG 225",
+    "prerequisite": "None.",
+    "offered": ""
+  },
+  {
+    "id": "ACCTG 225",
+    "name": "Fundamentals of Managerial Accounting",
+    "credits": "5",
+    "description": "Analyses and evaluation of accounting information as part of the managerial process of planning, decision making, and control. Concentrates on information useful to enterprise managers.",
+    "prerequisite": "ACCTG 215; ECON 200; may not be repeated.",
+    "offered": ""
+  },
+  {
+    "id": "POL S 312",
+    "name": "Survey of American Political Thought",
+    "credits": "5",
+    "description": "Survey of American political thought from colonial times to the 1980s. Topics include the idea of the self-made man; the intellectual contexts of the Declaration of Independence and the Constitution; slavery, abolition, and the Civil War; progressivism; Cold War liberalism; the Civil Rights Movement and and its critics; and modern conservatism.",
+    "prerequisite": "cannot be taken for credit if POL S 318 or POL S 319 already taken.",
+    "offered": ""
+  },
+  {
+    "id": "POL S 318",
+    "name": "American Political Thought from the Colonial Era to the Civil War",
+    "credits": "5",
+    "description": "Major thinkers in  American political thought from Franklin to Madison to Douglass to Jacobs to Lincoln. Emphasis on tensions between freedom, slavery, equality, violence, and \"the power of the people.\"",
+    "prerequisite": "cannot be taken for credit if POL S 312 already taken.",
+    "offered": ""
+  },
+  {
+    "id": "POL S 319",
+    "name": "American Political Thought from Reconstruction to the Present",
+    "credits": "5",
+    "description": "Major thinkers in American political thought from Lincoln to Whitman to to Du Bois to Martin Luther King, Jr.  to Malcolm X to Audre Lorde to Ronald Reagan. Emphasis on the legacies of slavery in American life and the tension between citizen and corporate power.",
+    "prerequisite": "cannot be taken for credit if POL S 312 already taken.",
+    "offered": ""
   }
 ]

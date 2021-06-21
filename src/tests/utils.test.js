@@ -27,6 +27,7 @@ const {
   courseIdMatch,
   eitherOrMatches,
   CONCURRENT_REGEX,
+  isRestriction,
   generateInitialElements,
   newNodeData,
   sortElementsByDepth,
@@ -108,15 +109,63 @@ describe("CONCURRENT_REGEX", () => {
   });
 });
 
+describe("isRestriction", () => {
+  it("Matches 'Cannot be taken for credit'", () => {
+    // CSS 551
+    const section = "Cannot be taken for credit if CSS 451 already taken";
+    expect(isRestriction(section)).to.be.true;
+  });
+  it("Matches 'cannot be taken for credit", () => {
+    // POL S 312
+    const section = "cannot be taken for credit if POL S 318 or POL S 319 already taken.";
+    expect(isRestriction(section)).to.be.true;
+  });
+  it("Matches 'Not open for credit'", () => {
+    // BIS 349
+    const section = "Not open for credit to students who have taken PSYCH 203 or PSYCH 303 at the Seattle Campus.";
+    expect(isRestriction(section)).to.be.true;
+  });
+  it("Matches 'may not be taken for credit'", () => {
+    // BIOL 360
+    const section = "may not be taken for credit if credit earned in BIOL 403";
+    expect(isRestriction(section)).to.be.true;
+  });
+  it("Matches 'may not be taken'", () => {
+    // ENGL 131
+    const section = "may not be taken if a minimum grade of 2.0 received in either ENGL 111, ENGL 121, or ENGL 131.";
+    expect(isRestriction(section)).to.be.true;
+  });
+});
+
 describe("generateInitialElements", () => {
-  it("Generates OR nodes for either/or prerequisites", () => {
+  it("Creates a connection for a single prereq", () => {
+    const courseData = getCourseData(["MATH 125", "MATH 126"]);
+    const initialElements = generateInitialElements(courseData, "cautiously");
+    const elemIndexes = newElemIndexes(initialElements);
+    expect(elemIndexes.has("MATH 125 -> MATH 126")).to.be.true;
+  });
+  it("Does not create a connection for a restriction", () => {
+    const courseData = getCourseData(["ACCTG 225", "ACCTG 219"]);
+    const initialElements = generateInitialElements(courseData, "cautiously");
+    const elemIndexes = newElemIndexes(initialElements);
+    expect(elemIndexes.has("ACCTG 225 -> ACCTG 219")).to.be.false;
+  });
+  it("Generates OR nodes for either/or prereqs", () => {
     const courseData = getCourseData(["MATH 307", "AMATH 351", "AMATH 353"]);
     const initialElements = generateInitialElements(courseData, "cautiously");
     const nodeData = newNodeData(initialElements);
     const elements = sortElementsByDepth(initialElements, nodeData);
     expect(elements[2].type).to.equal("or");
-    expect(nodeData.get(elements[2].id).incomingEdges.length).to.equal(2);
-    expect(nodeData.get(elements[2].id).outgoingEdges.length).to.equal(1);
+    expect(nodeData.get(elements[2].id).incomingEdges).to.have.lengthOf(2);
+    expect(nodeData.get(elements[2].id).outgoingEdges).to.have.lengthOf(1);
+  });
+  it("Does not generate OR nodes for a restriction", () => {
+    const courseData = getCourseData(["POL S 318", "POL S 319", "POL S 312"]);
+    const initialElements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(initialElements);
+    expect(nodeData.get("POL S 318").outgoingNodes).to.be.empty;
+    expect(nodeData.get("POL S 319").outgoingNodes).to.be.empty;
+    expect(nodeData.get("POL S 312").incomingNodes).to.be.empty;
   });
   it("Aggressively makes connections when parsing fails", () => {
     const courseData = getCourseData([
@@ -124,7 +173,7 @@ describe("generateInitialElements", () => {
     ]);
     const initialElements = generateInitialElements(courseData, "aggressively");
     const nodeData = newNodeData(initialElements);
-    expect(nodeData.get("E E 215").incomingEdges.length).to.equal(3);
+    expect(nodeData.get("E E 215").incomingEdges).to.have.lengthOf(3);
   });
 });
 
