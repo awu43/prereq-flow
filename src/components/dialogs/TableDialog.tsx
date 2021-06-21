@@ -6,14 +6,12 @@ import type {
   ModalClass,
   CloseModal,
   CourseNode,
-  ConditionalNode,
   Element,
 } from "types/main";
 
 import "./TableDialog.scss";
 import ModalDialog from "./ModalDialog";
 import {
-  isConditionalNode,
   courseIdMatch,
   newNodeData,
   filterUnconditionalElements,
@@ -34,10 +32,7 @@ export default function TableDialog({
   const [busy, setBusy] = useState(false);
   const [sortBy, setSortBy] = useState("id");
 
-  const conditionalNodes = elements.filter(elem => (
-    isConditionalNode(elem)
-  )) as ConditionalNode[];
-  const tableElems = filterUnconditionalElements(conditionalNodes, elements);
+  const tableElems = filterUnconditionalElements(elements);
   const tableData = newNodeData(tableElems);
 
   const tableNodes = tableElems.filter(

@@ -35,6 +35,7 @@ const {
   setNodeStatus,
   updateNodeStatus,
   updateAllNodes,
+  filterUnconditionalElements,
   getSourcePositions,
   newPosition,
   averagePosition,
@@ -284,6 +285,17 @@ describe("updateAllNodes", () => {
       .to.equal("ready");
     expect(elements[elemIndexes.get("MATH 308")].data.nodeStatus)
       .to.equal("one-away");
+  });
+});
+
+describe("filterConditionalNodes", () => {
+  it("Reroutes all conditional nodes", () => {
+    const filteredElems = filterUnconditionalElements(newTestElems());
+    const nodeData = newNodeData(filteredElems);
+    expect(nodeData.get("AMATH 301").incomingNodes)
+      .to.have.members(["MATH 125", "MATH 135"]);
+    expect(nodeData.get("MATH 309").incomingNodes)
+      .to.have.members(["MATH 307", "MATH 308", "MATH 136"]);
   });
 });
 

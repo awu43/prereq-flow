@@ -480,14 +480,20 @@ function generateDagreLayout(elements: Element[]): Element[] {
 }
 
 export function filterUnconditionalElements(
-  condNodes: ConditionalNode[],
   elements: Element[],
+  condNodes: ConditionalNode[] = [],
 ): Element[] {
   let tempElements = elements.slice();
   let tempNodeData = newNodeData(tempElements);
   let tempIndexes = newElemIndexes(tempElements);
 
-  for (const elem of condNodes) {
+  const conditionalNodes = (
+    condNodes.length
+      ? condNodes
+      : tempElements.filter(elem => isConditionalNode(elem))
+  ) as ConditionalNode[];
+
+  for (const elem of conditionalNodes) {
     const node = tempNodeData.get(elem.id);
 
     for (const iNode of node.incomingNodes) {
@@ -565,7 +571,7 @@ export function generateNewLayout(
     );
   } else {
     const filteredElements = filterUnconditionalElements(
-      conditionalNodes, elements
+      elements, conditionalNodes
     );
 
     // https://flaviocopes.com/how-to-shuffle-array-javascript/
@@ -654,8 +660,8 @@ export function autoconnect(
 ): Element[] {
   const targetId = targetNode.id;
   const courseMatches = courseIdMatch(targetNode.data.prerequisite) || [];
-  // Remove duplicates (example: NMETH 450 prereqs)
 
+  // Remove duplicates (example: NMETH 450 prereqs)
   let targetPrereqs = [] as CourseNode[];
   if (connectTo.prereq) {
     targetPrereqs = (
@@ -731,6 +737,7 @@ export const _testing = {
   setNodeStatus,
   updateNodeStatus,
   updateAllNodes,
+  filterUnconditionalElements,
   getSourcePositions,
   newPosition,
   averagePosition,
