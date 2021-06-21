@@ -25,6 +25,5 @@ if (import.meta.hot) {
 // TODO: Add concurrent edge to legend
 // TODO: Dark mode
 // TODO: N of prereq (PHYS 321)
-// FIXME: Undo/redo focus
 
 // TODO: Context menu for edge style

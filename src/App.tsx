@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import type { MouseEvent } from "react";
 
 import ReactFlow, {
@@ -159,9 +159,25 @@ export default function App({ initialElements }: AppProps) {
     redoStack.current = [];
   }
 
+  const dialogOpen = useMemo(() => ([
+    newFlowDlgCls,
+    openFileDlgCls,
+    addCourseDlgCls,
+    aboutDlgCls,
+    tableDlgCls,
+    editDlgCls].some(cls => !cls.includes("--display-none"))
+  ), [
+    aboutDlgCls,
+    addCourseDlgCls,
+    editDlgCls,
+    newFlowDlgCls,
+    openFileDlgCls,
+    tableDlgCls,
+  ]);
+
   useEffect(() => {
     function undoListener(event: KeyboardEvent): void {
-      if (event.ctrlKey && event.key === "z") {
+      if (event.ctrlKey && event.key === "z" && !dialogOpen) {
         if (undoStack.current.length) {
           redoStack.current.push(
             resetElementStates(
@@ -184,7 +200,7 @@ export default function App({ initialElements }: AppProps) {
       }
     }
     function redoListener(event: KeyboardEvent): void {
-      if (event.ctrlKey && event.key === "y") {
+      if (event.ctrlKey && event.key === "y" && !dialogOpen) {
         if (redoStack.current.length) {
           undoStack.current.push(
             resetElementStates(
@@ -208,7 +224,11 @@ export default function App({ initialElements }: AppProps) {
     }
     document.addEventListener("keydown", undoListener);
     document.addEventListener("keydown", redoListener);
-  }, []);
+    return () => {
+      document.removeEventListener("keydown", undoListener);
+      document.removeEventListener("keydown", redoListener);
+    };
+  }, [dialogOpen]);
 
   function generateNewFlow(elems: Element[]): void {
     recordFlowState();
