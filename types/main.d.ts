@@ -62,10 +62,11 @@ export type Node = CourseNode | ConditionalNode;
 
 export interface Edge {
   id: EdgeId;
+  type: "custom";
   source: NodeId;
   target: NodeId;
   className: CourseStatus;
-  label: null | string;
+  data: { concurrent: boolean; };
   animated?: boolean;
 }
 
@@ -105,7 +106,7 @@ export type ModalClass = "--transparent --display-none" | "--transparent" | "";
 export type OpenModal = () => void;
 export type CloseModal = () => void;
 
-export type ContextTargetStatus = CourseStatus | "" | "CC";
+export type ContextTargetStatus = CourseStatus | "" | "concurrent";
 export interface ContextTarget {
   target: ElementId[];
   targetType: string;

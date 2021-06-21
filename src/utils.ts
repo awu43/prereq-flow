@@ -42,12 +42,12 @@ export function removeElements(
   return removeElementsBase(toRemove, toRemoveFrom) as Element[];
 }
 
-export function isCourseNode(node: Element): node is CourseNode {
-  return (node as Node).type === "course";
+export function isCourseNode(elem: Element): elem is CourseNode {
+  return isNode(elem) && elem.type === "course";
 }
 
-export function isConditionalNode(node: Element): node is ConditionalNode {
-  return (node as Node).type === "or" || (node as Node).type === "and";
+export function isConditionalNode(elem: Element): elem is ConditionalNode {
+  return isNode(elem) && ["or", "and"].includes(elem.type);
 }
 
 export const ZERO_POSITION: XYPosition = { x: 0, y: 0 };
@@ -126,12 +126,6 @@ export function edgeArrowId(source: NodeId, target: NodeId): EdgeId {
   return `${source} -> ${target}`;
 }
 
-export const CONCURRENT_LABEL = {
-  label: "CC",
-  labelBgPadding: [2, 2],
-  labelBgBorderRadius: 4,
-};
-
 export function newEdge(
   source: NodeId,
   target: NodeId,
@@ -142,11 +136,11 @@ export function newEdge(
 
   return {
     id: edgeId,
+    type: "custom",
     source,
     target,
     className: "over-one-away",
-    ...(concurrent ? CONCURRENT_LABEL : { label: null }),
-    // Need to have null to notify React Flow about CC
+    data: { concurrent },
   };
 }
 
@@ -346,8 +340,7 @@ export function setNodeStatus(
 
 function getEdgeStatusCode(edge: Edge): number {
   let edgeStatusCode = COURSE_STATUS_CODES[edge.className];
-  if (edgeStatusCode === COURSE_STATUS_CODES.enrolled
-      && edge.label === "CC") {
+  if (edgeStatusCode === COURSE_STATUS_CODES.enrolled && edge.data.concurrent) {
     edgeStatusCode = COURSE_STATUS_CODES.completed;
   }
   return edgeStatusCode;

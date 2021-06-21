@@ -53,6 +53,7 @@ import { default as CourseNodeComponent } from "./components/CourseNode";
 import OrNode from "./components/OrNode";
 import AndNode from "./components/AndNode";
 import ContextMenu from "./components/ContextMenu";
+import CustomEdge from "./components/CustomEdge";
 import UserControls from "./components/UserControls";
 
 import NewFlowDialog from "./components/dialogs/NewFlowDialog";
@@ -71,7 +72,6 @@ import {
   ZERO_POSITION,
   newConditionalNode,
   edgeArrowId,
-  CONCURRENT_LABEL,
   newNodeData,
   sortElementsByDepth,
   newElemIndexes,
@@ -363,8 +363,8 @@ export default function App({ initialElements }: AppProps) {
     newElements[i] = {
       ...newElements[i],
       id: newData.id,
-      data: { ...(newElements[i] as CourseNode).data, ...newData },
-    };
+      data: { ...newElements[i].data, ...newData },
+    } as CourseNode;
     if (originalId !== newData.id) {
       for (const iNode of nodeData.current.get(originalId).incomingNodes) {
         const oldEdgeId = edgeArrowId(iNode, originalId);
@@ -393,14 +393,13 @@ export default function App({ initialElements }: AppProps) {
   // Single change can only propagate 2 layers deep
   function onElementClick(event: MouseEvent, eventTarget: FlowElement): void {
     // NOTE: eventTarget isn't the actual element so can't use id equality
-    // Change .type check if edges changed to have type property
-    if (event.altKey && eventTarget.type === "course") {
+    if (event.altKey && isCourseNode(eventTarget as Element)) {
       resetSelectedElements.current();
       const nodeId = eventTarget.id;
       const newElements = elements.slice();
       let newStatus;
-      const targetElement = elements[elemIndexes.current.get(nodeId)];
-      switch ((targetElement as Node).data.nodeStatus) {
+      const targetElement = elements[elemIndexes.current.get(nodeId)] as Node;
+      switch (targetElement.data.nodeStatus) {
         case "ready":
           newStatus = "enrolled";
           break;
@@ -468,18 +467,18 @@ export default function App({ initialElements }: AppProps) {
     for (const id of nodeData.current.get(nodeId).incomingEdges) {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
-        ...newElements[i] as Edge, animated: !prefersReducedMotion
-      };
+        ...newElements[i], animated: !prefersReducedMotion
+      } as Edge;
     }
 
     for (const id of nodeData.current.get(nodeId).incomingNodes) {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
         ...newElements[i],
-        data: { ...(newElements[i] as Node).data, nodeConnected: true },
+        data: { ...newElements[i].data, nodeConnected: true },
       } as Node;
 
-      if (["or", "and"].includes((newElements[i] as Node).type)) {
+      if (["or", "and"].includes(newElements[i].type)) {
         applyHoverEffectBackward(id, newElements);
       }
     }
@@ -492,18 +491,18 @@ export default function App({ initialElements }: AppProps) {
     for (const id of nodeData.current.get(nodeId).outgoingEdges) {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
-        ...newElements[i] as Edge, animated: !prefersReducedMotion
-      };
+        ...newElements[i], animated: !prefersReducedMotion
+      } as Edge;
     }
 
     for (const id of nodeData.current.get(nodeId).outgoingNodes) {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
         ...newElements[i],
-        data: { ...(newElements[i] as Node).data, nodeConnected: true },
+        data: { ...newElements[i].data, nodeConnected: true },
       } as Node;
 
-      if (["or", "and"].includes((newElements[i] as Node).type)) {
+      if (["or", "and"].includes(newElements[i].type)) {
         applyHoverEffectForward(id, newElements);
       }
     }
@@ -527,11 +526,11 @@ export default function App({ initialElements }: AppProps) {
     for (let i = 0; i < numNodes; i++) {
       newElements[i] = {
         ...newElements[i],
-        data: { ...(newElements[i] as Node).data, nodeConnected: false },
+        data: { ...newElements[i].data, nodeConnected: false },
       } as Node;
     }
     for (let i = numNodes; i < numElems; i++) {
-      newElements[i] = { ...newElements[i] as Edge, animated: false };
+      newElements[i] = { ...newElements[i], animated: false } as Edge;
     }
 
     setElements(newElements);
@@ -599,13 +598,14 @@ export default function App({ initialElements }: AppProps) {
       recordFlowState();
       const newElements = resetElementStates(elements);
       // Need to "unhover" to return to base state
-      const sourceNode = elements[elemIndexes.current.get(source)];
+      const sourceNode = elements[elemIndexes.current.get(source)] as Node;
       newElements.push({
         id: newEdgeId,
+        type: "custom",
         source,
         target,
-        className: (sourceNode as Node).data.nodeStatus,
-        label: null,
+        className: sourceNode.data.nodeStatus,
+        data: { concurrent: false },
       });
       setElements(recalculatedElements(newElements));
     }
@@ -629,13 +629,15 @@ export default function App({ initialElements }: AppProps) {
       recordFlowState();
       setElements(prevElems => {
         const newElements = prevElems.slice();
-        const sourceNode = prevElems[elemIndexes.current.get(newSource)];
+        const sourceNode = (
+          prevElems[elemIndexes.current.get(newSource)] as Node
+        );
         newElements[elemIndexes.current.get(oldEdge.id)] = {
           ...oldEdge, // Keep CC status
           id: newEdgeId,
           source: newConnection.source as NodeId,
           target: newConnection.target as NodeId,
-          className: (sourceNode as Node).data.nodeStatus,
+          className: sourceNode.data.nodeStatus,
         } as Edge;
         return recalculatedElements(newElements);
       });
@@ -652,14 +654,16 @@ export default function App({ initialElements }: AppProps) {
         : []
     );
     const targetStatus = (
-      (elements[elemIndexes.current.get(edge.id)] as Edge).label
+      (elements[elemIndexes.current.get(edge.id)] as Edge).data.concurrent
+        ? "concurrent"
+        : ""
     );
     if (selectedIds.includes(edge.id)) {
       if (selectedIds.length === 1) {
         contextData.current = {
           target: [edge.id],
           targetType: "edge",
-          targetStatus: targetStatus as ContextTargetStatus,
+          targetStatus,
         };
       } else {
         contextData.current = {
@@ -800,6 +804,7 @@ export default function App({ initialElements }: AppProps) {
             or: OrNode,
             and: AndNode,
           }}
+          edgeTypes={{ custom: CustomEdge }}
           // Event Handlers
           // --- Element ---
           onElementClick={onElementClick}
@@ -872,17 +877,10 @@ export default function App({ initialElements }: AppProps) {
             const i = elemIndexes.current.get(edgeId);
             const targetEdge = newElements[i] as Edge;
 
-            if (targetEdge.label) {
-              newElements[i] = {
-                id: edgeId,
-                source: targetEdge.source,
-                target: targetEdge.target,
-                className: targetEdge.className,
-                label: null,
-              };
-            } else {
-              newElements[i] = { ...targetEdge, ...CONCURRENT_LABEL };
-            }
+            newElements[i] = {
+              ...targetEdge,
+              data: { concurrent: !targetEdge.data.concurrent },
+            };
 
             setElements(
               updateAllNodes(
@@ -995,10 +993,9 @@ export default function App({ initialElements }: AppProps) {
             let tempIndexes = newElemIndexes(elements);
             const numNodes = tempNodeData.size;
             for (let i = 0; i < numNodes; i++) {
-              const elem = elements[i];
-              if (
-                (elem as Node).type === "or"
-                && tempNodeData.get(elem.id).incomingNodes.length <= 1
+              const elem = elements[i] as Node;
+              if (elem.type === "or"
+                  && tempNodeData.get(elem.id).incomingNodes.length <= 1
               ) {
                 const incoming = tempNodeData.get(elem.id).incomingNodes;
                 if (incoming.length) {

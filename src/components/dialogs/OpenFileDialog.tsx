@@ -19,7 +19,8 @@ function betaToBeta1(elems: Element[]): Element[] {
   // Remove selected field
   return elems.map(elem => (
     isNode(elem)
-      ? { id: elem.id,
+      ? {
+        id: elem.id,
         type: "course",
         position: elem.position,
         data: elem.data,

@@ -219,10 +219,9 @@ export default function ContextMenu({
       let pointlessOrNodeFound = false;
       const numNodes = nodeData.size;
       for (let i = 0; i < numNodes; i++) {
-        const elem = elements[i];
-        if (
-          (elem as Node).type === "or"
-          && nodeData.get(elem.id).incomingEdges.length <= 1
+        const elem = elements[i] as Node;
+        if (elem.type === "or"
+            && nodeData.get(elem.id).incomingEdges.length <= 1
         ) {
           pointlessOrNodeFound = true;
           break;
@@ -256,7 +255,7 @@ export default function ContextMenu({
         <>
           <li
             key="concurrent"
-            className={targetStatus === "CC" ? "current" : ""}
+            className={targetStatus === "concurrent" ? "current" : ""}
             onClick={() => toggleEdgeConcurrency(target[0])}
           >
             <p>Concurrent</p>
@@ -331,10 +330,9 @@ export default function ContextMenu({
       let pointlessOrNodeFound = false;
       const numNodes = nodeData.size;
       for (let i = 0; i < numNodes; i++) {
-        const elem = elements[i];
-        if (
-          (elem as Node).type === "or"
-          && nodeData.get(elem.id).incomingEdges.length <= 1
+        const elem = elements[i] as Node;
+        if (elem.type === "or"
+            && nodeData.get(elem.id).incomingEdges.length <= 1
         ) {
           pointlessOrNodeFound = true;
           break;
