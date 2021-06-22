@@ -7,7 +7,7 @@ import { expect } from "chai";
 
 import { TEST_COND_IDS } from "./test-utils";
 
-import { isEdge, _testing } from "../utils";
+import { edgeArrowId, isEdge, _testing } from "../utils";
 
 const testElements = JSON.parse(
   fs.readFileSync(path.join(__dirname, "test-flow.json"))
@@ -141,11 +141,20 @@ describe("isRestriction", () => {
 });
 
 describe("generateInitialElements", () => {
-  it("Creates a connection for a single prereq", () => {
+  it("Creates a single connection", () => {
     const courseData = getCourseData(["MATH 125", "MATH 126"]);
     const initialElements = generateInitialElements(courseData, "cautiously");
     const elemIndexes = newElemIndexes(initialElements);
     expect(elemIndexes.has("MATH 125 -> MATH 126")).to.be.true;
+  });
+  it("Creates a single concurrent connection", () => {
+    const courseData = getCourseData(["PHYS 114", "PHYS 117"]);
+    const initialElements = generateInitialElements(courseData, "cautiously");
+    const elemIndexes = newElemIndexes(initialElements);
+    const concurrentEdge = (
+      initialElements[elemIndexes.get("PHYS 114 -> PHYS 117")]
+    );
+    expect(concurrentEdge.data.concurrent).to.be.true;
   });
   it("Does not create a connection for a restriction", () => {
     const courseData = getCourseData(["ACCTG 225", "ACCTG 219"]);
@@ -153,16 +162,34 @@ describe("generateInitialElements", () => {
     const elemIndexes = newElemIndexes(initialElements);
     expect(elemIndexes.has("ACCTG 225 -> ACCTG 219")).to.be.false;
   });
-  it("Generates OR nodes for either/or prereqs", () => {
+  it("Generates an OR node for either/or prereqs", () => {
     const courseData = getCourseData(["MATH 307", "AMATH 351", "AMATH 353"]);
     const initialElements = generateInitialElements(courseData, "cautiously");
     const nodeData = newNodeData(initialElements);
-    const elements = sortElementsByDepth(initialElements, nodeData);
-    expect(elements[2].type).to.equal("or");
-    expect(nodeData.get(elements[2].id).incomingEdges).to.have.lengthOf(2);
-    expect(nodeData.get(elements[2].id).outgoingEdges).to.have.lengthOf(1);
+    const elemIndexes = newElemIndexes(initialElements);
+    expect(nodeData.get("AMATH 353").incomingNodes).to.have.lengthOf(1);
+    const [orId] = nodeData.get("AMATH 353").incomingNodes;
+    const orNode = initialElements[elemIndexes.get(orId)];
+    expect(orNode.type).to.equal("or");
+    expect(elemIndexes.has(`MATH 307 -> ${orId}`)).to.be.true;
+    expect(elemIndexes.has(`AMATH 351 -> ${orId}`)).to.be.true;
   });
-  it("Does not generate OR nodes for a restriction", () => {
+  it("Generates an OR node and concurrent connections", () => {
+    const courseData = getCourseData(["MATH 124", "MATH 134", "PHYS 121"]);
+    const initialElements = generateInitialElements(courseData, "cautiously");
+    const nodeData = newNodeData(initialElements);
+    const [orId] = nodeData.get("PHYS 121").incomingNodes;
+    const elemIndexes = newElemIndexes(initialElements);
+    const concurrentEdge1 = (
+      initialElements[elemIndexes.get(edgeArrowId("MATH 124", orId))]
+    );
+    const concurrentEdge2 = (
+      initialElements[elemIndexes.get(edgeArrowId("MATH 134", orId))]
+    );
+    expect(concurrentEdge1.data.concurrent).to.be.true;
+    expect(concurrentEdge2.data.concurrent).to.be.true;
+  });
+  it("Does not an generate OR node for a restriction", () => {
     const courseData = getCourseData(["POL S 318", "POL S 319", "POL S 312"]);
     const initialElements = generateInitialElements(courseData, "cautiously");
     const nodeData = newNodeData(initialElements);

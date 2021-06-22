@@ -355,11 +355,35 @@
     "offered": ""
   },
   {
+    "id": "MATH 134",
+    "name": "Accelerated [Honors] Calculus",
+    "credits": "5",
+    "description": "Covers the material of MATH 124, MATH 125, MATH 126; MATH 207, MATH 208. First year of a two-year accelerated sequence. May receive advanced placement (AP) credit for MATH 124 after taking MATH 134. For students with above average preparation, interest, and ability in mathematics.",
+    "prerequisite": "None.",
+    "offered": "A."
+  },
+  {
     "id": "MATH 136",
     "name": "Accelerated [Honors] Calculus",
     "credits": "5",
     "description": "Covers the material of MATH 124, MATH 125, MATH 126; MATH 207, MATH 208. First year of a two-year accelerated sequence. May not receive credit for both MATH 126 and MATH 136. For students with above average preparation, interest, and ability in mathematics.",
     "prerequisite": "a minimum grade of 2.0 in MATH 135.",
     "offered": "Sp."
+  },
+  {
+    "id": "PHYS 114",
+    "name": "Mechanics",
+    "credits": "4",
+    "description": "Principles of mechanics using algebra-based modeling with an emphasis on applications in life sciences. Maximum 5 credits allowed for any combination of PHYS 114, PHYS 117, PHYS 121, and PHYS 141.",
+    "prerequisite": "None.",
+    "offered": "AWSpS."
+  },
+  {
+    "id": "PHYS 117",
+    "name": "General Physics Laboratory: Mechanics",
+    "credits": "1",
+    "description": "Mechanics laboratory. Credit is not given for both PHYS 117 and the PHYS 121 laboratory. Credit/no-credit only.",
+    "prerequisite": "PHYS 114, which may be taken concurrently.",
+    "offered": "AWSpS."
   }
 ]
