@@ -1,22 +1,37 @@
 import React, { useState } from "react";
 
-import type { ModalClass, CloseModal, CourseNode, Element } from "types/main";
+import { isNode, isEdge } from "react-flow-renderer";
+
+import type {
+  ModalClass,
+  CloseModal,
+  // CourseNode,
+  Node,
+  Edge,
+  Element,
+} from "types/main";
+import type {
+  Element as ElementBeta,
+} from "types/beta";
+import type {
+  CourseNode as CourseNodeBeta1,
+  Edge as EdgeBeta1,
+  Element as ElementBeta1,
+} from "types/beta1";
 
 import ModalDialog from "./ModalDialog";
 import Dropzone from "./Dropzone";
 import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
-import { isNode, isEdge } from "../../utils";
-
 import "./OpenFileDialog.scss";
 
-const SUPPORTED_VERSIONS = ["Beta", "Beta.1"];
+const SUPPORTED_VERSIONS = ["Beta", "Beta.1", "Beta.2"];
 const DEPRECATED_VERSIONS: string[] = [];
 export const [CURRENT_VERSION] = SUPPORTED_VERSIONS.slice(-1);
 
-function betaToBeta1(elems: Element[]): Element[] {
-  // Change node type from "custom" to "course"
-  // Remove selected field
+// Change node type from "custom" to "course"
+// Remove selected property
+function betaToBeta1(elems: ElementBeta[]): ElementBeta1[] {
   return elems.map(elem => (
     isNode(elem)
       ? {
@@ -24,11 +39,30 @@ function betaToBeta1(elems: Element[]): Element[] {
         type: "course",
         position: elem.position,
         data: elem.data,
-      } as CourseNode
-      : elem
+      } as CourseNodeBeta1
+      : elem as EdgeBeta1
   ));
 }
-const CONVERSION_FUNCS = [betaToBeta1];
+
+// Convert default nodes to custom node
+// Change type from default to custom
+// Add concurrency data property
+function beta1ToBeta2(elems: ElementBeta1[]): Element[] {
+  return elems.map(elem => (
+    isEdge(elem)
+      ? {
+        id: elem.id,
+        type: "custom",
+        source: elem.source,
+        target: elem.target,
+        className: elem.className,
+        data: { concurrent: elem.label === "CC" }
+      } as Edge
+      : elem as Node
+  ));
+}
+
+const CONVERSION_FUNCS = [betaToBeta1, beta1ToBeta2];
 
 interface OpenFileDialogProps {
   modalCls: ModalClass;

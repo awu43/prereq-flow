@@ -1,5 +1,5 @@
 {
-  "version": "Beta.1",
+  "version": "Beta.2",
   "elements": [
     {
       "id": "MATH 135",
@@ -191,14 +191,16 @@
     },
     {
       "id": "MATH 135 -> MATH 136",
+      "type": "custom",
       "source": "MATH 135",
       "target": "MATH 136",
       "className": "ready",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     },
     {
       "id": "MATH 125 -> MATH 126",
@@ -206,32 +208,39 @@
       "target": "MATH 126",
       "className": "ready",
       "label": null,
-      "animated": false,
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "custom",
+      "animated": false,
+      "data": {
+        "concurrent": false
+      }
     },
     {
       "id": "MATH 125 -> OR-Jg1vC8IVRuKkAivuA3K_O",
+      "type": "custom",
       "source": "MATH 125",
       "target": "OR-Jg1vC8IVRuKkAivuA3K_O",
       "className": "ready",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     },
     {
       "id": "MATH 135 -> OR-Jg1vC8IVRuKkAivuA3K_O",
+      "type": "custom",
       "source": "MATH 135",
       "target": "OR-Jg1vC8IVRuKkAivuA3K_O",
       "className": "ready",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     },
     {
       "id": "MATH 125 -> MATH 307",
@@ -239,10 +248,13 @@
       "target": "MATH 307",
       "className": "ready",
       "label": null,
-      "animated": false,
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "custom",
+      "animated": false,
+      "data": {
+        "concurrent": false
+      }
     },
     {
       "id": "MATH 126 -> MATH 308",
@@ -250,76 +262,91 @@
       "target": "MATH 308",
       "className": "one-away",
       "label": null,
-      "animated": false,
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "type": "custom",
+      "animated": false,
+      "data": {
+        "concurrent": false
+      }
     },
     {
       "id": "MATH 307 -> AND-SZ7MzhC510siGlVNEg0Qm",
+      "type": "custom",
       "source": "MATH 307",
       "target": "AND-SZ7MzhC510siGlVNEg0Qm",
       "className": "one-away",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     },
     {
       "id": "MATH 308 -> AND-SZ7MzhC510siGlVNEg0Qm",
+      "type": "custom",
       "source": "MATH 308",
       "target": "AND-SZ7MzhC510siGlVNEg0Qm",
       "className": "over-one-away",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     },
     {
       "id": "MATH 136 -> OR-wz5c0miLAHpZGOGGWS8-N",
+      "type": "custom",
       "source": "MATH 136",
       "target": "OR-wz5c0miLAHpZGOGGWS8-N",
       "className": "one-away",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     },
     {
       "id": "AND-SZ7MzhC510siGlVNEg0Qm -> OR-wz5c0miLAHpZGOGGWS8-N",
+      "type": "custom",
       "source": "AND-SZ7MzhC510siGlVNEg0Qm",
       "target": "OR-wz5c0miLAHpZGOGGWS8-N",
       "className": "over-one-away",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     },
     {
       "id": "OR-wz5c0miLAHpZGOGGWS8-N -> MATH 309",
+      "type": "custom",
       "source": "OR-wz5c0miLAHpZGOGGWS8-N",
       "target": "MATH 309",
       "className": "one-away",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     },
     {
       "id": "OR-Jg1vC8IVRuKkAivuA3K_O -> AMATH 301",
+      "type": "custom",
       "source": "OR-Jg1vC8IVRuKkAivuA3K_O",
       "target": "AMATH 301",
       "className": "ready",
-      "label": null,
-      "animated": false,
+      "data": {
+        "concurrent": false
+      },
       "sourceHandle": null,
       "targetHandle": null,
-      "type": "default"
+      "animated": false
     }
   ]
 }
