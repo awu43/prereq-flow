@@ -15,7 +15,7 @@ export function newApp(initialElements = testFlow.elements) {
 
 export function getNode(nodeId, container) {
   return (
-    container.querySelector(`[data-id="${nodeId}"] > .CourseNode`)
+    container.querySelector(`[data-id="${nodeId}"] > [class*="Node"]`)
   );
 }
 
