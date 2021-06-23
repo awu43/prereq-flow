@@ -617,7 +617,11 @@ export function generateNewLayout(
         (avgDestPosition.y - avgSourcePosition.y)
         / (avgDestPosition.x - avgSourcePosition.x)
       );
-      const y = -nodeWidth * slope + avgDestPosition.y;
+      let dy = -nodeWidth * slope;
+      if (outgoingNodes.length === 1) {
+        dy = Math.min(Math.abs(dy), 3 * nodeHeight) * (dy / Math.abs(dy));
+      }
+      const y = dy + avgDestPosition.y;
 
       (newElements[i] as ConditionalNode).position = { x, y };
     } else if (incomingNodes.length && !outgoingNodes.length) {
