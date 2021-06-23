@@ -142,7 +142,9 @@ export default function ContextMenu({
     case "coursenode": {
       // Single course node
       const targetNode = target[0];
-      const targetStatusCode = COURSE_STATUS_CODES[targetStatus];
+      const targetStatusCode = (
+        COURSE_STATUS_CODES[targetStatus as CourseStatus]
+      );
       const courseStatusOptions = (
         <>
           <li
@@ -179,7 +181,7 @@ export default function ContextMenu({
           ))
           : true
       );
-      const notConnectedPostreqs = [] as CourseNode[];
+      const notConnectedPostreqs: CourseNode[] = [];
       const numNodes = nodeData.size;
       for (let i = 0; i < numNodes; i++) {
         const postreq = elements[i];

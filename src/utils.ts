@@ -168,7 +168,7 @@ export function generateInitialElements(
 ): Element[] {
   const elements: Element[] = courseData.map(c => newCourseNode(c));
   const elementIds: Set<ElementId> = new Set(courseData.map(c => c.id));
-  const secondPass = new Map() as AlwaysDefinedMap<ElementId, string[]>;
+  const secondPass: AlwaysDefinedMap<ElementId, string[]> = new Map();
 
   // First pass: unambiguous prerequisites
   for (const data of courseData) {
@@ -259,7 +259,7 @@ function discoverMaxDepths(
 }
 
 export function newNodeData(elements: Element[]): NodeDataMap {
-  const initialNodeData = new Map();
+  const initialNodeData: NodeDataMap = new Map();
 
   function setNewNode(nodeId: NodeId): void {
     if (!initialNodeData.has(nodeId)) {
@@ -335,7 +335,7 @@ const COURSE_STATUSES: CourseStatus[] = [
 
 export const COURSE_STATUS_CODES = Object.freeze(Object.fromEntries(
   COURSE_STATUSES.map((status, i) => [status, i])
-));
+)) as Readonly<Record<CourseStatus, number>>;
 
 export function setNodeStatus(
   nodeId: NodeId,
@@ -669,7 +669,7 @@ export function autoconnect(
   const courseMatches = courseIdMatch(targetNode.data.prerequisite) || [];
 
   // Remove duplicates (example: NMETH 450 prereqs)
-  let targetPrereqs = [] as CourseNode[];
+  let targetPrereqs: CourseNode[] = [];
   if (connectTo.prereq) {
     targetPrereqs = (
       [...new Set(courseMatches)]
@@ -679,7 +679,7 @@ export function autoconnect(
     );
   }
 
-  const targetPostreqs = [] as CourseNode[];
+  const targetPostreqs: CourseNode[] = [];
   if (connectTo.postreq) {
     for (let i = 0; i < numNodes; i++) {
       const postreq = newElements[i];
