@@ -168,7 +168,7 @@ export function generateInitialElements(
 ): Element[] {
   const elements: Element[] = courseData.map(c => newCourseNode(c));
   const elementIds: Set<ElementId> = new Set(courseData.map(c => c.id));
-  const secondPass = new Map() as AlwaysDefinedMap<ElementId, RegExpMatchArray>;
+  const secondPass = new Map() as AlwaysDefinedMap<ElementId, string[]>;
 
   // First pass: unambiguous prerequisites
   for (const data of courseData) {
@@ -236,12 +236,26 @@ function discoverMaxDepths(
   startDepth: number,
   nodeData: NodeDataMap,
 ): void {
-  for (const outgoerId of nodeData.get(startNodeId).outgoingNodes) {
-    nodeData.get(outgoerId).depth = Math.max(
-      nodeData.get(outgoerId).depth, startDepth + 1
-    );
-    discoverMaxDepths(outgoerId, startDepth + 1, nodeData);
+  const startNode = nodeData.get(startNodeId);
+  if (startNode.depth !== startDepth) {
+    if (startDepth > startNode.depth) {
+      startNode.depth = startDepth;
+    }
+    for (const outgoerId of startNode.outgoingNodes) {
+      discoverMaxDepths(outgoerId, startDepth + 1, nodeData);
+    }
   }
+  // If the current depth is equal to startDepth,
+  // retraversing deeper nodes will have no effect
+
+  // Skips unnecessary processing for diamonds in flow
+
+  //     B
+  // A <   > D — (rest of flow)
+  //     C
+
+  // B has already traversed everything past D,
+  // so extra traversal from C is skipped
 }
 
 export function newNodeData(elements: Element[]): NodeDataMap {
@@ -250,7 +264,7 @@ export function newNodeData(elements: Element[]): NodeDataMap {
   function setNewNode(nodeId: NodeId): void {
     if (!initialNodeData.has(nodeId)) {
       initialNodeData.set(nodeId, {
-        depth: 0,
+        depth: -1,
         incomingNodes: [],
         incomingEdges: [],
         outgoingEdges: [],

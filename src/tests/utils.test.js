@@ -7,7 +7,7 @@ import { expect } from "chai";
 
 import { TEST_COND_IDS } from "./test-utils";
 
-import { edgeArrowId, isEdge, _testing } from "../utils";
+import { edgeArrowId, isNode, isEdge, _testing } from "../utils";
 
 const testElements = JSON.parse(
   fs.readFileSync(path.join(__dirname, "test-flow.json"))
@@ -210,12 +210,69 @@ describe("generateInitialElements", () => {
 describe("newNodeData", () => {
   it("Generates new node data", () => {
     const nodeData = newNodeData(testElements);
-    const math126 = nodeData.get("MATH 126");
-    expect(math126.depth).to.equal(1);
-    expect(math126.incomingNodes).to.eql(["MATH 125"]);
-    expect(math126.incomingEdges).to.eql(["MATH 125 -> MATH 126"]);
-    expect(math126.outgoingEdges).to.eql(["MATH 126 -> MATH 308"]);
-    expect(math126.outgoingNodes).to.eql(["MATH 308"]);
+
+    const expectedDepths = new Map(Object.entries({
+      "MATH 125": 0,
+      "MATH 135": 0,
+
+      "MATH 307": 1,
+      [TEST_COND_IDS.OR1]: 1,
+      "MATH 126": 1,
+      "MATH 136": 1,
+
+      "AMATH 301": 2,
+      "MATH 308": 2,
+
+      [TEST_COND_IDS.AND1]: 3,
+
+      [TEST_COND_IDS.OR2]: 4,
+
+      "MATH 309": 5,
+    }));
+
+    for (const elem of testElements) {
+      if (isNode(elem)) {
+        expect(nodeData.has(elem.id)).to.be.true;
+        const nodeDepth = nodeData.get(elem.id).depth;
+        expect(nodeDepth).to.equal(expectedDepths.get(elem.id));
+      } else {
+        const { source, target } = elem;
+        expect(edgeArrowId(source, target)).to.equal(elem.id);
+        const sourceNode = nodeData.get(source);
+        const targetNode = nodeData.get(target);
+        expect(sourceNode.outgoingEdges).to.contain(elem.id);
+        expect(sourceNode.outgoingNodes).to.contain(target);
+        expect(targetNode.incomingNodes).to.contain(source);
+        expect(targetNode.incomingEdges).to.contain(elem.id);
+      }
+    }
+  });
+  it("Discovers max depths for a diamond", () => {
+    // See comments in discoverMaxDepths()
+    const courseData = getCourseData([
+      "MATH 124", "MATH 125", "PHYS 121", "PHYS 122", "PHYS 123", "E E 215"
+    ]);
+    const elements = generateInitialElements(courseData, "aggressively");
+    const nodeData = newNodeData(elements);
+
+    const expectedDepths = new Map(Object.entries({
+      "MATH 124": 0,
+
+      "MATH 125": 1,
+      "PHYS 121": 1,
+
+      "PHYS 122": 2,
+
+      "PHYS 123": 3,
+      "E E 215": 3,
+    }));
+
+    for (const elem of elements) {
+      if (isNode(elem)) {
+        const nodeDepth = nodeData.get(elem.id).depth;
+        expect(nodeDepth).to.equal(expectedDepths.get(elem.id));
+      }
+    }
   });
 });
 
@@ -224,13 +281,14 @@ describe("sortElementsByDepth", () => {
     const nodeData = newNodeData(testElements);
     const elements = sortElementsByDepth(newTestElems(), nodeData);
 
-    let lastDepth = 0;
-    for (let i = 0; i < nodeData.size; i++) {
+    expect(nodeData.get(elements[0].id).depth).to.equal(0);
+    const numNodes = nodeData.size;
+    for (let i = 1; i < numNodes; i++) {
       const nodeDepth = nodeData.get(elements[i].id).depth;
+      const lastDepth = nodeData.get(elements[i - 1].id).depth;
       expect(nodeDepth).to.be.at.least(lastDepth);
-      lastDepth = nodeDepth;
     }
-    for (let i = nodeData.size; i < elements.length; i++) {
+    for (let i = numNodes; i < elements.length; i++) {
       expect(isEdge(elements[i])).to.be.true;
     }
   });
