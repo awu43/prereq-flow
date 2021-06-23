@@ -32,14 +32,12 @@ export default function TableDialog({
   const [busy, setBusy] = useState(false);
   const [sortBy, setSortBy] = useState("id");
 
-  const tableElems = useMemo(() => (
-    filterUnconditionalElements(elements)
-  ), [elements]);
-  const tableData = useMemo(() => newNodeData(tableElems), [tableElems]);
-
-  const tableNodes = tableElems.filter(
-    elem => tableData.has(elem.id)
-  ) as CourseNode[];
+  const [tableData, tableNodes] = useMemo(() => {
+    const elems = filterUnconditionalElements(elements);
+    const data = newNodeData(elems);
+    const nodes = elems.slice(0, data.size) as CourseNode[];
+    return [data, nodes];
+  }, [elements]);
 
   switch (sortBy) {
     case "depth":

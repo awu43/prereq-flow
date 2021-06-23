@@ -36,7 +36,6 @@ import type {
   ElemIndexMap,
   ConnectTo,
   NewCoursePosition,
-  ContextTargetStatus,
   ContextTarget,
   UpdateNodePos,
   SelectedElements,
@@ -677,7 +676,7 @@ export default function App({ initialElements }: AppProps) {
       contextData.current = {
         target: [edge.id],
         targetType: "edge",
-        targetStatus: targetStatus as ContextTargetStatus,
+        targetStatus,
       };
     }
     setMouseXY(newPosition(event.clientX, event.clientY));
