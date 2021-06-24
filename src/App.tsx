@@ -521,7 +521,7 @@ export default function App({ initialElements }: AppProps) {
     const newElements = elements.slice();
 
     const numNodes = nodeData.current.size;
-    const numElems = elemIndexes.current.size;
+    const numElems = newElements.length;
     for (let i = 0; i < numNodes; i++) {
       newElements[i] = {
         ...newElements[i],
