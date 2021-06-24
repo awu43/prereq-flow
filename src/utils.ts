@@ -618,8 +618,8 @@ export function generateNewLayout(
         / (avgDestPosition.x - avgSourcePosition.x)
       );
       let dy = -nodeWidth * slope;
-      if (outgoingNodes.length === 1) {
-        dy = Math.min(Math.abs(dy), 3 * nodeHeight) * (dy / Math.abs(dy));
+      if ((outgoingNodes.length === 1) && (Math.abs(dy) > (3 * nodeHeight))) {
+        dy = (dy / Math.abs(dy)) * (3 * nodeHeight);
       }
       const y = dy + avgDestPosition.y;
 
