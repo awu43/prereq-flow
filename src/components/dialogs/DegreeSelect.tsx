@@ -133,7 +133,8 @@ export default function DegreeSelect({
           </div>
         </Tippy>
       </section>
-      <small>See degree courses, suggest changes, and contribute new degree data&nbsp;<a href="https://github.com/awu43/prereq-flow-degrees" target="_blank" rel="noreferrer">here</a>.</small>
+      <small>See available degrees and course lists on&nbsp;<a href="https://github.com/awu43/prereq-flow-degrees" target="_blank" rel="noreferrer">GitHub</a></small>
+      <small>Send suggestions for changes to <a href="mailto:comments@prereqflow.com">comments@prereqflow.com</a></small>
 
       <AmbiguitySelect
         ambiguityHandling={ambiguityHandling}
