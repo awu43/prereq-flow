@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import type { MouseEvent } from "react";
 
+import classNames from "classnames";
+
 import ReactFlow, {
   Background,
+  MiniMap,
   Controls,
   ReactFlowProvider,
   BackgroundVariant,
@@ -18,7 +21,9 @@ import type {
   Connection,
 } from "react-flow-renderer";
 
-import "./App.scss";
+import Tippy from "@tippyjs/react";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "tippy.js/dist/tippy.css";
 
 import type {
   XYPosition,
@@ -41,6 +46,8 @@ import type {
   SelectedElements,
   SetSelectedElements,
 } from "types/main";
+
+import "./App.scss";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
 import useDialogStatus from "./useDialogStatus";
@@ -95,6 +102,8 @@ export default function App({ initialElements }: AppProps) {
     addCourseDlgCls, openAddCourseDlg, closeAddCourseDlg
   ] = useDialogStatus();
   const [aboutDlgCls, openAboutDlg, closeAboutDlg] = useDialogStatus();
+
+  const [minimapPinned, setMinimapPinned] = useState(true);
   const [tableDlgCls, openTableDlg, closeTableDlg] = useDialogStatus();
   const [editDlgCls, openEditDlg, closeEditDlg] = useDialogStatus();
 
@@ -775,6 +784,25 @@ export default function App({ initialElements }: AppProps) {
         />
       </Header>
 
+      <Tippy
+        content={minimapPinned ? "Hide minimap" : "Show minimap"}
+        trigger="mouseenter"
+        hideOnClick={false}
+        placement="right"
+        duration={prefersReducedMotion ? 0 : 100}
+      >
+        <button
+          className={classNames(
+            "react-flow__minimap-pin-button",
+            { "react-flow__minimap-pin-button--pinned": minimapPinned },
+          )}
+          type="button"
+          onClick={() => setMinimapPinned(!minimapPinned)}
+        >
+          <img src="dist/icons/triangle.svg" alt="Pin minimap" />
+        </button>
+      </Tippy>
+
       <button
         type="button"
         className="TableDialog__open-btn"
@@ -836,6 +864,30 @@ export default function App({ initialElements }: AppProps) {
           multiSelectionKeyCode="Control"
         >
           <Background variant={BackgroundVariant.Lines} gap={32} size={1} />
+          <MiniMap
+            className={classNames(
+              { "react-flow__minimap--pinned": minimapPinned },
+            )}
+            nodeColor={node => {
+              switch ((node as Node).data.nodeStatus) {
+                case "completed":
+                  return "#000000";
+                case "enrolled":
+                  return "#9400d3";
+                case "ready":
+                  return "#32cd32";
+                case "under-one-away":
+                  return "#daa520";
+                case "one-away":
+                  return "#ff8c00";
+                case "over-one-away":
+                  return "#ff0000";
+                default:
+                  return "#808080";
+              }
+            }}
+            nodeBorderRadius={2}
+          />
           <Controls showInteractive={false} />
         </ReactFlow>
         <ContextMenu
