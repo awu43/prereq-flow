@@ -20,6 +20,36 @@
   }
 }
 
+@mixin img-button-style($width, $height: 0) {
+  @include base-button-style;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: percentage($width / 100);
+    @if $height == 0 {
+      height: percentage($width / 100);
+    } @else {
+      height: percentage($height / 100);
+    }
+  }
+  &:disabled img {
+    filter:
+      invert(55%)
+      sepia(0%)
+      saturate(28%)
+      hue-rotate(137deg)
+      brightness(92%)
+      contrast(83%);
+  }
+  &:not(:disabled):hover img {
+    filter: invert(100%);
+  }
+}
+
 @mixin base-text-input-style {
   height: 1.5rem;
   padding: 0.75rem 0.25rem;
