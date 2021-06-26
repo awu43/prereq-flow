@@ -11,22 +11,7 @@
     height: 2rem;
     width: 2rem;
 
-    @include base-button-style;
-    font-size: 1rem;
-    font-weight: bold;
-
-    background-color: rgb(240, 240, 240);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    img {
-      height: 75%;
-      width: 75%;
-    }
-    &:hover img {
-      filter: invert(100%);
-    }
+    @include img-button-style(60);
   }
 
   &__content {
