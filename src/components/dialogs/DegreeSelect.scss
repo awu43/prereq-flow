@@ -25,40 +25,16 @@
 
     &__add-button,
     &__delete-button {
-      appearance: none;
-      @include base-button-style;
       margin-left : 0.25rem;
       height: 1.5rem;
       width: 1.5rem;
-      padding: 0;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &:not(:disabled):hover img {
-        filter: invert(100%);
-      }
-
-      &:disabled img {
-        filter:
-          invert(55%)
-          sepia(0%)
-          saturate(28%)
-          hue-rotate(137deg)
-          brightness(92%)
-          contrast(83%);
-      }
     }
 
-    &__add-button img {
-      height: 70%;
-      width: 70%;
+    &__add-button {
+      @include img-button-style(70);
     }
-
-    &__delete-button img {
-      height: 75%;
-      width: 75%;
+    &__delete-button {
+      @include img-button-style(75);
     }
 
     &__bar-and-button {
