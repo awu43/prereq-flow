@@ -14,8 +14,14 @@ describe("AddCourseTextSearch", () => {
     cy.get("[data-id=\"CHEM 110\"]");
     cy.get("[data-id=\"CHEM 162\"]");
   });
+  it("Disables Get courses button when textarea is empty or whitespace", () => {
+    cy.get(".AddCourseTextSearch__add-courses-button").should("be.disabled");
+    cy.get(".AddCourseTextSearch__textarea").type("   ");
+    cy.get(".AddCourseTextSearch__add-courses-button").should("be.disabled");
+  });
   it("Displays an error message when no course IDs found", () => {
     cy.get(".AddCourseTextSearch__textarea").clear();
+    cy.get(".AddCourseTextSearch__textarea").type("String with no courses");
     cy.get(".AddCourseTextSearch").contains("Add courses").click();
     cy.get(".tippy-box--error");
   });

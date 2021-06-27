@@ -103,7 +103,7 @@ export default function NewFlowTextSearch({
         type="submit"
         className="AddCourseTextSearch__add-courses-button"
         onClick={AddCourses}
-        disabled={connectionError || busy}
+        disabled={connectionError || busy || !text.trim()}
       >
         Add courses
       </button>

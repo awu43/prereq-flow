@@ -74,7 +74,7 @@ export default function NewFlowTextSearch({
           type="submit"
           className="NewFlowTextSearch__get-courses-button"
           onClick={generateFlow}
-          disabled={Boolean(connectionError || busy)}
+          disabled={Boolean(connectionError || busy || !text.trim())}
         >
           Get courses
         </button>
