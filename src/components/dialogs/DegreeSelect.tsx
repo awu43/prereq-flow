@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";
@@ -44,22 +44,24 @@ export default function DegreeSelect({
 }: DegreeSelectProps) {
   const [majors, setMajors] = useState<string[]>([]);
   // const [minors, setMinors] = useState([]);
-  const majorSelectRef = useRef<HTMLSelectElement>(null);
+  const [currentlySelected, setCurrentlySelected] = useState("");
   const [
     ambiguityHandling,
     setAmbiguityHandling
   ] = useState<AmbiguityHandling>("aggressively");
 
+  useEffect(() => {
+    if (supportedMajors.length) {
+      setCurrentlySelected(supportedMajors[0]);
+    }
+  }, [supportedMajors]);
+
   function addMajor(): void {
     if (!supportedMajors.length) {
       return;
     }
-    if (majorSelectRef.current) {
-      const selectInput = majorSelectRef.current;
-      const selectedMajor = selectInput.options[selectInput.selectedIndex].label;
-      if (!majors.includes(selectedMajor) && majors.length < 3) {
-        setMajors(majors.concat([selectedMajor]));
-      }
+    if (!majors.includes(currentlySelected) && majors.length < 3) {
+      setMajors(majors.concat([currentlySelected]));
     }
   }
 
@@ -99,7 +101,7 @@ export default function DegreeSelect({
   return (
     <div className="DegreeSelect">
       <section className="majors">
-        <h3>Majors (up to 3)</h3>
+        <h3>Majors</h3>
         <ul className="majors__selected-list">
           {majorsListElems}
         </ul>
@@ -114,8 +116,12 @@ export default function DegreeSelect({
         >
           <div className="majors__bar-and-button">
             <select
-              ref={majorSelectRef}
               className="majors__select-input"
+              onChange={e => {
+                setCurrentlySelected(
+                  e.target.selectedOptions[0].textContent as string
+                );
+              }}
               disabled={Boolean(connectionError || busy)}
             >
               {supportedMajors.map(m => (
@@ -126,7 +132,12 @@ export default function DegreeSelect({
               className="majors__add-button"
               type="button"
               onClick={addMajor}
-              disabled={Boolean(connectionError || busy)}
+              disabled={Boolean(
+                connectionError
+                || busy
+                || majors.includes(currentlySelected)
+                || majors.length >= 3
+              )}
             >
               <img src="dist/icons/plus.svg" alt="Add" />
             </button>
