@@ -53,7 +53,7 @@ const WS_URL = (
     : import.meta.env.SNOWPACK_PUBLIC_DEV_WS_URL
 );
 
-const SEARCH_REGEX = /^\s*(?:[A-Z&]+ )+\d{3}\s*$/;
+const SEARCH_REGEX = /^\s*(?:[A-Z&]+ )+\d{3}\b/;
 // Strips away leading whitespace
 // Will not match if >3 numbers in ID
 
@@ -81,7 +81,7 @@ export default function AddCourseDialog({
   const [busy, setBusy] = useState(false);
   const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
 
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [searchbarInput, setSearchbarInput] = useState("");
   const [uwCourseErrorMsg, setUwErrorMsg] = useState("");
   const [textSearchErrorMsg, setTextSearchErrorMsg] = useState("");
 
@@ -134,12 +134,12 @@ export default function AddCourseDialog({
     if (!prefersReducedMotion) {
       setTimeout(() => {
         setTabIndex(0);
-        setSelectedCourse("");
+        setSearchbarInput("");
         setAutocompleteOpts([]);
       }, 100);
     } else {
       setTabIndex(0);
-      setSelectedCourse("");
+      setSearchbarInput("");
       setAutocompleteOpts([]);
     }
   }
@@ -148,7 +148,7 @@ export default function AddCourseDialog({
     // Heroku responds fast enough, no throttling/debouncing needed
     setUwErrorMsg("");
     const newValue = event.target.value.toUpperCase();
-    setSelectedCourse(newValue);
+    setSearchbarInput(newValue);
     if (newValue.trim() && websocket.current) {
       websocket.current.send(
         JSON.stringify({ campus: selectedCampus, id: `${newValue.trim()} ` })
@@ -175,7 +175,11 @@ export default function AddCourseDialog({
   async function fetchCourse(event: MouseEvent): Promise<void> {
     event.preventDefault();
 
-    const courseMatch = selectedCourse.match(SEARCH_REGEX);
+    if (!searchbarInput.trim()) {
+      return;
+    }
+
+    const courseMatch = searchbarInput.match(SEARCH_REGEX);
     if (!courseMatch) {
       setUwErrorMsg("Invalid course ID");
       searchBarRef.current?.focus();
@@ -196,7 +200,7 @@ export default function AddCourseDialog({
       const resp = await fetch(`${API_URL}/courses/${searchQuery}`);
       if (resp.ok) {
         addNewNode(await resp.json(), alwaysAtZero ? "zero" : "relative");
-        setSelectedCourse("");
+        setSearchbarInput("");
       } else if (resp.status === 404) {
         setUwErrorMsg("Course not found");
       } else {
@@ -276,14 +280,14 @@ export default function AddCourseDialog({
           visible={tabIndex === 0 && !!uwCourseErrorMsg}
         >
           <Combobox
-            onSelect={item => { setSelectedCourse(item); }}
+            onSelect={item => { setSearchbarInput(item); }}
             aria-label="Course search"
           >
             <ComboboxInput
               className="UwCourseForm__searchbar"
               ref={searchBarRef}
               placeholder="Course ID (Enter key to add)"
-              value={selectedCourse}
+              value={searchbarInput}
               onChange={onSearchChange}
               disabled={Boolean(connectionError || busy)}
             />
@@ -298,7 +302,7 @@ export default function AddCourseDialog({
           className="UwCourseForm__add-button"
           ref={addButtonRef}
           type="submit"
-          disabled={Boolean(connectionError || busy)}
+          disabled={Boolean(connectionError || busy || !searchbarInput.trim())}
           onClick={fetchCourse}
         >
           Add
