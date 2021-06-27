@@ -13,7 +13,7 @@ describe("CurriculumSelect", () => {
     cy.get(".NewFlowDialog").should("not.exist");
     cy.request("GET", "localhost:3000/curricula/A%20A").then(resp => {
       for (const course of resp.body) {
-        expect(course.id).to.match(/^A A\b/g)
+        expect(course.id).to.match(/^A A\b/g);
         cy.get(`[data-id="${course.id}"`);
       }
     });
@@ -42,8 +42,8 @@ describe("CurriculumSelect", () => {
   it("Displays Bothell curricula", () => {
     cy.get(".CampusSelect__radio-label--bothell input").check();
     cy
-    .get(".CurriculumSelect__select-input [value=\"A A\"]")
-    .should("not.exist");
+      .get(".CurriculumSelect__select-input [value=\"A A\"]")
+      .should("not.exist");
     cy.get(".CurriculumSelect__select-input [value=\"B ARAB\"]");
     cy
       .get(".CurriculumSelect__select-input [value=\"T ACCT\"]")
@@ -52,8 +52,8 @@ describe("CurriculumSelect", () => {
   it("Displays Tacoma curricula", () => {
     cy.get(".CampusSelect__radio-label--tacoma input").check();
     cy
-    .get(".CurriculumSelect__select-input [value=\"A A\"]")
-    .should("not.exist");
+      .get(".CurriculumSelect__select-input [value=\"A A\"]")
+      .should("not.exist");
     cy.get(".CurriculumSelect__select-input [value=\"T ACCT\"]");
     cy
       .get(".CurriculumSelect__select-input [value=\"B ARAB\"]")

@@ -63,4 +63,18 @@ module.exports = {
     "react/props-types": "off",
     "react/require-default-props": "off",
   },
+  overrides: [
+    {
+      files: ["**/*.spec.js"],
+      plugins: [
+        "cypress",
+      ],
+      extends: [
+        "plugin:cypress/recommended",
+      ],
+      rules: {
+        "no-undef": "off",
+      },
+    },
+  ]
 };
