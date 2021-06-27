@@ -259,13 +259,13 @@ export default function AddCourseDialog({
   }
 
   const uwCourseForm = (
-    <form className="add-uw-course">
+    <form className="UwCourseForm">
       <CampusSelect
         selectedCampus={selectedCampus}
         setSelectedCampus={setSelectedCampus}
         busy={busy}
       />
-      <div className="add-uw-course__bar-and-button">
+      <div className="UwCourseForm__bar-and-button">
         <Tippy
           className="tippy-box--error"
           content={uwCourseErrorMsg}
@@ -280,7 +280,7 @@ export default function AddCourseDialog({
             aria-label="Course search"
           >
             <ComboboxInput
-              className="add-uw-course__searchbar"
+              className="UwCourseForm__searchbar"
               ref={searchBarRef}
               placeholder="Course ID (Enter key to add)"
               value={selectedCourse}
@@ -295,7 +295,7 @@ export default function AddCourseDialog({
           </Combobox>
         </Tippy>
         <button
-          className="add-uw-course__add-button"
+          className="UwCourseForm__add-button"
           ref={addButtonRef}
           type="submit"
           disabled={Boolean(connectionError || busy)}
