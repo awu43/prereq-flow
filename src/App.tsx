@@ -187,6 +187,7 @@ export default function App({ initialElements }: AppProps) {
     function undoListener(event: KeyboardEvent): void {
       if (event.ctrlKey && event.key === "z" && !dialogOpen) {
         if (undoStack.current.length) {
+          unsetNodesSelection.current();
           redoStack.current.push(
             resetElementStates(
               flowInstance.current?.toObject().elements as Element[]
@@ -210,6 +211,7 @@ export default function App({ initialElements }: AppProps) {
     function redoListener(event: KeyboardEvent): void {
       if (event.ctrlKey && event.key === "y" && !dialogOpen) {
         if (redoStack.current.length) {
+          unsetNodesSelection.current();
           undoStack.current.push(
             resetElementStates(
               flowInstance.current?.toObject().elements as Element[]
