@@ -7,6 +7,23 @@ describe("DegreeSelect", () => {
     cy.get(".NewFlowDialog").contains("Continue").click();
     cy.get("[role=\"tablist\"]").contains("Degree").click();
   });
+  it("Generates a new flow from majors", () => {
+    cy
+      .get(".majors__select-input")
+      .select("Aeronautical and Astronautical Engineering");
+    cy.get(".majors__add-button").click();
+    cy.get(".DegreeSelect").contains("Get courses").click();
+    cy.get(".NewFlowDialog").should("not.exist");
+    cy.request(
+      "POST",
+      "localhost:3000/degrees",
+      ["Aeronautical and Astronautical Engineering"]
+    ).then(resp => {
+      for (const course of resp.body) {
+        cy.get(`[data-id="${course.id}"`);
+      }
+    });
+  });
   it("Adds a major", () => {
     cy
       .get(".majors__select-input")

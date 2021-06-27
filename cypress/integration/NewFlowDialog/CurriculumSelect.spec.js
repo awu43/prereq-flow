@@ -11,11 +11,12 @@ describe("CurriculumSelect", () => {
     cy.get(".CurriculumSelect__select-input").select("A A");
     cy.get(".CurriculumSelect").contains("Get courses").click();
     cy.get(".NewFlowDialog").should("not.exist");
-    cy
-      .get(".react-flow__node")
-      .each(node => (
-        cy.wrap(node).invoke("attr", "data-id").should("match", /^A A\b/g)
-      ));
+    cy.request("GET", "localhost:3000/curricula/A%20A").then(resp => {
+      for (const course of resp.body) {
+        expect(course.id).to.match(/^A A\b/g)
+        cy.get(`[data-id="${course.id}"`);
+      }
+    });
   });
   it("Generates a new curriculum flow with external prereqs", () => {
     cy.get(".CurriculumSelect__select-input").select("A A");
