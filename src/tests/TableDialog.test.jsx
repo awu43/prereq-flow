@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-undef */
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect } from "chai";

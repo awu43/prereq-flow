@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-undef */
 import { render } from "@testing-library/react";
 import { expect } from "chai";
 

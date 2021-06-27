@@ -1,7 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-undef */
-
 // eslint-disable-next-line import/prefer-default-export
 export const TEST_COND_IDS = {
   OR1: "OR-Jg1vC8IVRuKkAivuA3K_O",

@@ -65,6 +65,13 @@ module.exports = {
   },
   overrides: [
     {
+      files: ["**/*.test.{jsx,js}"],
+      rules: {
+        "no-undef": "off",
+        "@typescript-eslint/no-unused-expressions": "off",
+      },
+    },
+    {
       files: ["**/*.spec.js"],
       plugins: [
         "cypress",
@@ -72,9 +79,6 @@ module.exports = {
       extends: [
         "plugin:cypress/recommended",
       ],
-      rules: {
-        "no-undef": "off",
-      },
     },
   ]
 };

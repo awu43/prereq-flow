@@ -1,6 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-undef */
 import React from "react";
 import { within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-undef */
 import fs from "fs";
 import path from "path";
 
