@@ -22,6 +22,7 @@ describe("NewFlowTextSearch", () => {
     cy.get("[data-id=\"MATH 126\"]");
   });
   it("Displays an error message when no course IDs found", () => {
+    cy.get(".NewFlowTextSearch__textarea").clear();
     cy.get(".NewFlowTextSearch").contains("Get courses").click();
     cy.get(".tippy-box--error");
   });

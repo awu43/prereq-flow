@@ -13,7 +13,7 @@ describe("UwCourseForm", () => {
     cy.get(".AddCourseDialog").should("not.exist");
     cy.get("[data-id=\"CHEM 110\"]");
   });
-  it("Disables add button when searchbar is empty or only whitespace", () => {
+  it("Disables add button when searchbar is empty or whitespace", () => {
     cy.get(".UwCourseForm__add-button").should("be.disabled");
     cy.get(".UwCourseForm__searchbar").type("   ");
     cy.get(".UwCourseForm__add-button").should("be.disabled");
