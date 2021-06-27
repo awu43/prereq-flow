@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("UwCourseForm", () => {
+describe("CustomCourseForm", () => {
   beforeEach(() => {
     cy.visit("/");
     cy.get(".Header").contains("Add courses").click();

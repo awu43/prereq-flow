@@ -82,6 +82,7 @@ export default function NewFlowTextSearch({
           onChange={() => {
             setConnectTo(prev => ({ ...prev, prereq: !prev.prereq }));
           }}
+          data-cy="text-connect-to-prereqs"
         />
         Connect to existing prereqs
       </label>
@@ -93,6 +94,7 @@ export default function NewFlowTextSearch({
           onChange={() => {
             setConnectTo(prev => ({ ...prev, postreq: !prev.postreq }));
           }}
+          data-cy="text-connect-to-postreqs"
         />
         Connect to existing postreqs
       </label>

@@ -316,7 +316,7 @@ export default function AddCourseDialog({
           onChange={() => {
             setConnectTo(prev => ({ ...prev, prereq: !prev.prereq }));
           }}
-          data-cy="connect-to-prereqs"
+          data-cy="uw-connect-to-prereqs"
         />
         Connect to existing prereqs
       </label>
@@ -328,7 +328,7 @@ export default function AddCourseDialog({
           onChange={() => {
             setConnectTo(prev => ({ ...prev, postreq: !prev.postreq }));
           }}
-          data-cy="connect-to-postreqs"
+          data-cy="uw-connect-to-postreqs"
         />
         Connect to existing postreqs
       </label>
