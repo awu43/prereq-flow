@@ -10,14 +10,9 @@ import {
 import type {
   Campus,
   CurriculumData,
-  AmbiguityHandling,
   Edge,
   Element,
 } from "types/main";
-import type { ModalClass, CloseModal } from "@useDialogStatus";
-
-import "./NewFlowDialog.scss";
-import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import {
   courseIdMatch,
   isNode,
@@ -25,11 +20,16 @@ import {
   removeElements,
   generateInitialElements,
 } from "@utils";
+import type { ModalClass, CloseModal } from "@useDialogStatus";
+import usePrefersReducedMotion from "@usePrefersReducedMotion";
+
+import "./NewFlowDialog.scss";
 import ModalDialog from "./ModalDialog";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import NewFlowTextSearch from "./NewFlowTextSearch";
+import type { AmbiguityHandling } from "./AmbiguitySelect";
 
 const API_URL = (
   import.meta.env.MODE === "production"

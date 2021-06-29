@@ -5,11 +5,12 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import "./NewFlowTextSearch.scss";
-import type { SetState, AmbiguityHandling } from "types/main";
+import type { SetState } from "types/main";
 
+import "./NewFlowTextSearch.scss";
 import { courseIdMatch } from "@utils";
 import AmbiguitySelect from "./AmbiguitySelect";
+import type { AmbiguityHandling } from "./AmbiguitySelect";
 
 interface TextSearchProps {
   connectionError: boolean;

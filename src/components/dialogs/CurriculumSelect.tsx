@@ -7,9 +7,9 @@ import "tippy.js/dist/tippy.css";
 
 import type {
   SetState,
-  AmbiguityHandling,
   Campus,
 } from "types/main";
+import type { AmbiguityHandling } from "./AmbiguitySelect";
 
 import CampusSelect from "./CampusSelect";
 import AmbiguitySelect from "./AmbiguitySelect";

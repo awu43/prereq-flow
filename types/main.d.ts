@@ -99,7 +99,7 @@ export interface ConnectTo {
   prereq: boolean;
   postreq: boolean;
 }
-export type AmbiguityHandling = "aggressively" | "cautiously";
+
 export type NewCoursePosition = "zero" | "relative";
 
 export type ContextTargetStatus = CourseStatus | "" | "concurrent";

@@ -25,8 +25,8 @@ import type {
   NodeDataMap,
   ElemIndexMap,
   ConnectTo,
-  AmbiguityHandling,
 } from "types/main";
+import type { AmbiguityHandling } from "./components/dialogs/AmbiguitySelect";
 
 // Wrapped to narrow type
 export function isNode(elem: Element): elem is Node {
