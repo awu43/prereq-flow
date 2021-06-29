@@ -19,6 +19,7 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 import type {
+  Campus,
   CourseData,
   CourseNode,
   Element,
@@ -36,7 +37,6 @@ import {
 import "./AddCourseDialog.scss";
 import ModalDialog from "./ModalDialog";
 import CampusSelect from "./CampusSelect";
-import type { Campus } from "./CampusSelect";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
 

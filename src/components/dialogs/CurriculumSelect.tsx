@@ -7,11 +7,11 @@ import "tippy.js/dist/tippy.css";
 
 import type {
   SetState,
+  Campus,
 } from "types/main";
 import type { AmbiguityHandling } from "./AmbiguitySelect";
 
 import CampusSelect from "./CampusSelect";
-import type { Campus } from "./CampusSelect";
 import AmbiguitySelect from "./AmbiguitySelect";
 
 import "./CurriculumSelect.scss";
