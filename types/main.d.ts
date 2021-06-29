@@ -6,8 +6,6 @@ import type {
 
 export { XYPosition } from "react-flow-renderer";
 
-export type Campus = "Seattle" | "Bothell" | "Tacoma";
-
 export interface CurriculumData {
   campus: Campus;
   id: string;

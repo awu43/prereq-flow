@@ -2,7 +2,9 @@ import React from "react";
 
 import "./CampusSelect.scss";
 
-import type { SetState, Campus } from "types/main";
+import type { SetState } from "types/main";
+
+export type Campus = "Seattle" | "Bothell" | "Tacoma";
 
 interface CampusSelectProps {
   selectedCampus: Campus;

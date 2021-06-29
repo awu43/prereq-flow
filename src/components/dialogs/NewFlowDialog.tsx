@@ -8,7 +8,6 @@ import {
 } from "react-flow-renderer";
 
 import type {
-  Campus,
   CurriculumData,
   Edge,
   Element,
@@ -30,6 +29,7 @@ import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import NewFlowTextSearch from "./NewFlowTextSearch";
 import type { AmbiguityHandling } from "./AmbiguitySelect";
+import type { Campus } from "./CampusSelect";
 
 const API_URL = (
   import.meta.env.MODE === "production"
