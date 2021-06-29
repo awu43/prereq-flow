@@ -1,6 +1,14 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { XYPosition } from "react-flow-renderer";
 
+export type SetState<Type> = Dispatch<SetStateAction<Type>>;
+
+type WriteOnlyMap<K, V> = Omit<Map<K, V>, "get">;
+
+export type AlwaysDefinedMap<K, V> = WriteOnlyMap<K, V> & {
+  get: (key: K) => V;
+};
+
 export type Campus = "Seattle" | "Bothell" | "Tacoma";
 
 export type NodeId = string;
@@ -61,12 +69,6 @@ export interface Edge {
 
 export type Element = Node | Edge;
 
-type WriteOnlyMap<K, V> = Omit<Map<K, V>, "get">;
-
-export type AlwaysDefinedMap<K, V> = WriteOnlyMap<K, V> & {
-  get: (key: K) => V;
-};
-
 interface NodeDataValue {
   depth: number;
   incomingNodes: NodeId[];
@@ -81,8 +83,6 @@ type EdgeIndex = number;
 type ElementIndex = NodeIndex | EdgeIndex;
 
 export type ElemIndexMap = AlwaysDefinedMap<ElementId, ElementIndex>;
-
-export type SetState<Type> = Dispatch<SetStateAction<Type>>;
 
 export interface ConnectTo {
   prereq: boolean;
