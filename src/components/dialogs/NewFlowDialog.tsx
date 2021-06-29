@@ -9,7 +9,6 @@ import {
 
 import type {
   Campus,
-  CurriculumData,
   Edge,
   Element,
 } from "types/main";
@@ -30,6 +29,12 @@ import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import NewFlowTextSearch from "./NewFlowTextSearch";
 import type { AmbiguityHandling } from "./AmbiguitySelect";
+
+interface CurriculumData {
+  campus: Campus;
+  id: string;
+  name: string;
+}
 
 const API_URL = (
   import.meta.env.MODE === "production"
