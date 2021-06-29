@@ -27,7 +27,7 @@ import {
   courseIdMatch,
   edgeArrowId,
   COURSE_STATUS_CODES,
-} from "../utils";
+} from "@utils";
 
 interface ContextMenuProps {
   elements: Element[];

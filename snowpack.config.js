@@ -7,6 +7,10 @@ module.exports = {
     public: { url: "/", static: true },
     src: { url: "/dist" },
   },
+  alias: {
+    "@utils": "./src/utils.ts",
+    "@usePrefersReducedMotion": "./src/usePrefersReducedMotion.tsx",
+  },
   plugins: [
     "@snowpack/plugin-react-refresh",
     "@snowpack/plugin-dotenv",

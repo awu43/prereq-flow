@@ -18,20 +18,19 @@ import type {
 } from "types/main";
 
 import "./NewFlowDialog.scss";
-import ModalDialog from "./ModalDialog";
-import PreWarning from "./PreWarning";
-import DegreeSelect from "./DegreeSelect";
-import CurriculumSelect from "./CurriculumSelect";
-import NewFlowTextSearch from "./NewFlowTextSearch";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion";
-
+import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import {
   courseIdMatch,
   isNode,
   isEdge,
   removeElements,
   generateInitialElements,
-} from "../../utils";
+} from "@utils";
+import ModalDialog from "./ModalDialog";
+import PreWarning from "./PreWarning";
+import DegreeSelect from "./DegreeSelect";
+import CurriculumSelect from "./CurriculumSelect";
+import NewFlowTextSearch from "./NewFlowTextSearch";
 
 const API_URL = (
   import.meta.env.MODE === "production"

@@ -12,7 +12,7 @@ import type {
 
 import "./AddCourseTextSearch.scss";
 
-import { courseIdMatch } from "../../utils";
+import { courseIdMatch } from "@utils";
 
 interface TextSearchProps {
   tabIndex: number;

@@ -30,16 +30,16 @@ import type {
   NewCoursePosition,
 } from "types/main";
 
+import usePrefersReducedMotion from "@usePrefersReducedMotion";
+import {
+  newCourseNode,
+  generateInitialElements,
+} from "@utils";
 import "./AddCourseDialog.scss";
 import ModalDialog from "./ModalDialog";
 import CampusSelect from "./CampusSelect";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion";
-import {
-  newCourseNode,
-  generateInitialElements,
-} from "../../utils";
 
 const API_URL = (
   import.meta.env.MODE === "production"

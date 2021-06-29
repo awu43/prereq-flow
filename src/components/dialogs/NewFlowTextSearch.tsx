@@ -8,8 +8,8 @@ import "tippy.js/dist/tippy.css";
 import "./NewFlowTextSearch.scss";
 import type { SetState, AmbiguityHandling } from "types/main";
 
+import { courseIdMatch } from "@utils";
 import AmbiguitySelect from "./AmbiguitySelect";
-import { courseIdMatch } from "../../utils";
 
 interface TextSearchProps {
   connectionError: boolean;

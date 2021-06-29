@@ -10,12 +10,12 @@ import type {
 } from "types/main";
 
 import "./TableDialog.scss";
-import ModalDialog from "./ModalDialog";
 import {
   courseIdMatch,
   newNodeData,
   filterUnconditionalElements,
-} from "../../utils";
+} from "@utils";
+import ModalDialog from "./ModalDialog";
 
 interface TableDialogProps {
   modalCls: ModalClass;

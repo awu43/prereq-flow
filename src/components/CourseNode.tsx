@@ -10,9 +10,8 @@ import { Handle, Position } from "react-flow-renderer";
 
 import type { CourseNodeData } from "types/main";
 
-import usePrefersReducedMotion from "../usePrefersReducedMotion";
-
-import { COURSE_REGEX } from "../utils";
+import usePrefersReducedMotion from "@usePrefersReducedMotion";
+import { COURSE_REGEX } from "@utils";
 
 function markCoursesAndPreventBreaks(text: string): string {
   let innerHTML = text.replaceAll(COURSE_REGEX, "<mark>$&</mark>");

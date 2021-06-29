@@ -13,8 +13,8 @@ import type {
 } from "types/main";
 
 import "./EditDataDialog.scss";
+import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import ModalDialog from "./ModalDialog";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
 interface EditDataDialogProps {
   modalCls: ModalClass;

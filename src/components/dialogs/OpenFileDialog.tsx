@@ -19,9 +19,9 @@ import type {
   Element as ElementBeta1,
 } from "types/beta1";
 
+import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import ModalDialog from "./ModalDialog";
 import Dropzone from "./Dropzone";
-import usePrefersReducedMotion from "../../usePrefersReducedMotion";
 
 import "./OpenFileDialog.scss";
 
