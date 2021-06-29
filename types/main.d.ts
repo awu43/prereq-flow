@@ -1,8 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-
-import type {
-  XYPosition,
-} from "react-flow-renderer";
+import type { XYPosition } from "react-flow-renderer";
 
 export type Campus = "Seattle" | "Bothell" | "Tacoma";
 
@@ -76,7 +73,7 @@ export type AlwaysDefinedMap<K, V> = WriteOnlyMap<K, V> & {
   get: (key: K) => V;
 };
 
-export interface NodeDataValue {
+interface NodeDataValue {
   depth: number;
   incomingNodes: NodeId[];
   incomingEdges: EdgeId[];
@@ -87,7 +84,7 @@ export type NodeDataMap = AlwaysDefinedMap<NodeId, NodeDataValue>;
 
 type NodeIndex = number;
 type EdgeIndex = number;
-export type ElementIndex = NodeIndex | EdgeIndex;
+type ElementIndex = NodeIndex | EdgeIndex;
 
 export type ElemIndexMap = AlwaysDefinedMap<ElementId, ElementIndex>;
 
