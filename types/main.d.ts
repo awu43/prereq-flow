@@ -100,13 +100,6 @@ export interface ConnectTo {
 
 export type NewCoursePosition = "zero" | "relative";
 
-export type ContextTargetStatus = CourseStatus | "" | "concurrent";
-export interface ContextTarget {
-  target: ElementId[];
-  targetType: string;
-  targetStatus: ContextTargetStatus;
-}
-
 export type UpdateNodePos = ({ id, pos }: NodePosUpdate) => void;
 export type SelectedElements = FlowElement[];
 export type SetSelectedElements = (e: FlowElement[]) => void;

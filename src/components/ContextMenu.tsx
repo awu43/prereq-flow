@@ -19,7 +19,6 @@ import type {
   NodeDataMap,
   ElemIndexMap,
   ConnectTo,
-  ContextTarget,
 } from "types/main";
 
 import {
@@ -28,6 +27,13 @@ import {
   edgeArrowId,
   COURSE_STATUS_CODES,
 } from "@utils";
+
+type ContextTargetStatus = CourseStatus | "" | "concurrent";
+export interface ContextTarget {
+  target: ElementId[];
+  targetType: string;
+  targetStatus: ContextTargetStatus;
+}
 
 interface ContextMenuProps {
   elements: Element[];

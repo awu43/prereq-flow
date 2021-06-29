@@ -41,7 +41,6 @@ import type {
   ElemIndexMap,
   ConnectTo,
   NewCoursePosition,
-  ContextTarget,
   UpdateNodePos,
   SelectedElements,
   SetSelectedElements,
@@ -59,6 +58,7 @@ import { default as CourseNodeComponent } from "./components/CourseNode";
 import OrNode from "./components/OrNode";
 import AndNode from "./components/AndNode";
 import ContextMenu from "./components/ContextMenu";
+import type { ContextTarget } from "./components/ContextMenu";
 import CustomEdge from "./components/CustomEdge";
 import UserControls from "./components/UserControls";
 
