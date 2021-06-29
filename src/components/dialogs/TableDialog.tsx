@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react";
 
 import type { FlowElement } from "react-flow-renderer";
 
+import trashIcon from "@icons/trash.svg";
+
 import type {
   CourseNode,
   Element,
@@ -88,7 +90,7 @@ export default function TableDialog({
               setBusy(false);
             }}
           >
-            <img src="dist/icons/trash.svg" alt="Trash can" />
+            <img src={trashIcon} alt="Delete" />
           </button>
         </td>
       </tr>

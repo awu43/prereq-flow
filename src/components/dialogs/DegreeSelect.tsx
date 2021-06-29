@@ -7,6 +7,9 @@ import "tippy.js/dist/tippy.css";
 
 import { nanoid } from "nanoid";
 
+import timesIcon from "@icons/times.svg";
+import plusIcon from "@icons/plus.svg";
+
 import type { SetState } from "types/main";
 import type { AmbiguityHandling } from "./AmbiguitySelect";
 
@@ -92,7 +95,7 @@ export default function DegreeSelect({
           onClick={() => deleteMajor(m)}
           disabled={busy}
         >
-          <img src="dist/icons/times.svg" alt="Delete" />
+          <img src={timesIcon} alt="Delete" />
         </button>
       </li>
     );
@@ -140,7 +143,7 @@ export default function DegreeSelect({
                 || majors.length >= 3
               )}
             >
-              <img src="dist/icons/plus.svg" alt="Add" />
+              <img src={plusIcon} alt="Add" />
             </button>
           </div>
         </Tippy>

@@ -10,7 +10,8 @@ module.exports = {
   alias: {
     "@utils": "./src/utils.ts",
     "@usePrefersReducedMotion": "./src/usePrefersReducedMotion.tsx",
-    "@useDialogStatus": "./src/useDialogStatus",
+    "@useDialogStatus": "./src/useDialogStatus.tsx",
+    "@icons": "./src/icons",
   },
   plugins: [
     "@snowpack/plugin-react-refresh",

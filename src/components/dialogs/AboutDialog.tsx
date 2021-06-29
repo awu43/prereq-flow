@@ -1,6 +1,8 @@
 import React from "react";
 
 import type { ModalClass, CloseModal } from "@useDialogStatus";
+import githubIcon from "@icons/github.svg";
+import envelopeIcon from "@icons/envelope.svg";
 
 import "./AboutDialog.scss";
 import ModalDialog from "./ModalDialog";
@@ -34,7 +36,7 @@ export default function AboutDialog({
             rel="noreferrer"
             className="AboutDialog__github-link"
           >
-            <img src="dist/icons/github.svg" alt="Github logo" />
+            <img src={githubIcon} alt="Github logo" />
             Source code
           </a>
         </p>
@@ -45,7 +47,7 @@ export default function AboutDialog({
           href="mailto:comments@prereqflow.com"
           className="AboutDialog__email-link"
         >
-          <img src="dist/icons/envelope.svg" alt="Envelope" />
+          <img src={envelopeIcon} alt="Envelope" />
           comments@prereqflow.com
         </a>
       </p>

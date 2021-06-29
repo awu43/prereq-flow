@@ -8,6 +8,7 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
+import triangleIcon from "@icons/triangle.svg";
 
 import "./Header.scss";
 
@@ -35,7 +36,7 @@ export default function Header({ version, children }: HeaderProps) {
             type="button"
             onClick={() => setPinned(!pinned)}
           >
-            <img src="dist/icons/triangle.svg" alt="Pin header" />
+            <img src={triangleIcon} alt="Pin header" />
           </button>
         </Tippy>
         <h1>Prereq Flow</h1>

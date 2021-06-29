@@ -43,6 +43,9 @@ import type {
   NewCoursePosition,
 } from "types/main";
 
+import triangleIcon from "@icons/triangle.svg";
+import tableIcon from "@icons/table.svg";
+
 import "./App.scss";
 
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
@@ -803,7 +806,7 @@ export default function App({ initialElements }: AppProps) {
           type="button"
           onClick={() => setMinimapPinned(!minimapPinned)}
         >
-          <img src="dist/icons/triangle.svg" alt="Pin minimap" />
+          <img src={triangleIcon} alt="Show/hide minimap" />
         </button>
       </Tippy>
 
@@ -812,7 +815,7 @@ export default function App({ initialElements }: AppProps) {
         className="TableDialog__open-btn"
         onClick={openTableDlg}
       >
-        <img src="dist/icons/table.svg" alt="Open controls" />
+        <img src={tableIcon} alt="Open table dialog" />
       </button>
 
       <ReactFlowProvider>

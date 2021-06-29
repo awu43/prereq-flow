@@ -1,6 +1,8 @@
 import React from "react";
 import type { RefObject } from "react";
 
+import xBlackIcon from "@icons/x-black.svg";
+
 import "./CloseButton.scss";
 
 interface CloseButtonProps {
@@ -21,7 +23,7 @@ export default function CloseButton({
       onClick={onClick}
       disabled={disabled}
     >
-      <img src="dist/icons/x-black.svg" alt="close" />
+      <img src={xBlackIcon} alt="close" />
     </button>
   );
 }

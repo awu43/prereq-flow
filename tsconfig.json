@@ -15,6 +15,7 @@
       "@utils": ["./src/utils.ts"],
       "@usePrefersReducedMotion": ["./src/usePrefersReducedMotion.tsx"],
       "@useDialogStatus": ["./src/useDialogStatus"],
+      "@icons/*": ["./src/icons/*"],
     },
     /* noEmit - Snowpack builds (emits) files, not tsc. */
     "noEmit": true,

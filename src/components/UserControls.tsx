@@ -2,6 +2,9 @@ import React, { useState, useRef } from "react";
 
 import classNames from "classnames";
 
+import questionIcon from "@icons/question.svg";
+import chevronRightIcon from "@icons/chevron-right.svg";
+
 import "./UserControls.scss";
 
 export default function UserControls() {
@@ -18,7 +21,7 @@ export default function UserControls() {
         onClick={() => setControlsClosed(!controlsClosed)}
         // Focusing on close button causes offscreen jerk
       >
-        <img src="dist/icons/question.svg" alt="Open controls" />
+        <img src={questionIcon} alt="Open controls" />
       </button>
       <aside
         className={classNames(
@@ -48,7 +51,7 @@ export default function UserControls() {
             }}
             tabIndex={controlsClosed ? -1 : 0}
           >
-            <img src="dist/icons/chevron-right.svg" alt="Close controls" />
+            <img src={chevronRightIcon} alt="Close controls" />
           </button>
         </ul>
       </aside>
