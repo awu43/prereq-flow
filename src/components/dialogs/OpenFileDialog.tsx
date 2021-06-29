@@ -3,13 +3,12 @@ import React, { useState } from "react";
 import { isNode, isEdge } from "react-flow-renderer";
 
 import type {
-  ModalClass,
-  CloseModal,
   // CourseNode,
   Node,
   Edge,
   Element,
 } from "types/main";
+import type { ModalClass, CloseModal } from "@useDialogStatus";
 import type {
   Element as ElementBeta,
 } from "types/beta";

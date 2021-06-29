@@ -3,11 +3,10 @@ import React, { useState, useMemo } from "react";
 import type { FlowElement } from "react-flow-renderer";
 
 import type {
-  ModalClass,
-  CloseModal,
   CourseNode,
   Element,
 } from "types/main";
+import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import "./TableDialog.scss";
 import {

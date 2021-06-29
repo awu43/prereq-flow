@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { ModalClass, CloseModal } from "types/main";
+import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import "./AboutDialog.scss";
 import ModalDialog from "./ModalDialog";

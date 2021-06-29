@@ -14,6 +14,7 @@
       // More info: https://www.snowpack.dev/guides/streaming-imports
       "@utils": ["./src/utils.ts"],
       "@usePrefersReducedMotion": ["./src/usePrefersReducedMotion.tsx"],
+      "@useDialogStatus": ["./src/useDialogStatus"],
     },
     /* noEmit - Snowpack builds (emits) files, not tsc. */
     "noEmit": true,

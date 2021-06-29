@@ -10,12 +10,11 @@ import {
 import type {
   Campus,
   CurriculumData,
-  ModalClass,
-  CloseModal,
   AmbiguityHandling,
   Edge,
   Element,
 } from "types/main";
+import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import "./NewFlowDialog.scss";
 import usePrefersReducedMotion from "@usePrefersReducedMotion";

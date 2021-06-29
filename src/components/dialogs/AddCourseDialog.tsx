@@ -24,11 +24,10 @@ import type {
   CourseNode,
   Element,
   NodeDataMap,
-  ModalClass,
-  CloseModal,
   ConnectTo,
   NewCoursePosition,
 } from "types/main";
+import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import {

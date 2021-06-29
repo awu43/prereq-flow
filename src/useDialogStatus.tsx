@@ -1,7 +1,10 @@
 import { useState } from "react";
 
-import type { ModalClass, OpenModal, CloseModal } from "types/main";
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
+
+export type ModalClass = "--transparent --display-none" | "--transparent" | "";
+export type OpenModal = () => void;
+export type CloseModal = () => void;
 
 export default function useDialogStatus(): [ModalClass, OpenModal, CloseModal] {
   const [

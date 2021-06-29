@@ -8,9 +8,8 @@ import type {
   NodeId,
   CourseData,
   NodeDataMap,
-  ModalClass,
-  CloseModal,
 } from "types/main";
+import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import "./EditDataDialog.scss";
 import usePrefersReducedMotion from "@usePrefersReducedMotion";

@@ -3,7 +3,7 @@ import type { ReactNode, KeyboardEvent, RefObject } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
-import type { ModalClass } from "types/main";
+import type { ModalClass } from "@useDialogStatus";
 
 import CloseButton from "./CloseButton";
 

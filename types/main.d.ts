@@ -102,10 +102,6 @@ export interface ConnectTo {
 export type AmbiguityHandling = "aggressively" | "cautiously";
 export type NewCoursePosition = "zero" | "relative";
 
-export type ModalClass = "--transparent --display-none" | "--transparent" | "";
-export type OpenModal = () => void;
-export type CloseModal = () => void;
-
 export type ContextTargetStatus = CourseStatus | "" | "concurrent";
 export interface ContextTarget {
   target: ElementId[];
