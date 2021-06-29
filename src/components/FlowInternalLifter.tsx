@@ -2,13 +2,13 @@ import type { MutableRefObject } from "react";
 
 // https://github.com/wbkd/react-flow/blob/main/src/store/actions.ts
 import { useStoreState, useStoreActions } from "react-flow-renderer";
+import type { NodePosUpdate, FlowElement } from "react-flow-renderer";
 
-import type {
-  Element,
-  UpdateNodePos,
-  SelectedElements,
-  SetSelectedElements,
-} from "types/main";
+import type { Element } from "types/main";
+
+export type UpdateNodePos = ({ id, pos }: NodePosUpdate) => void;
+export type SelectedElements = FlowElement[];
+export type SetSelectedElements = (e: FlowElement[]) => void;
 
 interface FlowInternalLifterProps {
   updateNodePos: MutableRefObject<UpdateNodePos>;

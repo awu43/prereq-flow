@@ -41,9 +41,6 @@ import type {
   ElemIndexMap,
   ConnectTo,
   NewCoursePosition,
-  UpdateNodePos,
-  SelectedElements,
-  SetSelectedElements,
 } from "types/main";
 
 import "./App.scss";
@@ -54,6 +51,11 @@ import useDialogStatus from "./useDialogStatus";
 import Header from "./components/Header";
 import HeaderButton from "./components/HeaderButton";
 import FlowInternalLifter from "./components/FlowInternalLifter";
+import type {
+  UpdateNodePos,
+  SelectedElements,
+  SetSelectedElements,
+} from "./components/FlowInternalLifter";
 import { default as CourseNodeComponent } from "./components/CourseNode";
 import OrNode from "./components/OrNode";
 import AndNode from "./components/AndNode";

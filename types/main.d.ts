@@ -99,7 +99,3 @@ export interface ConnectTo {
 }
 
 export type NewCoursePosition = "zero" | "relative";
-
-export type UpdateNodePos = ({ id, pos }: NodePosUpdate) => void;
-export type SelectedElements = FlowElement[];
-export type SetSelectedElements = (e: FlowElement[]) => void;
