@@ -36,7 +36,7 @@ export default function Header({ version, children }: HeaderProps) {
             type="button"
             onClick={() => setPinned(!pinned)}
           >
-            <img src={triangleIcon} alt="Pin header" />
+            <img src={triangleIcon} alt="Pin/unpin header" />
           </button>
         </Tippy>
         <h1>Prereq Flow</h1>

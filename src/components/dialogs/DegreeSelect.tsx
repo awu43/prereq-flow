@@ -95,7 +95,7 @@ export default function DegreeSelect({
           onClick={() => deleteMajor(m)}
           disabled={busy}
         >
-          <img src={timesIcon} alt="Delete" />
+          <img src={timesIcon} alt="Remove" />
         </button>
       </li>
     );

@@ -23,7 +23,7 @@ export default function CloseButton({
       onClick={onClick}
       disabled={disabled}
     >
-      <img src={xBlackIcon} alt="close" />
+      <img src={xBlackIcon} alt="Close" />
     </button>
   );
 }
