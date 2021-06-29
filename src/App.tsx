@@ -12,6 +12,7 @@ import ReactFlow, {
 } from "react-flow-renderer";
 
 import type {
+  XYPosition,
   Node as FlowNode,
   Edge as FlowEdge,
   FlowElement,
@@ -26,7 +27,6 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 import type {
-  XYPosition,
   NodeId,
   EdgeId,
   ElementId,

@@ -7,9 +7,9 @@ import {
   isEdge as isEdgeBase,
   removeElements as removeElementsBase,
 } from "react-flow-renderer";
+import type { XYPosition } from "react-flow-renderer";
 
 import type {
-  XYPosition,
   NodeId,
   EdgeId,
   ElementId,

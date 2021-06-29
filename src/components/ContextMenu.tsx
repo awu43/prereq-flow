@@ -3,12 +3,12 @@
 import React from "react";
 
 import { useStoreActions } from "react-flow-renderer";
+import type { XYPosition } from "react-flow-renderer";
 
 import "./ContextMenu.scss";
 
 import type {
   CourseStatus,
-  XYPosition,
   NodeId,
   EdgeId,
   ElementId,

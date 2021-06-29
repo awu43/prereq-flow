@@ -4,8 +4,6 @@ import type {
   XYPosition,
 } from "react-flow-renderer";
 
-export { XYPosition } from "react-flow-renderer";
-
 export interface CurriculumData {
   campus: Campus;
   id: string;
