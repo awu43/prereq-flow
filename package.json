@@ -3,7 +3,6 @@
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
-    "postbuild": "node postbuild.js",
     "wtr": "web-test-runner \"src/tests/*.test.{jsx,tsx}\"",
     "mocha": "ts-mocha -r esm \"src/tests/*.test.{js,ts}\"",
     "format": "eslint --fix \"src/**/*.{jsx,js,tsx,ts}\"",
