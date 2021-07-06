@@ -7,6 +7,9 @@ import {
   getNode,
   openDialog,
 } from "./react-test-utils";
+import { _testing } from "../components/dialogs/TableDialog";
+
+const { COURSE_NUM_REGEX } = _testing;
 
 describe("<TableDialog />", () => {
   it("Sorts courses by depth", () => {
@@ -32,6 +35,19 @@ describe("<TableDialog />", () => {
     ].map(cell => cell.textContent);
     const sorted = courseIds.slice().sort((a, b) => a.localeCompare(b));
     expect(courseIds).to.eql(sorted);
+  });
+  it("Sorts courses by ID number", () => {
+    const { container } = render(newApp());
+    openDialog("TableDialog__open-btn", container);
+    const dialog = document.querySelector(".TableDialog");
+    userEvent.click(dialog.querySelector(".SortBy__radio-label--id-num"));
+    const tbody = dialog.querySelector("tbody");
+    const courseNums = [
+      ...tbody.querySelectorAll("tr > td:nth-child(2)")
+    ].map(cell => Number(cell.textContent.match(COURSE_NUM_REGEX)[0]));
+    for (let i = 1; i < courseNums.length; i++) {
+      expect(courseNums[i]).to.be.at.least(courseNums[i - 1]);
+    }
   });
   it("Sorts courses by Name", () => {
     const { container } = render(newApp());

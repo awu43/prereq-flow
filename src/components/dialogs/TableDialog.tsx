@@ -18,6 +18,8 @@ import {
 } from "@utils";
 import ModalDialog from "./ModalDialog";
 
+const COURSE_NUM_REGEX = /\b\d{3}\b/;
+
 interface TableDialogProps {
   modalCls: ModalClass;
   closeDialog: CloseModal;
@@ -48,6 +50,17 @@ export default function TableDialog({
       break;
     case "id":
       tableNodes.sort((a, b) => a.id.localeCompare(b.id));
+      break;
+    case "id-num":
+      tableNodes.sort((a, b) => {
+        const aNum = Number(
+          (a.id.match(COURSE_NUM_REGEX) ?? ["Infinity"])[0]
+        );
+        const bNum = Number(
+          (b.id.match(COURSE_NUM_REGEX) ?? ["Infinity"])[0]
+        );
+        return aNum - bNum;
+      });
       break;
     case "name":
       tableNodes.sort((a, b) => a.data.name.localeCompare(b.data.name));
@@ -128,6 +141,16 @@ export default function TableDialog({
           />
           ID
         </label>
+        <label className="SortBy__radio-label SortBy__radio-label--id-num">
+          <input
+            type="radio"
+            className="SortBy__radio-button"
+            name="sort-by"
+            checked={sortBy === "id-num"}
+            onChange={() => setSortBy("id-num")}
+          />
+          ID#
+        </label>
         <label className="SortBy__radio-label SortBy__radio-label--name">
           <input
             type="radio"
@@ -158,3 +181,5 @@ export default function TableDialog({
     </ModalDialog>
   );
 }
+
+export const _testing = { COURSE_NUM_REGEX };
