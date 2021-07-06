@@ -3,12 +3,9 @@
 .DegreeSelect {
   .majors,
   .minors {
-    align-self: flex-start;
-
     margin-bottom: 0.5rem;
 
     &__selected-list {
-      min-width: 23rem;
       height: 6rem;
       margin: 0.5rem 0;
     }
@@ -38,7 +35,6 @@
     }
 
     &__bar-and-button {
-      min-width: 23rem;
       display: flex;
       justify-content: space-between;
     }
