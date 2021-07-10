@@ -28,6 +28,8 @@ import {
   COURSE_STATUS_CODES,
 } from "@utils";
 
+const COURSE_REGEX = /^(?:[A-Z&]+ )+\d{3}$/;
+
 type ContextTargetStatus = CourseStatus | "" | "concurrent";
 export interface ContextTarget {
   target: ElementId[];
@@ -216,6 +218,28 @@ export default function ContextMenu({
             <p>Edit data</p>
           </li>
           {deleteElemsOpt}
+          {
+            COURSE_REGEX.test(targetNode)
+              ? (
+                <>
+                  <hr />
+                  <li>
+                    <p>
+                      <a
+                        href={
+                        `https://myplan.uw.edu/course/#/courses/${targetNode}`
+                      }
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Open in MyPlan
+                      </a>
+                    </p>
+                  </li>
+                </>
+              )
+              : null
+          }
         </>
       );
       break;

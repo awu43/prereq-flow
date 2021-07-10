@@ -23,6 +23,11 @@
     margin: 0.2rem 0.5rem;
   }
 
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
   li.current p {
     padding-left: 0;
     &::before {
@@ -33,7 +38,9 @@
   }
 
   li:hover {
-    color: white;
+    p, a {
+      color: white;
+    }
     background-color: gray;
   }
 }
