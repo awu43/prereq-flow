@@ -45,6 +45,13 @@
       border: 1px solid rgb(190,190,190);
       padding: 0.75rem 0.5rem;
 
+      // Name
+      &:nth-child(3) {
+        min-width: 10rem;
+        max-width: 20rem;
+      }
+
+      // Prerequisite
       &:nth-child(4) {
         min-width: 10rem;
         max-width: 30rem;
