@@ -112,12 +112,22 @@ export default function TableDialog({
       <tr key={node.id}>
         <td>{nodeData.depth}</td>
         <td
-          className={classNames(
-            node.data.nodeStatus,
-            { "course-id": COURSE_REGEX.test(node.id) }
-          )}
+          className={classNames({ "course-id": COURSE_REGEX.test(node.id) })}
         >
-          {node.id}
+          {
+            COURSE_REGEX.test(node.id)
+              ? (
+                <a
+                  className={node.data.nodeStatus}
+                  href={`https://myplan.uw.edu/course/#/courses/${node.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {node.id}
+                </a>
+              )
+              : <span className={node.data.nodeStatus}>{node.id}</span>
+          }
         </td>
         <td>{node.data.name.replace(/ (\S+?)$/, "\u00A0$1")}</td>
         {/* eslint-disable-next-line react/no-danger */}

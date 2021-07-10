@@ -72,13 +72,18 @@
       }
 
       &:nth-child(2) {
-        @each $status, $color in $flow-colors {
-          &.#{$status} {
-            text-decoration: underline $color 3px;
+        a:hover {
+          @each $status, $color in $flow-colors {
+            &.#{$status} {
+              color: white;
+              background-color: $color;
+              text-decoration: none;
+            }
           }
         }
       }
 
+      &:nth-child(2) a,
       span {
         @each $status, $color in $flow-colors {
           padding: 0 0.1rem;
