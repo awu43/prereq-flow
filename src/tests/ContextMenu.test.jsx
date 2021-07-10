@@ -1,4 +1,5 @@
-import { render } from "@testing-library/react";
+import { render, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { expect } from "chai";
 
 import {
@@ -121,6 +122,16 @@ describe("<ContextMenu />", () => {
     const MATH_125 = getNode("MATH 125", container);
     deleteFromContext(MATH_125, container);
     expect(getNode("MATH 125", container)).to.be.null;
+  });
+  it("Displays a link to MyPlan", () => {
+    const { container } = render(newApp());
+    const MATH_125 = getNode("MATH 125", container);
+    userEvent.click(MATH_125, { button: 2 });
+    const myPlanOpt = (
+      within(container.querySelector(".ContextMenu"))
+        .getByText("Open in MyPlan")
+    );
+    expect(myPlanOpt).to.not.be.null;
   });
 
   /* Edge */

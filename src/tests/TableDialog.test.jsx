@@ -61,13 +61,37 @@ describe("<TableDialog />", () => {
     const sorted = courseIds.slice().sort((a, b) => a.localeCompare(b));
     expect(courseIds).to.eql(sorted);
   });
-  it("Deletes a course", () => {
+  it("Deletes a course from the Incoming column", () => {
     const { container } = render(newApp());
     openDialog("TableDialog__open-btn", container);
     const tbody = document.querySelector(".TableDialog tbody");
     const originalNumRows = tbody.querySelectorAll("tr").length;
     userEvent.click(
-      tbody.querySelector(".TableDialog__delete-btn")
+      tbody.querySelector("tr:first-child .TableDialog__small-delete-btn")
+    );
+    const newNumRows = tbody.querySelectorAll("tr").length;
+    expect(getNode("MATH 125", container)).to.be.null;
+    expect(newNumRows).to.eql(originalNumRows - 1);
+  });
+  it("Deletes a course from the Outgoing column", () => {
+    const { container } = render(newApp());
+    openDialog("TableDialog__open-btn", container);
+    const tbody = document.querySelector(".TableDialog tbody");
+    const originalNumRows = tbody.querySelectorAll("tr").length;
+    userEvent.click(
+      tbody.querySelector("tr:nth-child(2) .TableDialog__small-delete-btn")
+    );
+    const newNumRows = tbody.querySelectorAll("tr").length;
+    expect(getNode("MATH 126", container)).to.be.null;
+    expect(newNumRows).to.eql(originalNumRows - 1);
+  });
+  it("Deletes a course from the Delete column", () => {
+    const { container } = render(newApp());
+    openDialog("TableDialog__open-btn", container);
+    const tbody = document.querySelector(".TableDialog tbody");
+    const originalNumRows = tbody.querySelectorAll("tr").length;
+    userEvent.click(
+      tbody.querySelector(".TableDialog__large-delete-btn")
     );
     const newNumRows = tbody.querySelectorAll("tr").length;
     expect(getNode("AMATH 301", container)).to.be.null;
