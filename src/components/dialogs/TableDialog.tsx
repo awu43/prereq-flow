@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from "react";
 
+import classNames from "classnames";
+
 import type { FlowElement } from "react-flow-renderer";
 
-import trashIcon from "@icons/trash.svg";
+import timesIcon from "@icons/times.svg";
 
 import type {
   CourseNode,
@@ -14,10 +16,12 @@ import "./TableDialog.scss";
 import {
   courseIdMatch,
   newNodeData,
+  newElemIndexes,
   filterUnconditionalElements,
 } from "@utils";
 import ModalDialog from "./ModalDialog";
 
+const COURSE_REGEX = /^(?:[A-Z&]+ )+\d{3}$/;
 const COURSE_NUM_REGEX = /\b\d{3}\b/;
 
 interface TableDialogProps {
@@ -35,11 +39,11 @@ export default function TableDialog({
   const [busy, setBusy] = useState(false);
   const [sortBy, setSortBy] = useState("id");
 
-  const [tableData, tableNodes] = useMemo(() => {
+  const [tableNodes, tableData] = useMemo(() => {
     const elems = filterUnconditionalElements(elements);
     const data = newNodeData(elems);
     const nodes = elems.slice(0, data.size) as CourseNode[];
-    return [data, nodes];
+    return [nodes, data];
   }, [elements]);
 
   switch (sortBy) {
@@ -69,41 +73,90 @@ export default function TableDialog({
       break;
   }
 
+  const elemIndexes = newElemIndexes(tableNodes);
+
+  function deleteCourseFunc(node: CourseNode): () => void {
+    return () => {
+      setBusy(true);
+      onElementsRemove([node]);
+      setBusy(false);
+    };
+  }
+
+  function smallDeleteButton(courseId: string): JSX.Element {
+    return (
+      <button
+        type="button"
+        className="TableDialog__small-delete-btn"
+        onClick={deleteCourseFunc(tableNodes[elemIndexes.get(courseId)])}
+      >
+        <img src={timesIcon} alt="Delete" />
+      </button>
+    );
+  }
+
   const tableRows = tableNodes.map(node => {
     const nodeData = tableData.get(node.id);
     let { prerequisite } = node.data;
     for (const match of courseIdMatch(prerequisite) ?? []) {
+      const status = (
+        tableData.has(match)
+          ? tableNodes[elemIndexes.get(match)].data.nodeStatus
+          : ""
+      );
       prerequisite = prerequisite.replace(
-        match, match.replaceAll(" ", "\u00A0")
+        match, `<span class="course-id ${status}">$&</span>`
       );
     }
     return (
       <tr key={node.id}>
         <td>{nodeData.depth}</td>
-        <td>{node.id}</td>
+        <td
+          className={classNames(
+            node.data.nodeStatus,
+            { "course-id": COURSE_REGEX.test(node.id) }
+          )}
+        >
+          {node.id}
+        </td>
         <td>{node.data.name.replace(/ (\S+?)$/, "\u00A0$1")}</td>
-        <td>{prerequisite}</td>
+        {/* eslint-disable-next-line react/no-danger */}
+        <td dangerouslySetInnerHTML={{ __html: prerequisite }} />
         <td>
           <ul>
-            {nodeData.incomingNodes.map(n => <li key={n}>{n}</li>)}
+            {nodeData.incomingNodes.map(n => (
+              <li key={n}>
+                {smallDeleteButton(n)}
+                <span
+                  className={tableNodes[elemIndexes.get(n)].data.nodeStatus}
+                >
+                  {n}
+                </span>
+              </li>
+            ))}
           </ul>
         </td>
         <td>
           <ul>
-            {nodeData.outgoingNodes.map(n => <li key={n}>{n}</li>)}
+            {nodeData.outgoingNodes.map(n => (
+              <li key={n}>
+                {smallDeleteButton(n)}
+                <span
+                  className={tableNodes[elemIndexes.get(n)].data.nodeStatus}
+                >
+                  {n}
+                </span>
+              </li>
+            ))}
           </ul>
         </td>
         <td>
           <button
             type="button"
-            className="TableDialog__delete-btn"
-            onClick={() => {
-              setBusy(true);
-              onElementsRemove([node]);
-              setBusy(false);
-            }}
+            className="TableDialog__large-delete-btn"
+            onClick={deleteCourseFunc(node)}
           >
-            <img src={trashIcon} alt="Delete" />
+            <img src={timesIcon} alt="Delete" />
           </button>
         </td>
       </tr>

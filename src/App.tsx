@@ -177,15 +177,13 @@ export default function App({ initialElements }: AppProps) {
     openFileDlgCls,
     addCourseDlgCls,
     aboutDlgCls,
-    tableDlgCls,
     editDlgCls].some(cls => !cls.includes("--display-none"))
   ), [
-    aboutDlgCls,
-    addCourseDlgCls,
-    editDlgCls,
     newFlowDlgCls,
     openFileDlgCls,
-    tableDlgCls,
+    addCourseDlgCls,
+    aboutDlgCls,
+    editDlgCls,
   ]);
 
   useEffect(() => {

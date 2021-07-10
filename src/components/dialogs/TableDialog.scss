@@ -65,32 +65,79 @@
 
     td {
       vertical-align: top;
+
+      // Depth
+      &:first-child {
+        text-align: center;
+      }
+
+      &:nth-child(2) {
+        @each $status, $color in $flow-colors {
+          &.#{$status} {
+            text-decoration: underline $color 3px;
+          }
+        }
+      }
+
+      span {
+        @each $status, $color in $flow-colors {
+          padding: 0 0.1rem;
+          border-radius: 3px;
+          &.#{$status} {
+            text-decoration: underline $color 3px;
+          }
+        }
+      }
+
+      &.course-id,
+      .course-id {
+        white-space: nowrap;
+      }
     }
 
-    td:first-child {
-      text-align: center;
-    }
-
-    td:nth-child(2) {
-      white-space: nowrap;
-    }
 
     ul {
-      list-style-type: square;
-      list-style-position: inside;
+      list-style-type: none;
     }
 
     li {
+      display: flex;
+      align-items: center;
       white-space: nowrap;
+
+      height: 1.4rem;
+
+      span {
+        height: 1.25rem;
+        line-height: 1.25rem;
+      }
+    }
+  }
+
+  &__small-delete-btn {
+    height: 1.25rem;
+    width: 1.25rem;
+    margin-right: 0.1rem;
+
+    @include img-button-style(100);
+
+    &:hover + span {
+      @each $status, $color in $flow-colors {
+        &.#{$status} {
+          color: white;
+          background-color: $color;
+          text-decoration: none;
+        }
+      }
     }
   }
 
 
-  &__delete-btn {
+  &__large-delete-btn {
     margin: 0 auto;
     height: 2rem;
     width: 2rem;
 
-    @include img-button-style(55);
+    @include img-button-style(100);
   }
 }
