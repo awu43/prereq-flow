@@ -36,7 +36,7 @@ export default function AboutDialog({
             rel="noreferrer"
             className="AboutDialog__github-link"
           >
-            <img src={githubIcon} alt="Github logo" />
+            <img src={githubIcon} alt="" />
             Source code
           </a>
         </p>
@@ -47,7 +47,7 @@ export default function AboutDialog({
           href="mailto:comments@prereqflow.com"
           className="AboutDialog__email-link"
         >
-          <img src={envelopeIcon} alt="Envelope" />
+          <img src={envelopeIcon} alt="" />
           comments@prereqflow.com
         </a>
       </p>
