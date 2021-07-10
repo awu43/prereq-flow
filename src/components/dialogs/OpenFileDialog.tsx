@@ -17,6 +17,7 @@ import type {
   Edge as EdgeBeta1,
   Element as ElementBeta1,
 } from "types/beta1";
+import type { Element as ElementBeta2 } from "types/beta2";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import ModalDialog from "./ModalDialog";
@@ -24,7 +25,7 @@ import Dropzone from "./Dropzone";
 
 import "./OpenFileDialog.scss";
 
-const SUPPORTED_VERSIONS = ["Beta", "Beta.1", "Beta.2"];
+const SUPPORTED_VERSIONS = ["Beta", "Beta.1", "Beta.2", "1.0.0"];
 const DEPRECATED_VERSIONS: string[] = [];
 export const [CURRENT_VERSION] = SUPPORTED_VERSIONS.slice(-1);
 
@@ -46,7 +47,7 @@ function betaToBeta1(elems: ElementBeta[]): ElementBeta1[] {
 // Convert default nodes to custom node
 // Change type from default to custom
 // Add concurrency data property
-function beta1ToBeta2(elems: ElementBeta1[]): Element[] {
+function beta1ToBeta2(elems: ElementBeta1[]): ElementBeta2[] {
   return elems.map(elem => (
     isEdge(elem)
       ? {
@@ -61,7 +62,16 @@ function beta1ToBeta2(elems: ElementBeta1[]): Element[] {
   ));
 }
 
-const CONVERSION_FUNCS = [betaToBeta1, beta1ToBeta2];
+// No changes
+function beta2Tov1(elems: ElementBeta2[]): Element[] {
+  return elems;
+}
+
+const CONVERSION_FUNCS = [
+  betaToBeta1,
+  beta1ToBeta2,
+  beta2Tov1,
+];
 
 interface OpenFileDialogProps {
   modalCls: ModalClass;
