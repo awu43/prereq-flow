@@ -19,9 +19,9 @@ describe("<CourseNode />", () => {
     const MATH_125 = getNode("MATH 125", container);
     userEvent.hover(MATH_125);
     const tippy = document.querySelector(".tippy-box--flow");
-    const mark = tippy.querySelector("mark");
-    expect(mark).to.not.be.null;
-    expect(mark.textContent).to.eql("MATH\u00A0124");
+    const span = tippy.querySelector(".uw-course-id");
+    expect(span).to.not.be.null;
+    expect(span.textContent).to.eql("MATH 124");
   });
   it("Highlights offered quarters", () => {
     const { container } = render(newApp());

@@ -97,6 +97,7 @@ export default function TableDialog({
 
   const tableRows = tableNodes.map(node => {
     const nodeData = tableData.get(node.id);
+
     let { prerequisite } = node.data;
     for (const match of courseIdMatch(prerequisite) ?? []) {
       const status = (
@@ -105,20 +106,53 @@ export default function TableDialog({
           : ""
       );
       prerequisite = prerequisite.replace(
-        match, `<span class="course-id ${status}">$&</span>`
+        match, `<span class="uw-course-id ${status}">$&</span>`
       );
     }
+
+    let { offered } = node.data;
+    offered = offered.replace(
+      /A(?=W|Sp|S|\b)(?=[WSp]*\.\s*$)/,
+      "<span class=\"offered-autumn\">$&</span>"
+    );
+    offered = offered.replace(
+      /(?<=A|\b)W(?=Sp|S|\b)(?=[Sp]*\.\s*$)/,
+      "<span class=\"offered-winter\">$&</span>"
+    );
+    offered = offered.replace(
+      /(?<=A|W|\b)Sp(?=S|\b)(?=S?\.\s*$)/,
+      "<span class=\"offered-spring\">$&</span>"
+    );
+    offered = offered.replace(
+      /(?<=A|W|Sp|\b)S(?=\b\.\s*$)/,
+      "<span class=\"offered-summer\">$&</span>"
+    );
+    offered = offered.replace(/\/(?!span)/g, "/\u200B");
+    for (const match of courseIdMatch(offered) ?? []) {
+      const status = (
+        tableData.has(match)
+          ? tableNodes[elemIndexes.get(match)].data.nodeStatus
+          : ""
+      );
+      offered = offered.replace(
+        match, `<span class="uw-course-id ${status}">$&</span>`
+      );
+    }
+
+    const isUwCourse = COURSE_REGEX.test(node.id);
+
     return (
       <tr key={node.id}>
         <td>{nodeData.depth}</td>
-        <td
-          className={classNames({ "course-id": COURSE_REGEX.test(node.id) })}
-        >
+        <td>
           {
-            COURSE_REGEX.test(node.id)
+            isUwCourse
               ? (
                 <a
-                  className={node.data.nodeStatus}
+                  className={classNames(
+                    { "uw-course-id": isUwCourse },
+                    node.data.nodeStatus,
+                  )}
                   href={`https://myplan.uw.edu/course/#/courses/${node.id}`}
                   target="_blank"
                   rel="noreferrer"
@@ -132,13 +166,18 @@ export default function TableDialog({
         <td>{node.data.name.replace(/ (\S+?)$/, "\u00A0$1")}</td>
         {/* eslint-disable-next-line react/no-danger */}
         <td dangerouslySetInnerHTML={{ __html: prerequisite }} />
+        {/* eslint-disable-next-line react/no-danger */}
+        <td dangerouslySetInnerHTML={{ __html: offered }} />
         <td>
           <ul>
             {nodeData.incomingNodes.map(n => (
               <li key={n}>
                 {smallDeleteButton(n)}
                 <span
-                  className={tableNodes[elemIndexes.get(n)].data.nodeStatus}
+                  className={classNames(
+                    { "uw-course-id": isUwCourse },
+                    tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                  )}
                 >
                   {n}
                 </span>
@@ -152,7 +191,10 @@ export default function TableDialog({
               <li key={n}>
                 {smallDeleteButton(n)}
                 <span
-                  className={tableNodes[elemIndexes.get(n)].data.nodeStatus}
+                  className={classNames(
+                    { "uw-course-id": isUwCourse },
+                    tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                  )}
                 >
                   {n}
                 </span>
@@ -232,6 +274,7 @@ export default function TableDialog({
             <th>ID</th>
             <th>Name</th>
             <th>Prerequisite</th>
+            <th>Offered</th>
             <th>Incoming</th>
             <th>Outgoing</th>
             <th>Delete</th>

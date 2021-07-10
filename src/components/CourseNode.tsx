@@ -14,12 +14,10 @@ import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import { COURSE_REGEX } from "@utils";
 
 function markCoursesAndPreventBreaks(text: string): string {
-  let innerHTML = text.replaceAll(COURSE_REGEX, "<mark>$&</mark>");
-  for (const match of text.match(COURSE_REGEX) ?? []) {
-    innerHTML = innerHTML.replace(match, match.replaceAll(" ", "\u00A0"));
-    // Stop courses from being split
-  }
-  innerHTML = innerHTML.replace(/ ([\S\u00A0.]+)$/, "\u00A0$1"); // Stop orphans
+  let innerHTML = text.replaceAll(
+    COURSE_REGEX, "<span class=\"uw-course-id\">$&</span>"
+  );
+  innerHTML = innerHTML.replace(/\/(?!span)/g, "/\u200B");
   return innerHTML;
 }
 
@@ -40,6 +38,10 @@ function markOfferedQuarters(text: string): string {
     /(?<=A|W|Sp|\b)S(?=\b\.\s*$)/,
     "<span class=\"offered-summer\">$&</span>"
   );
+  innerHTML = innerHTML.replace(/\/(?!span)/g, "/\u200B");
+  innerHTML = innerHTML.replaceAll(
+    COURSE_REGEX, "<span class=\"offered-jointly\">$&</span>"
+  );
   return innerHTML;
 }
 
@@ -48,7 +50,7 @@ export default function CourseNode({ data }: { data: CourseNodeData }) {
 
   const prereqHTML = markCoursesAndPreventBreaks(data.prerequisite);
   const offeredHTML = (
-    data.offered.length
+    data.offered
       ? (
         <p
           // eslint-disable-next-line react/no-danger

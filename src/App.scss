@@ -73,14 +73,35 @@ $winter-blue: hsl(210, 100%, 80%); // No change
 $spring-green: hsl(120, 100%, 85%); // -5% lightness
 $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
 
+span {
+  &.offered-autumn {
+    background: $autumn-pink;
+  }
+  &.offered-winter {
+    background: $winter-blue;
+  }
+  &.offered-spring {
+    background: $spring-green;
+  }
+  &.offered-summer {
+    background: $summer-yellow;
+  }
+}
+
 .tippy-box.tippy-box--flow {
   p {
     margin: 0.5rem 0;
   }
-  mark {
+
+  .uw-course-id {
     color: #333;
     background: rgba(white, 0.96);
     padding: 0 0.1rem;
+    white-space: nowrap;
+  }
+
+  .offered-jointly {
+    white-space: nowrap;
   }
 
   .offered-autumn,
@@ -89,18 +110,6 @@ $summer-yellow: hsl(58, 95%, 75%); // -3% lightness
   .offered-summer {
     color: black;
     padding: 0 0.1rem;
-  }
-  .offered-autumn {
-    background: $autumn-pink;
-  }
-  .offered-winter {
-    background: $winter-blue;
-  }
-  .offered-spring {
-    background: $spring-green;
-  }
-  .offered-summer {
-    background: $summer-yellow;
   }
 }
 

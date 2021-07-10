@@ -56,6 +56,18 @@
         min-width: 10rem;
         max-width: 30rem;
       }
+
+      // Offered
+      &:nth-child(5) {
+        max-width: 12.5rem;
+
+        .offered-autumn,
+        .offered-winter,
+        .offered-spring,
+        .offered-summer {
+          border-radius: 0;
+        }
+      }
     }
 
     th {
@@ -94,8 +106,7 @@
         }
       }
 
-      &.course-id,
-      .course-id {
+      .uw-course-id {
         white-space: nowrap;
       }
     }
