@@ -106,7 +106,8 @@ export default function TableDialog({
           : ""
       );
       prerequisite = prerequisite.replace(
-        match, `<span class="uw-course-id ${status}">$&</span>`
+        new RegExp(`${match}(?!")`),
+        `<a class="uw-course-id ${status}" href="https://myplan.uw.edu/course/#/courses/${match}" target="_blank" rel="noreferrer">$&</a>`
       );
     }
 
@@ -224,6 +225,9 @@ export default function TableDialog({
       contentAriaLabel="Table dialog"
     >
       <h2>Courses</h2>
+      <p className="TableDialog__prereq-warning">
+        ⚠️ Prerequisites may refer to courses that are no longer offered ⚠️
+      </p>
       <fieldset className="SortBy" disabled={busy}>
         Sort by:
         <label className="SortBy__radio-label SortBy__radio-label--depth">

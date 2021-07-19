@@ -11,11 +11,15 @@ import { _testing } from "../components/dialogs/TableDialog";
 
 const { COURSE_NUM_REGEX } = _testing;
 
+function openTableDialog() {
+  const { container } = render(newApp());
+  openDialog("TableDialog__open-btn", container);
+  return document.querySelector(".TableDialog");
+}
+
 describe("<TableDialog />", () => {
   it("Sorts courses by depth", () => {
-    const { container } = render(newApp());
-    openDialog("TableDialog__open-btn", container);
-    const dialog = document.querySelector(".TableDialog");
+    const dialog = openTableDialog();
     userEvent.click(dialog.querySelector(".SortBy__radio-label--depth"));
     const tbody = dialog.querySelector("tbody");
     const courseIds = [
@@ -25,9 +29,7 @@ describe("<TableDialog />", () => {
     expect(courseIds).to.eql(sorted);
   });
   it("Sorts courses by ID", () => {
-    const { container } = render(newApp());
-    openDialog("TableDialog__open-btn", container);
-    const dialog = document.querySelector(".TableDialog");
+    const dialog = openTableDialog();
     userEvent.click(dialog.querySelector(".SortBy__radio-label--id"));
     const tbody = dialog.querySelector("tbody");
     const courseIds = [
@@ -37,9 +39,7 @@ describe("<TableDialog />", () => {
     expect(courseIds).to.eql(sorted);
   });
   it("Sorts courses by ID number", () => {
-    const { container } = render(newApp());
-    openDialog("TableDialog__open-btn", container);
-    const dialog = document.querySelector(".TableDialog");
+    const dialog = openTableDialog();
     userEvent.click(dialog.querySelector(".SortBy__radio-label--id-num"));
     const tbody = dialog.querySelector("tbody");
     const courseNums = [
@@ -50,9 +50,7 @@ describe("<TableDialog />", () => {
     }
   });
   it("Sorts courses by Name", () => {
-    const { container } = render(newApp());
-    openDialog("TableDialog__open-btn", container);
-    const dialog = document.querySelector(".TableDialog");
+    const dialog = openTableDialog();
     userEvent.click(dialog.querySelector(".SortBy__radio-label--name"));
     const tbody = dialog.querySelector("tbody");
     const courseIds = [
@@ -60,6 +58,17 @@ describe("<TableDialog />", () => {
     ].map(cell => cell.textContent);
     const sorted = courseIds.slice().sort((a, b) => a.localeCompare(b));
     expect(courseIds).to.eql(sorted);
+  });
+  it("Links ID column to MyPlan", () => {
+    const dialog = openTableDialog();
+    expect(dialog.querySelector("a[href=\"https://myplan.uw.edu/course/#/courses/AMATH 301\"][class=\"uw-course-id one-away\"]")).to.not.be.null;
+  });
+  it("Links Prerequisite column to MyPlan", () => {
+    const dialog = openTableDialog();
+    const prerequisite = dialog.querySelector("tbody tr td:nth-child(4)");
+    expect(prerequisite.querySelector("a[href=\"https://myplan.uw.edu/course/#/courses/MATH 125\"][class=\"uw-course-id ready\"]")).to.not.be.null;
+    expect(prerequisite.querySelector("a[href=\"https://myplan.uw.edu/course/#/courses/Q SCI 292\"][class=\"uw-course-id \"]")).to.not.be.null;
+    expect(prerequisite.querySelector("a[href=\"https://myplan.uw.edu/course/#/courses/MATH 135\"][class=\"uw-course-id ready\"]")).to.not.be.null;
   });
   it("Deletes a course from the Incoming column", () => {
     const { container } = render(newApp());

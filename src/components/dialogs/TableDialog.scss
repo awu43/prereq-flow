@@ -10,6 +10,10 @@
     left: calc(100% - 1.5rem);
   }
 
+  &__prereq-warning {
+    margin-bottom: 1rem;
+  }
+
   .SortBy {
     margin: 0.25rem 0;
     border: none;
@@ -55,6 +59,14 @@
       &:nth-child(4) {
         min-width: 10rem;
         max-width: 30rem;
+
+        a[class="uw-course-id "] {
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
       }
 
       // Offered
@@ -83,7 +95,8 @@
         text-align: center;
       }
 
-      &:nth-child(2) {
+      &:nth-child(2),
+      &:nth-child(4) {
         a:hover {
           @each $status, $color in $flow-colors {
             &.#{$status} {
@@ -96,6 +109,7 @@
       }
 
       &:nth-child(2) a,
+      &:nth-child(4) a,
       span {
         @each $status, $color in $flow-colors {
           padding: 0 0.1rem;
