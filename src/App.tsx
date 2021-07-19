@@ -826,7 +826,7 @@ export default function App({ initialElements }: AppProps) {
         />
         <ReactFlow
           // Flow View
-          minZoom={0.25}
+          minZoom={0.2}
           // Instance
           onLoad={onLoad}
           // Basic Props
