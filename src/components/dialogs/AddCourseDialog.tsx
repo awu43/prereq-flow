@@ -148,7 +148,7 @@ export default function AddCourseDialog({
     setUwErrorMsg("");
     const newValue = event.target.value.toUpperCase();
     setSearchbarInput(newValue);
-    if (newValue.trim() && websocket.current) {
+    if (newValue.trim() && websocket.current?.readyState === 1) {
       websocket.current.send(
         JSON.stringify({ campus: selectedCampus, id: `${newValue.trim()} ` })
       );
