@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect } from "chai";
 
@@ -23,11 +23,18 @@ describe("<CourseNode />", () => {
     expect(span).to.not.be.null;
     expect(span.textContent).to.eql("MATH 124");
   });
-  it("Highlights offered quarters", () => {
+  it("Highlights offered quarters", async () => {
     const { container } = render(newApp());
     const MATH_125 = getNode("MATH 125", container);
     userEvent.hover(MATH_125);
-    const tippy = document.querySelector(".tippy-box--flow");
+    await waitFor(() => {
+      expect(document.querySelector(".tippy-box--flow[data-state=\"visible\"]"))
+        .to.not.be.null;
+    });
+    // Wait for tippy to appear
+    const tippy = document.querySelector(
+      ".tippy-box--flow[data-state=\"visible\"]"
+    );
     expect(tippy.querySelector("span.offered-autumn")).to.not.be.null;
     expect(tippy.querySelector("span.offered-winter")).to.not.be.null;
     expect(tippy.querySelector("span.offered-spring")).to.not.be.null;

@@ -3,8 +3,9 @@
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
-    "wtr": "web-test-runner \"src/tests/*.test.{jsx,tsx}\"",
     "mocha": "ts-mocha -r esm \"src/tests/*.test.{js,ts}\"",
+    "wtr": "web-test-runner \"src/tests/*.test.{jsx,tsx}\"",
+    "cypress": "cypress open",
     "format": "eslint --fix \"src/**/*.{jsx,js,tsx,ts}\"",
     "lint": "eslint \"src/**/*.{jsx,js,tsx,ts}\""
   },
