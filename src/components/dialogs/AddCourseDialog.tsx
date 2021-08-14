@@ -30,27 +30,22 @@ import type {
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
-import {
-  newCourseNode,
-  generateInitialElements,
-} from "@utils";
+import { newCourseNode, generateInitialElements } from "@utils";
 import "./AddCourseDialog.scss";
 import ModalDialog from "./ModalDialog";
 import CampusSelect from "./CampusSelect";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
 
-const API_URL = (
+const API_URL =
   import.meta.env.MODE === "production"
     ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
-    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
-);
+    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL;
 
-const WS_URL = (
+const WS_URL =
   import.meta.env.MODE === "production"
     ? import.meta.env.SNOWPACK_PUBLIC_PROD_WS_URL
-    : import.meta.env.SNOWPACK_PUBLIC_DEV_WS_URL
-);
+    : import.meta.env.SNOWPACK_PUBLIC_DEV_WS_URL;
 
 const SEARCH_REGEX = /^\s*(?:[A-Z&]+ )+\d{3}\b/;
 // Strips away leading whitespace
@@ -73,7 +68,7 @@ export default function AddCourseDialog({
   nodeData,
   addCourseNode,
   addExternalFlow,
-}: AddCourseDialogProps) {
+}: AddCourseDialogProps): JSX.Element {
   const [tabIndex, setTabIndex] = useState(0);
 
   const [connectionError, setConnectionError] = useState(false);
@@ -84,10 +79,9 @@ export default function AddCourseDialog({
   const [uwCourseErrorMsg, setUwErrorMsg] = useState("");
   const [textSearchErrorMsg, setTextSearchErrorMsg] = useState("");
 
-  const [
-    autocompleteOpts,
-    setAutocompleteOpts
-  ] = useState<ComboboxOptionProps[]>([]);
+  const [autocompleteOpts, setAutocompleteOpts] = useState<
+    ComboboxOptionProps[]
+  >([]);
 
   const searchBarRef = useRef<HTMLInputElement>(null);
   const addButtonRef = useRef<HTMLButtonElement>(null);
@@ -106,7 +100,7 @@ export default function AddCourseDialog({
           <ComboboxOption key={courseData.id} value={courseData.id}>
             <ComboboxOptionText />: {courseData.name}
           </ComboboxOption>
-        ))
+        )),
       );
     });
     wsConnection.addEventListener("error", event => {
@@ -150,7 +144,7 @@ export default function AddCourseDialog({
     setSearchbarInput(newValue);
     if (newValue.trim() && websocket.current?.readyState === 1) {
       websocket.current.send(
-        JSON.stringify({ campus: selectedCampus, id: `${newValue.trim()} ` })
+        JSON.stringify({ campus: selectedCampus, id: `${newValue.trim()} ` }),
       );
       // Adding a trailing space seems to improve accuracy for some reason
     } else {
@@ -158,14 +152,11 @@ export default function AddCourseDialog({
     }
   }
 
-  function addNewNode(
-    data: CourseData,
-    position: NewCoursePosition
-  ): void {
+  function addNewNode(data: CourseData, position: NewCoursePosition): void {
     const node = newCourseNode(data);
     node.position = {
       x: Math.random() * 150,
-      y: Math.random() * 300
+      y: Math.random() * 300,
     };
     // Add fuzzing to stop multiple nodes from piling
     addCourseNode(node, connectTo, position);
@@ -279,7 +270,7 @@ export default function AddCourseDialog({
           visible={tabIndex === 0 && !!uwCourseErrorMsg}
         >
           <Combobox
-            onSelect={item => { setSearchbarInput(item); }}
+            onSelect={item => setSearchbarInput(item)}
             aria-label="Course search"
           >
             <ComboboxInput
@@ -291,9 +282,7 @@ export default function AddCourseDialog({
               disabled={Boolean(connectionError || busy)}
             />
             <ComboboxPopover>
-              <ComboboxList>
-                {autocompleteOpts}
-              </ComboboxList>
+              <ComboboxList>{autocompleteOpts}</ComboboxList>
             </ComboboxPopover>
           </Combobox>
         </Tippy>
@@ -351,9 +340,7 @@ export default function AddCourseDialog({
       contentCls="AddCourseDialog"
       contentAriaLabel="Add course dialog"
     >
-      <h2 className={connectionError ? "connection-error" : ""}>
-        Add courses
-      </h2>
+      <h2 className={connectionError ? "connection-error" : ""}>Add courses</h2>
       <Tabs onChange={i => setTabIndex(i)}>
         <TabList>
           <Tab disabled={busy}>UW course</Tab>
@@ -362,9 +349,7 @@ export default function AddCourseDialog({
         </TabList>
 
         <TabPanels>
-          <TabPanel>
-            {uwCourseForm}
-          </TabPanel>
+          <TabPanel>{uwCourseForm}</TabPanel>
           <TabPanel className="AddCourseDialog__custom-course-tab-panel">
             <CustomCourseForm
               tabIndex={tabIndex}
