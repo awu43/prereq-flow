@@ -37,6 +37,7 @@ module.exports = {
 
     "import/no-named-default": 0,
     "no-continue": 0,
+    "no-underscore-dangle": 0,
   },
   overrides: [
     {
@@ -50,6 +51,7 @@ module.exports = {
       rules: {
         "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
         "import/no-unresolved": 0,
+        "@typescript-eslint/no-inferrable-types": 0,
 
         "no-use-before-define": 0,
         "@typescript-eslint/no-use-before-define": 2,
