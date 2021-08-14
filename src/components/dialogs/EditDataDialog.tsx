@@ -4,11 +4,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import type {
-  NodeId,
-  CourseData,
-  NodeDataMap,
-} from "types/main";
+import type { NodeId, CourseData, NodeDataMap } from "types/main";
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import "./EditDataDialog.scss";
@@ -30,8 +26,9 @@ export default function EditDataDialog({
   nodeData,
   saveCourseData,
   resetSelectedElements,
-}: EditDataDialogProps) {
+}: EditDataDialogProps): JSX.Element {
   const [busy, setBusy] = useState(false);
+  // TODO: Try reducer
   const [courseData, setCourseData] = useState<CourseData>({
     id: "",
     name: "",
@@ -84,14 +81,10 @@ export default function EditDataDialog({
             duration={0}
             offset={[0, 5]}
             visible={
-              (
-                nodeData.has(courseData.id)
-                && courseData.id !== originalData.id
-              )
-              && (
-                !modalCls.includes("--transparent")
-                && !modalCls.includes("--display-none")
-              )
+              nodeData.has(courseData.id) &&
+              courseData.id !== originalData.id &&
+              !modalCls.includes("--transparent") &&
+              !modalCls.includes("--display-none")
             }
           >
             <input
@@ -101,9 +94,12 @@ export default function EditDataDialog({
               required={true}
               placeholder="Course ID (required)"
               value={courseData.id}
-              onChange={e => setCourseData({
-                ...courseData, id: e.target.value
-              })}
+              onChange={e =>
+                setCourseData({
+                  ...courseData,
+                  id: e.target.value,
+                })
+              }
             />
           </Tippy>
           <input
@@ -112,9 +108,12 @@ export default function EditDataDialog({
             type="text"
             placeholder="Course name"
             value={courseData.name}
-            onChange={e => setCourseData({
-              ...courseData, name: e.target.value
-            })}
+            onChange={e =>
+              setCourseData({
+                ...courseData,
+                name: e.target.value,
+              })
+            }
           />
           <input
             disabled={busy}
@@ -122,9 +121,12 @@ export default function EditDataDialog({
             type="text"
             placeholder="Credits"
             value={courseData.credits}
-            onChange={e => setCourseData({
-              ...courseData, credits: e.target.value
-            })}
+            onChange={e =>
+              setCourseData({
+                ...courseData,
+                credits: e.target.value,
+              })
+            }
           />
         </div>
         <textarea
@@ -132,11 +134,13 @@ export default function EditDataDialog({
           className="EditDataForm__description-input"
           placeholder="Description"
           value={courseData.description}
-          onChange={e => setCourseData({
-            ...courseData, description: e.target.value
-          })}
-        >
-        </textarea>
+          onChange={e =>
+            setCourseData({
+              ...courseData,
+              description: e.target.value,
+            })
+          }
+        ></textarea>
         <div className="EditDataForm__footer-row">
           <input
             disabled={busy}
@@ -144,9 +148,12 @@ export default function EditDataDialog({
             type="text"
             placeholder="Prerequisite"
             value={courseData.prerequisite}
-            onChange={e => setCourseData({
-              ...courseData, prerequisite: e.target.value
-            })}
+            onChange={e =>
+              setCourseData({
+                ...courseData,
+                prerequisite: e.target.value,
+              })
+            }
           />
           <input
             disabled={busy}
@@ -154,9 +161,12 @@ export default function EditDataDialog({
             type="text"
             placeholder="Offered"
             value={courseData.offered}
-            onChange={e => setCourseData({
-              ...courseData, offered: e.target.value
-            })}
+            onChange={e =>
+              setCourseData({
+                ...courseData,
+                offered: e.target.value,
+              })
+            }
           />
         </div>
         <button
@@ -164,10 +174,11 @@ export default function EditDataDialog({
           className="EditDataForm__add-button"
           onClick={save}
           disabled={
-        !courseData.id.trim()
-        || (nodeData.has(courseData.id) && courseData.id !== originalData.id)
-        || busy
-      }
+            !courseData.id.trim() ||
+            (nodeData.has(courseData.id) &&
+              courseData.id !== originalData.id) ||
+            busy
+          }
         >
           Save
         </button>
