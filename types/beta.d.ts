@@ -1,6 +1,4 @@
-import type {
-  XYPosition,
-} from "react-flow-renderer";
+import type { XYPosition } from "react-flow-renderer";
 
 type NodeId = string;
 type EdgeId = string;
@@ -15,10 +13,11 @@ interface CourseData {
   offered: string;
 }
 
-type CourseStatus = (
-  "completed" | "enrolled" | "ready"
-  | `${"under-one" | "one" | "over-one"}-away`
-);
+type CourseStatus =
+  | "completed"
+  | "enrolled"
+  | "ready"
+  | `${"under-one" | "one" | "over-one"}-away`;
 
 interface NodeData extends CourseData {
   nodeStatus: CourseStatus;

@@ -12,10 +12,11 @@ interface CourseData {
   offered: string;
 }
 
-type CourseStatus = (
-  "completed" | "enrolled" | "ready"
-  | `${"under-one" | "one" | "over-one"}-away`
-);
+type CourseStatus =
+  | "completed"
+  | "enrolled"
+  | "ready"
+  | `${"under-one" | "one" | "over-one"}-away`;
 
 type ConditionalTypes = "or" | "and";
 
@@ -49,7 +50,7 @@ interface Edge {
   source: NodeId;
   target: NodeId;
   className: CourseStatus;
-  data: { concurrent: boolean; };
+  data: { concurrent: boolean };
   animated?: boolean;
 }
 

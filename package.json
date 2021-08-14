@@ -7,7 +7,8 @@
     "wtr": "web-test-runner \"src/tests/*.test.{jsx,tsx}\"",
     "cy": "cypress open",
     "format": "eslint --fix \"src/**/*.{jsx,js,tsx,ts}\"",
-    "lint": "eslint \"src/**/*.{jsx,js,tsx,ts}\""
+    "lint": "eslint \"src/**/*.{jsx,js,tsx,ts}\"",
+    "tscheck": "tsc --noEmit"
   },
   "browserslist": {
     "production": [

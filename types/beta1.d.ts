@@ -1,6 +1,4 @@
-import type {
-  XYPosition,
-} from "react-flow-renderer";
+import type { XYPosition } from "react-flow-renderer";
 
 type Campus = "Seattle" | "Bothell" | "Tacoma";
 
@@ -24,10 +22,11 @@ interface CourseData {
   offered: string;
 }
 
-type CourseStatus = (
-  "completed" | "enrolled" | "ready"
-  | `${"under-one" | "one" | "over-one"}-away`
-);
+type CourseStatus =
+  | "completed"
+  | "enrolled"
+  | "ready"
+  | `${"under-one" | "one" | "over-one"}-away`;
 
 type ConditionalTypes = "or" | "and";
 // type NodeTypes = "course" | ConditionalTypes;

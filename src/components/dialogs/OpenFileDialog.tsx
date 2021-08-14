@@ -24,7 +24,13 @@ import Dropzone from "./Dropzone";
 
 import "./OpenFileDialog.scss";
 
-const SUPPORTED_VERSIONS = ["Beta", "Beta.1", "Beta.2", "1.0.0"];
+// eslint-disable-next-line prettier/prettier
+const SUPPORTED_VERSIONS = [
+  "Beta",
+  "Beta.1",
+  "Beta.2",
+  "1.0.0",
+];
 const DEPRECATED_VERSIONS: string[] = [];
 export const [CURRENT_VERSION] = SUPPORTED_VERSIONS.slice(-1);
 

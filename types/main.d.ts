@@ -25,10 +25,11 @@ export interface CourseData {
   offered: string;
 }
 
-export type CourseStatus = (
-  "completed" | "enrolled" | "ready"
-  | `${"under-one" | "one" | "over-one"}-away`
-);
+export type CourseStatus =
+  | "completed"
+  | "enrolled"
+  | "ready"
+  | `${"under-one" | "one" | "over-one"}-away`;
 
 export type ConditionalTypes = "or" | "and";
 // type NodeTypes = "course" | ConditionalTypes;
@@ -65,7 +66,7 @@ export interface Edge {
   source: NodeId;
   target: NodeId;
   className: CourseStatus;
-  data: { concurrent: boolean; };
+  data: { concurrent: boolean };
   animated?: boolean;
 }
 
