@@ -32,6 +32,11 @@ module.exports = {
         svg: "always",
       },
     ],
+    "no-param-reassign": [2, { props: false }],
+    "no-plusplus": [2, { allowForLoopAfterthoughts: true }],
+
+    "import/no-named-default": 0,
+    "no-continue": 0,
   },
   overrides: [
     {
@@ -43,13 +48,23 @@ module.exports = {
       parser: "@typescript-eslint/parser",
       plugins: ["@typescript-eslint"],
       rules: {
-        "import/no-unresolved": 0,
         "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
+        "import/no-unresolved": 0,
 
         "no-use-before-define": 0,
         "@typescript-eslint/no-use-before-define": 2,
         "import/no-duplicates": 0,
         "@typescript-eslint/no-duplicate-imports": 2,
+        "no-unused-vars": 0,
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            varsIgnorePattern: "^_",
+            argsIgnorePattern: "^_",
+          },
+        ],
+        "no-empty-function": 0,
+        "@typescript-eslint/no-empty-function": 0,
       },
     },
     {

@@ -69,7 +69,7 @@ import UserControls from "./components/UserControls";
 
 import NewFlowDialog from "./components/dialogs/NewFlowDialog";
 import OpenFileDialog, {
-  CURRENT_VERSION
+  CURRENT_VERSION,
 } from "./components/dialogs/OpenFileDialog";
 import AddCourseDialog from "./components/dialogs/AddCourseDialog";
 import AboutDialog from "./components/dialogs/AboutDialog";
@@ -100,12 +100,11 @@ const MAX_UNDO_NUM = 20;
 interface AppProps {
   initialElements: Element[];
 }
-export default function App({ initialElements }: AppProps) {
+export default function App({ initialElements }: AppProps): JSX.Element {
   const [newFlowDlgCls, openNewFlowDlg, closeNewFlowDlg] = useDialogStatus();
   const [openFileDlgCls, openOpenFileDlg, closeOpenFileDlg] = useDialogStatus();
-  const [
-    addCourseDlgCls, openAddCourseDlg, closeAddCourseDlg
-  ] = useDialogStatus();
+  const [addCourseDlgCls, openAddCourseDlg, closeAddCourseDlg] =
+    useDialogStatus();
   const [aboutDlgCls, openAboutDlg, closeAboutDlg] = useDialogStatus();
 
   const [minimapPinned, setMinimapPinned] = useState(true);
@@ -122,8 +121,8 @@ export default function App({ initialElements }: AppProps) {
   const [elements, setElements] = useState<Element[]>(initialElements);
   const nodeData = useRef<NodeDataMap>(newNodeData(initialElements));
   const elemIndexes = useRef<ElemIndexMap>(newElemIndexes(initialElements));
-  const undoStack = useRef<(Element[])[]>([]);
-  const redoStack = useRef<(Element[])[]>([]);
+  const undoStack = useRef<Element[][]>([]);
+  const redoStack = useRef<Element[][]>([]);
   const dragStartState = useRef<Element[]>([]);
   // Because drag start is triggered on mousedown even if no movement
   // occurs, the flow state at drag start should only be added to undo
@@ -158,7 +157,9 @@ export default function App({ initialElements }: AppProps) {
     let recalculatedElems = sortElementsByDepth(newElements, nodeData.current);
     elemIndexes.current = newElemIndexes(recalculatedElems);
     recalculatedElems = updateAllNodes(
-      recalculatedElems, nodeData.current, elemIndexes.current
+      recalculatedElems,
+      nodeData.current,
+      elemIndexes.current
     );
     return resetElementStates(recalculatedElems);
   }
@@ -172,19 +173,17 @@ export default function App({ initialElements }: AppProps) {
     redoStack.current = [];
   }
 
-  const dialogOpen = useMemo(() => ([
-    newFlowDlgCls,
-    openFileDlgCls,
-    addCourseDlgCls,
-    aboutDlgCls,
-    editDlgCls].some(cls => !cls.includes("--display-none"))
-  ), [
-    newFlowDlgCls,
-    openFileDlgCls,
-    addCourseDlgCls,
-    aboutDlgCls,
-    editDlgCls,
-  ]);
+  const dialogOpen = useMemo(
+    () =>
+      [
+        newFlowDlgCls,
+        openFileDlgCls,
+        addCourseDlgCls,
+        aboutDlgCls,
+        editDlgCls,
+      ].some(cls => !cls.includes("--display-none")),
+    [newFlowDlgCls, openFileDlgCls, addCourseDlgCls, aboutDlgCls, editDlgCls]
+  );
 
   useEffect(() => {
     function undoListener(event: KeyboardEvent): void {
@@ -201,7 +200,7 @@ export default function App({ initialElements }: AppProps) {
             if (nodeData.current.has(elem.id)) {
               updateNodePos.current({
                 id: elem.id,
-                pos: (elem as Node).position
+                pos: (elem as Node).position,
               });
             }
           }
@@ -225,7 +224,7 @@ export default function App({ initialElements }: AppProps) {
             if (nodeData.current.has(elem.id)) {
               updateNodePos.current({
                 id: elem.id,
-                pos: (elem as Node).position
+                pos: (elem as Node).position,
               });
             }
           }
@@ -249,10 +248,14 @@ export default function App({ initialElements }: AppProps) {
     let newElements = sortElementsByDepth(elems.slice(), nodeData.current);
     elemIndexes.current = newElemIndexes(newElements);
     newElements = updateAllNodes(
-      newElements, nodeData.current, elemIndexes.current
+      newElements,
+      nodeData.current,
+      elemIndexes.current
     );
     newElements = generateNewLayout(
-      newElements, elemIndexes.current, nodeData.current
+      newElements,
+      elemIndexes.current,
+      nodeData.current
     );
     setElements(newElements);
   }
@@ -272,9 +275,9 @@ export default function App({ initialElements }: AppProps) {
         flowInstance.current?.toObject().elements as Element[]
       ),
     };
-    const fileBlob = new Blob(
-      [JSON.stringify(fileContents, null, 2)], { type: "application/json" }
-    );
+    const fileBlob = new Blob([JSON.stringify(fileContents, null, 2)], {
+      type: "application/json",
+    });
     downloadLink.href = URL.createObjectURL(fileBlob);
     downloadLink.download = "untitled-flow.json";
     downloadLink.click();
@@ -283,7 +286,7 @@ export default function App({ initialElements }: AppProps) {
   function addCourseNode(
     newNode: CourseNode,
     connectTo: ConnectTo,
-    newCoursePosition: NewCoursePosition = "relative",
+    newCoursePosition: NewCoursePosition = "relative"
   ): void {
     recordFlowState();
     let newElems = flowInstance.current?.toObject().elements as Element[];
@@ -294,7 +297,7 @@ export default function App({ initialElements }: AppProps) {
         nodeData.current.size,
         elemIndexes.current,
         connectTo,
-        newCoursePosition === "relative",
+        newCoursePosition === "relative"
       );
     } else {
       newElems.push(newNode);
@@ -314,7 +317,7 @@ export default function App({ initialElements }: AppProps) {
             nodeData.current.size,
             elemIndexes.current,
             connectTo,
-            false,
+            false
           );
           tempElems.pop();
         }
@@ -327,7 +330,7 @@ export default function App({ initialElements }: AppProps) {
     const tempLayout = generateNewLayout(
       JSON.parse(JSON.stringify(newElements)),
       newElemIndexes(newElements),
-      newNodeData(newElements),
+      newNodeData(newElements)
     );
     const tempIndexes = newElemIndexes(tempLayout);
     const tempData = newNodeData(tempLayout);
@@ -349,12 +352,11 @@ export default function App({ initialElements }: AppProps) {
       const tempNode = tempLayout[tempIndexes.get(id)] as Node;
       const tempPos = tempNode.position;
 
-      const newElemPos = (
-        !tempData.get(id).incomingEdges.length
-        && !tempData.get(id).outgoingEdges.length
+      const newElemPos =
+        !tempData.get(id).incomingEdges.length &&
+        !tempData.get(id).outgoingEdges.length
           ? newPosition(Math.random() * 150, Math.random() * 300 + dy)
-          : newPosition(tempPos.x, tempPos.y + dy)
-      );
+          : newPosition(tempPos.x, tempPos.y + dy);
       (newElements[ni] as Node).position = newElemPos;
     }
 
@@ -364,7 +366,9 @@ export default function App({ initialElements }: AppProps) {
   function reflowElements(): void {
     recordFlowState();
     const newElements = generateNewLayout(
-      elements, elemIndexes.current, nodeData.current
+      elements,
+      elemIndexes.current,
+      nodeData.current
     );
     setElements(newElements);
   }
@@ -428,23 +432,28 @@ export default function App({ initialElements }: AppProps) {
         newStatus as CourseStatus,
         newElements,
         nodeData.current,
-        elemIndexes.current,
+        elemIndexes.current
       );
 
       const firstDiff = nodeData.current.get(nodeId).outgoingNodes;
       for (const id of firstDiff) {
         updateNodeStatus(
-          id, newElements, nodeData.current, elemIndexes.current
+          id,
+          newElements,
+          nodeData.current,
+          elemIndexes.current
         );
       }
+      // TODO: flatmap
       const secondDiff = new Set(
-        firstDiff
-          .map(id => nodeData.current.get(id).outgoingNodes)
-          .flat()
+        firstDiff.map(id => nodeData.current.get(id).outgoingNodes).flat()
       );
       for (const id of secondDiff.values()) {
         updateNodeStatus(
-          id, newElements, nodeData.current, elemIndexes.current
+          id,
+          newElements,
+          nodeData.current,
+          elemIndexes.current
         );
       }
 
@@ -455,17 +464,14 @@ export default function App({ initialElements }: AppProps) {
   function onElementsRemove(targetElems: FlowElement[]): void {
     recordFlowState();
     setElements(
-      recalculatedElements(
-        removeElements(targetElems as Element[], elements)
-      )
+      recalculatedElements(removeElements(targetElems as Element[], elements))
     );
   }
 
   /* NODE */
   function onNodeDragStart(_event: MouseEvent, _node: FlowNode): void {
-    dragStartState.current = (
-      flowInstance.current?.toObject().elements as Element[]
-    );
+    dragStartState.current = flowInstance.current?.toObject()
+      .elements as Element[];
     setContextActive(false);
   }
 
@@ -475,12 +481,13 @@ export default function App({ initialElements }: AppProps) {
 
   function applyHoverEffectBackward(
     nodeId: NodeId,
-    newElements: Element[],
+    newElements: Element[]
   ): void {
     for (const id of nodeData.current.get(nodeId).incomingEdges) {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
-        ...newElements[i], animated: !prefersReducedMotion
+        ...newElements[i],
+        animated: !prefersReducedMotion,
       } as Edge;
     }
 
@@ -499,12 +506,13 @@ export default function App({ initialElements }: AppProps) {
 
   function applyHoverEffectForward(
     nodeId: NodeId,
-    newElements: Element[],
+    newElements: Element[]
   ): void {
     for (const id of nodeData.current.get(nodeId).outgoingEdges) {
       const i = elemIndexes.current.get(id);
       newElements[i] = {
-        ...newElements[i], animated: !prefersReducedMotion
+        ...newElements[i],
+        animated: !prefersReducedMotion,
       } as Edge;
     }
 
@@ -554,11 +562,9 @@ export default function App({ initialElements }: AppProps) {
   function onNodeContextMenu(event: MouseEvent, node: FlowNode): void {
     event.preventDefault();
     unsetNodesSelection.current();
-    const selectedIds = (
-      selectedElements.current
-        ? selectedElements.current.map(elem => elem.id)
-        : []
-    );
+    const selectedIds = selectedElements.current
+      ? selectedElements.current.map(elem => elem.id)
+      : [];
     if (selectedIds.includes(node.id)) {
       if (selectedIds.length === 1) {
         // Only one node selected
@@ -569,14 +575,16 @@ export default function App({ initialElements }: AppProps) {
         };
       } else if (!selectedIds.some(elemId => elemId.includes("->"))) {
         // Multiple nodes selected
-        const courseNodeSelected = selectedIds.some(nodeId => (
-          (elements[elemIndexes.current.get(nodeId)] as Node).type === "course"
-        ));
+        const courseNodeSelected = selectedIds.some(
+          nodeId =>
+            (elements[elemIndexes.current.get(nodeId)] as Node).type ===
+            "course"
+        );
         contextData.current = {
           target: selectedIds,
-          targetType: (
-            courseNodeSelected ? "coursemultiselect" : "conditionalmultiselect"
-          ),
+          targetType: courseNodeSelected
+            ? "coursemultiselect"
+            : "conditionalmultiselect",
           targetStatus: "",
         };
       } else {
@@ -606,8 +614,10 @@ export default function App({ initialElements }: AppProps) {
     const newEdgeId = edgeArrowId(source, target);
     const reverseEdgeId = edgeArrowId(target, source);
     // Creating a cycle causes infinite recursion in depth calculation
-    if (!elemIndexes.current.has(newEdgeId)
-        && !elemIndexes.current.has(reverseEdgeId)) {
+    if (
+      !elemIndexes.current.has(newEdgeId) &&
+      !elemIndexes.current.has(reverseEdgeId)
+    ) {
       recordFlowState();
       const newElements = resetElementStates(elements);
       // Need to "unhover" to return to base state
@@ -627,7 +637,7 @@ export default function App({ initialElements }: AppProps) {
   // { nodeId, handleId, handleType }: OnConnectStartParams
   function onConnectStart(
     _event: MouseEvent,
-    _params: OnConnectStartParams,
+    _params: OnConnectStartParams
   ): void {
     setContextActive(false);
   }
@@ -637,14 +647,16 @@ export default function App({ initialElements }: AppProps) {
     const newTarget = newConnection.target as NodeId;
     const newEdgeId = edgeArrowId(newSource, newTarget);
     const reverseEdgeId = edgeArrowId(newTarget, newSource);
-    if (!elemIndexes.current.has(newEdgeId)
-        && !elemIndexes.current.has(reverseEdgeId)) {
+    if (
+      !elemIndexes.current.has(newEdgeId) &&
+      !elemIndexes.current.has(reverseEdgeId)
+    ) {
       recordFlowState();
       setElements(prevElems => {
         const newElements = prevElems.slice();
-        const sourceNode = (
-          prevElems[elemIndexes.current.get(newSource)] as Node
-        );
+        const sourceNode = prevElems[
+          elemIndexes.current.get(newSource)
+        ] as Node;
         newElements[elemIndexes.current.get(oldEdge.id)] = {
           ...oldEdge, // Keep CC status
           id: newEdgeId,
@@ -661,16 +673,14 @@ export default function App({ initialElements }: AppProps) {
   function onEdgeContextMenu(event: MouseEvent, edge: FlowEdge): void {
     event.preventDefault();
     unsetNodesSelection.current();
-    const selectedIds = (
-      selectedElements.current // null if nothing selected, not empty array
-        ? selectedElements.current.map(elem => elem.id)
-        : []
-    );
-    const targetStatus = (
-      (elements[elemIndexes.current.get(edge.id)] as Edge).data.concurrent
-        ? "concurrent"
-        : ""
-    );
+    // selectedElements null if nothing selected, not empty array
+    const selectedIds = selectedElements.current
+      ? selectedElements.current.map(elem => elem.id)
+      : [];
+    const targetStatus = (elements[elemIndexes.current.get(edge.id)] as Edge)
+      .data.concurrent
+      ? "concurrent"
+      : "";
     if (selectedIds.includes(edge.id)) {
       if (selectedIds.length === 1) {
         contextData.current = {
@@ -704,9 +714,8 @@ export default function App({ initialElements }: AppProps) {
 
   /* SELECTION */
   function onSelectionDragStart(_event: MouseEvent, _nodes: FlowNode[]): void {
-    dragStartState.current = (
-      flowInstance.current?.toObject().elements as Element[]
-    );
+    dragStartState.current = flowInstance.current?.toObject()
+      .elements as Element[];
   }
 
   function onSelectionDragStop(_event: MouseEvent, _nodes: FlowNode[]): void {
@@ -715,16 +724,15 @@ export default function App({ initialElements }: AppProps) {
 
   function onSelectionContextMenu(event: MouseEvent, nodes: FlowNode[]): void {
     event.preventDefault();
-    const courseNodeSelected = (
-      nodes.some(node => (
+    const courseNodeSelected = nodes.some(
+      node =>
         (elements[elemIndexes.current.get(node.id)] as Node).type === "course"
-      ))
     );
     contextData.current = {
       target: nodes.map(n => n.id),
-      targetType: (
-        courseNodeSelected ? "courseselection" : "conditionalselection"
-      ),
+      targetType: courseNodeSelected
+        ? "courseselection"
+        : "conditionalselection",
       targetStatus: "",
     };
     setMouseXY(newPosition(event.clientX, event.clientY));
@@ -797,10 +805,9 @@ export default function App({ initialElements }: AppProps) {
         duration={prefersReducedMotion ? 0 : 100}
       >
         <button
-          className={classNames(
-            "react-flow__minimap-pin-button",
-            { "react-flow__minimap-pin-button--pinned": minimapPinned },
-          )}
+          className={classNames("react-flow__minimap-pin-button", {
+            "react-flow__minimap-pin-button--pinned": minimapPinned,
+          })}
           type="button"
           onClick={() => setMinimapPinned(!minimapPinned)}
         >
@@ -870,9 +877,9 @@ export default function App({ initialElements }: AppProps) {
         >
           <Background variant={BackgroundVariant.Lines} gap={32} size={1} />
           <MiniMap
-            className={classNames(
-              { "react-flow__minimap--pinned": minimapPinned },
-            )}
+            className={classNames({
+              "react-flow__minimap--pinned": minimapPinned,
+            })}
             nodeColor={node => {
               switch ((node as Node).data.nodeStatus) {
                 case "completed":
@@ -902,29 +909,31 @@ export default function App({ initialElements }: AppProps) {
           active={contextActive}
           data={contextData.current}
           xy={mouseXY}
-          setSelectionStatuses={
-            (nodeIds: NodeId[], newStatus: CourseStatus): void => {
-              resetSelectedElements.current();
-              recordFlowState();
+          setSelectionStatuses={(
+            nodeIds: NodeId[],
+            newStatus: CourseStatus
+          ): void => {
+            resetSelectedElements.current();
+            recordFlowState();
 
-              const newElements = elements.slice();
-              for (const id of nodeIds) {
-                const node = elements[elemIndexes.current.get(id)] as Node;
-                if (node.type === "course") {
-                  setNodeStatus(
-                    id, newStatus, newElements,
-                    nodeData.current, elemIndexes.current
-                  );
-                }
+            const newElements = elements.slice();
+            for (const id of nodeIds) {
+              const node = elements[elemIndexes.current.get(id)] as Node;
+              if (node.type === "course") {
+                setNodeStatus(
+                  id,
+                  newStatus,
+                  newElements,
+                  nodeData.current,
+                  elemIndexes.current
+                );
               }
-
-              setElements(
-                updateAllNodes(
-                  newElements, nodeData.current, elemIndexes.current
-                )
-              );
             }
-          }
+
+            setElements(
+              updateAllNodes(newElements, nodeData.current, elemIndexes.current)
+            );
+          }}
           toggleEdgeConcurrency={(edgeId: EdgeId): void => {
             resetSelectedElements.current();
             recordFlowState();
@@ -939,15 +948,13 @@ export default function App({ initialElements }: AppProps) {
             };
 
             setElements(
-              updateAllNodes(
-                newElements, nodeData.current, elemIndexes.current
-              )
+              updateAllNodes(newElements, nodeData.current, elemIndexes.current)
             );
           }}
           editCourseData={(courseId: NodeId): void => {
-            const targetNode = (
-              elements[elemIndexes.current.get(courseId)] as CourseNode
-            );
+            const targetNode = elements[
+              elemIndexes.current.get(courseId)
+            ] as CourseNode;
             editTargetData.current = { ...targetNode.data };
             openEditDlg();
           }}
@@ -959,7 +966,7 @@ export default function App({ initialElements }: AppProps) {
           }}
           connect={(
             targetId: NodeId,
-            to: ConnectTo = { prereq: true, postreq: true },
+            to: ConnectTo = { prereq: true, postreq: true }
           ): void => {
             resetSelectedElements.current();
             recordFlowState();
@@ -969,13 +976,13 @@ export default function App({ initialElements }: AppProps) {
               elements.slice(),
               nodeData.current.size,
               elemIndexes.current,
-              to,
+              to
             );
             setElements(recalculatedElements(newElements));
           }}
           disconnect={(
             targetIds: NodeId[],
-            from: ConnectTo = { prereq: true, postreq: true },
+            from: ConnectTo = { prereq: true, postreq: true }
           ): void => {
             resetSelectedElements.current();
             recordFlowState();
@@ -1000,20 +1007,20 @@ export default function App({ initialElements }: AppProps) {
               )
             );
           }}
-          newConditionalNode={
-            (type: ConditionalTypes, xy: XYPosition): void => {
-              resetSelectedElements.current();
-              recordFlowState();
+          newConditionalNode={(
+            type: ConditionalTypes,
+            xy: XYPosition
+          ): void => {
+            resetSelectedElements.current();
+            recordFlowState();
 
-              const newNode = newConditionalNode(
-                type, flowInstance.current?.project(xy)
-              );
+            const newNode = newConditionalNode(
+              type,
+              flowInstance.current?.project(xy)
+            );
 
-              setElements(
-                recalculatedElements(elements.concat([newNode]))
-              );
-            }
-          }
+            setElements(recalculatedElements(elements.concat([newNode])));
+          }}
           rerouteSingle={(targetId: NodeId): void => {
             resetSelectedElements.current();
             recordFlowState();
@@ -1050,8 +1057,9 @@ export default function App({ initialElements }: AppProps) {
             const numNodes = tempNodeData.size;
             for (let i = 0; i < numNodes; i++) {
               const elem = elements[i] as Node;
-              if (elem.type === "or"
-                  && tempNodeData.get(elem.id).incomingNodes.length <= 1
+              if (
+                elem.type === "or" &&
+                tempNodeData.get(elem.id).incomingNodes.length <= 1
               ) {
                 const incoming = tempNodeData.get(elem.id).incomingNodes;
                 if (incoming.length) {
@@ -1108,10 +1116,7 @@ export default function App({ initialElements }: AppProps) {
         addCourseNode={addCourseNode}
         addExternalFlow={addExternalFlow}
       />
-      <AboutDialog
-        modalCls={aboutDlgCls}
-        closeDialog={closeAboutDlg}
-      />
+      <AboutDialog modalCls={aboutDlgCls} closeDialog={closeAboutDlg} />
 
       <TableDialog
         modalCls={tableDlgCls}
