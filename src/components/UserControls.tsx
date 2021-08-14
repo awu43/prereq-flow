@@ -7,7 +7,7 @@ import chevronRightIcon from "@icons/chevron-right.svg";
 
 import "./UserControls.scss";
 
-export default function UserControls() {
+export default function UserControls(): JSX.Element {
   const [controlsClosed, setControlsClosed] = useState(true);
   const openControlsButtonRef = useRef<HTMLButtonElement>(null);
   // const closeControlsButtonRef = useRef(null);
@@ -24,23 +24,40 @@ export default function UserControls() {
         <img src={questionIcon} alt="Open controls" />
       </button>
       <aside
-        className={classNames(
-          "UserControls__content",
-          { "UserControls__content--closed": controlsClosed }
-        )}
+        className={classNames("UserControls__content", {
+          "UserControls__content--closed": controlsClosed,
+        })}
       >
         <ul>
           <li>Click for single&nbsp;select</li>
           <li>Right click for context&nbsp;menus</li>
-          <li>Hover over a node for connections and course info (click to hide&nbsp;tooltip)</li>
-          <li>Drag to create a new edge from a node when crosshair icon&nbsp;appears</li>
+          <li>
+            Hover over a node for connections and course info (click to
+            hide&nbsp;tooltip)
+          </li>
+          <li>
+            Drag to create a new edge from a node when crosshair
+            icon&nbsp;appears
+          </li>
           <li>Drag to reconnect an edge when 4-way arrow icon&nbsp;appears</li>
-          <li><kbd>Alt</kbd> + click to advance course&nbsp;status</li>
-          <li><kbd>Ctrl</kbd> + click for multiple&nbsp;select</li>
-          <li><kbd>Shift</kbd> + drag for area&nbsp;select</li>
-          <li><kbd>Del</kbd> to delete selected&nbsp;elements</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;20)</li>
-          <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo</li>
+          <li>
+            <kbd>Alt</kbd> + click to advance course&nbsp;status
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + click for multiple&nbsp;select
+          </li>
+          <li>
+            <kbd>Shift</kbd> + drag for area&nbsp;select
+          </li>
+          <li>
+            <kbd>Del</kbd> to delete selected&nbsp;elements
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>Z</kbd> to undo (max&nbsp;20)
+          </li>
+          <li>
+            <kbd>Ctrl</kbd> + <kbd>Y</kbd> to&nbsp;redo
+          </li>
           <button
             // ref={closeControlsButtonRef}
             type="button"
