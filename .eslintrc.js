@@ -17,7 +17,14 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react"],
-  rules: {},
+  rules: {
+    "no-restricted-syntax": [
+      2,
+      "ForInStatement",
+      "LabeledStatement",
+      "WithStatement",
+    ],
+  },
   overrides: [
     {
       files: ["**/*.ts?(x)"],
