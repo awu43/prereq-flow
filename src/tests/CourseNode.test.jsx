@@ -19,7 +19,7 @@ describe("<CourseNode />", () => {
     const MATH_125 = getNode("MATH 125", container);
     userEvent.hover(MATH_125);
     const tippy = document.querySelector(".tippy-box--flow");
-    const span = tippy.querySelector(".uw-course-id");
+    const span = tippy.querySelector(".uw-course-id--highlighted");
     expect(span).to.not.be.null;
     expect(span.textContent).to.eql("MATH 124");
   });

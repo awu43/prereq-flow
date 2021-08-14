@@ -94,14 +94,13 @@ span {
   }
 
   .uw-course-id {
-    color: #333;
-    background: rgba(white, 0.96);
-    padding: 0 0.1rem;
     white-space: nowrap;
-  }
 
-  .offered-jointly {
-    white-space: nowrap;
+    &--highlighted {
+      color: #333;
+      background: rgba(white, 0.96);
+      padding: 0 0.1rem;
+    }
   }
 
   .offered-autumn,

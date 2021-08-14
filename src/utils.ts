@@ -51,7 +51,7 @@ export function isConditionalNode(elem: Element): elem is ConditionalNode {
 }
 
 export const ZERO_POSITION: XYPosition = { x: 0, y: 0 };
-const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
+export const CRS = String.raw`(?:[A-Z&]+ )+\d{3}`; // COURSE_REGEX_STRING
 export const COURSE_REGEX = new RegExp(CRS, "g"); // AAA 000
 
 export function courseIdMatch(text: string): RegExpMatchArray | null {
