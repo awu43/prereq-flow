@@ -23,20 +23,20 @@ export default function FlowInternalLifter({
   setSelectedElements,
   resetSelectedElements,
   unsetNodesSelection,
-}: FlowInternalLifterProps) {
+}: FlowInternalLifterProps): null {
   updateNodePos.current = useStoreActions(state => state.updateNodePos);
   selectedElements.current = useStoreState(
-    state => state.selectedElements
+    state => state.selectedElements,
   ) as Element[];
-  setSelectedElements.current = useStoreActions(action => (
-    action.setSelectedElements
-  ));
-  resetSelectedElements.current = useStoreActions(action => (
-    action.resetSelectedElements
-  ));
-  unsetNodesSelection.current = useStoreActions(actions => (
-    actions.unsetNodesSelection
-  ));
+  setSelectedElements.current = useStoreActions(
+    action => action.setSelectedElements,
+  );
+  resetSelectedElements.current = useStoreActions(
+    action => action.resetSelectedElements,
+  );
+  unsetNodesSelection.current = useStoreActions(
+    actions => actions.unsetNodesSelection,
+  );
 
   return null;
 }
