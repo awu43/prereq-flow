@@ -5,10 +5,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import type {
-  SetState,
-  Campus,
-} from "types/main";
+import type { SetState, Campus } from "types/main";
 import type { AmbiguityHandling } from "./AmbiguitySelect";
 
 import CampusSelect from "./CampusSelect";
@@ -35,15 +32,13 @@ export default function CurriculumSelect({
   supportedCurricula,
   newCurriculumFlow,
   errorMsg,
-}: CurriculumSelectProps) {
+}: CurriculumSelectProps): JSX.Element {
   const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
   const curriculumSelectRef = useRef<HTMLSelectElement>(null);
 
   const [includeExternal, setIncludeExternal] = useState(false);
-  const [
-    ambiguityHandling,
-    setAmbiguityHandling
-  ] = useState<AmbiguityHandling>("aggressively");
+  const [ambiguityHandling, setAmbiguityHandling] =
+    useState<AmbiguityHandling>("aggressively");
 
   function getCourses(event: MouseEvent): void {
     event.preventDefault();
@@ -51,9 +46,8 @@ export default function CurriculumSelect({
 
     if (curriculumSelectRef.current) {
       const selectInput = curriculumSelectRef.current;
-      const selectedCurriculum = (
-        selectInput.options[selectInput.selectedIndex].value
-      );
+      const selectedCurriculum =
+        selectInput.options[selectInput.selectedIndex].value;
       newCurriculumFlow(selectedCurriculum, includeExternal, ambiguityHandling);
     }
   }
