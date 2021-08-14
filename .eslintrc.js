@@ -34,10 +34,12 @@ module.exports = {
     ],
     "no-param-reassign": [2, { props: false }],
     "no-plusplus": [2, { allowForLoopAfterthoughts: true }],
+    "react/jsx-boolean-value": [2, "always"],
 
     "import/no-named-default": 0,
     "no-continue": 0,
     "no-underscore-dangle": 0,
+    "no-else-return": 0,
   },
   overrides: [
     {

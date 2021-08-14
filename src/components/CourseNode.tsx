@@ -18,13 +18,14 @@ function capitalizeFirstCharacter(text: string): string {
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 }
 
-export function splitByCourses(text: string, capitalizeFirst = false): InnerText {
+export function splitByCourses(
+  text: string,
+  capitalizeFirst = false,
+): InnerText {
   if (capitalizeFirst) {
-    return (
-      capitalizeFirstCharacter(text)
-        .replaceAll("/", "/\u200B")
-        .split(new RegExp(`(${CRS})`))
-    );
+    return capitalizeFirstCharacter(text)
+      .replaceAll("/", "/\u200B")
+      .split(new RegExp(`(${CRS})`));
   } else {
     return text.replaceAll("/", "/\u200B").split(new RegExp(`(${CRS})`));
   }
@@ -41,14 +42,11 @@ export function generateUwCourseElements(
 
 function highlightUwCourses(text: string): InnerText {
   const innerHTML = splitByCourses(text, true);
-  generateUwCourseElements(
-    innerHTML,
-    (elemText, i) => (
-      <span key={i} className="uw-course-id uw-course-id--highlighted">
-        {elemText}
-      </span>
-    ),
-  );
+  generateUwCourseElements(innerHTML, (elemText, i) => (
+    <span key={i} className="uw-course-id uw-course-id--highlighted">
+      {elemText}
+    </span>
+  ));
   return innerHTML;
 }
 
@@ -78,7 +76,10 @@ export function markOfferedQuarters(innerHTML: InnerText): void {
   }
 }
 
-export default function CourseNode({ data }: { data: CourseNodeData }) {
+interface CourseNodeProps {
+  data: CourseNodeData;
+}
+export default function CourseNode({ data }: CourseNodeProps): JSX.Element {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const descriptionHTML = highlightUwCourses(data.description);
@@ -86,17 +87,20 @@ export default function CourseNode({ data }: { data: CourseNodeData }) {
   let offeredHTML = null;
   if (data.offered) {
     offeredHTML = splitByCourses(data.offered, true);
-    generateUwCourseElements(
-      offeredHTML,
-      (elemText, i) => <span key={i} className="uw-course-id">{elemText}</span>,
-    );
+    generateUwCourseElements(offeredHTML, (elemText, i) => (
+      <span key={i} className="uw-course-id">
+        {elemText}
+      </span>
+    ));
     markOfferedQuarters(offeredHTML);
     offeredHTML = <p>Offered: {offeredHTML}</p>;
   }
 
   const tippyContent = (
     <>
-      <p>{data.id} — {data.name} ({data.credits})</p>
+      <p>
+        {data.id} — {data.name} ({data.credits})
+      </p>
       <p>{descriptionHTML}</p>
       <hr />
       <p>Prerequisite: {prereqHTML}</p>
@@ -117,9 +121,9 @@ export default function CourseNode({ data }: { data: CourseNodeData }) {
       // trigger="click"
     >
       <div
-        className={classNames(
-          "CourseNode", data.nodeStatus, { connected: data.nodeConnected }
-        )}
+        className={classNames("CourseNode", data.nodeStatus, {
+          connected: data.nodeConnected,
+        })}
       >
         <Handle type="target" position={Position.Left} />
         <div>{data.id}</div>
