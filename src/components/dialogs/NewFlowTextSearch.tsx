@@ -18,7 +18,7 @@ interface TextSearchProps {
   setBusy: SetState<boolean>;
   newTextSearchFlow: (
     courses: string[],
-    ambiguityHandling: AmbiguityHandling
+    ambiguityHandling: AmbiguityHandling,
   ) => Promise<void>;
   errorMsg: string;
 }
@@ -28,12 +28,10 @@ export default function NewFlowTextSearch({
   setBusy,
   newTextSearchFlow,
   errorMsg,
-}: TextSearchProps) {
+}: TextSearchProps): JSX.Element {
   const [text, setText] = useState("");
-  const [
-    ambiguityHandling,
-    setAmbiguityHandling
-  ] = useState<AmbiguityHandling>("aggressively");
+  const [ambiguityHandling, setAmbiguityHandling] =
+    useState<AmbiguityHandling>("aggressively");
 
   function generateFlow(event: MouseEvent): void {
     event.preventDefault();
@@ -60,8 +58,7 @@ export default function NewFlowTextSearch({
           value={text}
           onChange={e => setText(e.target.value)}
           disabled={Boolean(connectionError || busy)}
-        >
-        </textarea>
+        ></textarea>
       </Tippy>
 
       <AmbiguitySelect
