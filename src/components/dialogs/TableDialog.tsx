@@ -9,16 +9,17 @@ import timesIcon from "@icons/times.svg";
 import type {
   CourseNode,
   Element,
+  InnerText,
 } from "types/main";
 import type { ModalClass, CloseModal } from "@useDialogStatus";
-
-import "./TableDialog.scss";
 import {
-  courseIdMatch,
   newNodeData,
   newElemIndexes,
   filterUnconditionalElements,
 } from "@utils";
+
+import "./TableDialog.scss";
+import { splitByCourses, QUARTER_REGEX } from "../CourseNode";
 import ModalDialog from "./ModalDialog";
 
 const COURSE_REGEX = /^(?:[A-Z&]+ )+\d{3}$/;
@@ -98,62 +99,72 @@ export default function TableDialog({
   const tableRows = tableNodes.map(node => {
     const nodeData = tableData.get(node.id);
 
-    let { prerequisite } = node.data;
-    for (const match of courseIdMatch(prerequisite) ?? []) {
-      const status = (
-        tableData.has(match)
-          ? tableNodes[elemIndexes.get(match)].data.nodeStatus
-          : ""
-      );
-      prerequisite = prerequisite.replace(
-        new RegExp(`${match}(?!")`),
-        `<a class="uw-course-id ${status}" href="https://myplan.uw.edu/course/#/courses/${match}" target="_blank" rel="noreferrer">$&</a>`
-      );
-    }
-
-    let { offered } = node.data;
-    offered = offered.replace(
-      /A(?=W|Sp|S|\b)(?=[WSp]*\.\s*$)/,
-      "<span class=\"offered-autumn\">$&</span>"
-    );
-    offered = offered.replace(
-      /(?<=A|\b)W(?=Sp|S|\b)(?=[Sp]*\.\s*$)/,
-      "<span class=\"offered-winter\">$&</span>"
-    );
-    offered = offered.replace(
-      /(?<=A|W|\b)Sp(?=S|\b)(?=S?\.\s*$)/,
-      "<span class=\"offered-spring\">$&</span>"
-    );
-    offered = offered.replace(
-      /(?<=A|W|Sp|\b)S(?=\b\.\s*$)/,
-      "<span class=\"offered-summer\">$&</span>"
-    );
-    offered = offered.replace(/\/(?!span)/g, "/\u200B");
-    for (const match of courseIdMatch(offered) ?? []) {
-      const status = (
-        tableData.has(match)
-          ? tableNodes[elemIndexes.get(match)].data.nodeStatus
-          : ""
-      );
-      offered = offered.replace(
-        match, `<span class="uw-course-id ${status}">$&</span>`
+    const prereqHTML: InnerText = splitByCourses(node.data.prerequisite);
+    for (let i = 1; i < prereqHTML.length; i += 2) {
+      const courseId = prereqHTML[i] as string;
+      prereqHTML[i] = (
+        <a
+          className={classNames(
+            "uw-course-id",
+            (tableData.has(courseId)
+              ? tableNodes[elemIndexes.get(courseId)].data.nodeStatus
+              : ""
+            ),
+          )}
+          href={`https://myplan.uw.edu/course/#/courses/${courseId}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {courseId}
+        </a>
       );
     }
 
-    const isUwCourse = COURSE_REGEX.test(node.id);
+    const offeredHTML: InnerText = splitByCourses(node.data.offered);
+    for (let i = 1; i < offeredHTML.length; i += 2) {
+      const courseId = offeredHTML[i] as string;
+      offeredHTML[i] = (
+        <span
+          key={i}
+          className={classNames(
+            "uw-course-id",
+            (tableData.has(courseId)
+              ? tableNodes[elemIndexes.get(courseId)].data.nodeStatus
+              : ""
+            ),
+          )}
+        >
+          {offeredHTML[i]}
+        </span>
+      );
+    }
+    for (const [quarter, regex] of Object.entries<RegExp>(QUARTER_REGEX)) {
+      const lastIndex = offeredHTML.length - 1;
+      const remainingText = offeredHTML[lastIndex] as string;
+      const match = remainingText.match(regex);
+      if (match) {
+        const [matchStr] = match;
+        const remainingItems: InnerText = remainingText.split(regex);
+        remainingItems.splice(
+          1,
+          0,
+          <span key={quarter} className={`offered-${quarter}`}>
+            {matchStr}
+          </span>,
+        );
+        offeredHTML.splice(lastIndex, 1, ...remainingItems);
+      }
+    }
 
     return (
       <tr key={node.id}>
         <td>{nodeData.depth}</td>
         <td>
           {
-            isUwCourse
+            COURSE_REGEX.test(node.id)
               ? (
                 <a
-                  className={classNames(
-                    { "uw-course-id": isUwCourse },
-                    node.data.nodeStatus,
-                  )}
+                  className={classNames("uw-course-id", node.data.nodeStatus)}
                   href={`https://myplan.uw.edu/course/#/courses/${node.id}`}
                   target="_blank"
                   rel="noreferrer"
@@ -165,10 +176,8 @@ export default function TableDialog({
           }
         </td>
         <td>{node.data.name.replace(/ (\S+?)$/, "\u00A0$1")}</td>
-        {/* eslint-disable-next-line react/no-danger */}
-        <td dangerouslySetInnerHTML={{ __html: prerequisite }} />
-        {/* eslint-disable-next-line react/no-danger */}
-        <td dangerouslySetInnerHTML={{ __html: offered }} />
+        <td>{prereqHTML}</td>
+        <td>{offeredHTML}</td>
         <td>
           <ul>
             {nodeData.incomingNodes.map(n => (
@@ -176,7 +185,7 @@ export default function TableDialog({
                 {smallDeleteButton(n)}
                 <span
                   className={classNames(
-                    { "uw-course-id": isUwCourse },
+                    { "uw-course-id": COURSE_REGEX.test(n) },
                     tableNodes[elemIndexes.get(n)].data.nodeStatus,
                   )}
                 >
@@ -193,7 +202,7 @@ export default function TableDialog({
                 {smallDeleteButton(n)}
                 <span
                   className={classNames(
-                    { "uw-course-id": isUwCourse },
+                    { "uw-course-id": COURSE_REGEX.test(n) },
                     tableNodes[elemIndexes.get(n)].data.nodeStatus,
                   )}
                 >

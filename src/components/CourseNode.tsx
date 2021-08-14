@@ -35,14 +35,16 @@ function highlightUwCourses(text: string): InnerText {
   return innerHTML;
 }
 
-const QUARTER_REGEX = {
+export const QUARTER_REGEX = {
   autumn: /\bA(?=W|Sp|S|\b)(?=[WSp]*\.\s*$)/,
   winter: /(?<=A|\b)W(?=Sp|S|\b)(?=[Sp]*\.\s*$)/,
   spring: /(?<=A|W|\b)Sp(?=S|\b)(?=S?\.\s*$)/,
   summer: /(?<=A|W|Sp|\b)S(?=\b\.\s*$)/,
 };
 function markOfferedQuarters(text: string): InnerText {
-  const innerHTML: InnerText = splitByCourses(text);
+  const innerHTML: InnerText = splitByCourses(
+    capitalizeFirstCharacter(text)
+  );
   for (let i = 1; i < innerHTML.length; i += 2) {
     innerHTML[i] = (
       <span key={i} className="uw-course-id">
