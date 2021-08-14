@@ -24,6 +24,14 @@ module.exports = {
       "LabeledStatement",
       "WithStatement",
     ],
+    "import/extensions": [
+      2,
+      "never",
+      {
+        json: "always",
+        svg: "always",
+      },
+    ],
   },
   overrides: [
     {
@@ -34,7 +42,15 @@ module.exports = {
       ],
       parser: "@typescript-eslint/parser",
       plugins: ["@typescript-eslint"],
-      rules: {},
+      rules: {
+        "import/no-unresolved": 0,
+        "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
+
+        "no-use-before-define": 0,
+        "@typescript-eslint/no-use-before-define": 2,
+        "import/no-duplicates": 0,
+        "@typescript-eslint/no-duplicate-imports": 2,
+      },
     },
     {
       files: ["**/*.spec.js"],

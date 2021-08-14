@@ -12,7 +12,7 @@ ReactDOM.render(
   <React.StrictMode>
     <App initialElements={demoFlow.elements as Element[]} />
   </React.StrictMode>,
-  document.getElementById("root"),
+  document.getElementById("root")
 );
 
 // Hot Module Replacement (HMR) - Remove this snippet to remove HMR.
