@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import type { ChangeEvent } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -28,7 +29,6 @@ export default function EditDataDialog({
   resetSelectedElements,
 }: EditDataDialogProps): JSX.Element {
   const [busy, setBusy] = useState(false);
-  // TODO: Try reducer
   const [courseData, setCourseData] = useState<CourseData>({
     id: "",
     name: "",
@@ -60,6 +60,12 @@ export default function EditDataDialog({
     setBusy(true);
     saveCourseData(originalData.id, courseData);
     close();
+  }
+
+  function onChangeFn(
+    key: keyof CourseData,
+  ): (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void {
+    return e => setCourseData(prev => ({ ...prev, [key]: e.target.value }));
   }
 
   return (
@@ -94,12 +100,7 @@ export default function EditDataDialog({
               required={true}
               placeholder="Course ID (required)"
               value={courseData.id}
-              onChange={e =>
-                setCourseData({
-                  ...courseData,
-                  id: e.target.value,
-                })
-              }
+              onChange={onChangeFn("id")}
             />
           </Tippy>
           <input
@@ -108,12 +109,7 @@ export default function EditDataDialog({
             type="text"
             placeholder="Course name"
             value={courseData.name}
-            onChange={e =>
-              setCourseData({
-                ...courseData,
-                name: e.target.value,
-              })
-            }
+            onChange={onChangeFn("name")}
           />
           <input
             disabled={busy}
@@ -121,12 +117,7 @@ export default function EditDataDialog({
             type="text"
             placeholder="Credits"
             value={courseData.credits}
-            onChange={e =>
-              setCourseData({
-                ...courseData,
-                credits: e.target.value,
-              })
-            }
+            onChange={onChangeFn("credits")}
           />
         </div>
         <textarea
@@ -134,12 +125,7 @@ export default function EditDataDialog({
           className="EditDataForm__description-input"
           placeholder="Description"
           value={courseData.description}
-          onChange={e =>
-            setCourseData({
-              ...courseData,
-              description: e.target.value,
-            })
-          }
+          onChange={onChangeFn("description")}
         ></textarea>
         <div className="EditDataForm__footer-row">
           <input
@@ -148,12 +134,7 @@ export default function EditDataDialog({
             type="text"
             placeholder="Prerequisite"
             value={courseData.prerequisite}
-            onChange={e =>
-              setCourseData({
-                ...courseData,
-                prerequisite: e.target.value,
-              })
-            }
+            onChange={onChangeFn("prerequisite")}
           />
           <input
             disabled={busy}
@@ -161,12 +142,7 @@ export default function EditDataDialog({
             type="text"
             placeholder="Offered"
             value={courseData.offered}
-            onChange={e =>
-              setCourseData({
-                ...courseData,
-                offered: e.target.value,
-              })
-            }
+            onChange={onChangeFn("offered")}
           />
         </div>
         <button

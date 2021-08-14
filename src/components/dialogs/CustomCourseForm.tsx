@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import type { ChangeEvent } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -27,7 +28,6 @@ export default function CustomCourseForm({
   nodeData,
   addNewNode,
 }: CustomCourseFormProps): JSX.Element {
-  // TODO: Try reducer
   const [customCourseData, setCustomCourseData] = useState<CourseData>({
     id: "",
     name: "",
@@ -46,6 +46,13 @@ export default function CustomCourseForm({
       prerequisite: "",
       offered: "",
     });
+  }
+
+  function onChangeFn(
+    key: keyof CourseData,
+  ): (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void {
+    return e =>
+      setCustomCourseData(prev => ({ ...prev, [key]: e.target.value }));
   }
 
   const customCourseIdRef = useRef<HTMLInputElement>(null);
@@ -78,12 +85,7 @@ export default function CustomCourseForm({
             required={true}
             placeholder="Course ID (required)"
             value={customCourseData.id}
-            onChange={e =>
-              setCustomCourseData({
-                ...customCourseData,
-                id: e.target.value,
-              })
-            }
+            onChange={onChangeFn("id")}
           />
         </Tippy>
         <input
@@ -92,12 +94,7 @@ export default function CustomCourseForm({
           type="text"
           placeholder="Course name"
           value={customCourseData.name}
-          onChange={e =>
-            setCustomCourseData({
-              ...customCourseData,
-              name: e.target.value,
-            })
-          }
+          onChange={onChangeFn("name")}
         />
         <input
           disabled={busy}
@@ -105,12 +102,7 @@ export default function CustomCourseForm({
           type="text"
           placeholder="Credits"
           value={customCourseData.credits}
-          onChange={e =>
-            setCustomCourseData({
-              ...customCourseData,
-              credits: e.target.value,
-            })
-          }
+          onChange={onChangeFn("credits")}
         />
       </div>
       <textarea
@@ -118,12 +110,7 @@ export default function CustomCourseForm({
         className="CustomCourseForm__description-input"
         placeholder="Description"
         value={customCourseData.description}
-        onChange={e =>
-          setCustomCourseData({
-            ...customCourseData,
-            description: e.target.value,
-          })
-        }
+        onChange={onChangeFn("description")}
       ></textarea>
       <div className="CustomCourseForm__footer-row">
         <input
@@ -132,12 +119,7 @@ export default function CustomCourseForm({
           type="text"
           placeholder="Prerequisite"
           value={customCourseData.prerequisite}
-          onChange={e =>
-            setCustomCourseData({
-              ...customCourseData,
-              prerequisite: e.target.value,
-            })
-          }
+          onChange={onChangeFn("prerequisite")}
         />
         <input
           disabled={busy}
@@ -145,12 +127,7 @@ export default function CustomCourseForm({
           type="text"
           placeholder="Offered"
           value={customCourseData.offered}
-          onChange={e =>
-            setCustomCourseData({
-              ...customCourseData,
-              offered: e.target.value,
-            })
-          }
+          onChange={onChangeFn("offered")}
         />
       </div>
       <button
