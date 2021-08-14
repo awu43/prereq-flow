@@ -96,7 +96,9 @@
       }
 
       &:nth-child(2),
-      &:nth-child(4) {
+      &:nth-child(4),
+      &:nth-child(6),
+      &:nth-child(7) {
         a:hover {
           @each $status, $color in $flow-colors {
             &.#{$status} {
@@ -110,6 +112,8 @@
 
       &:nth-child(2) a,
       &:nth-child(4) a,
+      &:nth-child(6) a,
+      &:nth-child(7) a,
       span {
         @each $status, $color in $flow-colors {
           padding: 0 0.1rem;
@@ -150,16 +154,6 @@
     margin-right: 0.1rem;
 
     @include img-button-style(100);
-
-    &:hover + span {
-      @each $status, $color in $flow-colors {
-        &.#{$status} {
-          color: white;
-          background-color: $color;
-          text-decoration: none;
-        }
-      }
-    }
   }
 
 

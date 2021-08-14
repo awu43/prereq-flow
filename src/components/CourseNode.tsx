@@ -78,7 +78,6 @@ export function markOfferedQuarters(innerHTML: InnerText): void {
   }
 }
 
-// TODO: Memoize
 export default function CourseNode({ data }: { data: CourseNodeData }) {
   const prefersReducedMotion = usePrefersReducedMotion();
 

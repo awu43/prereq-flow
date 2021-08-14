@@ -172,14 +172,29 @@ export default function TableDialog({
             {nodeData.incomingNodes.map(n => (
               <li key={n}>
                 {smallDeleteButton(n)}
-                <span
-                  className={classNames(
-                    { "uw-course-id": COURSE_REGEX.test(n) },
-                    tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                {COURSE_REGEX.test(n)
+                  ? (
+                    <a
+                      className={classNames(
+                        "uw-course-id",
+                        tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                      )}
+                      href={`https://myplan.uw.edu/course/#/courses/${n}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {n}
+                    </a>
+                  )
+                  : (
+                    <span
+                      className={classNames(
+                        tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                      )}
+                    >
+                      {n}
+                    </span>
                   )}
-                >
-                  {n}
-                </span>
               </li>
             ))}
           </ul>
@@ -189,14 +204,29 @@ export default function TableDialog({
             {nodeData.outgoingNodes.map(n => (
               <li key={n}>
                 {smallDeleteButton(n)}
-                <span
-                  className={classNames(
-                    { "uw-course-id": COURSE_REGEX.test(n) },
-                    tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                {COURSE_REGEX.test(n)
+                  ? (
+                    <a
+                      className={classNames(
+                        "uw-course-id",
+                        tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                      )}
+                      href={`https://myplan.uw.edu/course/#/courses/${n}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {n}
+                    </a>
+                  )
+                  : (
+                    <span
+                      className={classNames(
+                        tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                      )}
+                    >
+                      {n}
+                    </span>
                   )}
-                >
-                  {n}
-                </span>
               </li>
             ))}
           </ul>
