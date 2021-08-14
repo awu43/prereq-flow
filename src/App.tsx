@@ -159,7 +159,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
     recalculatedElems = updateAllNodes(
       recalculatedElems,
       nodeData.current,
-      elemIndexes.current
+      elemIndexes.current,
     );
     return resetElementStates(recalculatedElems);
   }
@@ -182,7 +182,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
         aboutDlgCls,
         editDlgCls,
       ].some(cls => !cls.includes("--display-none")),
-    [newFlowDlgCls, openFileDlgCls, addCourseDlgCls, aboutDlgCls, editDlgCls]
+    [newFlowDlgCls, openFileDlgCls, addCourseDlgCls, aboutDlgCls, editDlgCls],
   );
 
   useEffect(() => {
@@ -192,8 +192,8 @@ export default function App({ initialElements }: AppProps): JSX.Element {
           unsetNodesSelection.current();
           redoStack.current.push(
             resetElementStates(
-              flowInstance.current?.toObject().elements as Element[]
-            )
+              flowInstance.current?.toObject().elements as Element[],
+            ),
           );
           const pastElements = undoStack.current.pop() as Element[];
           for (const elem of pastElements) {
@@ -216,8 +216,8 @@ export default function App({ initialElements }: AppProps): JSX.Element {
           unsetNodesSelection.current();
           undoStack.current.push(
             resetElementStates(
-              flowInstance.current?.toObject().elements as Element[]
-            )
+              flowInstance.current?.toObject().elements as Element[],
+            ),
           );
           const futureElements = redoStack.current.pop() as Element[];
           for (const elem of futureElements) {
@@ -250,12 +250,12 @@ export default function App({ initialElements }: AppProps): JSX.Element {
     newElements = updateAllNodes(
       newElements,
       nodeData.current,
-      elemIndexes.current
+      elemIndexes.current,
     );
     newElements = generateNewLayout(
       newElements,
       elemIndexes.current,
-      nodeData.current
+      nodeData.current,
     );
     setElements(newElements);
   }
@@ -272,7 +272,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
     const fileContents = {
       version: CURRENT_VERSION,
       elements: resetElementStates(
-        flowInstance.current?.toObject().elements as Element[]
+        flowInstance.current?.toObject().elements as Element[],
       ),
     };
     const fileBlob = new Blob([JSON.stringify(fileContents, null, 2)], {
@@ -286,7 +286,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
   function addCourseNode(
     newNode: CourseNode,
     connectTo: ConnectTo,
-    newCoursePosition: NewCoursePosition = "relative"
+    newCoursePosition: NewCoursePosition = "relative",
   ): void {
     recordFlowState();
     let newElems = flowInstance.current?.toObject().elements as Element[];
@@ -297,7 +297,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
         nodeData.current.size,
         elemIndexes.current,
         connectTo,
-        newCoursePosition === "relative"
+        newCoursePosition === "relative",
       );
     } else {
       newElems.push(newNode);
@@ -317,7 +317,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
             nodeData.current.size,
             elemIndexes.current,
             connectTo,
-            false
+            false,
           );
           tempElems.pop();
         }
@@ -330,7 +330,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
     const tempLayout = generateNewLayout(
       JSON.parse(JSON.stringify(newElements)),
       newElemIndexes(newElements),
-      newNodeData(newElements)
+      newNodeData(newElements),
     );
     const tempIndexes = newElemIndexes(tempLayout);
     const tempData = newNodeData(tempLayout);
@@ -368,7 +368,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
     const newElements = generateNewLayout(
       elements,
       elemIndexes.current,
-      nodeData.current
+      nodeData.current,
     );
     setElements(newElements);
   }
@@ -432,7 +432,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
         newStatus as CourseStatus,
         newElements,
         nodeData.current,
-        elemIndexes.current
+        elemIndexes.current,
       );
 
       const firstDiff = nodeData.current.get(nodeId).outgoingNodes;
@@ -441,19 +441,19 @@ export default function App({ initialElements }: AppProps): JSX.Element {
           id,
           newElements,
           nodeData.current,
-          elemIndexes.current
+          elemIndexes.current,
         );
       }
       // TODO: flatmap
       const secondDiff = new Set(
-        firstDiff.map(id => nodeData.current.get(id).outgoingNodes).flat()
+        firstDiff.map(id => nodeData.current.get(id).outgoingNodes).flat(),
       );
       for (const id of secondDiff.values()) {
         updateNodeStatus(
           id,
           newElements,
           nodeData.current,
-          elemIndexes.current
+          elemIndexes.current,
         );
       }
 
@@ -464,7 +464,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
   function onElementsRemove(targetElems: FlowElement[]): void {
     recordFlowState();
     setElements(
-      recalculatedElements(removeElements(targetElems as Element[], elements))
+      recalculatedElements(removeElements(targetElems as Element[], elements)),
     );
   }
 
@@ -481,7 +481,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
 
   function applyHoverEffectBackward(
     nodeId: NodeId,
-    newElements: Element[]
+    newElements: Element[],
   ): void {
     for (const id of nodeData.current.get(nodeId).incomingEdges) {
       const i = elemIndexes.current.get(id);
@@ -506,7 +506,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
 
   function applyHoverEffectForward(
     nodeId: NodeId,
-    newElements: Element[]
+    newElements: Element[],
   ): void {
     for (const id of nodeData.current.get(nodeId).outgoingEdges) {
       const i = elemIndexes.current.get(id);
@@ -578,7 +578,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
         const courseNodeSelected = selectedIds.some(
           nodeId =>
             (elements[elemIndexes.current.get(nodeId)] as Node).type ===
-            "course"
+            "course",
         );
         contextData.current = {
           target: selectedIds,
@@ -637,7 +637,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
   // { nodeId, handleId, handleType }: OnConnectStartParams
   function onConnectStart(
     _event: MouseEvent,
-    _params: OnConnectStartParams
+    _params: OnConnectStartParams,
   ): void {
     setContextActive(false);
   }
@@ -726,7 +726,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
     event.preventDefault();
     const courseNodeSelected = nodes.some(
       node =>
-        (elements[elemIndexes.current.get(node.id)] as Node).type === "course"
+        (elements[elemIndexes.current.get(node.id)] as Node).type === "course",
     );
     contextData.current = {
       target: nodes.map(n => n.id),
@@ -911,7 +911,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
           xy={mouseXY}
           setSelectionStatuses={(
             nodeIds: NodeId[],
-            newStatus: CourseStatus
+            newStatus: CourseStatus,
           ): void => {
             resetSelectedElements.current();
             recordFlowState();
@@ -925,13 +925,17 @@ export default function App({ initialElements }: AppProps): JSX.Element {
                   newStatus,
                   newElements,
                   nodeData.current,
-                  elemIndexes.current
+                  elemIndexes.current,
                 );
               }
             }
 
             setElements(
-              updateAllNodes(newElements, nodeData.current, elemIndexes.current)
+              updateAllNodes(
+                newElements,
+                nodeData.current,
+                elemIndexes.current,
+              ),
             );
           }}
           toggleEdgeConcurrency={(edgeId: EdgeId): void => {
@@ -948,7 +952,11 @@ export default function App({ initialElements }: AppProps): JSX.Element {
             };
 
             setElements(
-              updateAllNodes(newElements, nodeData.current, elemIndexes.current)
+              updateAllNodes(
+                newElements,
+                nodeData.current,
+                elemIndexes.current,
+              ),
             );
           }}
           editCourseData={(courseId: NodeId): void => {
@@ -961,12 +969,12 @@ export default function App({ initialElements }: AppProps): JSX.Element {
           deleteElems={(elemIds: ElementId[]): void => {
             resetSelectedElements.current();
             onElementsRemove(
-              elemIds.map(id => elements[elemIndexes.current.get(id)])
+              elemIds.map(id => elements[elemIndexes.current.get(id)]),
             );
           }}
           connect={(
             targetId: NodeId,
-            to: ConnectTo = { prereq: true, postreq: true }
+            to: ConnectTo = { prereq: true, postreq: true },
           ): void => {
             resetSelectedElements.current();
             recordFlowState();
@@ -976,13 +984,13 @@ export default function App({ initialElements }: AppProps): JSX.Element {
               elements.slice(),
               nodeData.current.size,
               elemIndexes.current,
-              to
+              to,
             );
             setElements(recalculatedElements(newElements));
           }}
           disconnect={(
             targetIds: NodeId[],
-            from: ConnectTo = { prereq: true, postreq: true }
+            from: ConnectTo = { prereq: true, postreq: true },
           ): void => {
             resetSelectedElements.current();
             recordFlowState();
@@ -1003,20 +1011,20 @@ export default function App({ initialElements }: AppProps): JSX.Element {
 
             setElements(
               recalculatedElements(
-                elements.filter(elem => !connectedEdges.has(elem.id))
-              )
+                elements.filter(elem => !connectedEdges.has(elem.id)),
+              ),
             );
           }}
           newConditionalNode={(
             type: ConditionalTypes,
-            xy: XYPosition
+            xy: XYPosition,
           ): void => {
             resetSelectedElements.current();
             recordFlowState();
 
             const newNode = newConditionalNode(
               type,
-              flowInstance.current?.project(xy)
+              flowInstance.current?.project(xy),
             );
 
             setElements(recalculatedElements(elements.concat([newNode])));

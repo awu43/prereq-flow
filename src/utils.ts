@@ -37,7 +37,7 @@ export function isEdge(elem: Element): elem is Edge {
 }
 export function removeElements(
   toRemove: Element[],
-  toRemoveFrom: Element[]
+  toRemoveFrom: Element[],
 ): Element[] {
   return removeElementsBase(toRemove, toRemoveFrom) as Element[];
 }
@@ -59,7 +59,7 @@ export function courseIdMatch(text: string): RegExpMatchArray | null {
 }
 
 const EITHER_OR_REGEX = new RegExp(
-  `(?:[Ee]ither )?(${CRS})(?:, (${CRS}))*,? or (${CRS})`
+  `(?:[Ee]ither )?(${CRS})(?:, (${CRS}))*,? or (${CRS})`,
 );
 // "AAA 000 or AAA 111"
 // "AAA 000, AAA 111, or AAA 222"
@@ -108,7 +108,7 @@ export function newCourseNode(courseData: CourseData): CourseNode {
 
 export function newConditionalNode(
   type: ConditionalTypes,
-  position: XYPosition = ZERO_POSITION
+  position: XYPosition = ZERO_POSITION,
 ): ConditionalNode {
   return {
     id: `${type.toUpperCase()}-${nanoid()}`,
@@ -129,7 +129,7 @@ export function newEdge(
   source: NodeId,
   target: NodeId,
   concurrent: boolean = false,
-  id: EdgeId = ""
+  id: EdgeId = "",
 ): Edge {
   const edgeId = id || edgeArrowId(source, target);
 
@@ -148,7 +148,7 @@ function addEdges(
   target: NodeId,
   elements: Element[],
   elementIds: Set<ElementId>,
-  concurrent: boolean = false
+  concurrent: boolean = false,
 ): void {
   for (const source of sources) {
     const edgeId = edgeArrowId(source, target);
@@ -163,7 +163,7 @@ function addEdges(
 
 export function generateInitialElements(
   courseData: CourseData[],
-  ambiguityHandling: AmbiguityHandling
+  ambiguityHandling: AmbiguityHandling,
 ): Element[] {
   const elements: Element[] = courseData.map(c => newCourseNode(c));
   const elementIds: Set<ElementId> = new Set(courseData.map(c => c.id));
@@ -221,7 +221,7 @@ export function generateInitialElements(
             orNode.id,
             elements,
             elementIds,
-            concurrent
+            concurrent,
           );
         }
       } else if (ambiguityHandling === "aggressively") {
@@ -237,7 +237,7 @@ export function generateInitialElements(
 function discoverMaxDepths(
   startNodeId: NodeId,
   startDepth: number,
-  nodeData: NodeDataMap
+  nodeData: NodeDataMap,
 ): void {
   const startNode = nodeData.get(startNodeId);
   if (startNode.depth !== startDepth) {
@@ -296,7 +296,7 @@ export function newNodeData(elements: Element[]): NodeDataMap {
   }
 
   const roots = elements.filter(
-    elem => isNode(elem) && !initialNodeData.get(elem.id).incomingEdges.length
+    elem => isNode(elem) && !initialNodeData.get(elem.id).incomingEdges.length,
   );
   for (const root of roots) {
     discoverMaxDepths(root.id, 0, initialNodeData);
@@ -307,7 +307,7 @@ export function newNodeData(elements: Element[]): NodeDataMap {
 
 export function sortElementsByDepth(
   elements: Element[],
-  nodeData: NodeDataMap
+  nodeData: NodeDataMap,
 ): Element[] {
   return elements.sort((a, b) => {
     const aVal = isNode(a)
@@ -335,7 +335,7 @@ const COURSE_STATUSES: CourseStatus[] = [
 ];
 
 export const COURSE_STATUS_CODES = Object.freeze(
-  Object.fromEntries(COURSE_STATUSES.map((status, i) => [status, i]))
+  Object.fromEntries(COURSE_STATUSES.map((status, i) => [status, i])),
 ) as Readonly<Record<CourseStatus, number>>;
 
 export function setNodeStatus(
@@ -343,7 +343,7 @@ export function setNodeStatus(
   newStatus: CourseStatus,
   elements: Element[],
   nodeData: NodeDataMap,
-  elemIndexes: ElemIndexMap
+  elemIndexes: ElemIndexMap,
 ): void {
   (elements[elemIndexes.get(nodeId)] as Node).data.nodeStatus = newStatus;
   for (const edgeId of nodeData.get(nodeId).outgoingEdges) {
@@ -366,7 +366,7 @@ export function updateNodeStatus(
   nodeId: NodeId,
   elements: Element[],
   nodeData: NodeDataMap,
-  elemIndexes: ElemIndexMap
+  elemIndexes: ElemIndexMap,
 ): void {
   const targetNode = elements[elemIndexes.get(nodeId)] as Node;
   const currentStatus = targetNode.data.nodeStatus;
@@ -429,14 +429,14 @@ export function updateNodeStatus(
     newStatus as CourseStatus,
     elements,
     nodeData,
-    elemIndexes
+    elemIndexes,
   );
 }
 
 export function updateAllNodes(
   elements: Element[],
   nodeData: NodeDataMap,
-  elemIndexes: ElemIndexMap
+  elemIndexes: ElemIndexMap,
 ): Element[] {
   const updatedElements = elements.slice();
   const numNodes = nodeData.size;
@@ -491,7 +491,7 @@ function generateDagreLayout(elements: Element[]): Element[] {
 
 export function filterUnconditionalElements(
   elements: Element[],
-  condNodes: ConditionalNode[] = []
+  condNodes: ConditionalNode[] = [],
 ): Element[] {
   let tempElements = elements.slice();
   let tempNodeData = newNodeData(tempElements);
@@ -527,7 +527,7 @@ function getSourcePositions(
   nodeId: NodeId,
   elements: Element[],
   elemIndexes: ElemIndexMap,
-  nodeData: NodeDataMap
+  nodeData: NodeDataMap,
 ): XYPosition | XYPosition[] {
   const node = elements[elemIndexes.get(nodeId)] as Node;
   return node.type === "course"
@@ -535,7 +535,7 @@ function getSourcePositions(
     : nodeData
         .get(nodeId)
         .incomingNodes.map(nId =>
-          getSourcePositions(nId, elements, elemIndexes, nodeData)
+          getSourcePositions(nId, elements, elemIndexes, nodeData),
         )
         .flat();
 }
@@ -547,7 +547,7 @@ export function newPosition(x: number, y: number): XYPosition {
 function averagePosition(positions: XYPosition[]): XYPosition {
   const avgSourcePosition = positions.reduce(
     (a, b) => ({ x: a.x + b.x, y: a.y + b.y }),
-    ZERO_POSITION
+    ZERO_POSITION,
   );
   avgSourcePosition.x /= positions.length;
   avgSourcePosition.y /= positions.length;
@@ -561,29 +561,29 @@ function averageYPosition(positions: XYPosition[]): number {
 export function generateNewLayout(
   elements: Element[],
   elemIndexes: ElemIndexMap,
-  nodeData: NodeDataMap
+  nodeData: NodeDataMap,
 ): Element[] {
   const newElements = elements.slice();
 
   // Conditional nodes should not influence course depth/positioning
   const conditionalNodes = elements.filter(elem =>
-    isConditionalNode(elem)
+    isConditionalNode(elem),
   ) as ConditionalNode[];
 
   let dagreLayout;
   if (!conditionalNodes.length) {
     dagreLayout = generateDagreLayout(
-      elements.slice().sort(() => Math.random() - 0.5)
+      elements.slice().sort(() => Math.random() - 0.5),
     );
   } else {
     const filteredElements = filterUnconditionalElements(
       elements,
-      conditionalNodes
+      conditionalNodes,
     );
 
     // https://flaviocopes.com/how-to-shuffle-array-javascript/
     dagreLayout = generateDagreLayout(
-      filteredElements.sort(() => Math.random() - 0.5)
+      filteredElements.sort(() => Math.random() - 0.5),
     );
   }
 
@@ -604,11 +604,11 @@ export function generateNewLayout(
       // TODO: flatmap
       const incomingPositions = incomingNodes
         .map(nodeId =>
-          getSourcePositions(nodeId, elements, elemIndexes, nodeData)
+          getSourcePositions(nodeId, elements, elemIndexes, nodeData),
         )
         .flat();
       const outgoingPositions = outgoingNodes.map(
-        nodeId => (newElements[elemIndexes.get(nodeId)] as Node).position
+        nodeId => (newElements[elemIndexes.get(nodeId)] as Node).position,
       );
 
       const x =
@@ -627,7 +627,7 @@ export function generateNewLayout(
       (newElements[i] as ConditionalNode).position = { x, y };
     } else if (incomingNodes.length && !outgoingNodes.length) {
       const incomingPositions = incomingNodes.map(
-        nodeId => (newElements[elemIndexes.get(nodeId)] as Node).position
+        nodeId => (newElements[elemIndexes.get(nodeId)] as Node).position,
       );
 
       const x =
@@ -637,7 +637,7 @@ export function generateNewLayout(
       (newElements[i] as ConditionalNode).position = { x, y };
     } else if (!incomingNodes.length && outgoingNodes.length) {
       const outgoingPositions = outgoingNodes.map(
-        nodeId => (newElements[elemIndexes.get(nodeId)] as Node).position
+        nodeId => (newElements[elemIndexes.get(nodeId)] as Node).position,
       );
 
       const x =
@@ -656,7 +656,7 @@ export function resetElementStates(newElements: Element[]): Element[] {
   return newElements.map(elem =>
     isNode(elem)
       ? ({ ...elem, data: { ...elem.data, nodeConnected: false } } as Node)
-      : ({ ...elem, animated: false } as Edge)
+      : ({ ...elem, animated: false } as Edge),
   );
 }
 
@@ -666,7 +666,7 @@ export function autoconnect(
   numNodes: number,
   elemIndexes: ElemIndexMap,
   connectTo: ConnectTo = { prereq: true, postreq: true },
-  reposition = false
+  reposition = false,
 ): Element[] {
   const targetId = targetNode.id;
   const courseMatches = courseIdMatch(targetNode.data.prerequisite) || [];
