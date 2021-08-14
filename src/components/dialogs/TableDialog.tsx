@@ -6,11 +6,7 @@ import type { FlowElement } from "react-flow-renderer";
 
 import timesIcon from "@icons/times.svg";
 
-import type {
-  CourseNode,
-  Element,
-  InnerText,
-} from "types/main";
+import type { CourseNode, Element, InnerText } from "types/main";
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 import {
   newNodeData,
@@ -40,7 +36,7 @@ export default function TableDialog({
   closeDialog,
   elements,
   onElementsRemove,
-}: TableDialogProps) {
+}: TableDialogProps): JSX.Element {
   const [busy, setBusy] = useState(false);
   const [sortBy, setSortBy] = useState("id");
 
@@ -53,21 +49,17 @@ export default function TableDialog({
 
   switch (sortBy) {
     case "depth":
-      tableNodes.sort((a, b) => (
-        tableData.get(a.id).depth - tableData.get(b.id).depth
-      ));
+      tableNodes.sort(
+        (a, b) => tableData.get(a.id).depth - tableData.get(b.id).depth,
+      );
       break;
     case "id":
       tableNodes.sort((a, b) => a.id.localeCompare(b.id));
       break;
     case "id-num":
       tableNodes.sort((a, b) => {
-        const aNum = Number(
-          (a.id.match(COURSE_NUM_REGEX) ?? ["Infinity"])[0]
-        );
-        const bNum = Number(
-          (b.id.match(COURSE_NUM_REGEX) ?? ["Infinity"])[0]
-        );
+        const aNum = Number((a.id.match(COURSE_NUM_REGEX) ?? ["Infinity"])[0]);
+        const bNum = Number((b.id.match(COURSE_NUM_REGEX) ?? ["Infinity"])[0]);
         return aNum - bNum;
       });
       break;
@@ -104,65 +96,55 @@ export default function TableDialog({
     const nodeData = tableData.get(node.id);
 
     const prereqHTML: InnerText = splitByCourses(node.data.prerequisite, true);
-    generateUwCourseElements(
-      prereqHTML,
-      (elemText, i) => (
-        <a
-          key={i}
-          className={classNames(
-            "uw-course-id",
-            (tableData.has(elemText)
-              ? tableNodes[elemIndexes.get(elemText)].data.nodeStatus
-              : ""
-            ),
-          )}
-          href={`https://myplan.uw.edu/course/#/courses/${elemText}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {elemText}
-        </a>
-      ),
-    );
+    generateUwCourseElements(prereqHTML, (elemText, i) => (
+      <a
+        key={i}
+        className={classNames(
+          "uw-course-id",
+          tableData.has(elemText)
+            ? tableNodes[elemIndexes.get(elemText)].data.nodeStatus
+            : "",
+        )}
+        href={`https://myplan.uw.edu/course/#/courses/${elemText}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {elemText}
+      </a>
+    ));
 
     const offeredHTML: InnerText = splitByCourses(node.data.offered, true);
-    generateUwCourseElements(
-      offeredHTML,
-      (elemText, i) => (
-        <span
-          key={i}
-          className={classNames(
-            "uw-course-id",
-            (tableData.has(elemText)
-              ? tableNodes[elemIndexes.get(elemText)].data.nodeStatus
-              : ""
-            ),
-          )}
-        >
-          {elemText}
-        </span>
-      ),
-    );
+    generateUwCourseElements(offeredHTML, (elemText, i) => (
+      <span
+        key={i}
+        className={classNames(
+          "uw-course-id",
+          tableData.has(elemText)
+            ? tableNodes[elemIndexes.get(elemText)].data.nodeStatus
+            : "",
+        )}
+      >
+        {elemText}
+      </span>
+    ));
     markOfferedQuarters(offeredHTML);
 
     return (
       <tr key={node.id}>
         <td>{nodeData.depth}</td>
         <td>
-          {
-            COURSE_REGEX.test(node.id)
-              ? (
-                <a
-                  className={classNames("uw-course-id", node.data.nodeStatus)}
-                  href={`https://myplan.uw.edu/course/#/courses/${node.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {node.id}
-                </a>
-              )
-              : <span className={node.data.nodeStatus}>{node.id}</span>
-          }
+          {COURSE_REGEX.test(node.id) ? (
+            <a
+              className={classNames("uw-course-id", node.data.nodeStatus)}
+              href={`https://myplan.uw.edu/course/#/courses/${node.id}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {node.id}
+            </a>
+          ) : (
+            <span className={node.data.nodeStatus}>{node.id}</span>
+          )}
         </td>
         <td>{node.data.name.replace(/ (\S+?)$/, "\u00A0$1")}</td>
         <td>{prereqHTML}</td>
@@ -172,29 +154,27 @@ export default function TableDialog({
             {nodeData.incomingNodes.map(n => (
               <li key={n}>
                 {smallDeleteButton(n)}
-                {COURSE_REGEX.test(n)
-                  ? (
-                    <a
-                      className={classNames(
-                        "uw-course-id",
-                        tableNodes[elemIndexes.get(n)].data.nodeStatus,
-                      )}
-                      href={`https://myplan.uw.edu/course/#/courses/${n}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {n}
-                    </a>
-                  )
-                  : (
-                    <span
-                      className={classNames(
-                        tableNodes[elemIndexes.get(n)].data.nodeStatus,
-                      )}
-                    >
-                      {n}
-                    </span>
-                  )}
+                {COURSE_REGEX.test(n) ? (
+                  <a
+                    className={classNames(
+                      "uw-course-id",
+                      tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                    )}
+                    href={`https://myplan.uw.edu/course/#/courses/${n}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {n}
+                  </a>
+                ) : (
+                  <span
+                    className={classNames(
+                      tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                    )}
+                  >
+                    {n}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
@@ -204,29 +184,27 @@ export default function TableDialog({
             {nodeData.outgoingNodes.map(n => (
               <li key={n}>
                 {smallDeleteButton(n)}
-                {COURSE_REGEX.test(n)
-                  ? (
-                    <a
-                      className={classNames(
-                        "uw-course-id",
-                        tableNodes[elemIndexes.get(n)].data.nodeStatus,
-                      )}
-                      href={`https://myplan.uw.edu/course/#/courses/${n}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {n}
-                    </a>
-                  )
-                  : (
-                    <span
-                      className={classNames(
-                        tableNodes[elemIndexes.get(n)].data.nodeStatus,
-                      )}
-                    >
-                      {n}
-                    </span>
-                  )}
+                {COURSE_REGEX.test(n) ? (
+                  <a
+                    className={classNames(
+                      "uw-course-id",
+                      tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                    )}
+                    href={`https://myplan.uw.edu/course/#/courses/${n}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {n}
+                  </a>
+                ) : (
+                  <span
+                    className={classNames(
+                      tableNodes[elemIndexes.get(n)].data.nodeStatus,
+                    )}
+                  >
+                    {n}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
@@ -312,9 +290,7 @@ export default function TableDialog({
             <th>Delete</th>
           </tr>
         </thead>
-        <tbody>
-          {tableRows}
-        </tbody>
+        <tbody>{tableRows}</tbody>
       </table>
     </ModalDialog>
   );
