@@ -18,7 +18,7 @@ export default function Dropzone({
   errorMsg,
   setErrorMsg,
   openFile,
-}: DropzoneProps) {
+}: DropzoneProps): JSX.Element {
   const [message, setMessage] = useState("Drop file or click to select");
 
   // Moved to CSS
@@ -46,7 +46,7 @@ export default function Dropzone({
     getInputProps,
     // isDragActive,
     isDragAccept,
-    isDragReject
+    isDragReject,
   } = useDropzone({
     accept: "application/json",
     disabled: busy,
@@ -67,10 +67,10 @@ export default function Dropzone({
 
   const style = useMemo(() => {
     const acceptStyle = {
-      borderColor: "lime"
+      borderColor: "lime",
     };
     const rejectStyle = {
-      borderColor: "red"
+      borderColor: "red",
     };
     return {
       // ...baseStyle,
