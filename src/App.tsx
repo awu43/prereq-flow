@@ -444,9 +444,8 @@ export default function App({ initialElements }: AppProps): JSX.Element {
           elemIndexes.current,
         );
       }
-      // TODO: flatmap
       const secondDiff = new Set(
-        firstDiff.map(id => nodeData.current.get(id).outgoingNodes).flat(),
+        firstDiff.flatMap(id => nodeData.current.get(id).outgoingNodes),
       );
       for (const id of secondDiff.values()) {
         updateNodeStatus(

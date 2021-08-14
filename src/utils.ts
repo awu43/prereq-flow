@@ -522,7 +522,6 @@ export function filterUnconditionalElements(
   return tempElements;
 }
 
-// TODO: flatmap
 function getSourcePositions(
   nodeId: NodeId,
   elements: Element[],
@@ -534,10 +533,9 @@ function getSourcePositions(
     ? node.position
     : nodeData
         .get(nodeId)
-        .incomingNodes.map(nId =>
+        .incomingNodes.flatMap(nId =>
           getSourcePositions(nId, elements, elemIndexes, nodeData),
-        )
-        .flat();
+        );
 }
 
 export function newPosition(x: number, y: number): XYPosition {
@@ -601,12 +599,9 @@ export function generateNewLayout(
     const { incomingNodes, outgoingNodes } = data;
 
     if (incomingNodes.length && outgoingNodes.length) {
-      // TODO: flatmap
-      const incomingPositions = incomingNodes
-        .map(nodeId =>
-          getSourcePositions(nodeId, elements, elemIndexes, nodeData),
-        )
-        .flat();
+      const incomingPositions = incomingNodes.flatMap(nodeId =>
+        getSourcePositions(nodeId, elements, elemIndexes, nodeData),
+      );
       const outgoingPositions = outgoingNodes.map(
         nodeId => (newElements[elemIndexes.get(nodeId)] as Node).position,
       );
