@@ -70,10 +70,10 @@ export default function ContextMenu({
   newConditionalNode,
   rerouteSingle,
   reroutePointless,
-}: ContextMenuProps) {
-  const unsetNodesSelection = useStoreActions(actions => (
-    actions.unsetNodesSelection
-  ));
+}: ContextMenuProps): JSX.Element | null {
+  const unsetNodesSelection = useStoreActions(
+    actions => actions.unsetNodesSelection,
+  );
 
   if (!active) {
     return null;
@@ -127,10 +127,14 @@ export default function ContextMenu({
     );
   }
   const disconnectPrereqsOpt = disconnectOpt(
-    true, false, "Disconnect\u00A0prereqs"
+    true,
+    false,
+    "Disconnect\u00A0prereqs",
   );
   const disconnectPostreqsOpt = disconnectOpt(
-    false, true, "Disconnect\u00A0postreqs"
+    false,
+    true,
+    "Disconnect\u00A0postreqs",
   );
   const disconnectAllOpt = disconnectOpt(true, true, "Disconnect\u00A0all");
 
@@ -150,9 +154,8 @@ export default function ContextMenu({
     case "coursenode": {
       // Single course node
       const targetNode = target[0];
-      const targetStatusCode = (
-        COURSE_STATUS_CODES[targetStatus as CourseStatus]
-      );
+      const targetStatusCode =
+        COURSE_STATUS_CODES[targetStatus as CourseStatus];
       const courseStatusOptions = (
         <>
           <li
@@ -180,22 +183,24 @@ export default function ContextMenu({
         </>
       );
       const allPrereqs = courseIdMatch(
-        (elements[elemIndexes.get(targetNode)] as CourseNode).data.prerequisite
+        (elements[elemIndexes.get(targetNode)] as CourseNode).data.prerequisite,
       );
-      const allPrereqsConnected = (
-        allPrereqs
-          ? allPrereqs.every(p => (
-            !elemIndexes.has(p) || elemIndexes.has(edgeArrowId(p, targetNode))
-          ))
-          : true
-      );
+      const allPrereqsConnected = allPrereqs
+        ? allPrereqs.every(
+            p =>
+              !elemIndexes.has(p) ||
+              elemIndexes.has(edgeArrowId(p, targetNode)),
+          )
+        : true;
       const notConnectedPostreqs: CourseNode[] = [];
       const numNodes = nodeData.size;
       for (let i = 0; i < numNodes; i++) {
         const postreq = elements[i];
-        if (isCourseNode(postreq)
-            && postreq.data.prerequisite.includes(targetNode)
-            && !elemIndexes.has(edgeArrowId(targetNode, postreq.id))) {
+        if (
+          isCourseNode(postreq) &&
+          postreq.data.prerequisite.includes(targetNode) &&
+          !elemIndexes.has(edgeArrowId(targetNode, postreq.id))
+        ) {
           notConnectedPostreqs.push(postreq);
         }
       }
@@ -206,11 +211,9 @@ export default function ContextMenu({
           {targetStatusCode < 3 && courseStatusOptions}
           {!allPrereqsConnected && connectPrereqsOpt}
           {!!notConnectedPostreqs.length && connectPostreqsOpt}
-          {(
-            !allPrereqsConnected
-            && !!notConnectedPostreqs.length
-            && connectAllOpt
-          )}
+          {!allPrereqsConnected &&
+            !!notConnectedPostreqs.length &&
+            connectAllOpt}
           {hasPrereqs && disconnectPrereqsOpt}
           {hasPostreqs && disconnectPostreqsOpt}
           {hasPrereqs && hasPostreqs && disconnectAllOpt}
@@ -218,28 +221,22 @@ export default function ContextMenu({
             <p>Edit data</p>
           </li>
           {deleteElemsOpt}
-          {
-            COURSE_REGEX.test(targetNode)
-              ? (
-                <>
-                  <hr />
-                  <li>
-                    <p>
-                      <a
-                        href={
-                        `https://myplan.uw.edu/course/#/courses/${targetNode}`
-                      }
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Open in MyPlan
-                      </a>
-                    </p>
-                  </li>
-                </>
-              )
-              : null
-          }
+          {COURSE_REGEX.test(targetNode) ? (
+            <>
+              <hr />
+              <li>
+                <p>
+                  <a
+                    href={`https://myplan.uw.edu/course/#/courses/${targetNode}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open in MyPlan
+                  </a>
+                </p>
+              </li>
+            </>
+          ) : null}
         </>
       );
       break;
@@ -252,8 +249,9 @@ export default function ContextMenu({
       const numNodes = nodeData.size;
       for (let i = 0; i < numNodes; i++) {
         const elem = elements[i] as Node;
-        if (elem.type === "or"
-            && nodeData.get(elem.id).incomingEdges.length <= 1
+        if (
+          elem.type === "or" &&
+          nodeData.get(elem.id).incomingEdges.length <= 1
         ) {
           pointlessOrNodeFound = true;
           break;
@@ -326,11 +324,7 @@ export default function ContextMenu({
     case "mixedmultiselect":
       // Multiple edges
       // At least one node and at least one edge
-      menuOptions = (
-        <>
-          {deleteElemsOpt}
-        </>
-      );
+      menuOptions = <>{deleteElemsOpt}</>;
       break;
     case "courseselection":
       // Multiple nodes containing at least one course node
@@ -363,8 +357,9 @@ export default function ContextMenu({
       const numNodes = nodeData.size;
       for (let i = 0; i < numNodes; i++) {
         const elem = elements[i] as Node;
-        if (elem.type === "or"
-            && nodeData.get(elem.id).incomingEdges.length <= 1
+        if (
+          elem.type === "or" &&
+          nodeData.get(elem.id).incomingEdges.length <= 1
         ) {
           pointlessOrNodeFound = true;
           break;
