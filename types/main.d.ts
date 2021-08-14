@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction, ReactElement } from "react";
 import type { XYPosition } from "react-flow-renderer";
 
 export type SetState<Type> = Dispatch<SetStateAction<Type>>;
@@ -56,6 +56,8 @@ export interface ConditionalNode extends BaseNode {
 }
 
 export type Node = CourseNode | ConditionalNode;
+
+export type InnerText = (string | ReactElement)[];
 
 export interface Edge {
   id: EdgeId;

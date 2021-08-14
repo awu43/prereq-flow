@@ -1,5 +1,4 @@
 import React from "react";
-import type { ReactElement } from "react";
 
 import classNames from "classnames";
 
@@ -9,18 +8,22 @@ import "tippy.js/dist/tippy.css";
 
 import { Handle, Position } from "react-flow-renderer";
 
-import type { CourseNodeData } from "types/main";
+import type { InnerText, CourseNodeData } from "types/main";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import { CRS } from "@utils";
 
-function splitByCourses(text: string): (string | ReactElement)[] {
+function capitalizeFirstCharacter(text: string): string {
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
+}
+
+export function splitByCourses(text: string): string[] {
   return text.replaceAll("/", "/\u200B").split(new RegExp(`(${CRS})`));
 }
 
-function markCoursesAndPreventBreaks(text: string): (string | ReactElement)[] {
-  const innerHTML = splitByCourses(
-    `${text.charAt(0).toUpperCase()}${text.slice(1)}`
+function highlightUwCourses(text: string): InnerText {
+  const innerHTML: InnerText = splitByCourses(
+    capitalizeFirstCharacter(text)
   );
   for (let i = 1; i < innerHTML.length; i += 2) {
     innerHTML[i] = (
@@ -38,8 +41,8 @@ const QUARTER_REGEX = {
   spring: /(?<=A|W|\b)Sp(?=S|\b)(?=S?\.\s*$)/,
   summer: /(?<=A|W|Sp|\b)S(?=\b\.\s*$)/,
 };
-function markOfferedQuarters(text: string): (string | ReactElement)[] {
-  const innerHTML: (string | ReactElement)[] = splitByCourses(text);
+function markOfferedQuarters(text: string): InnerText {
+  const innerHTML: InnerText = splitByCourses(text);
   for (let i = 1; i < innerHTML.length; i += 2) {
     innerHTML[i] = (
       <span key={i} className="uw-course-id">
@@ -53,9 +56,7 @@ function markOfferedQuarters(text: string): (string | ReactElement)[] {
     const match = remainingText.match(regex);
     if (match) {
       const [matchStr] = match;
-      const remainingItems: (string | ReactElement)[] = (
-        remainingText.split(regex)
-      );
+      const remainingItems: InnerText = remainingText.split(regex);
       remainingItems.splice(
         1,
         0,
@@ -73,7 +74,7 @@ function markOfferedQuarters(text: string): (string | ReactElement)[] {
 export default function CourseNode({ data }: { data: CourseNodeData }) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  const prereqHTML = markCoursesAndPreventBreaks(data.prerequisite);
+  const prereqHTML = highlightUwCourses(data.prerequisite);
   const offeredHTML = (
     data.offered
       ? <p>Offered: {markOfferedQuarters(data.offered)}</p>
@@ -85,7 +86,7 @@ export default function CourseNode({ data }: { data: CourseNodeData }) {
       <p>{data.id} — {data.name} ({data.credits})</p>
       <p>{data.description}</p>
       <hr />
-      <p>{prereqHTML}</p>
+      <p className="prerequisite">Prerequisite: {prereqHTML}</p>
       {offeredHTML}
     </>
   );
