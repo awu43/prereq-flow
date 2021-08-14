@@ -18,7 +18,7 @@ interface CustomCourseFormProps {
   busy: boolean;
   setBusy: SetState<boolean>;
   nodeData: NodeDataMap;
-  addNewNode: (data: CourseData, position: NewCoursePosition) => void
+  addNewNode: (data: CourseData, position: NewCoursePosition) => void;
 }
 export default function CustomCourseForm({
   tabIndex,
@@ -26,7 +26,8 @@ export default function CustomCourseForm({
   setBusy,
   nodeData,
   addNewNode,
-}: CustomCourseFormProps) {
+}: CustomCourseFormProps): JSX.Element {
+  // TODO: Try reducer
   const [customCourseData, setCustomCourseData] = useState<CourseData>({
     id: "",
     name: "",
@@ -77,9 +78,12 @@ export default function CustomCourseForm({
             required={true}
             placeholder="Course ID (required)"
             value={customCourseData.id}
-            onChange={e => setCustomCourseData({
-              ...customCourseData, id: e.target.value
-            })}
+            onChange={e =>
+              setCustomCourseData({
+                ...customCourseData,
+                id: e.target.value,
+              })
+            }
           />
         </Tippy>
         <input
@@ -88,9 +92,12 @@ export default function CustomCourseForm({
           type="text"
           placeholder="Course name"
           value={customCourseData.name}
-          onChange={e => setCustomCourseData({
-            ...customCourseData, name: e.target.value
-          })}
+          onChange={e =>
+            setCustomCourseData({
+              ...customCourseData,
+              name: e.target.value,
+            })
+          }
         />
         <input
           disabled={busy}
@@ -98,9 +105,12 @@ export default function CustomCourseForm({
           type="text"
           placeholder="Credits"
           value={customCourseData.credits}
-          onChange={e => setCustomCourseData({
-            ...customCourseData, credits: e.target.value
-          })}
+          onChange={e =>
+            setCustomCourseData({
+              ...customCourseData,
+              credits: e.target.value,
+            })
+          }
         />
       </div>
       <textarea
@@ -108,11 +118,13 @@ export default function CustomCourseForm({
         className="CustomCourseForm__description-input"
         placeholder="Description"
         value={customCourseData.description}
-        onChange={e => setCustomCourseData({
-          ...customCourseData, description: e.target.value
-        })}
-      >
-      </textarea>
+        onChange={e =>
+          setCustomCourseData({
+            ...customCourseData,
+            description: e.target.value,
+          })
+        }
+      ></textarea>
       <div className="CustomCourseForm__footer-row">
         <input
           disabled={busy}
@@ -120,9 +132,12 @@ export default function CustomCourseForm({
           type="text"
           placeholder="Prerequisite"
           value={customCourseData.prerequisite}
-          onChange={e => setCustomCourseData({
-            ...customCourseData, prerequisite: e.target.value
-          })}
+          onChange={e =>
+            setCustomCourseData({
+              ...customCourseData,
+              prerequisite: e.target.value,
+            })
+          }
         />
         <input
           disabled={busy}
@@ -130,9 +145,12 @@ export default function CustomCourseForm({
           type="text"
           placeholder="Offered"
           value={customCourseData.offered}
-          onChange={e => setCustomCourseData({
-            ...customCourseData, offered: e.target.value
-          })}
+          onChange={e =>
+            setCustomCourseData({
+              ...customCourseData,
+              offered: e.target.value,
+            })
+          }
         />
       </div>
       <button
@@ -140,10 +158,10 @@ export default function CustomCourseForm({
         className="CustomCourseForm__add-button"
         onClick={addCustomCourse}
         disabled={
-        !customCourseData.id.trim()
-        || nodeData.has(customCourseData.id)
-        || busy
-      }
+          !customCourseData.id.trim() ||
+          nodeData.has(customCourseData.id) ||
+          busy
+        }
       >
         Add custom course
       </button>
