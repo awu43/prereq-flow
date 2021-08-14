@@ -5,9 +5,8 @@ const QUERY = "(prefers-reduced-motion: no-preference)";
 const getInitialState = (): boolean => !window.matchMedia(QUERY).matches;
 
 export default function usePrefersReducedMotion(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
-    getInitialState
-  );
+  const [prefersReducedMotion, setPrefersReducedMotion] =
+    useState(getInitialState);
 
   useEffect(() => {
     const mediaQueryList = window.matchMedia(QUERY);
@@ -15,7 +14,7 @@ export default function usePrefersReducedMotion(): boolean {
       setPrefersReducedMotion(!event.matches);
     }
     mediaQueryList.addEventListener("change", listener);
-    return () => { mediaQueryList.removeEventListener("change", listener); };
+    return () => mediaQueryList.removeEventListener("change", listener);
   }, []);
 
   return prefersReducedMotion;
