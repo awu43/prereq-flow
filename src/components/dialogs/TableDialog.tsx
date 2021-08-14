@@ -19,7 +19,11 @@ import {
 } from "@utils";
 
 import "./TableDialog.scss";
-import { splitByCourses, QUARTER_REGEX } from "../CourseNode";
+import {
+  splitByCourses,
+  generateUwCourseElements,
+  markOfferedQuarters,
+} from "../CourseNode";
 import ModalDialog from "./ModalDialog";
 
 const COURSE_REGEX = /^(?:[A-Z&]+ )+\d{3}$/;
@@ -99,62 +103,47 @@ export default function TableDialog({
   const tableRows = tableNodes.map(node => {
     const nodeData = tableData.get(node.id);
 
-    const prereqHTML: InnerText = splitByCourses(node.data.prerequisite);
-    for (let i = 1; i < prereqHTML.length; i += 2) {
-      const courseId = prereqHTML[i] as string;
-      prereqHTML[i] = (
+    const prereqHTML: InnerText = splitByCourses(node.data.prerequisite, true);
+    generateUwCourseElements(
+      prereqHTML,
+      (elemText, i) => (
         <a
+          key={i}
           className={classNames(
             "uw-course-id",
-            (tableData.has(courseId)
-              ? tableNodes[elemIndexes.get(courseId)].data.nodeStatus
+            (tableData.has(elemText)
+              ? tableNodes[elemIndexes.get(elemText)].data.nodeStatus
               : ""
             ),
           )}
-          href={`https://myplan.uw.edu/course/#/courses/${courseId}`}
+          href={`https://myplan.uw.edu/course/#/courses/${elemText}`}
           target="_blank"
           rel="noreferrer"
         >
-          {courseId}
+          {elemText}
         </a>
-      );
-    }
+      ),
+    );
 
-    const offeredHTML: InnerText = splitByCourses(node.data.offered);
-    for (let i = 1; i < offeredHTML.length; i += 2) {
-      const courseId = offeredHTML[i] as string;
-      offeredHTML[i] = (
+    const offeredHTML: InnerText = splitByCourses(node.data.offered, true);
+    generateUwCourseElements(
+      offeredHTML,
+      (elemText, i) => (
         <span
           key={i}
           className={classNames(
             "uw-course-id",
-            (tableData.has(courseId)
-              ? tableNodes[elemIndexes.get(courseId)].data.nodeStatus
+            (tableData.has(elemText)
+              ? tableNodes[elemIndexes.get(elemText)].data.nodeStatus
               : ""
             ),
           )}
         >
-          {offeredHTML[i]}
+          {elemText}
         </span>
-      );
-    }
-    for (const [quarter, regex] of Object.entries<RegExp>(QUARTER_REGEX)) {
-      const lastIndex = offeredHTML.length - 1;
-      const remainingText = offeredHTML[lastIndex] as string;
-      const match = remainingText.match(regex);
-      if (match) {
-        const [matchStr] = match;
-        const remainingItems: InnerText = remainingText.split(regex);
-        remainingItems.splice(
-          1,
-          0,
-          <span key={quarter} className={`offered-${quarter}`}>
-            {matchStr}
-          </span>,
-        );
-        offeredHTML.splice(lastIndex, 1, ...remainingItems);
-      }
-    }
+      ),
+    );
+    markOfferedQuarters(offeredHTML);
 
     return (
       <tr key={node.id}>

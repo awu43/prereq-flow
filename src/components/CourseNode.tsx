@@ -1,4 +1,5 @@
 import React from "react";
+import type { ReactElement } from "react";
 
 import classNames from "classnames";
 
@@ -17,41 +18,47 @@ function capitalizeFirstCharacter(text: string): string {
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 }
 
-export function splitByCourses(text: string): string[] {
-  return text.replaceAll("/", "/\u200B").split(new RegExp(`(${CRS})`));
+export function splitByCourses(text: string, capitalizeFirst = false): InnerText {
+  if (capitalizeFirst) {
+    return (
+      capitalizeFirstCharacter(text)
+        .replaceAll("/", "/\u200B")
+        .split(new RegExp(`(${CRS})`))
+    );
+  } else {
+    return text.replaceAll("/", "/\u200B").split(new RegExp(`(${CRS})`));
+  }
+}
+
+export function generateUwCourseElements(
+  innerHTML: InnerText,
+  elemFunc: (elemText: string, i: number) => ReactElement,
+): void {
+  for (let i = 1; i < innerHTML.length; i += 2) {
+    innerHTML[i] = elemFunc(innerHTML[i] as string, i);
+  }
 }
 
 function highlightUwCourses(text: string): InnerText {
-  const innerHTML: InnerText = splitByCourses(
-    capitalizeFirstCharacter(text)
-  );
-  for (let i = 1; i < innerHTML.length; i += 2) {
-    innerHTML[i] = (
+  const innerHTML = splitByCourses(text, true);
+  generateUwCourseElements(
+    innerHTML,
+    (elemText, i) => (
       <span key={i} className="uw-course-id uw-course-id--highlighted">
-        {innerHTML[i]}
+        {elemText}
       </span>
-    );
-  }
+    ),
+  );
   return innerHTML;
 }
 
-export const QUARTER_REGEX = {
+const QUARTER_REGEX = {
   autumn: /\bA(?=W|Sp|S|\b)(?=[WSp]*\.\s*$)/,
   winter: /(?<=A|\b)W(?=Sp|S|\b)(?=[Sp]*\.\s*$)/,
   spring: /(?<=A|W|\b)Sp(?=S|\b)(?=S?\.\s*$)/,
   summer: /(?<=A|W|Sp|\b)S(?=\b\.\s*$)/,
 };
-function markOfferedQuarters(text: string): InnerText {
-  const innerHTML: InnerText = splitByCourses(
-    capitalizeFirstCharacter(text)
-  );
-  for (let i = 1; i < innerHTML.length; i += 2) {
-    innerHTML[i] = (
-      <span key={i} className="uw-course-id">
-        {innerHTML[i]}
-      </span>
-    );
-  }
+export function markOfferedQuarters(innerHTML: InnerText): void {
   for (const [quarter, regex] of Object.entries<RegExp>(QUARTER_REGEX)) {
     const lastIndex = innerHTML.length - 1;
     const remainingText = innerHTML[lastIndex] as string;
@@ -69,7 +76,6 @@ function markOfferedQuarters(text: string): InnerText {
       innerHTML.splice(lastIndex, 1, ...remainingItems);
     }
   }
-  return innerHTML;
 }
 
 // TODO: Memoize
@@ -77,18 +83,23 @@ export default function CourseNode({ data }: { data: CourseNodeData }) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const prereqHTML = highlightUwCourses(data.prerequisite);
-  const offeredHTML = (
-    data.offered
-      ? <p>Offered: {markOfferedQuarters(data.offered)}</p>
-      : null
-  );
+  let offeredHTML = null;
+  if (data.offered) {
+    offeredHTML = splitByCourses(data.offered, true);
+    generateUwCourseElements(
+      offeredHTML,
+      (elemText, i) => <span key={i} className="uw-course-id">{elemText}</span>,
+    );
+    markOfferedQuarters(offeredHTML);
+    offeredHTML = <p>Offered: {offeredHTML}</p>;
+  }
 
   const tippyContent = (
     <>
       <p>{data.id} — {data.name} ({data.credits})</p>
       <p>{data.description}</p>
       <hr />
-      <p className="prerequisite">Prerequisite: {prereqHTML}</p>
+      <p>Prerequisite: {prereqHTML}</p>
       {offeredHTML}
     </>
   );
