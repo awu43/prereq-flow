@@ -14,7 +14,7 @@ interface ModalDialogProps {
   busy: boolean;
   contentCls: string;
   contentAriaLabel: string;
-  children: ReactNode
+  children: ReactNode;
 }
 export default function ModalDialog({
   modalCls,
@@ -24,12 +24,12 @@ export default function ModalDialog({
   contentCls,
   contentAriaLabel,
   children,
-}: ModalDialogProps) {
+}: ModalDialogProps): JSX.Element {
   return (
     <DialogOverlay
       className={modalCls}
       isOpen={!modalCls.includes("--display-none")}
-    // Reach UI is not TS friendly here
+      // Reach UI is not TS friendly here
       onDismiss={event => {
         if ((event as KeyboardEvent).key === "Escape" && !busy) {
           close();
