@@ -5,10 +5,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import type {
-  SetState,
-  ConnectTo,
-} from "types/main";
+import type { SetState, ConnectTo } from "types/main";
 
 import "./AddCourseTextSearch.scss";
 
@@ -18,7 +15,7 @@ interface TextSearchProps {
   tabIndex: number;
   connectionError: boolean;
   errorMsg: string;
-  setErrorMsg: SetState<string>
+  setErrorMsg: SetState<string>;
   busy: boolean;
   addCoursesFromText: (
     matches: RegExpMatchArray,
@@ -32,7 +29,7 @@ export default function NewFlowTextSearch({
   setErrorMsg,
   busy,
   addCoursesFromText,
-}: TextSearchProps) {
+}: TextSearchProps): JSX.Element {
   const [text, setText] = useState("");
   const [connectTo, setConnectTo] = useState<ConnectTo>({
     prereq: true,
@@ -42,7 +39,8 @@ export default function NewFlowTextSearch({
   async function AddCourses(event: MouseEvent): Promise<void> {
     event.preventDefault();
     const success = await addCoursesFromText(
-      [...new Set(courseIdMatch(text) || [])], connectTo
+      [...new Set(courseIdMatch(text) || [])],
+      connectTo,
     );
     if (success) {
       setText("");
@@ -69,8 +67,7 @@ export default function NewFlowTextSearch({
             setErrorMsg("");
           }}
           disabled={connectionError || busy}
-        >
-        </textarea>
+        ></textarea>
       </Tippy>
 
       <p>⚠️Added courses are placed below existing courses⚠️</p>

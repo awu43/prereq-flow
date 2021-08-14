@@ -36,6 +36,7 @@ module.exports = {
     "no-plusplus": [2, { allowForLoopAfterthoughts: true }],
     "react/jsx-boolean-value": [2, "always"],
     "jsx-a11y/label-has-associated-control": [2, { assert: "either" }],
+    "react/self-closing-comp": [2, { component: true, html: false }],
 
     "import/no-named-default": 0,
     "no-continue": 0,
