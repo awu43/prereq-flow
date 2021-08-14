@@ -82,6 +82,7 @@ export function markOfferedQuarters(innerHTML: InnerText): void {
 export default function CourseNode({ data }: { data: CourseNodeData }) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
+  const descriptionHTML = highlightUwCourses(data.description);
   const prereqHTML = highlightUwCourses(data.prerequisite);
   let offeredHTML = null;
   if (data.offered) {
@@ -97,7 +98,7 @@ export default function CourseNode({ data }: { data: CourseNodeData }) {
   const tippyContent = (
     <>
       <p>{data.id} — {data.name} ({data.credits})</p>
-      <p>{data.description}</p>
+      <p>{descriptionHTML}</p>
       <hr />
       <p>Prerequisite: {prereqHTML}</p>
       {offeredHTML}
