@@ -3,15 +3,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
-import {
-  getConnectedEdges,
-} from "react-flow-renderer";
+import { getConnectedEdges } from "react-flow-renderer";
 
-import type {
-  Campus,
-  Edge,
-  Element,
-} from "types/main";
+import type { Campus, Edge, Element } from "types/main";
 import {
   courseIdMatch,
   isNode,
@@ -36,11 +30,10 @@ interface CurriculumData {
   name: string;
 }
 
-const API_URL = (
+const API_URL =
   import.meta.env.MODE === "production"
     ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
-    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL
-);
+    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL;
 
 interface NewFlowDialogProps {
   modalCls: ModalClass;
@@ -51,7 +44,7 @@ export default function NewFlowDialog({
   modalCls,
   closeDialog,
   generateNewFlow,
-}: NewFlowDialogProps) {
+}: NewFlowDialogProps): JSX.Element {
   const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
@@ -59,10 +52,9 @@ export default function NewFlowDialog({
 
   const [supportedMajors, setSupportedMajors] = useState<string[]>([]);
   const [degreeError, setDegreeError] = useState("");
-  const [
-    supportedCurricula,
-    setSupportedCurricula
-  ] = useState<Map<Campus, HTMLOptionElement[]>>(new Map());
+  const [supportedCurricula, setSupportedCurricula] = useState<
+    Map<Campus, HTMLOptionElement[]>
+  >(new Map());
   const [curriculumError, setCurriculumError] = useState("");
   const [textSearchError, setTextSearchError] = useState("");
 
@@ -103,11 +95,14 @@ export default function NewFlowDialog({
     fetch(`${API_URL}/curricula/`)
       .then(resp => resp.json())
       .then((data: CurriculumData[]) => {
-        const curricula = new Map(Object.entries({
-          Seattle: [],
-          Bothell: [],
-          Tacoma: [],
-        })) as Map<Campus, any>;
+        const curricula = new Map(
+          Object.entries({
+            Seattle: [],
+            Bothell: [],
+            Tacoma: [],
+          }),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ) as Map<Campus, any>;
 
         for (const datum of data) {
           curricula.get(datum.campus).push(datum);
@@ -115,16 +110,18 @@ export default function NewFlowDialog({
         // Values initially CurriculumData[]
 
         for (const campus of curricula.keys()) {
-          curricula.get(campus).sort((a: CurriculumData, b: CurriculumData) => (
-            a.id.localeCompare(b.id)
-          ));
+          curricula
+            .get(campus)
+            .sort((a: CurriculumData, b: CurriculumData) =>
+              a.id.localeCompare(b.id),
+            );
           curricula.set(
             campus,
             curricula.get(campus).map((curr: CurriculumData) => (
               <option key={curr.id} value={curr.id}>
                 {`${curr.id}: ${curr.name}`}
               </option>
-            ))
+            )),
           );
         }
         // Now HTMLOptionElement[]
@@ -140,7 +137,7 @@ export default function NewFlowDialog({
 
   async function newDegreeFlow(
     majors: string[],
-    ambiguityHandling: AmbiguityHandling
+    ambiguityHandling: AmbiguityHandling,
   ): Promise<void> {
     setDegreeError("");
     try {
@@ -185,15 +182,11 @@ export default function NewFlowDialog({
         const externalPrereqs = [];
         for (const course of data) {
           const courseMatches = courseIdMatch(
-            course.prerequisite
+            course.prerequisite,
           ) as RegExpMatchArray;
-          const external = (
-            courseMatches
-              ? courseMatches.filter(
-                courseId => !courseId.startsWith(curriculum)
-              )
-              : []
-          );
+          const external = courseMatches
+            ? courseMatches.filter(courseId => !courseId.startsWith(curriculum))
+            : [];
           externalPrereqs.push(...external);
         }
         if (externalPrereqs.length) {
@@ -209,16 +202,15 @@ export default function NewFlowDialog({
 
       const newElements = generateInitialElements(data, ambiguityHandling);
       const edges = newElements.filter(elem => isEdge(elem));
-      const externalOrphans = newElements.filter(elem => (
-        isNode(elem)
-        && !elem.id.startsWith(curriculum)
-        && !getConnectedEdges([elem], edges as Edge[]).length
+      const externalOrphans = newElements.filter(
+        elem =>
+          isNode(elem) &&
+          !elem.id.startsWith(curriculum) &&
+          !getConnectedEdges([elem], edges as Edge[]).length,
         // Not connected to any other nodes
-      ));
-
-      generateNewFlow(
-        removeElements(externalOrphans, newElements)
       );
+
+      generateNewFlow(removeElements(externalOrphans, newElements));
       close();
     } catch (error) {
       setCurriculumError("Something went wrong");
@@ -283,9 +275,7 @@ export default function NewFlowDialog({
       contentCls="NewFlowDialog"
       contentAriaLabel="New flow dialog"
     >
-      <h2 className={connectionError ? "connection-error" : ""}>
-        New flow
-      </h2>
+      <h2 className={connectionError ? "connection-error" : ""}>New flow</h2>
       <hr />
       <div className={`NewFlowDialog__slides slide-${slideNum}`}>
         <PreWarning
