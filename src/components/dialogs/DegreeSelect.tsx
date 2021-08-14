@@ -22,9 +22,15 @@ function toKebabCase(text: string) {
 }
 
 const dummyMajors = [
-  <li className="majors__selected-item" key={nanoid()}>&nbsp;</li>,
-  <li className="majors__selected-item" key={nanoid()}>&nbsp;</li>,
-  <li className="majors__selected-item" key={nanoid()}>&nbsp;</li>,
+  <li className="majors__selected-item" key={nanoid()}>
+    &nbsp;
+  </li>,
+  <li className="majors__selected-item" key={nanoid()}>
+    &nbsp;
+  </li>,
+  <li className="majors__selected-item" key={nanoid()}>
+    &nbsp;
+  </li>,
 ];
 
 interface DegreeSelectProps {
@@ -45,14 +51,12 @@ export default function DegreeSelect({
   supportedMajors,
   newDegreeFlow,
   errorMsg,
-}: DegreeSelectProps) {
+}: DegreeSelectProps): JSX.Element {
   const [majors, setMajors] = useState<string[]>([]);
   // const [minors, setMinors] = useState([]);
   const [currentlySelected, setCurrentlySelected] = useState("");
-  const [
-    ambiguityHandling,
-    setAmbiguityHandling
-  ] = useState<AmbiguityHandling>("aggressively");
+  const [ambiguityHandling, setAmbiguityHandling] =
+    useState<AmbiguityHandling>("aggressively");
 
   useEffect(() => {
     if (supportedMajors.length) {
@@ -106,9 +110,7 @@ export default function DegreeSelect({
     <div className="DegreeSelect">
       <section className="majors">
         <h3>Majors</h3>
-        <ul className="majors__selected-list">
-          {majorsListElems}
-        </ul>
+        <ul className="majors__selected-list">{majorsListElems}</ul>
         <Tippy
           className="tippy-box--error"
           content={errorMsg}
@@ -123,7 +125,7 @@ export default function DegreeSelect({
               className="majors__select-input"
               onChange={e => {
                 setCurrentlySelected(
-                  e.target.selectedOptions[0].textContent as string
+                  e.target.selectedOptions[0].textContent as string,
                 );
               }}
               disabled={Boolean(connectionError || busy)}
@@ -137,10 +139,10 @@ export default function DegreeSelect({
               type="button"
               onClick={addMajor}
               disabled={Boolean(
-                connectionError
-                || busy
-                || majors.includes(currentlySelected)
-                || majors.length >= 3
+                connectionError ||
+                  busy ||
+                  majors.includes(currentlySelected) ||
+                  majors.length >= 3,
               )}
             >
               <img src={plusIcon} alt="Add" />
@@ -148,8 +150,20 @@ export default function DegreeSelect({
           </div>
         </Tippy>
       </section>
-      <small>See available degrees and course lists on&nbsp;<a href="https://github.com/awu43/prereq-flow-degrees" target="_blank" rel="noreferrer">GitHub</a></small>
-      <small>Send suggestions for changes to <a href="mailto:comments@prereqflow.com">comments@prereqflow.com</a></small>
+      <small>
+        See available degrees and course lists on&nbsp;
+        <a
+          href="https://github.com/awu43/prereq-flow-degrees"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
+      </small>
+      <small>
+        Send suggestions for changes to{" "}
+        <a href="mailto:comments@prereqflow.com">comments@prereqflow.com</a>
+      </small>
 
       <AmbiguitySelect
         ambiguityHandling={ambiguityHandling}
