@@ -13,7 +13,7 @@ export default function CampusSelect({
   selectedCampus,
   setSelectedCampus,
   busy,
-}: CampusSelectProps) {
+}: CampusSelectProps): JSX.Element {
   return (
     <fieldset className="CampusSelect" disabled={busy}>
       <label className="CampusSelect__radio-label--seattle">
