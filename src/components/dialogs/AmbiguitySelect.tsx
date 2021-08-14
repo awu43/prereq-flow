@@ -16,7 +16,7 @@ export default function AmbiguitySelect({
   ambiguityHandling,
   setAmbiguityHandling,
   busy,
-}: AmbiGuitySelectProps) {
+}: AmbiGuitySelectProps): JSX.Element {
   const [fieldName, _setFieldName] = useState(() => nanoid());
   // Need a unique name for every new instance
 
