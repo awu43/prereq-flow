@@ -55,6 +55,7 @@ module.exports = {
       rules: {
         "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
         "import/no-unresolved": 0,
+        "react/require-default-props": 0,
         "@typescript-eslint/no-inferrable-types": 0,
 
         "no-use-before-define": 0,

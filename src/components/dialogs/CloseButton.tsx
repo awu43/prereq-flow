@@ -14,7 +14,7 @@ export default function CloseButton({
   btnRef = null,
   onClick,
   disabled = false,
-}: CloseButtonProps) {
+}: CloseButtonProps): JSX.Element {
   return (
     <button
       ref={btnRef}
