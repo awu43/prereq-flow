@@ -7,10 +7,9 @@ export type OpenModal = () => void;
 export type CloseModal = () => void;
 
 export default function useDialogStatus(): [ModalClass, OpenModal, CloseModal] {
-  const [
-    dialogCls,
-    setDialogCls
-  ] = useState<ModalClass>("--transparent --display-none");
+  const [dialogCls, setDialogCls] = useState<ModalClass>(
+    "--transparent --display-none"
+  );
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
