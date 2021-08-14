@@ -21,7 +21,7 @@ interface CustomEdgeProps {
   targetY: number;
   sourcePosition: Position;
   targetPosition: Position;
-  data: { concurrent: boolean; };
+  data: { concurrent: boolean };
 }
 export default function CustomEdge({
   id,
@@ -32,7 +32,7 @@ export default function CustomEdge({
   sourcePosition,
   targetPosition,
   data = { concurrent: false },
-}: CustomEdgeProps) {
+}: CustomEdgeProps): JSX.Element {
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -50,17 +50,13 @@ export default function CustomEdge({
 
   return (
     <>
-      <path
-        className="react-flow__edge-path"
-        d={edgePath}
-        data-testid={id}
-      />
+      <path className="react-flow__edge-path" d={edgePath} data-testid={id} />
       <EdgeText
         x={centerX}
         y={centerY}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...(data.concurrent ? CONCURRENT_LABEL : {})}
-      />;
+      />
     </>
   );
 }
