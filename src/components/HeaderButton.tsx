@@ -15,7 +15,7 @@ export default function HeaderButton({
   label,
   description,
   onClick,
-}: HeaderButtonProps) {
+}: HeaderButtonProps): JSX.Element {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
