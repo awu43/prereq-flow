@@ -2,10 +2,7 @@ import { render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect } from "chai";
 
-import {
-  newApp,
-  getNode,
-} from "./react-test-utils";
+import { newApp, getNode } from "./react-test-utils";
 
 describe("<CourseNode />", () => {
   it("Displays tippy when hovered over", () => {
@@ -28,12 +25,12 @@ describe("<CourseNode />", () => {
     const MATH_125 = getNode("MATH 125", container);
     userEvent.hover(MATH_125);
     await waitFor(() => {
-      expect(document.querySelector(".tippy-box--flow[data-state=\"visible\"]"))
+      expect(document.querySelector('.tippy-box--flow[data-state="visible"]'))
         .to.not.be.null;
     });
     // Wait for tippy to appear
     const tippy = document.querySelector(
-      ".tippy-box--flow[data-state=\"visible\"]"
+      '.tippy-box--flow[data-state="visible"]',
     );
     expect(tippy.querySelector("span.offered-autumn")).to.not.be.null;
     expect(tippy.querySelector("span.offered-winter")).to.not.be.null;

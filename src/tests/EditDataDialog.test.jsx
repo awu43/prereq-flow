@@ -7,11 +7,7 @@ import {
 import userEvent from "@testing-library/user-event";
 import { expect } from "chai";
 
-import {
-  newApp,
-  getNode,
-  clickContextOption,
-} from "./react-test-utils";
+import { newApp, getNode, clickContextOption } from "./react-test-utils";
 import { TEST_COND_IDS } from "./test-utils";
 
 describe("<EditDataDialog />", () => {
@@ -48,9 +44,9 @@ describe("<EditDataDialog />", () => {
     userEvent.type(idInput, "FOO 123");
     const saveButton = within(dialog).getByText("Save");
     userEvent.click(saveButton);
-    await waitForElementToBeRemoved(() => (
-      document.querySelector(".EditDataDialog")
-    ));
+    await waitForElementToBeRemoved(() =>
+      document.querySelector(".EditDataDialog"),
+    );
     expect(getNode("MATH 125", container)).to.be.null;
     expect(getNode("FOO 123", container)).to.not.be.null;
     expect(queryByTestId("MATH 125 -> MATH 307")).to.be.null;

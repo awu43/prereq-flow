@@ -70,6 +70,13 @@ module.exports = {
       },
     },
     {
+      files: ["**/*.test.{jsx,js}"],
+      rules: {
+        "import/no-unresolved": 0,
+        "no-unused-expressions": 0,
+      },
+    },
+    {
       files: ["**/*.spec.js"],
       plugins: ["cypress"],
       extends: ["plugin:cypress/recommended"],
