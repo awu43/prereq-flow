@@ -10,9 +10,7 @@ import type {
   Element,
 } from "types/main";
 import type { ModalClass, CloseModal } from "@useDialogStatus";
-import type {
-  Element as ElementBeta,
-} from "types/beta";
+import type { Element as ElementBeta } from "types/beta";
 import type {
   CourseNode as CourseNodeBeta1,
   Edge as EdgeBeta1,
@@ -33,34 +31,34 @@ export const [CURRENT_VERSION] = SUPPORTED_VERSIONS.slice(-1);
 // Change node type from "custom" to "course"
 // Remove selected property
 function betaToBeta1(elems: ElementBeta[]): ElementBeta1[] {
-  return elems.map(elem => (
+  return elems.map(elem =>
     isNode(elem)
-      ? {
-        id: elem.id,
-        type: "course",
-        position: elem.position,
-        data: elem.data,
-      } as CourseNodeBeta1
-      : elem as EdgeBeta1
-  ));
+      ? ({
+          id: elem.id,
+          type: "course",
+          position: elem.position,
+          data: elem.data,
+        } as CourseNodeBeta1)
+      : (elem as EdgeBeta1),
+  );
 }
 
 // Convert default nodes to custom node
 // Change type from default to custom
 // Add concurrency data property
 function beta1ToBeta2(elems: ElementBeta1[]): ElementBeta2[] {
-  return elems.map(elem => (
+  return elems.map(elem =>
     isEdge(elem)
-      ? {
-        id: elem.id,
-        type: "custom",
-        source: elem.source,
-        target: elem.target,
-        className: elem.className,
-        data: { concurrent: elem.label === "CC" }
-      } as Edge
-      : elem as Node
-  ));
+      ? ({
+          id: elem.id,
+          type: "custom",
+          source: elem.source,
+          target: elem.target,
+          className: elem.className,
+          data: { concurrent: elem.label === "CC" },
+        } as Edge)
+      : (elem as Node),
+  );
 }
 
 // No changes
@@ -68,6 +66,7 @@ function beta2Tov1(elems: ElementBeta2[]): Element[] {
   return elems;
 }
 
+// eslint-disable-next-line prettier/prettier
 const CONVERSION_FUNCS = [
   betaToBeta1,
   beta1ToBeta2,
@@ -83,7 +82,7 @@ export default function OpenFileDialog({
   modalCls,
   closeDialog,
   openFlow,
-}: OpenFileDialogProps) {
+}: OpenFileDialogProps): JSX.Element {
   const [busy, setBusy] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -118,15 +117,13 @@ export default function OpenFileDialog({
     reader.onload = event => {
       // https://github.com/microsoft/TypeScript/issues/4163
       // https://stackoverflow.com/a/35790786 <- Didn't work
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       loadedData = JSON.parse((event as any).target.result);
 
-      const structureValid = (
-        typeof loadedData === "object"
-        && (
-          Object.keys(loadedData).toString()
-          === ["version", "elements"].toString()
-        )
-      );
+      const structureValid =
+        typeof loadedData === "object" &&
+        Object.keys(loadedData).toString() ===
+          ["version", "elements"].toString();
       if (!structureValid) {
         setErrorMsg("Invalid data structure");
         setBusy(false);
@@ -146,11 +143,10 @@ export default function OpenFileDialog({
         return;
       }
 
-      const dataValid = (
-        typeof loadedVersion === "string"
-        && Array.isArray(loadedElems)
-        && loadedElems.every(e => isNode(e) || isEdge(e))
-      );
+      const dataValid =
+        typeof loadedVersion === "string" &&
+        Array.isArray(loadedElems) &&
+        loadedElems.every(e => isNode(e) || isEdge(e));
       if (!dataValid) {
         setErrorMsg("Invalid data");
         setBusy(false);
@@ -159,14 +155,14 @@ export default function OpenFileDialog({
 
       for (const elem of loadedElems) {
         if (elem.data?.prerequisite) {
-          elem.data.prerequisite = sanitizeHtml(
-            elem.data.prerequisite, { disallowedTagsMode: "recursiveEscape" }
-          );
+          elem.data.prerequisite = sanitizeHtml(elem.data.prerequisite, {
+            disallowedTagsMode: "recursiveEscape",
+          });
         }
         if (elem.data?.offered) {
-          elem.data.offered = sanitizeHtml(
-            elem.data.offered, { disallowedTagsMode: "recursiveEscape" }
-          );
+          elem.data.offered = sanitizeHtml(elem.data.offered, {
+            disallowedTagsMode: "recursiveEscape",
+          });
         }
       }
 
