@@ -14,12 +14,16 @@ export default function PreWarning({
   warningAccepted,
   setWarningAccepted,
   closeButtonRef,
-}: PreWarningProps) {
+}: PreWarningProps): JSX.Element {
   return (
     <div className="PreWarning">
       <section>
         <h3>⚠️ Important information ⚠️</h3>
-        <p>Prereq Flow is not an official University of Washington resource. No guarantees are made about the accuracy, completeness, or up-to-dateness of any information&nbsp;presented.</p>
+        <p>
+          Prereq Flow is not an official University of Washington resource. No
+          guarantees are made about the accuracy, completeness, or
+          up-to-dateness of any information&nbsp;presented.
+        </p>
 
         <p>Some limitations to keep in&nbsp;mind:</p>
         <ul>
@@ -28,11 +32,30 @@ export default function PreWarning({
           <li>Registration restrictions are not&nbsp;displayed.</li>
         </ul>
 
-        <p>All caveats for <a href="https://prereqmap.uw.edu/" target="_blank" rel="noreferrer" tabIndex={warningAccepted ? -1 : 0}>Prereq Map</a> also apply&nbsp;here:</p>
+        <p>
+          All caveats for{" "}
+          <a
+            href="https://prereqmap.uw.edu/"
+            target="_blank"
+            rel="noreferrer"
+            tabIndex={warningAccepted ? -1 : 0}
+          >
+            Prereq Map
+          </a>{" "}
+          also apply&nbsp;here:
+        </p>
         <ul>
-          <li>Prerequisites and graduation requirements may change over&nbsp;time.</li>
-          <li>Non-course graduation requirements (e.g. 5 credits of VLPA) are not&nbsp;displayed.</li>
-          <li>Equivalencies (e.g. placements tests, AP credits) are not&nbsp;displayed.</li>
+          <li>
+            Prerequisites and graduation requirements may change over&nbsp;time.
+          </li>
+          <li>
+            Non-course graduation requirements (e.g. 5 credits of VLPA) are
+            not&nbsp;displayed.
+          </li>
+          <li>
+            Equivalencies (e.g. placements tests, AP credits) are
+            not&nbsp;displayed.
+          </li>
         </ul>
         <p>Talk to your advisor when course&nbsp;planning.</p>
         <div className="PreWarning__button-wrapper">
