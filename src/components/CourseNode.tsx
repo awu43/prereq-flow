@@ -52,9 +52,9 @@ function highlightUwCourses(text: string): InnerText {
 
 const QUARTER_REGEX = {
   autumn: /\bA(?=W|Sp|S|\b)(?=[WSp]*\.\s*$)/,
-  winter: /(?<=A|\b)W(?=Sp|S|\b)(?=[Sp]*\.\s*$)/,
-  spring: /(?<=A|W|\b)Sp(?=S|\b)(?=S?\.\s*$)/,
-  summer: /(?<=A|W|Sp|\b)S(?=\b\.\s*$)/,
+  winter: /\bW(?=Sp|S|\b)(?=[Sp]*\.\s*$)/,
+  spring: /\bSp(?=S|\b)(?=S?\.\s*$)/,
+  summer: /\bS(?=\b\.\s*$)/,
 };
 export function markOfferedQuarters(innerHTML: InnerText): void {
   for (const [quarter, regex] of Object.entries<RegExp>(QUARTER_REGEX)) {
