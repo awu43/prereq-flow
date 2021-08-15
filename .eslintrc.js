@@ -75,6 +75,14 @@ module.exports = {
       },
     },
     {
+      files: ["src/components/ContextMenu/*.tsx"],
+      rules: {
+        "react/destructuring-assignment": 0,
+        "jsx-a11y/no-noninteractive-element-interactions": 0,
+        "jsx-a11y/click-events-have-key-events": 0,
+      },
+    },
+    {
       files: ["**/*.test.{jsx,js}"],
       rules: {
         "import/no-unresolved": 0,
