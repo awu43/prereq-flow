@@ -13,10 +13,22 @@ import type {
   ConnectTo,
 } from "types/main";
 
+type ContextTargetType =
+  | "coursenode"
+  | "conditionalnode"
+  | "edge"
+  | "coursemultiselect"
+  | "conditionalmultiselect"
+  | "mixedmultiselect"
+  | "courseselection"
+  | "conditionalselection"
+  | "pane";
+
 type ContextTargetStatus = CourseStatus | "" | "concurrent";
+
 interface ContextTarget {
   target: ElementId[];
-  targetType: string;
+  targetType: ContextTargetType;
   targetStatus: ContextTargetStatus;
 }
 

@@ -131,7 +131,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
   const [contextActive, setContextActive] = useState(false);
   const contextData = useRef<ContextTarget>({
     target: [],
-    targetType: "node",
+    targetType: "pane",
     targetStatus: "",
   });
   const [mouseXY, setMouseXY] = useState<XYPosition>(ZERO_POSITION);
