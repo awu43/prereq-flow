@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { MutableRefObject } from "react";
 
 import { isNode, isEdge } from "react-flow-renderer";
 import sanitizeHtml from "sanitize-html";
@@ -83,11 +84,13 @@ interface OpenFileDialogProps {
   modalCls: ModalClass;
   closeDialog: CloseModal;
   openFlow: (openedElements: Element[]) => void;
+  fileName: MutableRefObject<string>;
 }
 export default function OpenFileDialog({
   modalCls,
   closeDialog,
   openFlow,
+  fileName,
 }: OpenFileDialogProps): JSX.Element {
   const [busy, setBusy] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -181,6 +184,7 @@ export default function OpenFileDialog({
       }
 
       openFlow(convertedElems);
+      fileName.current = file.name;
       close();
     };
   }

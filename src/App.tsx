@@ -111,6 +111,8 @@ export default function App({ initialElements }: AppProps): JSX.Element {
   const [tableDlgCls, openTableDlg, closeTableDlg] = useDialogStatus();
   const [editDlgCls, openEditDlg, closeEditDlg] = useDialogStatus();
 
+  const fileName = useRef("untitled-flow.json");
+
   const flowInstance = useRef<OnLoadParams>();
   const updateNodePos = useRef<UpdateNodePos>(() => {});
   const selectedElements = useRef<SelectedElements>([]);
@@ -244,6 +246,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
 
   function generateNewFlow(elems: Element[]): void {
     recordFlowState();
+    fileName.current = "untitled-flow.json";
     nodeData.current = newNodeData(elems);
     let newElements = sortElementsByDepth(elems.slice(), nodeData.current);
     elemIndexes.current = newElemIndexes(newElements);
@@ -279,7 +282,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
       type: "application/json",
     });
     downloadLink.href = URL.createObjectURL(fileBlob);
-    downloadLink.download = "untitled-flow.json";
+    downloadLink.download = fileName.current;
     downloadLink.click();
   }
 
@@ -1115,6 +1118,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
         modalCls={openFileDlgCls}
         closeDialog={closeOpenFileDlg}
         openFlow={openFlow}
+        fileName={fileName}
       />
       <AddCourseDialog
         modalCls={addCourseDlgCls}
