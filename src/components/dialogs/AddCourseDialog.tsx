@@ -87,7 +87,7 @@ export default function AddCourseDialog({
   const addButtonRef = useRef<HTMLButtonElement>(null);
 
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065#issuecomment-446425911
-  const websocket = useRef<WebSocket | null>(null);
+  const websocket = useRef<WebSocket>();
   useEffect(() => {
     const wsConnection = new WebSocket(WS_URL);
     websocket.current = wsConnection;

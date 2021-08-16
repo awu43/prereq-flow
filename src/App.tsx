@@ -111,7 +111,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
   const [tableDlgCls, openTableDlg, closeTableDlg] = useDialogStatus();
   const [editDlgCls, openEditDlg, closeEditDlg] = useDialogStatus();
 
-  const flowInstance = useRef<OnLoadParams | null>(null);
+  const flowInstance = useRef<OnLoadParams>();
   const updateNodePos = useRef<UpdateNodePos>(() => {});
   const selectedElements = useRef<SelectedElements>([]);
   const setSelectedElements = useRef<SetSelectedElements>(() => {});
