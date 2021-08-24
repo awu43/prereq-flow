@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import type { MutableRefObject } from "react";
 
 import { isNode, isEdge } from "react-flow-renderer";
-import sanitizeHtml from "sanitize-html";
 
 import type {
   // CourseNode,
@@ -160,19 +159,6 @@ export default function OpenFileDialog({
         setErrorMsg("Invalid data");
         setBusy(false);
         return;
-      }
-
-      for (const elem of loadedElems) {
-        if (elem.data?.prerequisite) {
-          elem.data.prerequisite = sanitizeHtml(elem.data.prerequisite, {
-            disallowedTagsMode: "recursiveEscape",
-          });
-        }
-        if (elem.data?.offered) {
-          elem.data.offered = sanitizeHtml(elem.data.offered, {
-            disallowedTagsMode: "recursiveEscape",
-          });
-        }
       }
 
       let convertedElems = loadedElems;
