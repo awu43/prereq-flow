@@ -100,7 +100,7 @@
   },
   {
     "campus": "Seattle",
-    "id": "MATH 307",
+    "id": "MATH 207",
     "name": "Introduction to Differential Equations",
     "credits": "3",
     "description": "Introductory course in ordinary differential equations. Includes first- and second-order equations and Laplace transform.",
@@ -145,7 +145,7 @@
   },
   {
     "campus": "Seattle",
-    "id": "MATH 308",
+    "id": "MATH 208",
     "name": "Matrix Algebra with Applications",
     "credits": "3",
     "description": "Systems of linear equations, vector spaces, matrices, subspaces, orthogonality, least squares, eigenvalues, eigenvectors, applications. For students in engineering, mathematics, and the sciences.",
@@ -154,8 +154,8 @@
   },
   {
     "campus": "Seattle",
-    "id": "MATH 324",
-    "name": "Advanced Multivariable Calculus I",
+    "id": "MATH 224",
+    "name": "Advanced Multivariable Calculus",
     "credits": "3",
     "description": "Topics include double and triple integrals, the chain rule, vector fields, line and surface integrals. Culminates in the theorems of Green and Stokes, along with the Divergence Theorem.",
     "prerequisite": "minimum grade of 2.0 in either MATH 126 or MATH 136.",
@@ -185,7 +185,7 @@
     "name": "Partial Differential Equations and Waves",
     "credits": "3",
     "description": "Covers traveling waves of linear equations, dispersion relation, stability, superposition and Fourier analysis, d'Alembert solution, standing waves, vibrations and separation of variables, traveling waves of nonlinear equations, conservation laws, characteristics, breaking, shocks, and rarefaction.",
-    "prerequisite": "either AMATH 351, MATH 136, or MATH 307.",
+    "prerequisite": "either AMATH 351, MATH 136, or MATH 207.",
     "offered": "Sp."
   },
   {
@@ -203,7 +203,7 @@
     "name": "Probability and Statistics for Engineers",
     "credits": "3",
     "description": "Application of probability theory and statistics to engineering problems, distribution theory and discussion of particular distributions of interest in engineering, statistical estimation and data analysis. Illustrative statistical applications may include quality control, linear regression, and analysis of engineering data sets.",
-    "prerequisite": "either MATH 136, MATH 307, or AMATH 351.",
+    "prerequisite": "either MATH 136, MATH 207, or AMATH 351.",
     "offered": "AWSpS."
   },
   {
@@ -221,16 +221,16 @@
     "name": "Introduction to Fluid Mechanics",
     "credits": "5",
     "description": "Introduction to the basic fluid laws and their application. Conservation equations, dynamic similarity, potential flow, boundary-layer concepts, effects of friction, compressible flow, fluid machinery, measurement techniques.",
-    "prerequisite": "AMATH 301; M E 323; either MATH 307 or AMATH 351.",
+    "prerequisite": "AMATH 301; M E 323; either MATH 207 or AMATH 351.",
     "offered": ""
   },
   {
     "campus": "Seattle",
-    "id": "MATH 309",
+    "id": "MATH 209",
     "name": "Linear Analysis",
     "credits": "3",
     "description": "First order systems of linear differential equations, Fourier series and partial differential equations, and the phase plane.",
-    "prerequisite": "either a minimum grade of 2.0 in both MATH 307 and MATH 308 or minimum grade of 2.0 in MATH 136.",
+    "prerequisite": "either a minimum grade of 2.0 in both MATH 207 and MATH 208 or minimum grade of 2.0 in MATH 136.",
     "offered": "AWSpS."
   },
   {
@@ -239,7 +239,7 @@
     "name": "Fundamentals of Electrical Engineering",
     "credits": "4",
     "description": "Introduction to electrical engineering. Basic circuit and systems concepts. Mathematical models of components. Kirchhoff's laws. Resistors, sources, capacitors, inductors, and operational amplifiers. Solution of first and second order linear differential equations associated with basic circuit forms.",
-    "prerequisite": "either MATH 136, or MATH 126 and either MATH 307 or AMATH 351, either of which may be taken concurrently; PHYS 122.",
+    "prerequisite": "either MATH 136, or MATH 126 and either MATH 207 or AMATH 351, either of which may be taken concurrently; PHYS 122.",
     "offered": ""
   },
   {
@@ -266,7 +266,7 @@
     "name": "Introduction to System Dynamics",
     "credits": "5",
     "description": "Mathematical modeling, analysis, and design of physical dynamic systems involving energy storage and transfer by lumped-parameter linear elements. Time-domain response by analytical methods and numeric simulation. Laboratory experiments.",
-    "prerequisite": "either AMATH 351 or MATH 307; either AMATH 352 or MATH 308; E E 215; M E 230.",
+    "prerequisite": "either AMATH 351 or MATH 207; either AMATH 352 or MATH 208; E E 215; M E 230.",
     "offered": ""
   },
   {

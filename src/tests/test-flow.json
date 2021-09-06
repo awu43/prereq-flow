@@ -90,7 +90,7 @@
       }
     },
     {
-      "id": "MATH 307",
+      "id": "MATH 207",
       "type": "course",
       "position": {
         "x": 420,
@@ -98,7 +98,7 @@
       },
       "data": {
         "campus": "Seattle",
-        "id": "MATH 307",
+        "id": "MATH 207",
         "name": "Introduction to Differential Equations",
         "credits": "3",
         "description": "Introductory course in ordinary differential equations. Includes first- and second-order equations and Laplace transform.",
@@ -128,7 +128,7 @@
       }
     },
     {
-      "id": "MATH 308",
+      "id": "MATH 208",
       "type": "course",
       "position": {
         "x": 646,
@@ -136,7 +136,7 @@
       },
       "data": {
         "campus": "Seattle",
-        "id": "MATH 308",
+        "id": "MATH 208",
         "name": "Matrix Algebra with Applications",
         "credits": "3",
         "description": "Systems of linear equations, vector spaces, matrices, subspaces, orthogonality, least squares, eigenvalues, eigenvectors, applications. For students in engineering, mathematics, and the sciences.",
@@ -171,7 +171,7 @@
       }
     },
     {
-      "id": "MATH 309",
+      "id": "MATH 209",
       "type": "course",
       "position": {
         "x": 1103,
@@ -179,11 +179,11 @@
       },
       "data": {
         "campus": "Seattle",
-        "id": "MATH 309",
+        "id": "MATH 209",
         "name": "Linear Analysis",
         "credits": "3",
         "description": "First order systems of linear differential equations, Fourier series and partial differential equations, and the phase plane.",
-        "prerequisite": "either a minimum grade of 2.0 in both MATH 307 and MATH 308 or minimum grade of 2.0 in MATH 136.",
+        "prerequisite": "either a minimum grade of 2.0 in both MATH 207 and MATH 208 or minimum grade of 2.0 in MATH 136.",
         "offered": "AWSpS.",
         "nodeStatus": "over-one-away",
         "nodeConnected": false
@@ -243,9 +243,9 @@
       "animated": false
     },
     {
-      "id": "MATH 125 -> MATH 307",
+      "id": "MATH 125 -> MATH 207",
       "source": "MATH 125",
-      "target": "MATH 307",
+      "target": "MATH 207",
       "className": "ready",
       "label": null,
       "sourceHandle": null,
@@ -257,9 +257,9 @@
       }
     },
     {
-      "id": "MATH 126 -> MATH 308",
+      "id": "MATH 126 -> MATH 208",
       "source": "MATH 126",
-      "target": "MATH 308",
+      "target": "MATH 208",
       "className": "one-away",
       "label": null,
       "sourceHandle": null,
@@ -271,9 +271,9 @@
       }
     },
     {
-      "id": "MATH 307 -> AND-SZ7MzhC510siGlVNEg0Qm",
+      "id": "MATH 207 -> AND-SZ7MzhC510siGlVNEg0Qm",
       "type": "custom",
-      "source": "MATH 307",
+      "source": "MATH 207",
       "target": "AND-SZ7MzhC510siGlVNEg0Qm",
       "className": "one-away",
       "data": {
@@ -284,9 +284,9 @@
       "animated": false
     },
     {
-      "id": "MATH 308 -> AND-SZ7MzhC510siGlVNEg0Qm",
+      "id": "MATH 208 -> AND-SZ7MzhC510siGlVNEg0Qm",
       "type": "custom",
-      "source": "MATH 308",
+      "source": "MATH 208",
       "target": "AND-SZ7MzhC510siGlVNEg0Qm",
       "className": "over-one-away",
       "data": {
@@ -323,10 +323,10 @@
       "animated": false
     },
     {
-      "id": "OR-wz5c0miLAHpZGOGGWS8-N -> MATH 309",
+      "id": "OR-wz5c0miLAHpZGOGGWS8-N -> MATH 209",
       "type": "custom",
       "source": "OR-wz5c0miLAHpZGOGGWS8-N",
-      "target": "MATH 309",
+      "target": "MATH 209",
       "className": "one-away",
       "data": {
         "concurrent": false

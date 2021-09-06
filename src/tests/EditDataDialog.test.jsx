@@ -54,10 +54,10 @@ describe("<EditDataDialog />", () => {
   //   );
   //   expect(getNode("MATH 125", container)).to.be.null;
   //   expect(getNode("FOO 123", container)).to.not.be.null;
-  //   expect(queryByTestId("MATH 125 -> MATH 307")).to.be.null;
+  //   expect(queryByTestId("MATH 125 -> MATH 207")).to.be.null;
   //   expect(queryByTestId(`MATH 125 -> ${TEST_COND_IDS.OR1}`)).to.be.null;
   //   expect(queryByTestId("MATH 125 -> MATH 126")).to.be.null;
-  //   expect(queryByTestId("FOO 123 -> MATH 307")).to.not.be.null;
+  //   expect(queryByTestId("FOO 123 -> MATH 207")).to.not.be.null;
   //   expect(queryByTestId(`FOO 123 -> ${TEST_COND_IDS.OR1}`)).to.not.be.null;
   //   expect(queryByTestId("FOO 123 -> MATH 126")).to.not.be.null;
   // });

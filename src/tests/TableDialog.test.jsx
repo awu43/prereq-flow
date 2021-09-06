@@ -130,7 +130,7 @@ describe("<TableDialog />", () => {
     // Not seen when manually loading test flow and opening table
     expect(
       outgoing.querySelector(
-        'a[href="https://myplan.uw.edu/course/#/courses/MATH 307"][class="uw-course-id one-away"]',
+        'a[href="https://myplan.uw.edu/course/#/courses/MATH 207"][class="uw-course-id one-away"]',
       ),
     ).to.not.be.null;
     expect(

@@ -43,7 +43,7 @@ describe("<ContextMenu />", () => {
     expect(getNode(TEST_COND_IDS.OR1, container)).to.be.null;
     expect(queryByTestId("MATH 125 -> AMATH 301")).to.not.be.null;
     expect(getNode(TEST_COND_IDS.OR2, container)).to.be.null;
-    expect(queryByTestId("MATH 136 -> MATH 309")).to.not.be.null;
+    expect(queryByTestId("MATH 136 -> MATH 209")).to.not.be.null;
   });
   it("Disconnects from prereqs", () => {
     const { container, queryByTestId } = render(newApp());
@@ -57,48 +57,48 @@ describe("<ContextMenu />", () => {
   });
   it("Disconnects from postreqs", () => {
     const { container, queryByTestId } = render(newApp());
-    expect(queryByTestId("MATH 126 -> MATH 308")).to.not.be.null;
+    expect(queryByTestId("MATH 126 -> MATH 208")).to.not.be.null;
     clickContextOption(
       "Disconnect postreqs",
       getNode("MATH 126", container),
       container,
     );
-    expect(queryByTestId("MATH 126 -> MATH 308")).to.be.null;
+    expect(queryByTestId("MATH 126 -> MATH 208")).to.be.null;
   });
   it("Disconnects all", () => {
     const { container, queryByTestId } = render(newApp());
     expect(queryByTestId("MATH 125 -> MATH 126")).to.not.be.null;
-    expect(queryByTestId("MATH 126 -> MATH 308")).to.not.be.null;
+    expect(queryByTestId("MATH 126 -> MATH 208")).to.not.be.null;
     clickContextOption(
       "Disconnect all",
       getNode("MATH 126", container),
       container,
     );
     expect(queryByTestId("MATH 125 -> MATH 126")).to.be.null;
-    expect(queryByTestId("MATH 126 -> MATH 308")).to.be.null;
+    expect(queryByTestId("MATH 126 -> MATH 208")).to.be.null;
   });
   it("Connects to prereqs", () => {
     const { container, queryByTestId } = render(newApp());
     deleteFromContext(getNode(TEST_COND_IDS.AND1, container), container);
     deleteFromContext(getNode(TEST_COND_IDS.OR2, container), container);
-    expect(queryByTestId("MATH 307 -> MATH 309")).to.be.null;
-    expect(queryByTestId("MATH 308 -> MATH 309")).to.be.null;
-    expect(queryByTestId("MATH 136 -> MATH 309")).to.be.null;
+    expect(queryByTestId("MATH 207 -> MATH 209")).to.be.null;
+    expect(queryByTestId("MATH 208 -> MATH 209")).to.be.null;
+    expect(queryByTestId("MATH 136 -> MATH 209")).to.be.null;
     clickContextOption(
       "Connect prereqs",
-      getNode("MATH 309", container),
+      getNode("MATH 209", container),
       container,
     );
-    expect(queryByTestId("MATH 307 -> MATH 309")).to.not.be.null;
-    expect(queryByTestId("MATH 308 -> MATH 309")).to.not.be.null;
-    expect(queryByTestId("MATH 136 -> MATH 309")).to.not.be.null;
+    expect(queryByTestId("MATH 207 -> MATH 209")).to.not.be.null;
+    expect(queryByTestId("MATH 208 -> MATH 209")).to.not.be.null;
+    expect(queryByTestId("MATH 136 -> MATH 209")).to.not.be.null;
   });
   it("Connects to postreqs", () => {
     const { container, queryByTestId } = render(newApp());
     deleteFromContext(getNode(TEST_COND_IDS.OR1, container), container);
-    deleteFromContext(queryByTestId("MATH 125 -> MATH 307"), container);
+    deleteFromContext(queryByTestId("MATH 125 -> MATH 207"), container);
     deleteFromContext(queryByTestId("MATH 125 -> MATH 126"), container);
-    expect(queryByTestId("MATH 125 -> MATH 307")).to.be.null;
+    expect(queryByTestId("MATH 125 -> MATH 207")).to.be.null;
     expect(queryByTestId("MATH 125 -> AMATH 301")).to.be.null;
     expect(queryByTestId("MATH 125 -> MATH 126")).to.be.null;
     clickContextOption(
@@ -106,7 +106,7 @@ describe("<ContextMenu />", () => {
       getNode("MATH 125", container),
       container,
     );
-    expect(queryByTestId("MATH 125 -> MATH 307")).to.not.be.null;
+    expect(queryByTestId("MATH 125 -> MATH 207")).to.not.be.null;
     expect(queryByTestId("MATH 125 -> AMATH 301")).to.not.be.null;
     expect(queryByTestId("MATH 125 -> MATH 126")).to.not.be.null;
   });
@@ -118,14 +118,14 @@ describe("<ContextMenu />", () => {
       container,
     );
     expect(queryByTestId("MATH 125 -> MATH 126")).to.be.null;
-    expect(queryByTestId("MATH 126 -> MATH 308")).to.be.null;
+    expect(queryByTestId("MATH 126 -> MATH 208")).to.be.null;
     clickContextOption(
       "Connect all",
       getNode("MATH 126", container),
       container,
     );
     expect(queryByTestId("MATH 125 -> MATH 126")).to.not.be.null;
-    expect(queryByTestId("MATH 126 -> MATH 308")).to.not.be.null;
+    expect(queryByTestId("MATH 126 -> MATH 208")).to.not.be.null;
   });
   it("Deletes a node", () => {
     const { container } = render(newApp());
@@ -189,7 +189,7 @@ describe("<ContextMenu />", () => {
     expect(getNode(TEST_COND_IDS.OR1, container)).to.be.null;
     expect(queryByTestId("MATH 125 -> AMATH 301")).to.not.be.null;
     expect(getNode(TEST_COND_IDS.OR2, container)).to.be.null;
-    expect(queryByTestId("MATH 136 -> MATH 309")).to.not.be.null;
+    expect(queryByTestId("MATH 136 -> MATH 209")).to.not.be.null;
   });
 });
 // Alt + Click advance and Ctrl multiselect fail
