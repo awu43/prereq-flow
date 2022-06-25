@@ -45,8 +45,8 @@ export default function AboutDialog({
             FastAPI
           </a>{" "}
           in the back. Built with{" "}
-          <a href="https://www.snowpack.dev/" target="_blank" rel="noreferrer">
-            Snowpack
+          <a href="https://vitejs.dev/" target="_blank" rel="noreferrer">
+            Vite
           </a>{" "}
           and hosted on&nbsp;
           <a href="https://vercel.com/" target="_blank" rel="noreferrer">

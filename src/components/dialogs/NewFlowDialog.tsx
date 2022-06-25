@@ -32,8 +32,8 @@ interface CurriculumData {
 
 const API_URL =
   import.meta.env.MODE === "production"
-    ? import.meta.env.SNOWPACK_PUBLIC_PROD_API_URL
-    : import.meta.env.SNOWPACK_PUBLIC_DEV_API_URL;
+    ? import.meta.env.VITE_PROD_API_URL
+    : import.meta.env.VITE_DEV_API_URL;
 
 interface NewFlowDialogProps {
   modalCls: ModalClass;

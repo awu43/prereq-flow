@@ -4,7 +4,8 @@ describe("CurriculumSelect", () => {
   beforeEach(() => {
     cy.visit("/");
     cy.get(".Header").contains("New flow").click();
-    cy.get(".NewFlowDialog").contains("Continue").click();
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.get(".NewFlowDialog").contains("Continue").click().wait(300);
     cy.get('[role="tablist"]').contains("Curriculum").click();
   });
   it("Generates a new curriculum flow without external prereqs", () => {
