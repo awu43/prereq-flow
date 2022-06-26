@@ -3,8 +3,6 @@ import path from "path";
 
 import { expect } from "chai";
 
-import { TEST_COND_IDS } from "./test-utils";
-
 import { edgeArrowId, isNode, isEdge, _testing } from "../utils";
 
 const testElements = JSON.parse(
@@ -20,6 +18,12 @@ const testCourseData = JSON.parse(
 function getCourseData(courseIds) {
   return testCourseData.filter(cd => courseIds.includes(cd.id));
 }
+
+const TEST_COND_IDS = {
+  OR1: "OR-Jg1vC8IVRuKkAivuA3K_O",
+  AND1: "AND-SZ7MzhC510siGlVNEg0Qm",
+  OR2: "OR-wz5c0miLAHpZGOGGWS8-N",
+};
 
 const {
   courseIdMatch,
