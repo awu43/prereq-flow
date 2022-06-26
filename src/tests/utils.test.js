@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 
 import { edgeArrowId, isNode, isEdge, _testing } from "../utils";
 
