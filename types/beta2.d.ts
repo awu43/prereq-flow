@@ -20,6 +20,10 @@ type CourseStatus =
 
 type ConditionalTypes = "or" | "and";
 
+type NodeId = string;
+type EdgeId = string;
+type ElementId = NodeId | EdgeId;
+
 interface BaseNode {
   id: NodeId;
   position: XYPosition;
