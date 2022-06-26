@@ -39,13 +39,14 @@ module.exports = {
     "react/self-closing-comp": [2, { component: true, html: false }],
 
     "import/no-named-default": 0,
+    "import/prefer-default-export": 0,
     "no-continue": 0,
     "no-underscore-dangle": 0,
     "no-else-return": 0,
   },
   overrides: [
     {
-      files: ["**/*.ts?(x)"],
+      files: ["*.ts?(x)"],
       extends: [
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
@@ -72,6 +73,12 @@ module.exports = {
         ],
         "no-empty-function": 0,
         "@typescript-eslint/no-empty-function": 0,
+      },
+    },
+    {
+      files: ["*.tsx"],
+      rules: {
+        "import/prefer-default-export": 2,
       },
     },
     {

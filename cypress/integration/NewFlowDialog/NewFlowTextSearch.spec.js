@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("NewFlowTextSearch", () => {
   beforeEach(() => {
     cy.visit("/");

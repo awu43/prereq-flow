@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("DegreeSelect", () => {
   beforeEach(() => {
     cy.visit("/");
@@ -10,7 +8,7 @@ describe("DegreeSelect", () => {
   });
   it("Generates a new flow from majors", () => {
     cy.get(".majors__select-input").select(
-      "Aeronautical and Astronautical Engineering"
+      "Aeronautical and Astronautical Engineering",
     );
     cy.get(".majors__add-button").click();
     cy.get(".DegreeSelect").contains("Get courses").click();
@@ -25,20 +23,20 @@ describe("DegreeSelect", () => {
   });
   it("Adds a major", () => {
     cy.get(".majors__select-input").select(
-      "Aeronautical and Astronautical Engineering"
+      "Aeronautical and Astronautical Engineering",
     );
     cy.get(".majors__add-button").click();
     cy.get(".majors__selected-list").contains(
-      "Aeronautical and Astronautical Engineering"
+      "Aeronautical and Astronautical Engineering",
     );
   });
   it("Deletes a major", () => {
     cy.get(".majors__select-input").select(
-      "Aeronautical and Astronautical Engineering"
+      "Aeronautical and Astronautical Engineering",
     );
     cy.get(".majors__add-button").click();
     cy.get(".majors__selected-list").contains(
-      "Aeronautical and Astronautical Engineering"
+      "Aeronautical and Astronautical Engineering",
     );
     cy.get(".majors__delete-button").click();
     cy.get(".majors__selected-list")

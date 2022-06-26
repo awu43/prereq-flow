@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("NewBlankFlow", () => {
   it("Generates a new blank dialog", () => {
     cy.visit("/");
