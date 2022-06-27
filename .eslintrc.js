@@ -3,6 +3,11 @@ module.exports = {
     browser: true,
     es2021: true,
   },
+  settings: {
+    "import/resolver": {
+      typescript: {},
+    },
+  },
   extends: [
     "plugin:react/recommended",
     "airbnb",
@@ -68,8 +73,6 @@ module.exports = {
         "no-use-before-define": 0,
         "@typescript-eslint/no-use-before-define": 2,
 
-        "import/no-unresolved": 0,
-
         "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
         "react/require-default-props": 0,
       },
@@ -89,9 +92,8 @@ module.exports = {
       },
     },
     {
-      files: ["**/*.test.{jsx,js}"],
+      files: ["src/tests/*.test.js"],
       rules: {
-        "import/no-unresolved": 0,
         "no-unused-expressions": 0,
       },
     },
