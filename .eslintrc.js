@@ -1,18 +1,13 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
   },
   settings: {
     "import/resolver": {
       typescript: {},
     },
   },
-  extends: [
-    "plugin:react/recommended",
-    "airbnb",
-    "plugin:prettier/recommended",
-  ],
+  extends: ["plugin:react/recommended", "airbnb"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -96,8 +91,17 @@ module.exports = {
     },
     {
       files: ["cypress/**/*.js"],
-      plugins: ["cypress"],
       extends: ["plugin:cypress/recommended"],
+      plugins: ["cypress"],
+    },
+    {
+      files: ["*.js?(x)", "*.ts?(x)"],
+      extends: ["plugin:prettier/recommended"],
+      plugins: ["prettier"],
+      rules: {
+        "arrow-body-style": [2, "as-needed"],
+        curly: [2, "all"],
+      },
     },
   ],
 };
