@@ -10,9 +10,9 @@
     "tscheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@reach/combobox": "^0.15.1",
-    "@reach/dialog": "^0.15.0",
-    "@reach/tabs": "^0.15.0",
+    "@reach/combobox": "^0.15.3",
+    "@reach/dialog": "^0.15.3",
+    "@reach/tabs": "^0.15.3",
     "@tippyjs/react": "^4.2.6",
     "classnames": "^2.3.1",
     "dagre": "^0.8.5",
