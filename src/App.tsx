@@ -60,6 +60,7 @@ import type {
   SelectedElements,
   SetSelectedElements,
 } from "./components/FlowInternalLifter";
+// eslint-disable-next-line import/no-named-default
 import { default as CourseNodeComponent } from "./components/CourseNode";
 import OrNode from "./components/OrNode";
 import AndNode from "./components/AndNode";
