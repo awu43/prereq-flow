@@ -47,6 +47,7 @@ module.exports = {
       parser: "@typescript-eslint/parser",
       plugins: ["@typescript-eslint"],
       rules: {
+        "@typescript-eslint/consistent-type-imports": 2,
         "no-empty-function": 0,
         "@typescript-eslint/no-empty-function": 0,
         "@typescript-eslint/no-inferrable-types": 0,
