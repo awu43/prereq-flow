@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /// <reference types="cypress" />
 
 export function getNode(nodeId) {

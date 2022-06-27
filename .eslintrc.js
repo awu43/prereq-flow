@@ -96,7 +96,7 @@ module.exports = {
       },
     },
     {
-      files: ["**/*.spec.js"],
+      files: ["cypress/**/*.js"],
       plugins: ["cypress"],
       extends: ["plugin:cypress/recommended"],
     },
