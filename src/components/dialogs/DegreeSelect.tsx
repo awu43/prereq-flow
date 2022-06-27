@@ -17,7 +17,7 @@ import AmbiguitySelect from "./AmbiguitySelect";
 
 import "./DegreeSelect.scss";
 
-function toKebabCase(text: string) {
+function toKebabCase(text: string): string {
   return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
 }
 

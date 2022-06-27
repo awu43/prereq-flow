@@ -48,6 +48,10 @@ module.exports = {
       plugins: ["@typescript-eslint"],
       rules: {
         "@typescript-eslint/consistent-type-imports": 2,
+        "@typescript-eslint/explicit-function-return-type": [
+          2,
+          { allowExpressions: true },
+        ],
         "no-empty-function": 0,
         "@typescript-eslint/no-empty-function": 0,
         "@typescript-eslint/no-inferrable-types": 0,
