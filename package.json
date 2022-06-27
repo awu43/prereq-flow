@@ -5,8 +5,8 @@
     "build": "tsc && vite build",
     "vitest": "vitest run",
     "cy": "cypress open",
-    "format": "eslint --fix \"src/**/*.{jsx,js,tsx,ts}\"",
-    "lint": "eslint \"src/**/*.{jsx,js,tsx,ts}\"",
+    "format": "eslint --fix \"src/**/*.{js,tsx,ts}\"",
+    "lint": "eslint \"src/**/*.{js,tsx,ts}\"",
     "tscheck": "tsc --noEmit"
   },
   "dependencies": {
