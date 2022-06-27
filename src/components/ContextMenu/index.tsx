@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useStoreActions } from "react-flow-renderer";
 
 import type { CourseStatus } from "types/main";

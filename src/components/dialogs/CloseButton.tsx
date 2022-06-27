@@ -1,4 +1,3 @@
-import React from "react";
 import type { RefObject } from "react";
 
 import xBlackIcon from "@icons/x-black.svg";

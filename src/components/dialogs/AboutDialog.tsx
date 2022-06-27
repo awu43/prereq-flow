@@ -1,5 +1,3 @@
-import React from "react";
-
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 import githubIcon from "@icons/github.svg";
 import envelopeIcon from "@icons/envelope.svg";

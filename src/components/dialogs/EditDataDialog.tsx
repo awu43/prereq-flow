@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
 
 import Tippy from "@tippyjs/react";

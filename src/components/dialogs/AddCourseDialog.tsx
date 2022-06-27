@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { MouseEvent, ChangeEvent } from "react";
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";

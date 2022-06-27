@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";

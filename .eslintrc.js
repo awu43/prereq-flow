@@ -70,6 +70,7 @@ module.exports = {
         "react/jsx-boolean-value": [2, "always"],
         "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
         "react/jsx-no-bind": 0,
+        "react/react-in-jsx-scope": 0,
         "react/require-default-props": 0,
         "react/self-closing-comp": [2, { component: true, html: false }],
 

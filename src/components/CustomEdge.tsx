@@ -1,5 +1,3 @@
-import React from "react";
-
 import type { Position } from "react-flow-renderer";
 import { getBezierPath, getEdgeCenter, EdgeText } from "react-flow-renderer";
 
