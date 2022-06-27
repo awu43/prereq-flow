@@ -410,16 +410,15 @@ export function updateNodeStatus(
       // AND node should be complete if no prereqs
       break;
     }
-    case "or":
-      {
-        let newStatusCode = Math.min(...incomingEdges.map(getEdgeStatusCode));
-        newStatusCode =
-          newStatusCode === Number.POSITIVE_INFINITY ? 0 : newStatusCode;
-        // Math.min() with no args -> positive infinity
+    case "or": {
+      let newStatusCode = Math.min(...incomingEdges.map(getEdgeStatusCode));
+      newStatusCode =
+        newStatusCode === Number.POSITIVE_INFINITY ? 0 : newStatusCode;
+      // Math.min() with no args -> positive infinity
 
-        newStatus = COURSE_STATUSES[newStatusCode];
-      }
+      newStatus = COURSE_STATUSES[newStatusCode];
       break;
+    }
     default:
       break;
   }

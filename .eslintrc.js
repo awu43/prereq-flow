@@ -12,7 +12,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 12,
+    ecmaVersion: "latest",
     sourceType: "module",
   },
   plugins: ["react"],
@@ -41,6 +41,7 @@ module.exports = {
     "import/prefer-default-export": 0,
 
     "react/jsx-boolean-value": [2, "always"],
+    "react/jsx-no-bind": 0,
     "react/self-closing-comp": [2, { component: true, html: false }],
     "jsx-a11y/label-has-associated-control": [2, { assert: "either" }],
   },

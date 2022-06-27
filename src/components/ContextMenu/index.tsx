@@ -166,7 +166,7 @@ export default function ContextMenu(
     case "mixedmultiselect":
       // Multiple edges
       // At least one node and at least one edge
-      menuOptions = <>{deleteElemsOpt}</>;
+      menuOptions = deleteElemsOpt;
       break;
     case "courseselection":
       // Multiple nodes containing at least one course node
