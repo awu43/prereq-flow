@@ -1,6 +1,9 @@
 import { nanoid } from "nanoid";
 
-import dagre from "dagre";
+// eslint-disable-next-line import/order
+import { layout } from "./dagre";
+// eslint-disable-next-line import/order
+import Graph from "./graphlib";
 
 import {
   isNode as isNodeBase,
@@ -454,7 +457,7 @@ export const nodeSpacing = ranksep + nodeWidth;
 // For autopositioning
 
 function generateDagreLayout(elements: Element[]): Element[] {
-  const dagreGraph = new dagre.graphlib.Graph();
+  const dagreGraph = new Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
   dagreGraph.setGraph({ rankdir: "LR", ranksep, nodesep });
 
@@ -466,7 +469,7 @@ function generateDagreLayout(elements: Element[]): Element[] {
     }
   }
 
-  dagre.layout(dagreGraph);
+  layout(dagreGraph);
 
   const arrangedElements = elements.map(elem => {
     if (isNode(elem)) {

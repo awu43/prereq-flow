@@ -1,0 +1,47 @@
+import * as utils from "../utils";
+
+export default function tarjan(g) {
+  let index = 0;
+  const stack = [];
+  const visited = {}; // node id -> { onStack, lowlink, index }
+  const results = [];
+
+  function dfs(v) {
+    visited[v] = {
+      onStack: true,
+      lowlink: index,
+      index,
+    };
+    const entry = visited[v];
+    index += 1;
+    stack.push(v);
+
+    g.successors(v).forEach(function (w) {
+      if (!utils.has(visited, w)) {
+        dfs(w);
+        entry.lowlink = Math.min(entry.lowlink, visited[w].lowlink);
+      } else if (visited[w].onStack) {
+        entry.lowlink = Math.min(entry.lowlink, visited[w].index);
+      }
+    });
+
+    if (entry.lowlink === entry.index) {
+      const cmpt = [];
+      let w;
+      do {
+        w = stack.pop();
+        visited[w].onStack = false;
+        cmpt.push(w);
+      } while (v !== w);
+      results.push(cmpt);
+    }
+  }
+
+  g.nodes().forEach(function (v) {
+    if (!utils.has(visited, v)) {
+      dfs(v);
+    }
+  });
+
+  return results;
+}
