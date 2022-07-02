@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("AddCourseTextSearch", () => {
   beforeEach(() => {
     cy.visit("/");

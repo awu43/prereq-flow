@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";
@@ -17,7 +17,7 @@ import AmbiguitySelect from "./AmbiguitySelect";
 
 import "./DegreeSelect.scss";
 
-function toKebabCase(text: string) {
+function toKebabCase(text: string): string {
   return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
 }
 

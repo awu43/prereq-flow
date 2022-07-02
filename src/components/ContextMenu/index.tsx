@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useStoreActions } from "react-flow-renderer";
 
 import type { CourseStatus } from "types/main";
@@ -166,7 +164,7 @@ export default function ContextMenu(
     case "mixedmultiselect":
       // Multiple edges
       // At least one node and at least one edge
-      menuOptions = <>{deleteElemsOpt}</>;
+      menuOptions = deleteElemsOpt;
       break;
     case "courseselection":
       // Multiple nodes containing at least one course node

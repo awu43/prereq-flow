@@ -1,10 +1,9 @@
-/// <reference types="cypress" />
-
 describe("NewBlankFlow", () => {
   it("Generates a new blank dialog", () => {
     cy.visit("/");
     cy.get(".Header").contains("New flow").click();
-    cy.get(".NewFlowDialog").contains("Continue").click();
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.get(".NewFlowDialog").contains("Continue").click().wait(300);
     cy.get('[role="tablist"]').contains("Blank").click();
     cy.get(".NewBlankFlow button").click();
     cy.get(".NewFlowDialog").should("not.exist");

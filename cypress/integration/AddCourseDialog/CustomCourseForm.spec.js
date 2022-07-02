@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("CustomCourseForm", () => {
   beforeEach(() => {
     cy.visit("/");

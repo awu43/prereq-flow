@@ -1,29 +1,34 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
-    mocha: true,
   },
-  extends: [
-    "plugin:react/recommended",
-    "airbnb",
-    "plugin:prettier/recommended",
-  ],
+  settings: {
+    "import/resolver": {
+      typescript: {},
+    },
+  },
+  extends: ["plugin:react/recommended", "airbnb"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 12,
+    ecmaVersion: "latest",
     sourceType: "module",
   },
   plugins: ["react"],
   rules: {
+    "no-continue": 0,
+    "no-else-return": 0,
+    "no-param-reassign": [2, { props: false }],
+    "no-plusplus": [2, { allowForLoopAfterthoughts: true }],
     "no-restricted-syntax": [
       2,
       "ForInStatement",
       "LabeledStatement",
       "WithStatement",
     ],
+    "no-underscore-dangle": 0,
+
     "import/extensions": [
       2,
       "never",
@@ -32,36 +37,24 @@ module.exports = {
         svg: "always",
       },
     ],
-    "no-param-reassign": [2, { props: false }],
-    "no-plusplus": [2, { allowForLoopAfterthoughts: true }],
-    "react/jsx-boolean-value": [2, "always"],
-    "jsx-a11y/label-has-associated-control": [2, { assert: "either" }],
-    "react/self-closing-comp": [2, { component: true, html: false }],
-
-    "import/no-named-default": 0,
-    "no-continue": 0,
-    "no-underscore-dangle": 0,
-    "no-else-return": 0,
+    "import/no-default-export": 2,
+    "import/prefer-default-export": 0,
   },
   overrides: [
     {
-      files: ["**/*.ts?(x)"],
-      extends: [
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-      ],
+      files: ["*.ts?(x)"],
+      extends: ["plugin:@typescript-eslint/recommended"],
       parser: "@typescript-eslint/parser",
       plugins: ["@typescript-eslint"],
       rules: {
-        "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
-        "import/no-unresolved": 0,
-        "react/require-default-props": 0,
+        "@typescript-eslint/consistent-type-imports": 2,
+        "@typescript-eslint/explicit-function-return-type": [
+          2,
+          { allowExpressions: true },
+        ],
+        "no-empty-function": 0,
+        "@typescript-eslint/no-empty-function": 0,
         "@typescript-eslint/no-inferrable-types": 0,
-
-        "no-use-before-define": 0,
-        "@typescript-eslint/no-use-before-define": 2,
-        "import/no-duplicates": 0,
-        "@typescript-eslint/no-duplicate-imports": 2,
         "no-unused-vars": 0,
         "@typescript-eslint/no-unused-vars": [
           2,
@@ -70,29 +63,51 @@ module.exports = {
             argsIgnorePattern: "^_",
           },
         ],
-        "no-empty-function": 0,
-        "@typescript-eslint/no-empty-function": 0,
+      },
+    },
+    {
+      files: ["*.tsx"],
+      rules: {
+        "import/no-default-export": 0,
+        "import/prefer-default-export": 2,
+
+        "react/jsx-boolean-value": [2, "always"],
+        "react/jsx-filename-extension": [2, { extensions: [".tsx"] }],
+        "react/jsx-no-bind": 0,
+        "react/react-in-jsx-scope": 0,
+        "react/require-default-props": 0,
+        "react/self-closing-comp": [2, { component: true, html: false }],
+
+        "jsx-a11y/label-has-associated-control": [2, { assert: "either" }],
       },
     },
     {
       files: ["src/components/ContextMenu/*.tsx"],
       rules: {
         "react/destructuring-assignment": 0,
-        "jsx-a11y/no-noninteractive-element-interactions": 0,
         "jsx-a11y/click-events-have-key-events": 0,
+        "jsx-a11y/no-noninteractive-element-interactions": 0,
       },
     },
     {
-      files: ["**/*.test.{jsx,js}"],
+      files: ["src/tests/*.test.js"],
       rules: {
-        "import/no-unresolved": 0,
         "no-unused-expressions": 0,
       },
     },
     {
-      files: ["**/*.spec.js"],
-      plugins: ["cypress"],
+      files: ["cypress/**/*.js"],
       extends: ["plugin:cypress/recommended"],
+      plugins: ["cypress"],
+    },
+    {
+      files: ["*.js?(x)", "*.ts?(x)"],
+      extends: ["plugin:prettier/recommended"],
+      plugins: ["prettier"],
+      rules: {
+        "arrow-body-style": [2, "as-needed"],
+        curly: [2, "all"],
+      },
     },
   ],
 };

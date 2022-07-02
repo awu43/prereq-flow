@@ -1,10 +1,9 @@
-/// <reference types="cypress" />
-
 describe("NewFlowTextSearch", () => {
   beforeEach(() => {
     cy.visit("/");
     cy.get(".Header").contains("New flow").click();
-    cy.get(".NewFlowDialog").contains("Continue").click();
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.get(".NewFlowDialog").contains("Continue").click().wait(300);
     cy.get('[role="tablist"]').contains("Text search").click();
   });
   it("Generates a new flow from text search", () => {

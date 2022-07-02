@@ -1,10 +1,9 @@
-/// <reference types="cypress" />
-
 describe("CurriculumSelect", () => {
   beforeEach(() => {
     cy.visit("/");
     cy.get(".Header").contains("New flow").click();
-    cy.get(".NewFlowDialog").contains("Continue").click();
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.get(".NewFlowDialog").contains("Continue").click().wait(300);
     cy.get('[role="tablist"]').contains("Curriculum").click();
   });
   it("Generates a new curriculum flow without external prereqs", () => {
@@ -37,10 +36,10 @@ describe("CurriculumSelect", () => {
     cy.get(".CampusSelect__radio-label--seattle input").check();
     cy.get('.CurriculumSelect__select-input [value="A A"]');
     cy.get('.CurriculumSelect__select-input [value="B ARAB"]').should(
-      "not.exist"
+      "not.exist",
     );
     cy.get('.CurriculumSelect__select-input [value="T ACCT"]').should(
-      "not.exist"
+      "not.exist",
     );
   });
   it("Displays Bothell curricula", () => {
@@ -48,7 +47,7 @@ describe("CurriculumSelect", () => {
     cy.get('.CurriculumSelect__select-input [value="A A"]').should("not.exist");
     cy.get('.CurriculumSelect__select-input [value="B ARAB"]');
     cy.get('.CurriculumSelect__select-input [value="T ACCT"]').should(
-      "not.exist"
+      "not.exist",
     );
   });
   it("Displays Tacoma curricula", () => {
@@ -56,7 +55,7 @@ describe("CurriculumSelect", () => {
     cy.get('.CurriculumSelect__select-input [value="A A"]').should("not.exist");
     cy.get('.CurriculumSelect__select-input [value="T ACCT"]');
     cy.get('.CurriculumSelect__select-input [value="B ARAB"]').should(
-      "not.exist"
+      "not.exist",
     );
   });
 });

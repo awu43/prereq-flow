@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { MutableRefObject } from "react";
 
 import { isNode, isEdge } from "react-flow-renderer";

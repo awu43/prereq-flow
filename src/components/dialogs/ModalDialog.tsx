@@ -1,4 +1,3 @@
-import React from "react";
 import type { ReactNode, KeyboardEvent, RefObject } from "react";
 
 import { DialogOverlay, DialogContent } from "@reach/dialog";

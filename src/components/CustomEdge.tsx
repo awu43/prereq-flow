@@ -1,11 +1,5 @@
-import React from "react";
-
-import {
-  Position,
-  getBezierPath,
-  getEdgeCenter,
-  EdgeText,
-} from "react-flow-renderer";
+import type { Position } from "react-flow-renderer";
+import { getBezierPath, getEdgeCenter, EdgeText } from "react-flow-renderer";
 
 const CONCURRENT_LABEL = {
   label: "CC",

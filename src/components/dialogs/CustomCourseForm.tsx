@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import type { ChangeEvent } from "react";
 
 import Tippy from "@tippyjs/react";

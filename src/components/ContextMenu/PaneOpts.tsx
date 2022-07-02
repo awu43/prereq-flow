@@ -1,5 +1,3 @@
-import React from "react";
-
 import type { Node } from "types/main";
 import type { OptListProps } from "types/ContextMenu";
 

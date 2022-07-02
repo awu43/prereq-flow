@@ -46,7 +46,7 @@
 
     // No transform for slide-0
     &.slide-1 {
-      transform: translateX(-(100%/2)*1);
+      transform: translateX(calc(100%/-2));
     }
 
     & > * {
@@ -97,7 +97,7 @@
 
   &__end-padding {
     flex-grow: 1;
-    background-image: url("dist/icons/x-gray.svg");
+    background-image: url("../../icons/x-gray.svg");
   }
 }
 

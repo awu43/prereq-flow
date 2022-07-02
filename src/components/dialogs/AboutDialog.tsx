@@ -1,5 +1,3 @@
-import React from "react";
-
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 import githubIcon from "@icons/github.svg";
 import envelopeIcon from "@icons/envelope.svg";
@@ -45,8 +43,8 @@ export default function AboutDialog({
             FastAPI
           </a>{" "}
           in the back. Built with{" "}
-          <a href="https://www.snowpack.dev/" target="_blank" rel="noreferrer">
-            Snowpack
+          <a href="https://vitejs.dev/" target="_blank" rel="noreferrer">
+            Vite
           </a>{" "}
           and hosted on&nbsp;
           <a href="https://vercel.com/" target="_blank" rel="noreferrer">

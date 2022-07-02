@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'source_sans';
-  src: url('dist/source-sans/sourcesanspro-regular-webfont.woff2') format('woff2'),
-       url('dist/source-sans/sourcesanspro-regular-webfont.woff') format('woff');
+  src: url('./source-sans/sourcesanspro-regular-webfont.woff2') format('woff2'),
+       url('./source-sans/sourcesanspro-regular-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 
@@ -9,8 +9,8 @@
 
 @font-face {
   font-family: 'source_sans';
-  src: url('dist/source-sans/sourcesanspro-bold-webfont.woff2') format('woff2'),
-       url('dist/source-sans/sourcesanspro-bold-webfont.woff') format('woff');
+  src: url('./source-sans/sourcesanspro-bold-webfont.woff2') format('woff2'),
+       url('./source-sans/sourcesanspro-bold-webfont.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 
@@ -18,8 +18,8 @@
 
 @font-face {
   font-family: 'source_sans';
-  src: url('dist/source-sans/sourcesanspro-it-webfont.woff2') format('woff2'),
-       url('dist/source-sans/sourcesanspro-it-webfont.woff') format('woff');
+  src: url('./source-sans/sourcesanspro-it-webfont.woff2') format('woff2'),
+       url('./source-sans/sourcesanspro-it-webfont.woff') format('woff');
   font-weight: normal;
   font-style: italic;
 
@@ -27,8 +27,8 @@
 
 @font-face {
   font-family: 'source_sans';
-  src: url('dist/source-sans/sourcesanspro-boldit-webfont.woff2') format('woff2'),
-       url('dist/source-sans/sourcesanspro-boldit-webfont.woff') format('woff');
+  src: url('./source-sans/sourcesanspro-boldit-webfont.woff2') format('woff2'),
+       url('./source-sans/sourcesanspro-boldit-webfont.woff') format('woff');
   font-weight: bold;
   font-style: italic;
 

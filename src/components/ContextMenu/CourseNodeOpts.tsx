@@ -1,5 +1,3 @@
-import React from "react";
-
 import type { CourseStatus, CourseNode } from "types/main";
 import type { OptListProps } from "types/ContextMenu";
 

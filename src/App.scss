@@ -167,22 +167,22 @@ span {
 }
 
 .react-flow__edge {
-  &-path {
+  & &-path {
     stroke-width: 3px;
   }
-  &-text {
+  & &-text {
     font-family: sans-serif;
     fill: white;
     font-size: 0.8rem;
   }
-  &-textbg {
+  & &-textbg {
     fill: black;
   }
 
   @each $status, $color in $flow-colors {
     &.#{$status} {
       .react-flow__edge-path {
-        stroke: $color;
+        stroke: $color !important;
       }
       &:hover,
       &.selected,
