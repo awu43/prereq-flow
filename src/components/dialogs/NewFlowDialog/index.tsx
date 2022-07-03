@@ -18,11 +18,16 @@ import usePrefersReducedMotion from "@usePrefersReducedMotion";
 
 import "./index.scss";
 import ModalDialog from "../ModalDialog";
+import type { AmbiguityHandling } from "../AmbiguitySelect";
+import type {
+  DegreeSelectState,
+  // CurriculumSelectState,
+  // TextSearchState,
+} from "./types";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import NewFlowTextSearch from "./NewFlowTextSearch";
-import type { AmbiguityHandling } from "../AmbiguitySelect";
 
 interface CurriculumData {
   campus: Campus;
@@ -49,14 +54,41 @@ export default function NewFlowDialog({
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const [supportedMajors, setSupportedMajors] = useState<string[]>([]);
-  const [degreeError, setDegreeError] = useState("");
+  // const [degreeError, setDegreeError] = useState("");
+  const [degreeSelectState, setDegreeSelectState] = useState<DegreeSelectState>(
+    {
+      majors: [],
+      selected: "",
+      ambiguityHandling: "aggressively",
+      errorMsg: "",
+    },
+  );
+  function setDegreeError(errorMsg: string): void {
+    setDegreeSelectState(prev => ({ ...prev, errorMsg }));
+  }
+
   const [supportedCurricula, setSupportedCurricula] = useState<
     Map<Campus, HTMLOptionElement[]>
   >(new Map());
   const [curriculumError, setCurriculumError] = useState("");
+  // const [curriculumSelectState, setCurriculumSelectState] =
+  //   useState<CurriculumSelectState>({
+  //     campus: "Seattle",
+  //     selected: "",
+  //     includeExternal: false,
+  //     ambiguityHandling: "aggressively",
+  //     errorMsg: "",
+  //   });
+
   const [textSearchError, setTextSearchError] = useState("");
+  // const [textSearchState, setTextSearchState] = useState<TextSearchState>({
+  //   text: "",
+  //   ambiguityHandling: "aggressively",
+  //   errorMsg: "",
+  // });
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -135,20 +167,21 @@ export default function NewFlowDialog({
       });
   }, []);
 
-  async function newDegreeFlow(
-    majors: string[],
-    ambiguityHandling: AmbiguityHandling,
-  ): Promise<void> {
+  async function newDegreeFlow(): Promise<void> {
+    setBusy(true);
     setDegreeError("");
     try {
       const resp = await fetch(`${API_URL}/degrees/`, {
         method: "POST",
         headers: { contentType: "application/json" },
-        body: JSON.stringify(majors),
+        body: JSON.stringify(degreeSelectState.majors),
       });
       const data = await resp.json();
 
-      const newElements = generateInitialElements(data, ambiguityHandling);
+      const newElements = generateInitialElements(
+        data,
+        degreeSelectState.ambiguityHandling,
+      );
       generateNewFlow(newElements);
       close();
     } catch (error) {
@@ -285,10 +318,12 @@ export default function NewFlowDialog({
         />
         <form className="FlowType">
           <Tabs
-            onChange={() => {
+            index={tabIndex}
+            onChange={index => {
               setDegreeError("");
               setCurriculumError("");
               setTextSearchError("");
+              setTabIndex(index);
             }}
           >
             <TabList>
@@ -303,10 +338,10 @@ export default function NewFlowDialog({
                 <DegreeSelect
                   connectionError={connectionError}
                   busy={busy}
-                  setBusy={setBusy}
                   supportedMajors={supportedMajors}
+                  dsState={degreeSelectState}
+                  setDsState={setDegreeSelectState}
                   newDegreeFlow={newDegreeFlow}
-                  errorMsg={degreeError}
                 />
               </TabPanel>
               <TabPanel>
@@ -315,6 +350,7 @@ export default function NewFlowDialog({
                   busy={busy}
                   setBusy={setBusy}
                   supportedCurricula={supportedCurricula}
+                  // csState={curriculumSelectState}
                   newCurriculumFlow={newCurriculumFlow}
                   errorMsg={curriculumError}
                 />
@@ -324,6 +360,7 @@ export default function NewFlowDialog({
                   connectionError={connectionError}
                   busy={busy}
                   setBusy={setBusy}
+                  // tsState={textSearchState}
                   newTextSearchFlow={newTextSearchFlow}
                   errorMsg={textSearchError}
                 />
