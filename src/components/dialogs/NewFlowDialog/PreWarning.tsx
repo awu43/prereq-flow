@@ -32,16 +32,16 @@ export default function PreWarning({
         </ul>
 
         <p>
-          All caveats for{" "}
+          All caveats for Prereq Map (now part of{" "}
           <a
-            href="https://prereqmap.uw.edu/"
+            href="https://dawgpath.uw.edu/"
             target="_blank"
             rel="noreferrer"
             tabIndex={warningAccepted ? -1 : 0}
           >
-            Prereq Map
-          </a>{" "}
-          also apply&nbsp;here:
+            DawgPath
+          </a>
+          ) also apply&nbsp;here:
         </p>
         <ul>
           <li>
