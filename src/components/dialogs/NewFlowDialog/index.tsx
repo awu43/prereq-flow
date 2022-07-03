@@ -16,13 +16,13 @@ import {
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 
-import "./NewFlowDialog.scss";
-import ModalDialog from "./ModalDialog";
+import "./index.scss";
+import ModalDialog from "../ModalDialog";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import NewFlowTextSearch from "./NewFlowTextSearch";
-import type { AmbiguityHandling } from "./AmbiguitySelect";
+import type { AmbiguityHandling } from "../AmbiguitySelect";
 
 interface CurriculumData {
   campus: Campus;

@@ -52,20 +52,20 @@ import "./App.scss";
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
 import useDialogStatus from "./useDialogStatus";
 
-import Header from "./components/Header";
-import HeaderButton from "./components/HeaderButton";
-import FlowInternalLifter from "./components/FlowInternalLifter";
+import Header from "./components/header/Header";
+import HeaderButton from "./components/header/HeaderButton";
+import FlowInternalLifter from "./components/flow/FlowInternalLifter";
 import type {
   UpdateNodePos,
   SelectedElements,
   SetSelectedElements,
-} from "./components/FlowInternalLifter";
+} from "./components/flow/FlowInternalLifter";
 // eslint-disable-next-line import/no-named-default
-import { default as CourseNodeComponent } from "./components/CourseNode";
-import OrNode from "./components/OrNode";
-import AndNode from "./components/AndNode";
+import { default as CourseNodeComponent } from "./components/flow/CourseNode";
+import OrNode from "./components/flow/OrNode";
+import AndNode from "./components/flow/AndNode";
 import ContextMenu from "./components/ContextMenu";
-import CustomEdge from "./components/CustomEdge";
+import CustomEdge from "./components/flow/CustomEdge";
 import UserControls from "./components/UserControls";
 
 import NewFlowDialog from "./components/dialogs/NewFlowDialog";

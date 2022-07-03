@@ -31,9 +31,9 @@ import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import { newCourseNode, generateInitialElements } from "@utils";
-import "./AddCourseDialog.scss";
-import ModalDialog from "./ModalDialog";
-import CampusSelect from "./CampusSelect";
+import "./index.scss";
+import ModalDialog from "../ModalDialog";
+import CampusSelect from "../CampusSelect";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
 

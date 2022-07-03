@@ -11,9 +11,9 @@ import timesIcon from "@icons/times.svg";
 import plusIcon from "@icons/plus.svg";
 
 import type { SetState } from "types/main";
-import type { AmbiguityHandling } from "./AmbiguitySelect";
+import type { AmbiguityHandling } from "../AmbiguitySelect";
 
-import AmbiguitySelect from "./AmbiguitySelect";
+import AmbiguitySelect from "../AmbiguitySelect";
 
 import "./DegreeSelect.scss";
 

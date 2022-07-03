@@ -9,8 +9,8 @@ import type { SetState } from "types/main";
 
 import "./NewFlowTextSearch.scss";
 import { courseIdMatch } from "@utils";
-import AmbiguitySelect from "./AmbiguitySelect";
-import type { AmbiguityHandling } from "./AmbiguitySelect";
+import AmbiguitySelect from "../AmbiguitySelect";
+import type { AmbiguityHandling } from "../AmbiguitySelect";
 
 interface TextSearchProps {
   connectionError: boolean;

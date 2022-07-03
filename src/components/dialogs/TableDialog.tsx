@@ -19,7 +19,7 @@ import {
   splitByCourses,
   generateUwCourseElements,
   markOfferedQuarters,
-} from "../CourseNode";
+} from "../flow/CourseNode";
 import ModalDialog from "./ModalDialog";
 
 const COURSE_REGEX = /^(?:[A-Z&]+ )+\d{3}$/;
