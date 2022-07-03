@@ -1,7 +1,7 @@
 import { useStoreActions } from "react-flow-renderer";
 
 import type { CourseStatus } from "types/main";
-import type { ContextMenuProps } from "types/ContextMenu";
+import type { ContextMenuProps } from "./types";
 
 import "./index.scss";
 

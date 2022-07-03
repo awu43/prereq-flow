@@ -42,7 +42,6 @@ import type {
   ConnectTo,
   NewCoursePosition,
 } from "types/main";
-import type { ContextTarget } from "types/ContextMenu";
 
 import triangleIcon from "@icons/triangle.svg";
 import tableIcon from "@icons/table.svg";
@@ -65,6 +64,7 @@ import { default as CourseNodeComponent } from "./components/flow/CourseNode";
 import OrNode from "./components/flow/OrNode";
 import AndNode from "./components/flow/AndNode";
 import ContextMenu from "./components/ContextMenu";
+import type { ContextTarget } from "./components/ContextMenu/types";
 import CustomEdge from "./components/flow/CustomEdge";
 import UserControls from "./components/UserControls";
 
