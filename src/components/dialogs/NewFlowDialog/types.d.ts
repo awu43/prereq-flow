@@ -11,7 +11,7 @@ export interface DegreeSelectState {
 
 export interface CurriculumSelectState {
   campus: Campus;
-  selected: string;
+  selected: Record<Campus, string>;
   includeExternal: boolean;
   ambiguityHandling: AmbiguityHandling;
   errorMsg: string;

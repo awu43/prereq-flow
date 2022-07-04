@@ -58,4 +58,33 @@ describe("CurriculumSelect", () => {
       "not.exist",
     );
   });
+  it("Persists state", () => {
+    cy.get(".CurriculumSelect__select-input").select(
+      "AES: American Ethnic Studies",
+    );
+    cy.get(".CampusSelect__radio-label--bothell input").check();
+    cy.get(".CurriculumSelect__select-input").select("B BIO: Biology");
+    cy.get(".CampusSelect__radio-label--tacoma input").check();
+    cy.get(".CurriculumSelect__select-input").select("T CHEM: Chemistry");
+    cy.get(".CurriculumSelect__external-checkbox input").check();
+    cy.get(".CurriculumSelect .AmbiguitySelect label")
+      .contains("Cautiously")
+      .click();
+    cy.get(".CloseButton").click();
+    cy.get(".Header").contains("New flow").click();
+    cy.get(".CurriculumSelect");
+    cy.get(".CurriculumSelect__select-input")
+      .find(":selected")
+      .contains("T CHEM: Chemistry");
+    cy.get(".CampusSelect__radio-label--bothell input").check();
+    cy.get(".CurriculumSelect__select-input")
+      .find(":selected")
+      .contains("B BIO: Biology");
+    cy.get(".CampusSelect__radio-label--seattle input").check();
+    cy.get(".CurriculumSelect__select-input")
+      .find(":selected")
+      .contains("AES: American Ethnic Studies");
+    cy.get(".CurriculumSelect__external-checkbox input[checked]");
+    cy.get('input[type="radio"][checked]').parent().contains("Cautiously");
+  });
 });

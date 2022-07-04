@@ -21,7 +21,7 @@ import ModalDialog from "../ModalDialog";
 import type { AmbiguityHandling } from "../AmbiguitySelect";
 import type {
   DegreeSelectState,
-  // CurriculumSelectState,
+  CurriculumSelectState,
   // TextSearchState,
 } from "./types";
 import PreWarning from "./PreWarning";
@@ -71,17 +71,20 @@ export default function NewFlowDialog({
   }
 
   const [supportedCurricula, setSupportedCurricula] = useState<
-    Map<Campus, HTMLOptionElement[]>
-  >(new Map());
-  const [curriculumError, setCurriculumError] = useState("");
-  // const [curriculumSelectState, setCurriculumSelectState] =
-  //   useState<CurriculumSelectState>({
-  //     campus: "Seattle",
-  //     selected: "",
-  //     includeExternal: false,
-  //     ambiguityHandling: "aggressively",
-  //     errorMsg: "",
-  //   });
+    Record<Campus, [id: string, name: string][]>
+  >({ Seattle: [], Bothell: [], Tacoma: [] });
+  // const [curriculumError, setCurriculumError] = useState("");
+  const [curriculumSelectState, setCurriculumSelectState] =
+    useState<CurriculumSelectState>({
+      campus: "Seattle",
+      selected: { Seattle: "", Bothell: "", Tacoma: "" },
+      includeExternal: false,
+      ambiguityHandling: "aggressively",
+      errorMsg: "",
+    });
+  function setCurriculumError(errorMsg: string): void {
+    setCurriculumSelectState(prev => ({ ...prev, errorMsg }));
+  }
 
   const [textSearchError, setTextSearchError] = useState("");
   // const [textSearchState, setTextSearchState] = useState<TextSearchState>({
@@ -127,36 +130,56 @@ export default function NewFlowDialog({
     fetch(`${API_URL}/curricula/`)
       .then(resp => resp.json())
       .then((data: CurriculumData[]) => {
-        const curricula = new Map(
-          Object.entries({
-            Seattle: [],
-            Bothell: [],
-            Tacoma: [],
-          }),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ) as Map<Campus, any>;
+        // const curricula = new Map(
+        //   Object.entries({
+        //     Seattle: [],
+        //     Bothell: [],
+        //     Tacoma: [],
+        //   }),
+        //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // ) as Map<Campus, any>;
 
-        for (const datum of data) {
-          curricula.get(datum.campus).push(datum);
-        }
-        // Values initially CurriculumData[]
+        // for (const datum of data) {
+        //   curricula.get(datum.campus).push(datum);
+        // }
+        // // Values initially CurriculumData[]
 
-        for (const campus of curricula.keys()) {
-          curricula
-            .get(campus)
-            .sort((a: CurriculumData, b: CurriculumData) =>
-              a.id.localeCompare(b.id),
-            );
-          curricula.set(
-            campus,
-            curricula.get(campus).map((curr: CurriculumData) => (
-              <option key={curr.id} value={curr.id}>
-                {`${curr.id}: ${curr.name}`}
-              </option>
-            )),
-          );
-        }
+        // for (const campus of curricula.keys()) {
+        //   curricula
+        //     .get(campus)
+        //     .sort((a: CurriculumData, b: CurriculumData) =>
+        //       a.id.localeCompare(b.id),
+        //     );
+        //   curricula.set(
+        //     campus,
+        //     curricula.get(campus).map((curr: CurriculumData) => (
+        //       <option key={curr.id} value={curr.id}>
+        //         {`${curr.id}: ${curr.name}`}
+        //       </option>
+        //     )),
+        //   );
+        // }
         // Now HTMLOptionElement[]
+
+        const curriculaData: Record<Campus, CurriculumData[]> = {
+          Seattle: [],
+          Bothell: [],
+          Tacoma: [],
+        };
+        for (const datum of data) {
+          curriculaData[datum.campus].push(datum);
+        }
+
+        const curricula: Record<Campus, [string, string][]> = {
+          Seattle: [],
+          Bothell: [],
+          Tacoma: [],
+        };
+        for (const campus of Object.keys(curricula) as Campus[]) {
+          curricula[campus] = curriculaData[campus]
+            .sort((a, b) => a.id.localeCompare(b.id))
+            .map(c => [c.id, c.name]);
+        }
 
         setSupportedCurricula(curricula);
       })
@@ -201,24 +224,25 @@ export default function NewFlowDialog({
     // }
   }
 
-  async function newCurriculumFlow(
-    curriculum: string,
-    includeExternal: boolean,
-    ambiguityHandling: AmbiguityHandling,
-  ): Promise<void> {
+  async function newCurriculumFlow(): Promise<void> {
+    setBusy(true);
     setCurriculumError("");
+    const curriculumId =
+      curriculumSelectState.selected[curriculumSelectState.campus];
     try {
-      const resp = await fetch(`${API_URL}/curricula/${curriculum}`);
+      const resp = await fetch(`${API_URL}/curricula/${curriculumId}`);
       const data = await resp.json();
 
-      if (includeExternal) {
+      if (curriculumSelectState.includeExternal) {
         const externalPrereqs = [];
         for (const course of data) {
           const courseMatches = courseIdMatch(
             course.prerequisite,
           ) as RegExpMatchArray;
           const external = courseMatches
-            ? courseMatches.filter(courseId => !courseId.startsWith(curriculum))
+            ? courseMatches.filter(
+                courseId => !courseId.startsWith(curriculumId),
+              )
             : [];
           externalPrereqs.push(...external);
         }
@@ -233,12 +257,15 @@ export default function NewFlowDialog({
         }
       }
 
-      const newElements = generateInitialElements(data, ambiguityHandling);
+      const newElements = generateInitialElements(
+        data,
+        curriculumSelectState.ambiguityHandling,
+      );
       const edges = newElements.filter(elem => isEdge(elem));
       const externalOrphans = newElements.filter(
         elem =>
           isNode(elem) &&
-          !elem.id.startsWith(curriculum) &&
+          !elem.id.startsWith(curriculumId) &&
           !getConnectedEdges([elem], edges as Edge[]).length,
         // Not connected to any other nodes
       );
@@ -348,11 +375,10 @@ export default function NewFlowDialog({
                 <CurriculumSelect
                   connectionError={connectionError}
                   busy={busy}
-                  setBusy={setBusy}
                   supportedCurricula={supportedCurricula}
-                  // csState={curriculumSelectState}
+                  csState={curriculumSelectState}
+                  setCsState={setCurriculumSelectState}
                   newCurriculumFlow={newCurriculumFlow}
-                  errorMsg={curriculumError}
                 />
               </TabPanel>
               <TabPanel>

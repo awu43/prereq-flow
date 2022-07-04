@@ -1,10 +1,10 @@
 import "./CampusSelect.scss";
 
-import type { SetState, Campus } from "types/main";
+import type { Campus } from "types/main";
 
 interface CampusSelectProps {
   selectedCampus: Campus;
-  setSelectedCampus: SetState<Campus>;
+  setSelectedCampus: (c: Campus) => void;
   busy: boolean;
 }
 export default function CampusSelect({
