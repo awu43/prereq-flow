@@ -136,7 +136,7 @@ export default function DegreeSelect({
                   selected: e.target.selectedOptions[0].textContent as string,
                 }));
               }}
-              disabled={Boolean(connectionError || busy)}
+              disabled={connectionError || busy || !supportedMajors.length}
             >
               {supportedMajors.map(m => (
                 <option key={toKebabCase(m)}>{m}</option>
@@ -146,12 +146,13 @@ export default function DegreeSelect({
               className="majors__add-button"
               type="button"
               onClick={addMajor}
-              disabled={Boolean(
+              disabled={
                 connectionError ||
-                  busy ||
-                  dsState.majors.includes(dsState.selected) ||
-                  dsState.majors.length >= 3,
-              )}
+                busy ||
+                !supportedMajors.length ||
+                dsState.majors.includes(dsState.selected) ||
+                dsState.majors.length >= 3
+              }
             >
               <img src={plusIcon} alt="Add" />
             </button>
@@ -199,7 +200,7 @@ export default function DegreeSelect({
           className="DegreeSelect__get-courses-button"
           type="submit"
           onClick={generateFlow}
-          disabled={Boolean(connectionError || busy || !dsState.majors.length)}
+          disabled={connectionError || busy || !dsState.majors.length}
         >
           Get courses
         </button>

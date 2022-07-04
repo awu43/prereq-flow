@@ -57,7 +57,7 @@ export default function NewFlowTextSearch({
           placeholder="Text to search for UW course IDs"
           value={text}
           onChange={e => setText(e.target.value)}
-          disabled={Boolean(connectionError || busy)}
+          disabled={connectionError || busy}
         ></textarea>
       </Tippy>
 
@@ -72,7 +72,7 @@ export default function NewFlowTextSearch({
           type="submit"
           className="NewFlowTextSearch__get-courses-button"
           onClick={generateFlow}
-          disabled={Boolean(connectionError || busy || !text.trim())}
+          disabled={connectionError || busy || !text.trim()}
         >
           Get courses
         </button>

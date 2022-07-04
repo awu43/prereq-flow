@@ -94,7 +94,9 @@ export default function CurriculumSelect({
               },
             }));
           }}
-          disabled={connectionError || busy}
+          disabled={
+            connectionError || busy || !supportedCurricula.Seattle.length
+          }
         >
           {/* {supportedCurricula.get(csState.campus)} */}
           {supportedCurricula[csState.campus].map(([id, name]) => (
@@ -130,7 +132,9 @@ export default function CurriculumSelect({
           type="submit"
           className="CurriculumSelect__get-courses-button"
           onClick={getCourses}
-          disabled={connectionError || busy}
+          disabled={
+            connectionError || busy || !supportedCurricula.Seattle.length
+          }
         >
           Get courses
         </button>
