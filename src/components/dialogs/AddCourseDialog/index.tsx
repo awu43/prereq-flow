@@ -84,7 +84,6 @@ export default function AddCourseDialog({
   >([]);
 
   const searchBarRef = useRef<HTMLInputElement>(null);
-  const addButtonRef = useRef<HTMLButtonElement>(null);
 
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065#issuecomment-446425911
   const websocket = useRef<WebSocket>();
@@ -126,12 +125,10 @@ export default function AddCourseDialog({
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
-        setTabIndex(0);
         setSearchbarInput("");
         setAutocompleteOpts([]);
       }, 100);
     } else {
-      setTabIndex(0);
       setSearchbarInput("");
       setAutocompleteOpts([]);
     }
@@ -279,7 +276,7 @@ export default function AddCourseDialog({
               placeholder="Course ID (Enter key to add)"
               value={searchbarInput}
               onChange={onSearchChange}
-              disabled={Boolean(connectionError || busy)}
+              disabled={connectionError || busy}
             />
             <ComboboxPopover>
               <ComboboxList>{autocompleteOpts}</ComboboxList>
@@ -288,9 +285,8 @@ export default function AddCourseDialog({
         </Tippy>
         <button
           className="UwCourseForm__add-button"
-          ref={addButtonRef}
           type="submit"
-          disabled={Boolean(connectionError || busy || !searchbarInput.trim())}
+          disabled={connectionError || busy || !searchbarInput.trim()}
           onClick={fetchCourse}
         >
           Add
@@ -341,7 +337,7 @@ export default function AddCourseDialog({
       contentAriaLabel="Add course dialog"
     >
       <h2 className={connectionError ? "connection-error" : ""}>Add courses</h2>
-      <Tabs onChange={i => setTabIndex(i)}>
+      <Tabs index={tabIndex} onChange={i => setTabIndex(i)}>
         <TabList>
           <Tab disabled={busy}>UW course</Tab>
           <Tab disabled={busy}>Custom course</Tab>
