@@ -18,7 +18,6 @@ import usePrefersReducedMotion from "@usePrefersReducedMotion";
 
 import "./index.scss";
 import ModalDialog from "../ModalDialog";
-// import type { AmbiguityHandling } from "../AmbiguitySelect";
 import type {
   DegreeSelectState,
   CurriculumSelectState,
@@ -57,7 +56,6 @@ export default function NewFlowDialog({
   const [tabIndex, setTabIndex] = useState(0);
 
   const [supportedMajors, setSupportedMajors] = useState<string[]>([]);
-  // const [degreeError, setDegreeError] = useState("");
   const [degreeSelectState, setDegreeSelectState] = useState<DegreeSelectState>(
     {
       majors: [],
@@ -73,7 +71,6 @@ export default function NewFlowDialog({
   const [supportedCurricula, setSupportedCurricula] = useState<
     Record<Campus, [id: string, name: string][]>
   >({ Seattle: [], Bothell: [], Tacoma: [] });
-  // const [curriculumError, setCurriculumError] = useState("");
   const [curriculumSelectState, setCurriculumSelectState] =
     useState<CurriculumSelectState>({
       campus: "Seattle",
@@ -86,7 +83,6 @@ export default function NewFlowDialog({
     setCurriculumSelectState(prev => ({ ...prev, errorMsg }));
   }
 
-  // const [textSearchError, setTextSearchError] = useState("");
   const [textSearchState, setTextSearchState] = useState<TextSearchState>({
     text: "",
     ambiguityHandling: "aggressively",
@@ -133,37 +129,6 @@ export default function NewFlowDialog({
     fetch(`${API_URL}/curricula/`)
       .then(resp => resp.json())
       .then((data: CurriculumData[]) => {
-        // const curricula = new Map(
-        //   Object.entries({
-        //     Seattle: [],
-        //     Bothell: [],
-        //     Tacoma: [],
-        //   }),
-        //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        // ) as Map<Campus, any>;
-
-        // for (const datum of data) {
-        //   curricula.get(datum.campus).push(datum);
-        // }
-        // // Values initially CurriculumData[]
-
-        // for (const campus of curricula.keys()) {
-        //   curricula
-        //     .get(campus)
-        //     .sort((a: CurriculumData, b: CurriculumData) =>
-        //       a.id.localeCompare(b.id),
-        //     );
-        //   curricula.set(
-        //     campus,
-        //     curricula.get(campus).map((curr: CurriculumData) => (
-        //       <option key={curr.id} value={curr.id}>
-        //         {`${curr.id}: ${curr.name}`}
-        //       </option>
-        //     )),
-        //   );
-        // }
-        // Now HTMLOptionElement[]
-
         const curriculaData: Record<Campus, CurriculumData[]> = {
           Seattle: [],
           Bothell: [],
@@ -394,11 +359,9 @@ export default function NewFlowDialog({
                 <NewFlowTextSearch
                   connectionError={connectionError}
                   busy={busy}
-                  // setBusy={setBusy}
                   tsState={textSearchState}
                   setTsState={setTextSearchState}
                   newTextSearchFlow={newTextSearchFlow}
-                  // errorMsg={textSearchError}
                 />
               </TabPanel>
               <TabPanel>

@@ -49,12 +49,6 @@ export default function DegreeSelect({
   setDsState,
   newDegreeFlow,
 }: DegreeSelectProps): JSX.Element {
-  // const [majors, setMajors] = useState<string[]>([]);
-  // const [minors, setMinors] = useState([]);
-  // const [currentlySelected, setCurrentlySelected] = useState("");
-  // const [ambiguityHandling, setAmbiguityHandling] =
-  //   useState<AmbiguityHandling>("aggressively");
-
   useEffect(() => {
     if (supportedMajors.length && !dsState.selected) {
       setDsState(prev => ({ ...prev, selected: supportedMajors[0] }));
@@ -73,7 +67,6 @@ export default function DegreeSelect({
         ...prev,
         majors: prev.majors.concat([prev.selected]),
       }));
-      // setMajors(majors.concat([currentlySelected]));
     }
   }
 
@@ -82,7 +75,6 @@ export default function DegreeSelect({
       ...prev,
       majors: prev.majors.filter(m => m !== targetMajor),
     }));
-    // setMajors(majors.filter(m => m !== targetMajor));
   }
 
   // function addMinor(params) {

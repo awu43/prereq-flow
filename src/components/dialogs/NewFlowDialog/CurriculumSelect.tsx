@@ -6,7 +6,6 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 import type { SetState, Campus } from "types/main";
-// import type { AmbiguityHandling } from "../AmbiguitySelect";
 
 import CampusSelect from "../CampusSelect";
 import AmbiguitySelect from "../AmbiguitySelect";
@@ -25,19 +24,11 @@ interface CurriculumSelectProps {
 export default function CurriculumSelect({
   connectionError,
   busy,
-  // setBusy,
   supportedCurricula,
   csState,
   setCsState,
   newCurriculumFlow,
 }: CurriculumSelectProps): JSX.Element {
-  // const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
-  // const curriculumSelectRef = useRef<HTMLSelectElement>(null);
-
-  // const [includeExternal, setIncludeExternal] = useState(false);
-  // const [ambiguityHandling, setAmbiguityHandling] =
-  //   useState<AmbiguityHandling>("aggressively");
-
   useEffect(() => {
     if (
       supportedCurricula.Seattle.length &&
@@ -57,13 +48,6 @@ export default function CurriculumSelect({
   function getCourses(event: MouseEvent): void {
     event.preventDefault();
     newCurriculumFlow();
-
-    // if (curriculumSelectRef.current) {
-    //   const selectInput = curriculumSelectRef.current;
-    //   const selectedCurriculum =
-    //     selectInput.options[selectInput.selectedIndex].value;
-    //   newCurriculumFlow(selectedCurriculum, includeExternal, ambiguityHandling);
-    // }
   }
 
   return (
@@ -98,7 +82,6 @@ export default function CurriculumSelect({
             connectionError || busy || !supportedCurricula.Seattle.length
           }
         >
-          {/* {supportedCurricula.get(csState.campus)} */}
           {supportedCurricula[csState.campus].map(([id, name]) => (
             <option key={id} value={id}>
               {`${id}: ${name}`}

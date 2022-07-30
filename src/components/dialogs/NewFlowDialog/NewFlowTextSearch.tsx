@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";
@@ -8,34 +7,24 @@ import "tippy.js/dist/tippy.css";
 import type { SetState } from "types/main";
 
 import "./NewFlowTextSearch.scss";
-// import { courseIdMatch } from "@utils";
 import AmbiguitySelect from "../AmbiguitySelect";
-// import type { AmbiguityHandling } from "../AmbiguitySelect";
 
 import type { TextSearchState } from "./types";
 
 interface TextSearchProps {
   connectionError: boolean;
   busy: boolean;
-  // setBusy: SetState<boolean>;
   tsState: TextSearchState;
   setTsState: SetState<TextSearchState>;
   newTextSearchFlow: () => Promise<void>;
-  // errorMsg: string;
 }
 export default function NewFlowTextSearch({
   connectionError,
   busy,
-  // setBusy,
   tsState,
   setTsState,
   newTextSearchFlow,
-}: // errorMsg,
-TextSearchProps): JSX.Element {
-  // const [text, setText] = useState("");
-  // const [ambiguityHandling, setAmbiguityHandling] =
-  //   useState<AmbiguityHandling>("aggressively");
-
+}: TextSearchProps): JSX.Element {
   function generateFlow(event: MouseEvent): void {
     event.preventDefault();
     newTextSearchFlow();
