@@ -18,11 +18,11 @@ import usePrefersReducedMotion from "@usePrefersReducedMotion";
 
 import "./index.scss";
 import ModalDialog from "../ModalDialog";
-import type { AmbiguityHandling } from "../AmbiguitySelect";
+// import type { AmbiguityHandling } from "../AmbiguitySelect";
 import type {
   DegreeSelectState,
   CurriculumSelectState,
-  // TextSearchState,
+  TextSearchState,
 } from "./types";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
@@ -86,12 +86,15 @@ export default function NewFlowDialog({
     setCurriculumSelectState(prev => ({ ...prev, errorMsg }));
   }
 
-  const [textSearchError, setTextSearchError] = useState("");
-  // const [textSearchState, setTextSearchState] = useState<TextSearchState>({
-  //   text: "",
-  //   ambiguityHandling: "aggressively",
-  //   errorMsg: "",
-  // });
+  // const [textSearchError, setTextSearchError] = useState("");
+  const [textSearchState, setTextSearchState] = useState<TextSearchState>({
+    text: "",
+    ambiguityHandling: "aggressively",
+    errorMsg: "",
+  });
+  function setTextSearchError(errorMsg: string): void {
+    setTextSearchState(prev => ({ ...prev, errorMsg }));
+  }
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -280,17 +283,19 @@ export default function NewFlowDialog({
     }
   }
 
-  async function newTextSearchFlow(
-    courses: string[],
-    ambiguityHandling: AmbiguityHandling,
-  ): Promise<void> {
+  async function newTextSearchFlow(): Promise<void> {
+    setBusy(true);
+    setTextSearchError("");
+
+    const courseMatches = courseIdMatch(textSearchState.text) ?? [];
+    const courses = [...new Set(courseMatches)];
+
     if (!courses.length) {
       setTextSearchError("No course IDs found");
       setBusy(false);
       return;
     }
 
-    setTextSearchError("");
     try {
       const resp = await fetch(`${API_URL}/courses/`, {
         method: "POST",
@@ -306,8 +311,12 @@ export default function NewFlowDialog({
 
       const data = await resp.json();
 
-      const newElements = generateInitialElements(data, ambiguityHandling);
+      const newElements = generateInitialElements(
+        data,
+        textSearchState.ambiguityHandling,
+      );
       generateNewFlow(newElements);
+      setTextSearchState(prev => ({ ...prev, text: "" }));
       close();
     } catch (error) {
       setTextSearchError("Something went wrong");
@@ -385,10 +394,11 @@ export default function NewFlowDialog({
                 <NewFlowTextSearch
                   connectionError={connectionError}
                   busy={busy}
-                  setBusy={setBusy}
-                  // tsState={textSearchState}
+                  // setBusy={setBusy}
+                  tsState={textSearchState}
+                  setTsState={setTextSearchState}
                   newTextSearchFlow={newTextSearchFlow}
-                  errorMsg={textSearchError}
+                  // errorMsg={textSearchError}
                 />
               </TabPanel>
               <TabPanel>
