@@ -21,4 +21,17 @@ describe("CustomCourseForm", () => {
     cy.get(".CustomCourseForm__id-input").type("MATH 124");
     cy.get(".tippy-box--error");
   });
+  it("Persists state", () => {
+    cy.get(".CustomCourseForm__id-input").type("WEB 101");
+    cy.get(".CustomCourseForm__name-input").type(
+      "Introduction to Web Development",
+    );
+    cy.get(".AddCourseDialog .CloseButton").click();
+    cy.get(".Header").contains("Add courses").click();
+    cy.get(".CustomCourseForm__id-input").should("have.value", "WEB 101");
+    cy.get(".CustomCourseForm__name-input").should(
+      "have.value",
+      "Introduction to Web Development",
+    );
+  });
 });

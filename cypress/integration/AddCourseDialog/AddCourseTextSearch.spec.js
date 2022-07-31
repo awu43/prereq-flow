@@ -72,7 +72,7 @@ describe("AddCourseTextSearch", () => {
     cy.get('[data-cy="text-connect-to-postreqs"]').check();
     cy.get(".CloseButton").click();
     cy.get(".Header").contains("Add courses").click();
-    cy.get(".AddCourseTextSearch__textarea").contains("FOOBAR BAZ");
+    cy.get(".AddCourseTextSearch__textarea").should("have.value", "FOOBAR BAZ");
     cy.get('input[type="checkbox"][checked]')
       .parent()
       .contains("Connect to existing postreqs");
