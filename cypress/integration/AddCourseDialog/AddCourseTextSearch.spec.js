@@ -65,4 +65,16 @@ describe("AddCourseTextSearch", () => {
     cy.get('[data-id="CHEM 110"]');
     cy.get('[data-testid="CHEM 110 -> CHEM 142"]').should("not.exist");
   });
+  it("Persists state", () => {
+    cy.get(".AddCourseTextSearch__textarea").type("FOOBAR BAZ");
+    cy.get('[data-cy="text-connect-to-prereqs"]').uncheck();
+    cy.get('[data-cy="text-connect-to-postreqs"]').uncheck();
+    cy.get('[data-cy="text-connect-to-postreqs"]').check();
+    cy.get(".CloseButton").click();
+    cy.get(".Header").contains("Add courses").click();
+    cy.get(".AddCourseTextSearch__textarea").contains("FOOBAR BAZ");
+    cy.get('input[type="checkbox"][checked]')
+      .parent()
+      .contains("Connect to existing postreqs");
+  });
 });

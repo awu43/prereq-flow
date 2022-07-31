@@ -30,14 +30,14 @@ import type {
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
-import { newCourseNode, generateInitialElements } from "@utils";
+import { newCourseNode, generateInitialElements, courseIdMatch } from "@utils";
 import "./index.scss";
 import ModalDialog from "../ModalDialog";
 // import CampusSelect from "../CampusSelect";
 import UwCourseForm from "./UwCourseForm";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
-import type { UwCourseFormState } from "./types";
+import type { UwCourseFormState, TextSearchState } from "./types";
 
 const API_URL =
   import.meta.env.MODE === "production"
@@ -79,7 +79,7 @@ export default function AddCourseDialog({
 
   // const [searchbarInput, setSearchbarInput] = useState("");
   // const [uwCourseErrorMsg, setUwErrorMsg] = useState("");
-  const [textSearchErrorMsg, setTextSearchErrorMsg] = useState("");
+  // const [textSearchErrorMsg, setTextSearchErrorMsg] = useState("");
 
   const [autocompleteOpts, setAutocompleteOpts] = useState<
     ComboboxOptionProps[]
@@ -107,6 +107,15 @@ export default function AddCourseDialog({
     prerequisite: "",
     offered: "",
   });
+
+  const [tsState, setTsState] = useState<TextSearchState>({
+    text: "",
+    connectTo: { prereq: true, postreq: true },
+    errorMsg: "",
+  });
+  function setTextSearchErrorMsg(errorMsg: string): void {
+    setTsState(prev => ({ ...prev, errorMsg }));
+  }
 
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065#issuecomment-446425911
   const websocket = useRef<WebSocket>();
@@ -241,24 +250,24 @@ export default function AddCourseDialog({
     focusSearchRef.current();
   }
 
-  async function addCoursesFromText(
-    matches: RegExpMatchArray,
-    connect: ConnectTo,
-  ): Promise<boolean> {
+  async function addCoursesFromText(event: MouseEvent): Promise<void> {
+    event.preventDefault();
     setTextSearchErrorMsg("");
     setBusy(true);
+
+    const matches = [...new Set(courseIdMatch(tsState.text) || [])];
 
     if (!matches.length) {
       setTextSearchErrorMsg("No course IDs found");
       setBusy(false);
-      return false;
+      return;
     }
 
     const courses = matches.filter(m => !nodeData.has(m));
     if (!courses.length) {
       setTextSearchErrorMsg("All found courses already exist");
       setBusy(false);
-      return false;
+      return;
     }
 
     try {
@@ -271,21 +280,20 @@ export default function AddCourseDialog({
       if (resp.status === 404) {
         setTextSearchErrorMsg("No matching courses found");
         setBusy(false);
-        return false;
+        return;
       }
 
       const data = await resp.json();
 
       const newElements = generateInitialElements(data, "aggressively");
-      addExternalFlow(newElements, connect);
+      addExternalFlow(newElements, tsState.connectTo);
+      setTsState(prev => ({ ...prev, text: "" }));
       setBusy(false);
-      return true;
     } catch (error) {
       setTextSearchErrorMsg("Something went wrong");
       // eslint-disable-next-line no-console
       console.error(error);
       setBusy(false);
-      return false;
     }
   }
 
@@ -415,8 +423,8 @@ export default function AddCourseDialog({
             <AddCourseTextSearch
               tabIndex={tabIndex}
               connectionError={connectionError}
-              errorMsg={textSearchErrorMsg}
-              setErrorMsg={setTextSearchErrorMsg}
+              tsState={tsState}
+              setTsState={setTsState}
               busy={busy}
               addCoursesFromText={addCoursesFromText}
             />

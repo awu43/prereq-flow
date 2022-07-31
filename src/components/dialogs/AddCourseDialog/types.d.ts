@@ -7,3 +7,9 @@ export interface UwCourseFormState {
   alwaysAtZero: boolean;
   errorMsg: string;
 }
+
+export interface TextSearchState {
+  text: string;
+  connectTo: ConnectTo;
+  errorMsg: string;
+}
