@@ -1,4 +1,5 @@
 import type { MouseEvent } from "react";
+import { useEffect, useRef } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -32,6 +33,17 @@ export default function NewFlowTextSearch({
     newTextSearchFlow();
   }
 
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (tabIndex === 2) {
+      textAreaRef.current?.setSelectionRange(
+        tsState.text.length,
+        tsState.text.length,
+      );
+      textAreaRef.current?.focus();
+    }
+  }, []);
+
   return (
     <div className="NewFlowTextSearch">
       <Tippy
@@ -46,6 +58,7 @@ export default function NewFlowTextSearch({
         <textarea
           className="NewFlowTextSearch__textarea"
           placeholder="Text to search for UW course IDs"
+          ref={textAreaRef}
           value={tsState.text}
           onChange={e =>
             setTsState(prev => ({

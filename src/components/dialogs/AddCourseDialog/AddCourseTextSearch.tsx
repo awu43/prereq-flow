@@ -41,6 +41,10 @@ export default function NewFlowTextSearch({
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
+    textAreaRef.current?.setSelectionRange(
+      tsState.text.length,
+      tsState.text.length,
+    );
     if (tabIndex === 2) {
       textAreaRef.current?.focus();
     }
