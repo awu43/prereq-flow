@@ -1,0 +1,30 @@
+@use "src/utils" as *;
+
+.UwCourseForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &__bar-and-button {
+    width: 100%;
+    display: flex;
+    margin-bottom: 2.5rem;
+  }
+  [data-reach-combobox] {
+    max-width: 30rem;
+    flex-grow: 1;
+    margin-right: 0.25rem;
+
+    display: flex;
+    input {
+      @include base-text-input-style;
+      flex: 1;
+    }
+  }
+  &__add-button {
+    @include base-button-style;
+    height: 1.75rem;
+    width: 2.5rem;
+    padding: 0 0.25rem;
+  }
+}
