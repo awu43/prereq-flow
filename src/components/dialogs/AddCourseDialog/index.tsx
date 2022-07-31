@@ -99,6 +99,15 @@ export default function AddCourseDialog({
     setUwcfState(prev => ({ ...prev, errorMsg }));
   }
 
+  const [customCourseData, setCustomCourseData] = useState<CourseData>({
+    id: "",
+    name: "",
+    credits: "",
+    description: "",
+    prerequisite: "",
+    offered: "",
+  });
+
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065#issuecomment-446425911
   const websocket = useRef<WebSocket>();
   useEffect(() => {
@@ -397,6 +406,8 @@ export default function AddCourseDialog({
               busy={busy}
               setBusy={setBusy}
               nodeData={nodeData}
+              customCourseData={customCourseData}
+              setCustomCourseData={setCustomCourseData}
               addNewNode={addNewNode}
             />
           </TabPanel>

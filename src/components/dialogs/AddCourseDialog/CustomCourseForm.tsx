@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { ChangeEvent } from "react";
 
 import Tippy from "@tippyjs/react";
@@ -19,6 +19,8 @@ interface CustomCourseFormProps {
   busy: boolean;
   setBusy: SetState<boolean>;
   nodeData: NodeDataMap;
+  customCourseData: CourseData;
+  setCustomCourseData: SetState<CourseData>;
   addNewNode: (data: CourseData, position: NewCoursePosition) => void;
 }
 export default function CustomCourseForm({
@@ -26,16 +28,26 @@ export default function CustomCourseForm({
   busy,
   setBusy,
   nodeData,
+  customCourseData,
+  setCustomCourseData,
   addNewNode,
 }: CustomCourseFormProps): JSX.Element {
-  const [customCourseData, setCustomCourseData] = useState<CourseData>({
-    id: "",
-    name: "",
-    credits: "",
-    description: "",
-    prerequisite: "",
-    offered: "",
-  });
+  // const [customCourseData, setCustomCourseData] = useState<CourseData>({
+  //   id: "",
+  //   name: "",
+  //   credits: "",
+  //   description: "",
+  //   prerequisite: "",
+  //   offered: "",
+  // });
+
+  const customCourseIdRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (tabIndex === 1) {
+      customCourseIdRef.current?.focus();
+    }
+  }, []);
 
   function resetCustomCourseData(): void {
     setCustomCourseData({
@@ -54,8 +66,6 @@ export default function CustomCourseForm({
     return e =>
       setCustomCourseData(prev => ({ ...prev, [key]: e.target.value }));
   }
-
-  const customCourseIdRef = useRef<HTMLInputElement>(null);
 
   function addCustomCourse(): void {
     setBusy(true);
