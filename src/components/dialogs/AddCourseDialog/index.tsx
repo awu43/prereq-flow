@@ -157,11 +157,9 @@ export default function AddCourseDialog({
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
-        setUwcfState(prev => ({ ...prev, searchText: "" }));
         setAutocompleteOpts([]);
       }, 100);
     } else {
-      setUwcfState(prev => ({ ...prev, searchText: "" }));
       setAutocompleteOpts([]);
     }
   }
