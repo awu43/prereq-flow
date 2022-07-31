@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ChangeEvent } from "react";
 
 import Tippy from "@tippyjs/react";
@@ -38,12 +38,27 @@ export default function EditDataDialog({
     offered: "",
   });
 
-  const prefersReducedMotion = usePrefersReducedMotion();
-
   useEffect(() => {
     setCourseData(originalData);
   }, [originalData]);
 
+  const courseIdRef = useRef<HTMLInputElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (modalCls === "") {
+      setTimeout(() => {
+        textAreaRef.current?.setSelectionRange(
+          courseData.description.length,
+          courseData.description.length,
+        );
+        courseIdRef.current?.focus();
+      });
+      // Delay until next cycle in case user prefers reduced motion
+      // so course data will be set
+    }
+  }, [modalCls]);
+
+  const prefersReducedMotion = usePrefersReducedMotion();
   function close(): void {
     resetSelectedElements();
     closeDialog();
@@ -98,6 +113,7 @@ export default function EditDataDialog({
               disabled={busy}
               className="EditDataForm__id-input"
               type="text"
+              ref={courseIdRef}
               required={true}
               placeholder="Course ID (required)"
               value={courseData.id}
@@ -122,6 +138,7 @@ export default function EditDataDialog({
           />
         </div>
         <textarea
+          ref={textAreaRef}
           disabled={busy}
           className="EditDataForm__description-input"
           placeholder="Description"

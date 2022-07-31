@@ -42,9 +42,13 @@ export default function CustomCourseForm({
   // });
 
   const customCourseIdRef = useRef<HTMLInputElement>(null);
-
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     if (tabIndex === 1) {
+      textAreaRef.current?.setSelectionRange(
+        customCourseData.description.length,
+        customCourseData.description.length,
+      );
       customCourseIdRef.current?.focus();
     }
   }, []);
@@ -116,6 +120,7 @@ export default function CustomCourseForm({
         />
       </div>
       <textarea
+        ref={textAreaRef}
         disabled={busy}
         className="CustomCourseForm__description-input"
         placeholder="Description"
