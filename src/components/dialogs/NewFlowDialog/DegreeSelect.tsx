@@ -34,6 +34,7 @@ const dummyMajors = [
 ];
 
 interface DegreeSelectProps {
+  tabIndex: number;
   connectionError: boolean;
   busy: boolean;
   supportedMajors: string[];
@@ -42,6 +43,7 @@ interface DegreeSelectProps {
   newDegreeFlow: () => void;
 }
 export default function DegreeSelect({
+  tabIndex,
   connectionError,
   busy,
   supportedMajors,
@@ -116,7 +118,7 @@ export default function DegreeSelect({
           arrow={false}
           duration={0}
           offset={[0, 5]}
-          visible={!!dsState.errorMsg}
+          visible={tabIndex === 0 && !!dsState.errorMsg}
         >
           <div className="majors__bar-and-button">
             <select

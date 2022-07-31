@@ -14,6 +14,7 @@ import "./CurriculumSelect.scss";
 import type { CurriculumSelectState } from "./types";
 
 interface CurriculumSelectProps {
+  tabIndex: number;
   connectionError: boolean;
   busy: boolean;
   supportedCurricula: Record<Campus, [string, string][]>;
@@ -22,6 +23,7 @@ interface CurriculumSelectProps {
   newCurriculumFlow: () => void;
 }
 export default function CurriculumSelect({
+  tabIndex,
   connectionError,
   busy,
   supportedCurricula,
@@ -64,7 +66,7 @@ export default function CurriculumSelect({
         arrow={false}
         duration={0}
         offset={[0, 5]}
-        visible={!!csState.errorMsg}
+        visible={tabIndex === 1 && !!csState.errorMsg}
       >
         <select
           className="CurriculumSelect__select-input"

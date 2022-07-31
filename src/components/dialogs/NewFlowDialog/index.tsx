@@ -321,9 +321,6 @@ export default function NewFlowDialog({
           <Tabs
             index={tabIndex}
             onChange={index => {
-              setDegreeError("");
-              setCurriculumError("");
-              setTextSearchError("");
               setTabIndex(index);
             }}
           >
@@ -337,6 +334,7 @@ export default function NewFlowDialog({
             <TabPanels>
               <TabPanel>
                 <DegreeSelect
+                  tabIndex={tabIndex}
                   connectionError={connectionError}
                   busy={busy}
                   supportedMajors={supportedMajors}
@@ -347,6 +345,7 @@ export default function NewFlowDialog({
               </TabPanel>
               <TabPanel>
                 <CurriculumSelect
+                  tabIndex={tabIndex}
                   connectionError={connectionError}
                   busy={busy}
                   supportedCurricula={supportedCurricula}
@@ -357,6 +356,7 @@ export default function NewFlowDialog({
               </TabPanel>
               <TabPanel>
                 <NewFlowTextSearch
+                  tabIndex={tabIndex}
                   connectionError={connectionError}
                   busy={busy}
                   tsState={textSearchState}

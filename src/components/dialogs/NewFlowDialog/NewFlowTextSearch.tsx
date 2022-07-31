@@ -12,6 +12,7 @@ import AmbiguitySelect from "../AmbiguitySelect";
 import type { TextSearchState } from "./types";
 
 interface TextSearchProps {
+  tabIndex: number;
   connectionError: boolean;
   busy: boolean;
   tsState: TextSearchState;
@@ -19,6 +20,7 @@ interface TextSearchProps {
   newTextSearchFlow: () => Promise<void>;
 }
 export default function NewFlowTextSearch({
+  tabIndex,
   connectionError,
   busy,
   tsState,
@@ -39,14 +41,18 @@ export default function NewFlowTextSearch({
         arrow={false}
         duration={0}
         offset={[0, 5]}
-        visible={!!tsState.errorMsg}
+        visible={tabIndex === 2 && !!tsState.errorMsg}
       >
         <textarea
           className="NewFlowTextSearch__textarea"
           placeholder="Text to search for UW course IDs"
           value={tsState.text}
           onChange={e =>
-            setTsState(prev => ({ ...prev, text: e.target.value }))
+            setTsState(prev => ({
+              ...prev,
+              text: e.target.value.toUpperCase(),
+              errorMsg: "",
+            }))
           }
           disabled={connectionError || busy}
         ></textarea>
