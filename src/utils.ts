@@ -735,6 +735,21 @@ export function autoconnect(
   return newElements;
 }
 
+interface StateUpdater<S> {
+  value: (key: keyof S, value: S[typeof key]) => void;
+  cb: (key: keyof S, value: (prev: S) => S[typeof key]) => void;
+}
+export function stateUpdater<S>(setState: SetState<S>): StateUpdater<S> {
+  return {
+    value: (key, value) => setState(prev => ({ ...prev, [key]: value })),
+    cb: (key, value) =>
+      setState(prev => ({
+        ...prev,
+        [key]: value(prev),
+      })),
+  };
+}
+
 export function textChangeUpdater<S>(
   setState: SetState<S>,
 ): (

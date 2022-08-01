@@ -6,6 +6,7 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 import type { SetState, Campus } from "types/main";
+import { stateUpdater } from "@utils";
 
 import CampusSelect from "../CampusSelect";
 import AmbiguitySelect from "../AmbiguitySelect";
@@ -31,19 +32,18 @@ export default function CurriculumSelect({
   setCsState,
   newCurriculumFlow,
 }: CurriculumSelectProps): JSX.Element {
+  const csUpdater = stateUpdater(setCsState);
+
   useEffect(() => {
     if (
       supportedCurricula.Seattle.length &&
       !Object.values(csState.selected).some(s => s)
     ) {
-      setCsState(prev => ({
-        ...prev,
-        selected: {
-          Seattle: supportedCurricula.Seattle[0][0],
-          Bothell: supportedCurricula.Bothell[0][0],
-          Tacoma: supportedCurricula.Tacoma[0][0],
-        },
-      }));
+      csUpdater.value("selected", {
+        Seattle: supportedCurricula.Seattle[0][0],
+        Bothell: supportedCurricula.Bothell[0][0],
+        Tacoma: supportedCurricula.Tacoma[0][0],
+      });
     }
   }, [supportedCurricula]);
 
@@ -56,7 +56,7 @@ export default function CurriculumSelect({
     <div className="CurriculumSelect">
       <CampusSelect
         selectedCampus={csState.campus}
-        setSelectedCampus={c => setCsState(prev => ({ ...prev, campus: c }))}
+        setSelectedCampus={c => csUpdater.value("campus", c)}
         busy={busy}
       />
       <Tippy
@@ -72,12 +72,9 @@ export default function CurriculumSelect({
           className="CurriculumSelect__select-input"
           value={csState.selected[csState.campus]}
           onChange={e => {
-            setCsState(prev => ({
-              ...prev,
-              selected: {
-                ...prev.selected,
-                [prev.campus]: e.target.selectedOptions[0].value,
-              },
+            csUpdater.cb("selected", prev => ({
+              ...prev.selected,
+              [prev.campus]: e.target.selectedOptions[0].value,
             }));
           }}
           disabled={
@@ -96,10 +93,7 @@ export default function CurriculumSelect({
           type="checkbox"
           checked={csState.includeExternal}
           onChange={() => {
-            setCsState(prev => ({
-              ...prev,
-              includeExternal: !prev.includeExternal,
-            }));
+            csUpdater.cb("includeExternal", prev => !prev.includeExternal);
           }}
           disabled={busy}
         />
@@ -107,9 +101,7 @@ export default function CurriculumSelect({
       </label>
       <AmbiguitySelect
         ambiguityHandling={csState.ambiguityHandling}
-        setAmbiguityHandling={a => {
-          setCsState(prev => ({ ...prev, ambiguityHandling: a }));
-        }}
+        setAmbiguityHandling={a => csUpdater.value("ambiguityHandling", a)}
         busy={busy}
       />
       <div className="CurriculumSelect__button-wrapper">

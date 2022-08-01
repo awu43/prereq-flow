@@ -12,6 +12,7 @@ import plusIcon from "@icons/plus.svg";
 
 import type { SetState } from "types/main";
 
+import { stateUpdater } from "@utils";
 import AmbiguitySelect from "../AmbiguitySelect";
 
 import "./DegreeSelect.scss";
@@ -51,9 +52,11 @@ export default function DegreeSelect({
   setDsState,
   newDegreeFlow,
 }: DegreeSelectProps): JSX.Element {
+  const dsUpdater = stateUpdater(setDsState);
+
   useEffect(() => {
     if (supportedMajors.length && !dsState.selected) {
-      setDsState(prev => ({ ...prev, selected: supportedMajors[0] }));
+      dsUpdater.value("selected", supportedMajors[0]);
     }
   }, [supportedMajors]);
 
@@ -65,18 +68,12 @@ export default function DegreeSelect({
       !dsState.majors.includes(dsState.selected) &&
       dsState.majors.length < 3
     ) {
-      setDsState(prev => ({
-        ...prev,
-        majors: prev.majors.concat([prev.selected]),
-      }));
+      dsUpdater.cb("majors", prev => prev.majors.concat([prev.selected]));
     }
   }
 
   function deleteMajor(targetMajor: string): void {
-    setDsState(prev => ({
-      ...prev,
-      majors: prev.majors.filter(m => m !== targetMajor),
-    }));
+    dsUpdater.cb("majors", prev => prev.majors.filter(m => m !== targetMajor));
   }
 
   // function addMinor(params) {
@@ -124,12 +121,12 @@ export default function DegreeSelect({
             <select
               className="majors__select-input"
               value={dsState.selected}
-              onChange={e => {
-                setDsState(prev => ({
-                  ...prev,
-                  selected: e.target.selectedOptions[0].textContent as string,
-                }));
-              }}
+              onChange={e =>
+                dsUpdater.value(
+                  "selected",
+                  e.target.selectedOptions[0].textContent as string,
+                )
+              }
               disabled={connectionError || busy || !supportedMajors.length}
             >
               {supportedMajors.map(m => (
@@ -170,9 +167,7 @@ export default function DegreeSelect({
 
       <AmbiguitySelect
         ambiguityHandling={dsState.ambiguityHandling}
-        setAmbiguityHandling={a => {
-          setDsState(prev => ({ ...prev, ambiguityHandling: a }));
-        }}
+        setAmbiguityHandling={a => dsUpdater.value("ambiguityHandling", a)}
         busy={busy}
       />
 

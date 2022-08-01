@@ -16,6 +16,7 @@ import "tippy.js/dist/tippy.css";
 
 import type { SetState } from "types/main";
 
+import { stateUpdater } from "@utils";
 import CampusSelect from "../CampusSelect";
 
 import type { UwCourseFormState } from "./types";
@@ -45,6 +46,8 @@ export default function UwCourseForm({
   busy,
   focusSearchRef,
 }: UwCourseFormProps): JSX.Element {
+  const uwcfUpdater = stateUpdater(setUwcfState);
+
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   function focusSearchInput(): void {
@@ -63,9 +66,8 @@ export default function UwCourseForm({
 
   function onSearchChange(event: ChangeEvent<HTMLInputElement>): void {
     // Heroku responds fast enough, no throttling/debouncing needed
-    setUwcfState(prev => ({ ...prev, errorMsg: "" }));
     const newValue = event.target.value.toUpperCase();
-    setUwcfState(prev => ({ ...prev, searchText: newValue }));
+    setUwcfState(prev => ({ ...prev, searchText: newValue, errorMsg: "" }));
     if (newValue.trim() && websocket.current?.readyState === 1) {
       websocket.current.send(
         JSON.stringify({ campus: uwcfState.campus, id: `${newValue.trim()} ` }),
@@ -80,7 +82,7 @@ export default function UwCourseForm({
     <form className="UwCourseForm">
       <CampusSelect
         selectedCampus={uwcfState.campus}
-        setSelectedCampus={c => setUwcfState(prev => ({ ...prev, campus: c }))}
+        setSelectedCampus={c => uwcfUpdater.value("campus", c)}
         busy={busy}
       />
       <div className="UwCourseForm__bar-and-button">
@@ -94,9 +96,7 @@ export default function UwCourseForm({
           visible={tabIndex === 0 && !!uwcfState.errorMsg}
         >
           <Combobox
-            onSelect={item =>
-              setUwcfState(prev => ({ ...prev, searchText: item }))
-            }
+            onSelect={item => uwcfUpdater.value("searchText", item)}
             aria-label="Course search"
           >
             <ComboboxInput
@@ -126,12 +126,12 @@ export default function UwCourseForm({
           type="checkbox"
           checked={uwcfState.connectTo.prereq}
           disabled={busy}
-          onChange={() => {
-            setUwcfState(prev => ({
-              ...prev,
-              connectTo: { ...prev.connectTo, prereq: !prev.connectTo.prereq },
-            }));
-          }}
+          onChange={() =>
+            uwcfUpdater.cb("connectTo", prev => ({
+              ...prev.connectTo,
+              prereq: !prev.connectTo.prereq,
+            }))
+          }
           data-cy="uw-connect-to-prereqs"
         />
         Connect to existing prereqs
@@ -141,15 +141,12 @@ export default function UwCourseForm({
           type="checkbox"
           checked={uwcfState.connectTo.postreq}
           disabled={busy}
-          onChange={() => {
-            setUwcfState(prev => ({
-              ...prev,
-              connectTo: {
-                ...prev.connectTo,
-                postreq: !prev.connectTo.postreq,
-              },
-            }));
-          }}
+          onChange={() =>
+            uwcfUpdater.cb("connectTo", prev => ({
+              ...prev.connectTo,
+              postreq: !prev.connectTo.postreq,
+            }))
+          }
           data-cy="uw-connect-to-postreqs"
         />
         Connect to existing postreqs
@@ -160,10 +157,7 @@ export default function UwCourseForm({
           checked={uwcfState.alwaysAtZero}
           disabled={busy}
           onChange={() =>
-            setUwcfState(prev => ({
-              ...prev,
-              alwaysAtZero: !prev.alwaysAtZero,
-            }))
+            uwcfUpdater.cb("alwaysAtZero", prev => !prev.alwaysAtZero)
           }
         />
         Always place new courses at (0, 0)

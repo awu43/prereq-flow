@@ -9,7 +9,7 @@ import type { SetState, ConnectTo } from "types/main";
 
 import "./AddCourseTextSearch.scss";
 
-import { courseIdMatch } from "@utils";
+import { courseIdMatch, stateUpdater } from "@utils";
 
 import type { TextSearchState } from "./types";
 
@@ -33,6 +33,8 @@ export default function NewFlowTextSearch({
   busy,
   addCoursesFromText,
 }: TextSearchProps): JSX.Element {
+  const tsUpdater = stateUpdater(setTsState);
+
   // const [text, setText] = useState("");
   // const [connectTo, setConnectTo] = useState<ConnectTo>({
   //   prereq: true,
@@ -94,12 +96,12 @@ export default function NewFlowTextSearch({
           type="checkbox"
           checked={tsState.connectTo.prereq}
           disabled={busy}
-          onChange={() => {
-            setTsState(prev => ({
-              ...prev,
-              connectTo: { ...prev.connectTo, prereq: !prev.connectTo.prereq },
-            }));
-          }}
+          onChange={() =>
+            tsUpdater.cb("connectTo", prev => ({
+              ...prev.connectTo,
+              prereq: !prev.connectTo.prereq,
+            }))
+          }
           data-cy="text-connect-to-prereqs"
         />
         Connect to existing prereqs
@@ -109,15 +111,12 @@ export default function NewFlowTextSearch({
           type="checkbox"
           checked={tsState.connectTo.postreq}
           disabled={busy}
-          onChange={() => {
-            setTsState(prev => ({
-              ...prev,
-              connectTo: {
-                ...prev.connectTo,
-                postreq: !prev.connectTo.postreq,
-              },
-            }));
-          }}
+          onChange={() =>
+            tsUpdater.cb("connectTo", prev => ({
+              ...prev.connectTo,
+              postreq: !prev.connectTo.postreq,
+            }))
+          }
           data-cy="text-connect-to-postreqs"
         />
         Connect to existing postreqs
