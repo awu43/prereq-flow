@@ -63,4 +63,18 @@ describe("DegreeSelect", () => {
     cy.get(".majors__add-button").click();
     cy.get(".DegreeSelect").contains("Get courses").should("not.be.disabled");
   });
+  it("Persists state", () => {
+    cy.get(".majors__add-button").click();
+    cy.get(".majors__select-input").select("Applied Mathematics");
+    cy.get(".majors__add-button").click();
+    cy.get(".majors__select-input").select("Astronomy");
+    cy.get(".AmbiguitySelect label").contains("Cautiously").click();
+    cy.get(".CloseButton").click();
+    cy.get(".Header").contains("New flow").click();
+    cy.get(".DegreeSelect");
+    cy.get("li").contains("Aeronautical and Astronautical Engineering");
+    cy.get("li").contains("Applied Mathematics");
+    cy.get(".majors__select-input").find(":selected").contains("Astronomy");
+    cy.get('input[type="radio"][checked]').parent().contains("Cautiously");
+  });
 });

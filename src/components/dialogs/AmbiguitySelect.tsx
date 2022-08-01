@@ -3,13 +3,11 @@ import { nanoid } from "nanoid";
 
 import "./AmbiguitySelect.scss";
 
-import type { SetState } from "types/main";
-
 export type AmbiguityHandling = "aggressively" | "cautiously";
 
 interface AmbiGuitySelectProps {
   ambiguityHandling: AmbiguityHandling;
-  setAmbiguityHandling: SetState<AmbiguityHandling>;
+  setAmbiguityHandling: (a: AmbiguityHandling) => void;
   busy: boolean;
 }
 export default function AmbiguitySelect({

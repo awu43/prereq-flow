@@ -1,5 +1,4 @@
-import { useState, useRef } from "react";
-import type { ChangeEvent } from "react";
+import { useEffect, useRef } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -11,6 +10,7 @@ import type {
   NewCoursePosition,
   NodeDataMap,
 } from "types/main";
+import { textChangeUpdater } from "@utils";
 
 import "./CustomCourseForm.scss";
 
@@ -19,6 +19,8 @@ interface CustomCourseFormProps {
   busy: boolean;
   setBusy: SetState<boolean>;
   nodeData: NodeDataMap;
+  customCourseData: CourseData;
+  setCustomCourseData: SetState<CourseData>;
   addNewNode: (data: CourseData, position: NewCoursePosition) => void;
 }
 export default function CustomCourseForm({
@@ -26,16 +28,21 @@ export default function CustomCourseForm({
   busy,
   setBusy,
   nodeData,
+  customCourseData,
+  setCustomCourseData,
   addNewNode,
 }: CustomCourseFormProps): JSX.Element {
-  const [customCourseData, setCustomCourseData] = useState<CourseData>({
-    id: "",
-    name: "",
-    credits: "",
-    description: "",
-    prerequisite: "",
-    offered: "",
-  });
+  const customCourseIdRef = useRef<HTMLInputElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (tabIndex === 1) {
+      textAreaRef.current?.setSelectionRange(
+        customCourseData.description.length,
+        customCourseData.description.length,
+      );
+      customCourseIdRef.current?.focus();
+    }
+  }, []);
 
   function resetCustomCourseData(): void {
     setCustomCourseData({
@@ -48,14 +55,7 @@ export default function CustomCourseForm({
     });
   }
 
-  function onChangeFn(
-    key: keyof CourseData,
-  ): (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void {
-    return e =>
-      setCustomCourseData(prev => ({ ...prev, [key]: e.target.value }));
-  }
-
-  const customCourseIdRef = useRef<HTMLInputElement>(null);
+  const onChangeFn = textChangeUpdater(setCustomCourseData);
 
   function addCustomCourse(): void {
     setBusy(true);
@@ -106,6 +106,7 @@ export default function CustomCourseForm({
         />
       </div>
       <textarea
+        ref={textAreaRef}
         disabled={busy}
         className="CustomCourseForm__description-input"
         placeholder="Description"

@@ -73,4 +73,16 @@ describe("UwCourseForm", () => {
     cy.get('[data-id="CHEM 110"]');
     cy.get('[data-testid="CHEM 110 -> CHEM 142"]').should("not.exist");
   });
+  it("Persists state", () => {
+    cy.get('[data-cy="uw-connect-to-prereqs"]').uncheck();
+    cy.get('[data-cy="uw-connect-to-postreqs"]').uncheck();
+    cy.get('[data-cy="uw-connect-to-postreqs"]').check();
+    cy.get(".UwCourseForm__searchbar").type("CHEM 110");
+    cy.get(".AddCourseDialog .CloseButton").click();
+    cy.get(".Header").contains("Add courses").click();
+    cy.get(".UwCourseForm__searchbar").should("have.value", "CHEM 110");
+    cy.get('input[type="checkbox"][checked]')
+      .parent()
+      .contains("Connect to existing postreqs");
+  });
 });

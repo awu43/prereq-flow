@@ -16,13 +16,17 @@ import {
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 
-import "./NewFlowDialog.scss";
-import ModalDialog from "./ModalDialog";
+import "./index.scss";
+import ModalDialog from "../ModalDialog";
+import type {
+  DegreeSelectState,
+  CurriculumSelectState,
+  TextSearchState,
+} from "./types";
 import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import NewFlowTextSearch from "./NewFlowTextSearch";
-import type { AmbiguityHandling } from "./AmbiguitySelect";
 
 interface CurriculumData {
   campus: Campus;
@@ -49,14 +53,44 @@ export default function NewFlowDialog({
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const [supportedMajors, setSupportedMajors] = useState<string[]>([]);
-  const [degreeError, setDegreeError] = useState("");
+  const [degreeSelectState, setDegreeSelectState] = useState<DegreeSelectState>(
+    {
+      majors: [],
+      selected: "",
+      ambiguityHandling: "aggressively",
+      errorMsg: "",
+    },
+  );
+  function setDegreeError(errorMsg: string): void {
+    setDegreeSelectState(prev => ({ ...prev, errorMsg }));
+  }
+
   const [supportedCurricula, setSupportedCurricula] = useState<
-    Map<Campus, HTMLOptionElement[]>
-  >(new Map());
-  const [curriculumError, setCurriculumError] = useState("");
-  const [textSearchError, setTextSearchError] = useState("");
+    Record<Campus, [id: string, name: string][]>
+  >({ Seattle: [], Bothell: [], Tacoma: [] });
+  const [curriculumSelectState, setCurriculumSelectState] =
+    useState<CurriculumSelectState>({
+      campus: "Seattle",
+      selected: { Seattle: "", Bothell: "", Tacoma: "" },
+      includeExternal: false,
+      ambiguityHandling: "aggressively",
+      errorMsg: "",
+    });
+  function setCurriculumError(errorMsg: string): void {
+    setCurriculumSelectState(prev => ({ ...prev, errorMsg }));
+  }
+
+  const [textSearchState, setTextSearchState] = useState<TextSearchState>({
+    text: "",
+    ambiguityHandling: "aggressively",
+    errorMsg: "",
+  });
+  function setTextSearchError(errorMsg: string): void {
+    setTextSearchState(prev => ({ ...prev, errorMsg }));
+  }
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -95,36 +129,25 @@ export default function NewFlowDialog({
     fetch(`${API_URL}/curricula/`)
       .then(resp => resp.json())
       .then((data: CurriculumData[]) => {
-        const curricula = new Map(
-          Object.entries({
-            Seattle: [],
-            Bothell: [],
-            Tacoma: [],
-          }),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ) as Map<Campus, any>;
-
+        const curriculaData: Record<Campus, CurriculumData[]> = {
+          Seattle: [],
+          Bothell: [],
+          Tacoma: [],
+        };
         for (const datum of data) {
-          curricula.get(datum.campus).push(datum);
+          curriculaData[datum.campus].push(datum);
         }
-        // Values initially CurriculumData[]
 
-        for (const campus of curricula.keys()) {
-          curricula
-            .get(campus)
-            .sort((a: CurriculumData, b: CurriculumData) =>
-              a.id.localeCompare(b.id),
-            );
-          curricula.set(
-            campus,
-            curricula.get(campus).map((curr: CurriculumData) => (
-              <option key={curr.id} value={curr.id}>
-                {`${curr.id}: ${curr.name}`}
-              </option>
-            )),
-          );
+        const curricula: Record<Campus, [string, string][]> = {
+          Seattle: [],
+          Bothell: [],
+          Tacoma: [],
+        };
+        for (const campus of Object.keys(curricula) as Campus[]) {
+          curricula[campus] = curriculaData[campus]
+            .sort((a, b) => a.id.localeCompare(b.id))
+            .map(c => [c.id, c.name]);
         }
-        // Now HTMLOptionElement[]
 
         setSupportedCurricula(curricula);
       })
@@ -135,20 +158,21 @@ export default function NewFlowDialog({
       });
   }, []);
 
-  async function newDegreeFlow(
-    majors: string[],
-    ambiguityHandling: AmbiguityHandling,
-  ): Promise<void> {
+  async function newDegreeFlow(): Promise<void> {
+    setBusy(true);
     setDegreeError("");
     try {
       const resp = await fetch(`${API_URL}/degrees/`, {
         method: "POST",
         headers: { contentType: "application/json" },
-        body: JSON.stringify(majors),
+        body: JSON.stringify(degreeSelectState.majors),
       });
       const data = await resp.json();
 
-      const newElements = generateInitialElements(data, ambiguityHandling);
+      const newElements = generateInitialElements(
+        data,
+        degreeSelectState.ambiguityHandling,
+      );
       generateNewFlow(newElements);
       close();
     } catch (error) {
@@ -168,24 +192,25 @@ export default function NewFlowDialog({
     // }
   }
 
-  async function newCurriculumFlow(
-    curriculum: string,
-    includeExternal: boolean,
-    ambiguityHandling: AmbiguityHandling,
-  ): Promise<void> {
+  async function newCurriculumFlow(): Promise<void> {
+    setBusy(true);
     setCurriculumError("");
+    const curriculumId =
+      curriculumSelectState.selected[curriculumSelectState.campus];
     try {
-      const resp = await fetch(`${API_URL}/curricula/${curriculum}`);
+      const resp = await fetch(`${API_URL}/curricula/${curriculumId}`);
       const data = await resp.json();
 
-      if (includeExternal) {
+      if (curriculumSelectState.includeExternal) {
         const externalPrereqs = [];
         for (const course of data) {
           const courseMatches = courseIdMatch(
             course.prerequisite,
           ) as RegExpMatchArray;
           const external = courseMatches
-            ? courseMatches.filter(courseId => !courseId.startsWith(curriculum))
+            ? courseMatches.filter(
+                courseId => !courseId.startsWith(curriculumId),
+              )
             : [];
           externalPrereqs.push(...external);
         }
@@ -200,12 +225,15 @@ export default function NewFlowDialog({
         }
       }
 
-      const newElements = generateInitialElements(data, ambiguityHandling);
+      const newElements = generateInitialElements(
+        data,
+        curriculumSelectState.ambiguityHandling,
+      );
       const edges = newElements.filter(elem => isEdge(elem));
       const externalOrphans = newElements.filter(
         elem =>
           isNode(elem) &&
-          !elem.id.startsWith(curriculum) &&
+          !elem.id.startsWith(curriculumId) &&
           !getConnectedEdges([elem], edges as Edge[]).length,
         // Not connected to any other nodes
       );
@@ -220,17 +248,19 @@ export default function NewFlowDialog({
     }
   }
 
-  async function newTextSearchFlow(
-    courses: string[],
-    ambiguityHandling: AmbiguityHandling,
-  ): Promise<void> {
+  async function newTextSearchFlow(): Promise<void> {
+    setBusy(true);
+    setTextSearchError("");
+
+    const courseMatches = courseIdMatch(textSearchState.text) ?? [];
+    const courses = [...new Set(courseMatches)];
+
     if (!courses.length) {
       setTextSearchError("No course IDs found");
       setBusy(false);
       return;
     }
 
-    setTextSearchError("");
     try {
       const resp = await fetch(`${API_URL}/courses/`, {
         method: "POST",
@@ -246,8 +276,12 @@ export default function NewFlowDialog({
 
       const data = await resp.json();
 
-      const newElements = generateInitialElements(data, ambiguityHandling);
+      const newElements = generateInitialElements(
+        data,
+        textSearchState.ambiguityHandling,
+      );
       generateNewFlow(newElements);
+      setTextSearchState(prev => ({ ...prev, text: "" }));
       close();
     } catch (error) {
       setTextSearchError("Something went wrong");
@@ -285,10 +319,9 @@ export default function NewFlowDialog({
         />
         <form className="FlowType">
           <Tabs
-            onChange={() => {
-              setDegreeError("");
-              setCurriculumError("");
-              setTextSearchError("");
+            index={tabIndex}
+            onChange={index => {
+              setTabIndex(index);
             }}
           >
             <TabList>
@@ -301,31 +334,34 @@ export default function NewFlowDialog({
             <TabPanels>
               <TabPanel>
                 <DegreeSelect
+                  tabIndex={tabIndex}
                   connectionError={connectionError}
                   busy={busy}
-                  setBusy={setBusy}
                   supportedMajors={supportedMajors}
+                  dsState={degreeSelectState}
+                  setDsState={setDegreeSelectState}
                   newDegreeFlow={newDegreeFlow}
-                  errorMsg={degreeError}
                 />
               </TabPanel>
               <TabPanel>
                 <CurriculumSelect
+                  tabIndex={tabIndex}
                   connectionError={connectionError}
                   busy={busy}
-                  setBusy={setBusy}
                   supportedCurricula={supportedCurricula}
+                  csState={curriculumSelectState}
+                  setCsState={setCurriculumSelectState}
                   newCurriculumFlow={newCurriculumFlow}
-                  errorMsg={curriculumError}
                 />
               </TabPanel>
               <TabPanel>
                 <NewFlowTextSearch
+                  tabIndex={tabIndex}
                   connectionError={connectionError}
                   busy={busy}
-                  setBusy={setBusy}
+                  tsState={textSearchState}
+                  setTsState={setTextSearchState}
                   newTextSearchFlow={newTextSearchFlow}
-                  errorMsg={textSearchError}
                 />
               </TabPanel>
               <TabPanel>

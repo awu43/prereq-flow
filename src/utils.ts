@@ -1,3 +1,5 @@
+import type { ChangeEvent } from "react";
+
 import { nanoid } from "nanoid";
 
 // eslint-disable-next-line import/order
@@ -28,6 +30,7 @@ import type {
   NodeDataMap,
   ElemIndexMap,
   ConnectTo,
+  SetState,
 } from "types/main";
 import type { AmbiguityHandling } from "./components/dialogs/AmbiguitySelect";
 
@@ -730,6 +733,32 @@ export function autoconnect(
   }
 
   return newElements;
+}
+
+interface StateUpdater<S> {
+  value: (key: keyof S, value: S[typeof key]) => void;
+  cb: (key: keyof S, value: (prev: S) => S[typeof key]) => void;
+}
+export function stateUpdater<S>(setState: SetState<S>): StateUpdater<S> {
+  return {
+    value: (key, value) => setState(prev => ({ ...prev, [key]: value })),
+    cb: (key, value) =>
+      setState(prev => ({
+        ...prev,
+        [key]: value(prev),
+      })),
+  };
+}
+
+export function textChangeUpdater<S>(
+  setState: SetState<S>,
+): (
+  key: keyof S,
+) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void {
+  return key =>
+    function _setState(e) {
+      setState(prev => ({ ...prev, [key]: e.target.value }));
+    };
 }
 
 export const _testing = {

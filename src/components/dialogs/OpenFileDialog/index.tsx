@@ -19,10 +19,10 @@ import type {
 import type { Element as ElementBeta2 } from "types/beta2";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
-import ModalDialog from "./ModalDialog";
+import ModalDialog from "../ModalDialog";
 import Dropzone from "./Dropzone";
 
-import "./OpenFileDialog.scss";
+import "./index.scss";
 
 // eslint-disable-next-line prettier/prettier
 const SUPPORTED_VERSIONS = [

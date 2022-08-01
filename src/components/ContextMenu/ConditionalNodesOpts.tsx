@@ -1,5 +1,5 @@
 import type { Node } from "types/main";
-import type { OptListProps } from "types/ContextMenu";
+import type { OptListProps } from "./types";
 
 export default function ConditionalNodeOpts({
   contextProps,

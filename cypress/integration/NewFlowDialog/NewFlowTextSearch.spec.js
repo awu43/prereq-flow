@@ -31,4 +31,14 @@ describe("NewFlowTextSearch", () => {
     cy.get(".NewFlowTextSearch").contains("Get courses").click();
     cy.get(".tippy-box--error");
   });
+  it("Persists state", () => {
+    cy.get(".NewFlowTextSearch__textarea").type("FOOBAR BAZ");
+    cy.get(".NewFlowTextSearch .AmbiguitySelect label")
+      .contains("Cautiously")
+      .click();
+    cy.get(".CloseButton").click();
+    cy.get(".Header").contains("New flow").click();
+    cy.get(".NewFlowTextSearch__textarea").should("have.value", "FOOBAR BAZ");
+    cy.get('input[type="radio"][checked]').parent().contains("Cautiously");
+  });
 });

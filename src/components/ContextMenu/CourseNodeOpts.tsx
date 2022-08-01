@@ -1,5 +1,4 @@
 import type { CourseStatus, CourseNode } from "types/main";
-import type { OptListProps } from "types/ContextMenu";
 
 import {
   isCourseNode,
@@ -7,6 +6,8 @@ import {
   edgeArrowId,
   COURSE_STATUS_CODES,
 } from "@utils";
+
+import type { OptListProps } from "./types";
 
 const COURSE_REGEX = /^(?:[A-Z&]+ )+\d{3}$/;
 

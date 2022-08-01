@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";
@@ -11,11 +11,12 @@ import timesIcon from "@icons/times.svg";
 import plusIcon from "@icons/plus.svg";
 
 import type { SetState } from "types/main";
-import type { AmbiguityHandling } from "./AmbiguitySelect";
 
-import AmbiguitySelect from "./AmbiguitySelect";
+import { stateUpdater } from "@utils";
+import AmbiguitySelect from "../AmbiguitySelect";
 
 import "./DegreeSelect.scss";
+import type { DegreeSelectState } from "./types";
 
 function toKebabCase(text: string): string {
   return text.replace(/[().]/g, "").replace(/ /g, "-").toLowerCase();
@@ -34,33 +35,28 @@ const dummyMajors = [
 ];
 
 interface DegreeSelectProps {
+  tabIndex: number;
   connectionError: boolean;
   busy: boolean;
-  setBusy: SetState<boolean>;
   supportedMajors: string[];
-  newDegreeFlow: (
-    majors: string[],
-    ambiguityHandling: AmbiguityHandling,
-  ) => void;
-  errorMsg: string;
+  dsState: DegreeSelectState;
+  setDsState: SetState<DegreeSelectState>;
+  newDegreeFlow: () => void;
 }
 export default function DegreeSelect({
+  tabIndex,
   connectionError,
   busy,
-  setBusy,
   supportedMajors,
+  dsState,
+  setDsState,
   newDegreeFlow,
-  errorMsg,
 }: DegreeSelectProps): JSX.Element {
-  const [majors, setMajors] = useState<string[]>([]);
-  // const [minors, setMinors] = useState([]);
-  const [currentlySelected, setCurrentlySelected] = useState("");
-  const [ambiguityHandling, setAmbiguityHandling] =
-    useState<AmbiguityHandling>("aggressively");
+  const dsUpdater = stateUpdater(setDsState);
 
   useEffect(() => {
-    if (supportedMajors.length) {
-      setCurrentlySelected(supportedMajors[0]);
+    if (supportedMajors.length && !dsState.selected) {
+      dsUpdater.value("selected", supportedMajors[0]);
     }
   }, [supportedMajors]);
 
@@ -68,13 +64,16 @@ export default function DegreeSelect({
     if (!supportedMajors.length) {
       return;
     }
-    if (!majors.includes(currentlySelected) && majors.length < 3) {
-      setMajors(majors.concat([currentlySelected]));
+    if (
+      !dsState.majors.includes(dsState.selected) &&
+      dsState.majors.length < 3
+    ) {
+      dsUpdater.cb("majors", prev => prev.majors.concat([prev.selected]));
     }
   }
 
   function deleteMajor(targetMajor: string): void {
-    setMajors(majors.filter(m => m !== targetMajor));
+    dsUpdater.cb("majors", prev => prev.majors.filter(m => m !== targetMajor));
   }
 
   // function addMinor(params) {
@@ -83,12 +82,10 @@ export default function DegreeSelect({
 
   function generateFlow(event: MouseEvent): void {
     event.preventDefault();
-    setBusy(true);
-
-    newDegreeFlow(majors, ambiguityHandling);
+    newDegreeFlow();
   }
 
-  const majorsListElems = majors.map(m => {
+  const majorsListElems = dsState.majors.map(m => {
     const id = toKebabCase(m);
     return (
       <li className="majors__selected-item" key={id}>
@@ -113,22 +110,24 @@ export default function DegreeSelect({
         <ul className="majors__selected-list">{majorsListElems}</ul>
         <Tippy
           className="tippy-box--error"
-          content={errorMsg}
+          content={dsState.errorMsg}
           placement="bottom-start"
           arrow={false}
           duration={0}
           offset={[0, 5]}
-          visible={!!errorMsg}
+          visible={tabIndex === 0 && !!dsState.errorMsg}
         >
           <div className="majors__bar-and-button">
             <select
               className="majors__select-input"
-              onChange={e => {
-                setCurrentlySelected(
+              value={dsState.selected}
+              onChange={e =>
+                dsUpdater.value(
+                  "selected",
                   e.target.selectedOptions[0].textContent as string,
-                );
-              }}
-              disabled={Boolean(connectionError || busy)}
+                )
+              }
+              disabled={connectionError || busy || !supportedMajors.length}
             >
               {supportedMajors.map(m => (
                 <option key={toKebabCase(m)}>{m}</option>
@@ -138,12 +137,13 @@ export default function DegreeSelect({
               className="majors__add-button"
               type="button"
               onClick={addMajor}
-              disabled={Boolean(
+              disabled={
                 connectionError ||
-                  busy ||
-                  majors.includes(currentlySelected) ||
-                  majors.length >= 3,
-              )}
+                busy ||
+                !supportedMajors.length ||
+                dsState.majors.includes(dsState.selected) ||
+                dsState.majors.length >= 3
+              }
             >
               <img src={plusIcon} alt="Add" />
             </button>
@@ -166,8 +166,8 @@ export default function DegreeSelect({
       </small>
 
       <AmbiguitySelect
-        ambiguityHandling={ambiguityHandling}
-        setAmbiguityHandling={setAmbiguityHandling}
+        ambiguityHandling={dsState.ambiguityHandling}
+        setAmbiguityHandling={a => dsUpdater.value("ambiguityHandling", a)}
         busy={busy}
       />
 
@@ -189,7 +189,7 @@ export default function DegreeSelect({
           className="DegreeSelect__get-courses-button"
           type="submit"
           onClick={generateFlow}
-          disabled={Boolean(connectionError || busy || !majors.length)}
+          disabled={connectionError || busy || !dsState.majors.length}
         >
           Get courses
         </button>

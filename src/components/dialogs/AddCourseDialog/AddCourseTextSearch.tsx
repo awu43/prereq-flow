@@ -1,71 +1,70 @@
-import { useState } from "react";
+import { useRef, useEffect } from "react";
 import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import type { SetState, ConnectTo } from "types/main";
+import type { SetState } from "types/main";
 
 import "./AddCourseTextSearch.scss";
 
-import { courseIdMatch } from "@utils";
+import { stateUpdater } from "@utils";
+
+import type { TextSearchState } from "./types";
 
 interface TextSearchProps {
   tabIndex: number;
   connectionError: boolean;
-  errorMsg: string;
-  setErrorMsg: SetState<string>;
+  tsState: TextSearchState;
+  setTsState: SetState<TextSearchState>;
   busy: boolean;
-  addCoursesFromText: (
-    matches: RegExpMatchArray,
-    connectTo: ConnectTo,
-  ) => Promise<boolean>;
+  addCoursesFromText: (e: MouseEvent) => Promise<void>;
 }
 export default function NewFlowTextSearch({
   tabIndex,
   connectionError,
-  errorMsg,
-  setErrorMsg,
+  tsState,
+  setTsState,
   busy,
   addCoursesFromText,
 }: TextSearchProps): JSX.Element {
-  const [text, setText] = useState("");
-  const [connectTo, setConnectTo] = useState<ConnectTo>({
-    prereq: true,
-    postreq: true,
-  });
+  const tsUpdater = stateUpdater(setTsState);
 
-  async function AddCourses(event: MouseEvent): Promise<void> {
-    event.preventDefault();
-    const success = await addCoursesFromText(
-      [...new Set(courseIdMatch(text) || [])],
-      connectTo,
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    textAreaRef.current?.setSelectionRange(
+      tsState.text.length,
+      tsState.text.length,
     );
-    if (success) {
-      setText("");
+    if (tabIndex === 2) {
+      textAreaRef.current?.focus();
     }
-  }
+  }, []);
 
   return (
     <form className="AddCourseTextSearch">
       <Tippy
         className="tippy-box--error"
-        content={errorMsg}
+        content={tsState.errorMsg}
         placement="bottom-start"
         arrow={false}
         duration={0}
         offset={[0, 5]}
-        visible={tabIndex === 2 && !!errorMsg}
+        visible={tabIndex === 2 && !!tsState.errorMsg}
       >
         <textarea
           className="AddCourseTextSearch__textarea"
           placeholder="Text to search for UW course IDs"
-          value={text}
+          value={tsState.text}
           onChange={e => {
-            setText(e.target.value);
-            setErrorMsg("");
+            setTsState(prev => ({
+              ...prev,
+              text: e.target.value.toUpperCase(),
+              errorMsg: "",
+            }));
           }}
+          ref={textAreaRef}
           disabled={connectionError || busy}
         ></textarea>
       </Tippy>
@@ -74,11 +73,14 @@ export default function NewFlowTextSearch({
       <label>
         <input
           type="checkbox"
-          checked={connectTo.prereq}
+          checked={tsState.connectTo.prereq}
           disabled={busy}
-          onChange={() => {
-            setConnectTo(prev => ({ ...prev, prereq: !prev.prereq }));
-          }}
+          onChange={() =>
+            tsUpdater.cb("connectTo", prev => ({
+              ...prev.connectTo,
+              prereq: !prev.connectTo.prereq,
+            }))
+          }
           data-cy="text-connect-to-prereqs"
         />
         Connect to existing prereqs
@@ -86,11 +88,14 @@ export default function NewFlowTextSearch({
       <label>
         <input
           type="checkbox"
-          checked={connectTo.postreq}
+          checked={tsState.connectTo.postreq}
           disabled={busy}
-          onChange={() => {
-            setConnectTo(prev => ({ ...prev, postreq: !prev.postreq }));
-          }}
+          onChange={() =>
+            tsUpdater.cb("connectTo", prev => ({
+              ...prev.connectTo,
+              postreq: !prev.connectTo.postreq,
+            }))
+          }
           data-cy="text-connect-to-postreqs"
         />
         Connect to existing postreqs
@@ -99,8 +104,8 @@ export default function NewFlowTextSearch({
       <button
         type="submit"
         className="AddCourseTextSearch__add-courses-button"
-        onClick={AddCourses}
-        disabled={connectionError || busy || !text.trim()}
+        onClick={addCoursesFromText}
+        disabled={connectionError || busy || !tsState.text.trim()}
       >
         Add courses
       </button>

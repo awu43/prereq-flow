@@ -1,25 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import type { MouseEvent, ChangeEvent } from "react";
+import type { MouseEvent } from "react";
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxOptionText,
-} from "@reach/combobox";
+import { ComboboxOption, ComboboxOptionText } from "@reach/combobox";
 import type { ComboboxOptionProps } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-import Tippy from "@tippyjs/react";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import "tippy.js/dist/tippy.css";
-
 import type {
-  Campus,
   CourseData,
   CourseNode,
   Element,
@@ -30,12 +18,14 @@ import type {
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
-import { newCourseNode, generateInitialElements } from "@utils";
-import "./AddCourseDialog.scss";
-import ModalDialog from "./ModalDialog";
-import CampusSelect from "./CampusSelect";
+import { newCourseNode, generateInitialElements, courseIdMatch } from "@utils";
+import "./index.scss";
+import ModalDialog from "../ModalDialog";
+// import CampusSelect from "../CampusSelect";
+import UwCourseForm from "./UwCourseForm";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
+import type { UwCourseFormState, TextSearchState } from "./types";
 
 const API_URL =
   import.meta.env.MODE === "production"
@@ -70,21 +60,41 @@ export default function AddCourseDialog({
   addExternalFlow,
 }: AddCourseDialogProps): JSX.Element {
   const [tabIndex, setTabIndex] = useState(0);
-
   const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
 
-  const [searchbarInput, setSearchbarInput] = useState("");
-  const [uwCourseErrorMsg, setUwErrorMsg] = useState("");
-  const [textSearchErrorMsg, setTextSearchErrorMsg] = useState("");
-
+  const focusSearchRef = useRef<() => void>(() => {});
+  const [uwcfState, setUwcfState] = useState<UwCourseFormState>({
+    campus: "Seattle",
+    searchText: "",
+    connectTo: { prereq: true, postreq: true },
+    alwaysAtZero: false,
+    errorMsg: "",
+  });
+  function setUwErrorMsg(errorMsg: string): void {
+    setUwcfState(prev => ({ ...prev, errorMsg }));
+  }
   const [autocompleteOpts, setAutocompleteOpts] = useState<
     ComboboxOptionProps[]
   >([]);
 
-  const searchBarRef = useRef<HTMLInputElement>(null);
-  const addButtonRef = useRef<HTMLButtonElement>(null);
+  const [customCourseData, setCustomCourseData] = useState<CourseData>({
+    id: "",
+    name: "",
+    credits: "",
+    description: "",
+    prerequisite: "",
+    offered: "",
+  });
+
+  const [tsState, setTsState] = useState<TextSearchState>({
+    text: "",
+    connectTo: { prereq: true, postreq: true },
+    errorMsg: "",
+  });
+  function setTextSearchErrorMsg(errorMsg: string): void {
+    setTsState(prev => ({ ...prev, errorMsg }));
+  }
 
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065#issuecomment-446425911
   const websocket = useRef<WebSocket>();
@@ -113,12 +123,6 @@ export default function AddCourseDialog({
     };
   }, []);
 
-  const [connectTo, setConnectTo] = useState<ConnectTo>({
-    prereq: true,
-    postreq: true,
-  });
-  const [alwaysAtZero, setAlwaysAtZero] = useState(false);
-
   const prefersReducedMotion = usePrefersReducedMotion();
   function close(): void {
     setUwErrorMsg("");
@@ -126,60 +130,47 @@ export default function AddCourseDialog({
     closeDialog();
     if (!prefersReducedMotion) {
       setTimeout(() => {
-        setTabIndex(0);
-        setSearchbarInput("");
         setAutocompleteOpts([]);
       }, 100);
     } else {
-      setTabIndex(0);
-      setSearchbarInput("");
       setAutocompleteOpts([]);
     }
   }
 
-  function onSearchChange(event: ChangeEvent<HTMLInputElement>): void {
-    // Heroku responds fast enough, no throttling/debouncing needed
-    setUwErrorMsg("");
-    const newValue = event.target.value.toUpperCase();
-    setSearchbarInput(newValue);
-    if (newValue.trim() && websocket.current?.readyState === 1) {
-      websocket.current.send(
-        JSON.stringify({ campus: selectedCampus, id: `${newValue.trim()} ` }),
-      );
-      // Adding a trailing space seems to improve accuracy for some reason
-    } else {
-      setAutocompleteOpts([]);
-    }
-  }
-
-  function addNewNode(data: CourseData, position: NewCoursePosition): void {
+  function addNewNode(
+    data: CourseData,
+    position: NewCoursePosition,
+    connectTo: ConnectTo = { prereq: false, postreq: false },
+  ): void {
     const node = newCourseNode(data);
     node.position = {
       x: Math.random() * 150,
       y: Math.random() * 300,
     };
     // Add fuzzing to stop multiple nodes from piling
+    // This position will be overwritten in addCourseNode() if
+    // position arg is "relative"
     addCourseNode(node, connectTo, position);
   }
 
   async function fetchCourse(event: MouseEvent): Promise<void> {
     event.preventDefault();
 
-    if (!searchbarInput.trim()) {
+    if (!uwcfState.searchText.trim()) {
       return;
     }
 
-    const courseMatch = searchbarInput.match(SEARCH_REGEX);
+    const courseMatch = uwcfState.searchText.match(SEARCH_REGEX);
     if (!courseMatch) {
       setUwErrorMsg("Invalid course ID");
-      searchBarRef.current?.focus();
+      focusSearchRef.current();
       return;
     }
 
     const searchQuery = courseMatch[0].trim();
     if (nodeData.has(searchQuery)) {
       setUwErrorMsg("Course already exists");
-      searchBarRef.current?.focus();
+      focusSearchRef.current();
       return;
     }
 
@@ -189,39 +180,47 @@ export default function AddCourseDialog({
     try {
       const resp = await fetch(`${API_URL}/courses/${searchQuery}`);
       if (resp.ok) {
-        addNewNode(await resp.json(), alwaysAtZero ? "zero" : "relative");
-        setSearchbarInput("");
+        addNewNode(
+          await resp.json(),
+          uwcfState.alwaysAtZero ? "zero" : "relative",
+          uwcfState.connectTo,
+        );
+        setUwcfState(prev => ({ ...prev, searchText: "" }));
       } else if (resp.status === 404) {
         setUwErrorMsg("Course not found");
       } else {
         setUwErrorMsg("Something went wrong");
+        // eslint-disable-next-line no-console
+        console.error(resp);
       }
-    } catch (_error) {
+    } catch (error) {
       setUwErrorMsg("Something went wrong");
+      // eslint-disable-next-line no-console
+      console.error(error);
     }
 
     setBusy(false);
-    searchBarRef.current?.focus();
+    focusSearchRef.current();
   }
 
-  async function addCoursesFromText(
-    matches: RegExpMatchArray,
-    connect: ConnectTo,
-  ): Promise<boolean> {
+  async function addCoursesFromText(event: MouseEvent): Promise<void> {
+    event.preventDefault();
     setTextSearchErrorMsg("");
     setBusy(true);
+
+    const matches = [...new Set(courseIdMatch(tsState.text) || [])];
 
     if (!matches.length) {
       setTextSearchErrorMsg("No course IDs found");
       setBusy(false);
-      return false;
+      return;
     }
 
     const courses = matches.filter(m => !nodeData.has(m));
     if (!courses.length) {
       setTextSearchErrorMsg("All found courses already exist");
       setBusy(false);
-      return false;
+      return;
     }
 
     try {
@@ -234,103 +233,22 @@ export default function AddCourseDialog({
       if (resp.status === 404) {
         setTextSearchErrorMsg("No matching courses found");
         setBusy(false);
-        return false;
+        return;
       }
 
       const data = await resp.json();
 
       const newElements = generateInitialElements(data, "aggressively");
-      addExternalFlow(newElements, connect);
+      addExternalFlow(newElements, tsState.connectTo);
+      setTsState(prev => ({ ...prev, text: "" }));
       setBusy(false);
-      return true;
     } catch (error) {
       setTextSearchErrorMsg("Something went wrong");
       // eslint-disable-next-line no-console
       console.error(error);
       setBusy(false);
-      return false;
     }
   }
-
-  const uwCourseForm = (
-    <form className="UwCourseForm">
-      <CampusSelect
-        selectedCampus={selectedCampus}
-        setSelectedCampus={setSelectedCampus}
-        busy={busy}
-      />
-      <div className="UwCourseForm__bar-and-button">
-        <Tippy
-          className="tippy-box--error"
-          content={uwCourseErrorMsg}
-          placement="bottom-start"
-          arrow={false}
-          duration={0}
-          offset={[0, 5]}
-          visible={tabIndex === 0 && !!uwCourseErrorMsg}
-        >
-          <Combobox
-            onSelect={item => setSearchbarInput(item)}
-            aria-label="Course search"
-          >
-            <ComboboxInput
-              className="UwCourseForm__searchbar"
-              ref={searchBarRef}
-              placeholder="Course ID (Enter key to add)"
-              value={searchbarInput}
-              onChange={onSearchChange}
-              disabled={Boolean(connectionError || busy)}
-            />
-            <ComboboxPopover>
-              <ComboboxList>{autocompleteOpts}</ComboboxList>
-            </ComboboxPopover>
-          </Combobox>
-        </Tippy>
-        <button
-          className="UwCourseForm__add-button"
-          ref={addButtonRef}
-          type="submit"
-          disabled={Boolean(connectionError || busy || !searchbarInput.trim())}
-          onClick={fetchCourse}
-        >
-          Add
-        </button>
-      </div>
-      <label>
-        <input
-          type="checkbox"
-          checked={connectTo.prereq}
-          disabled={busy}
-          onChange={() => {
-            setConnectTo(prev => ({ ...prev, prereq: !prev.prereq }));
-          }}
-          data-cy="uw-connect-to-prereqs"
-        />
-        Connect to existing prereqs
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          checked={connectTo.postreq}
-          disabled={busy}
-          onChange={() => {
-            setConnectTo(prev => ({ ...prev, postreq: !prev.postreq }));
-          }}
-          data-cy="uw-connect-to-postreqs"
-        />
-        Connect to existing postreqs
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          checked={alwaysAtZero}
-          disabled={busy}
-          onChange={() => setAlwaysAtZero(!alwaysAtZero)}
-        />
-        Always place new courses at (0, 0)
-      </label>
-    </form>
-  );
 
   return (
     <ModalDialog
@@ -341,7 +259,7 @@ export default function AddCourseDialog({
       contentAriaLabel="Add course dialog"
     >
       <h2 className={connectionError ? "connection-error" : ""}>Add courses</h2>
-      <Tabs onChange={i => setTabIndex(i)}>
+      <Tabs index={tabIndex} onChange={i => setTabIndex(i)}>
         <TabList>
           <Tab disabled={busy}>UW course</Tab>
           <Tab disabled={busy}>Custom course</Tab>
@@ -349,13 +267,28 @@ export default function AddCourseDialog({
         </TabList>
 
         <TabPanels>
-          <TabPanel>{uwCourseForm}</TabPanel>
+          <TabPanel>
+            <UwCourseForm
+              tabIndex={tabIndex}
+              connectionError={connectionError}
+              websocket={websocket}
+              uwcfState={uwcfState}
+              setUwcfState={setUwcfState}
+              autocompleteOpts={autocompleteOpts}
+              setAutocompleteOpts={setAutocompleteOpts}
+              fetchCourse={fetchCourse}
+              busy={busy}
+              focusSearchRef={focusSearchRef}
+            />
+          </TabPanel>
           <TabPanel className="AddCourseDialog__custom-course-tab-panel">
             <CustomCourseForm
               tabIndex={tabIndex}
               busy={busy}
               setBusy={setBusy}
               nodeData={nodeData}
+              customCourseData={customCourseData}
+              setCustomCourseData={setCustomCourseData}
               addNewNode={addNewNode}
             />
           </TabPanel>
@@ -363,8 +296,8 @@ export default function AddCourseDialog({
             <AddCourseTextSearch
               tabIndex={tabIndex}
               connectionError={connectionError}
-              errorMsg={textSearchErrorMsg}
-              setErrorMsg={setTextSearchErrorMsg}
+              tsState={tsState}
+              setTsState={setTsState}
               busy={busy}
               addCoursesFromText={addCoursesFromText}
             />
