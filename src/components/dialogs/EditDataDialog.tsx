@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import type { ChangeEvent } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies

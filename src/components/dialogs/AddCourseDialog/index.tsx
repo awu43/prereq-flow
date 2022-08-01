@@ -1,25 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import type { MouseEvent, ChangeEvent } from "react";
+import type { MouseEvent } from "react";
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxOptionText,
-} from "@reach/combobox";
+import { ComboboxOption, ComboboxOptionText } from "@reach/combobox";
 import type { ComboboxOptionProps } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-import Tippy from "@tippyjs/react";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import "tippy.js/dist/tippy.css";
-
 import type {
-  Campus,
   CourseData,
   CourseNode,
   Element,
@@ -72,20 +60,8 @@ export default function AddCourseDialog({
   addExternalFlow,
 }: AddCourseDialogProps): JSX.Element {
   const [tabIndex, setTabIndex] = useState(0);
-
   const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
-  // const [selectedCampus, setSelectedCampus] = useState<Campus>("Seattle");
-
-  // const [searchbarInput, setSearchbarInput] = useState("");
-  // const [uwCourseErrorMsg, setUwErrorMsg] = useState("");
-  // const [textSearchErrorMsg, setTextSearchErrorMsg] = useState("");
-
-  const [autocompleteOpts, setAutocompleteOpts] = useState<
-    ComboboxOptionProps[]
-  >([]);
-
-  // const searchBarRef = useRef<HTMLInputElement>(null);
 
   const focusSearchRef = useRef<() => void>(() => {});
   const [uwcfState, setUwcfState] = useState<UwCourseFormState>({
@@ -98,6 +74,9 @@ export default function AddCourseDialog({
   function setUwErrorMsg(errorMsg: string): void {
     setUwcfState(prev => ({ ...prev, errorMsg }));
   }
+  const [autocompleteOpts, setAutocompleteOpts] = useState<
+    ComboboxOptionProps[]
+  >([]);
 
   const [customCourseData, setCustomCourseData] = useState<CourseData>({
     id: "",
@@ -144,12 +123,6 @@ export default function AddCourseDialog({
     };
   }, []);
 
-  // const [connectTo, setConnectTo] = useState<ConnectTo>({
-  //   prereq: true,
-  //   postreq: true,
-  // });
-  // const [alwaysAtZero, setAlwaysAtZero] = useState(false);
-
   const prefersReducedMotion = usePrefersReducedMotion();
   function close(): void {
     setUwErrorMsg("");
@@ -163,21 +136,6 @@ export default function AddCourseDialog({
       setAutocompleteOpts([]);
     }
   }
-
-  // function onSearchChange(event: ChangeEvent<HTMLInputElement>): void {
-  //   // Heroku responds fast enough, no throttling/debouncing needed
-  //   setUwErrorMsg("");
-  //   const newValue = event.target.value.toUpperCase();
-  //   setSearchbarInput(newValue);
-  //   if (newValue.trim() && websocket.current?.readyState === 1) {
-  //     websocket.current.send(
-  //       JSON.stringify({ campus: selectedCampus, id: `${newValue.trim()} ` }),
-  //     );
-  //     // Adding a trailing space seems to improve accuracy for some reason
-  //   } else {
-  //     setAutocompleteOpts([]);
-  //   }
-  // }
 
   function addNewNode(
     data: CourseData,
@@ -205,7 +163,6 @@ export default function AddCourseDialog({
     const courseMatch = uwcfState.searchText.match(SEARCH_REGEX);
     if (!courseMatch) {
       setUwErrorMsg("Invalid course ID");
-      // searchBarRef.current?.focus();
       focusSearchRef.current();
       return;
     }
@@ -213,7 +170,6 @@ export default function AddCourseDialog({
     const searchQuery = courseMatch[0].trim();
     if (nodeData.has(searchQuery)) {
       setUwErrorMsg("Course already exists");
-      // searchBarRef.current?.focus();
       focusSearchRef.current();
       return;
     }
@@ -244,7 +200,6 @@ export default function AddCourseDialog({
     }
 
     setBusy(false);
-    // searchBarRef.current?.focus();
     focusSearchRef.current();
   }
 
@@ -295,85 +250,6 @@ export default function AddCourseDialog({
     }
   }
 
-  // const uwCourseForm = (
-  //   <form className="UwCourseForm">
-  //     <CampusSelect
-  //       selectedCampus={selectedCampus}
-  //       setSelectedCampus={setSelectedCampus}
-  //       busy={busy}
-  //     />
-  //     <div className="UwCourseForm__bar-and-button">
-  //       <Tippy
-  //         className="tippy-box--error"
-  //         content={uwCourseErrorMsg}
-  //         placement="bottom-start"
-  //         arrow={false}
-  //         duration={0}
-  //         offset={[0, 5]}
-  //         visible={tabIndex === 0 && !!uwCourseErrorMsg}
-  //       >
-  //         <Combobox
-  //           onSelect={item => setSearchbarInput(item)}
-  //           aria-label="Course search"
-  //         >
-  //           <ComboboxInput
-  //             className="UwCourseForm__searchbar"
-  //             ref={searchBarRef}
-  //             placeholder="Course ID (Enter key to add)"
-  //             value={searchbarInput}
-  //             onChange={onSearchChange}
-  //             disabled={connectionError || busy}
-  //           />
-  //           <ComboboxPopover>
-  //             <ComboboxList>{autocompleteOpts}</ComboboxList>
-  //           </ComboboxPopover>
-  //         </Combobox>
-  //       </Tippy>
-  //       <button
-  //         className="UwCourseForm__add-button"
-  //         type="submit"
-  //         disabled={connectionError || busy || !searchbarInput.trim()}
-  //         onClick={fetchCourse}
-  //       >
-  //         Add
-  //       </button>
-  //     </div>
-  //     <label>
-  //       <input
-  //         type="checkbox"
-  //         checked={connectTo.prereq}
-  //         disabled={busy}
-  //         onChange={() => {
-  //           setConnectTo(prev => ({ ...prev, prereq: !prev.prereq }));
-  //         }}
-  //         data-cy="uw-connect-to-prereqs"
-  //       />
-  //       Connect to existing prereqs
-  //     </label>
-  //     <label>
-  //       <input
-  //         type="checkbox"
-  //         checked={connectTo.postreq}
-  //         disabled={busy}
-  //         onChange={() => {
-  //           setConnectTo(prev => ({ ...prev, postreq: !prev.postreq }));
-  //         }}
-  //         data-cy="uw-connect-to-postreqs"
-  //       />
-  //       Connect to existing postreqs
-  //     </label>
-  //     <label>
-  //       <input
-  //         type="checkbox"
-  //         checked={alwaysAtZero}
-  //         disabled={busy}
-  //         onChange={() => setAlwaysAtZero(!alwaysAtZero)}
-  //       />
-  //       Always place new courses at (0, 0)
-  //     </label>
-  //   </form>
-  // );
-
   return (
     <ModalDialog
       modalCls={modalCls}
@@ -391,7 +267,6 @@ export default function AddCourseDialog({
         </TabList>
 
         <TabPanels>
-          {/* <TabPanel>{uwCourseForm}</TabPanel> */}
           <TabPanel>
             <UwCourseForm
               tabIndex={tabIndex}

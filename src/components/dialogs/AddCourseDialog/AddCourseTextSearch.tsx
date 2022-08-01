@@ -1,23 +1,21 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import type { MouseEvent } from "react";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import type { SetState, ConnectTo } from "types/main";
+import type { SetState } from "types/main";
 
 import "./AddCourseTextSearch.scss";
 
-import { courseIdMatch, stateUpdater } from "@utils";
+import { stateUpdater } from "@utils";
 
 import type { TextSearchState } from "./types";
 
 interface TextSearchProps {
   tabIndex: number;
   connectionError: boolean;
-  // errorMsg: string;
-  // setErrorMsg: SetState<string>;
   tsState: TextSearchState;
   setTsState: SetState<TextSearchState>;
   busy: boolean;
@@ -28,18 +26,10 @@ export default function NewFlowTextSearch({
   connectionError,
   tsState,
   setTsState,
-  // errorMsg,
-  // setErrorMsg,
   busy,
   addCoursesFromText,
 }: TextSearchProps): JSX.Element {
   const tsUpdater = stateUpdater(setTsState);
-
-  // const [text, setText] = useState("");
-  // const [connectTo, setConnectTo] = useState<ConnectTo>({
-  //   prereq: true,
-  //   postreq: true,
-  // });
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
@@ -51,17 +41,6 @@ export default function NewFlowTextSearch({
       textAreaRef.current?.focus();
     }
   }, []);
-
-  // async function AddCourses(event: MouseEvent): Promise<void> {
-  //   event.preventDefault();
-  //   const success = await addCoursesFromText(
-  //     [...new Set(courseIdMatch(tsState.text) || [])],
-  //     tsState.connectTo,
-  //   );
-  //   if (success) {
-  //     setTsState(prev => ({ ...prev, text: "" }));
-  //   }
-  // }
 
   return (
     <form className="AddCourseTextSearch">
