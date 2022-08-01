@@ -11,6 +11,7 @@ import type {
   NewCoursePosition,
   NodeDataMap,
 } from "types/main";
+import { textChangeUpdater } from "@utils";
 
 import "./CustomCourseForm.scss";
 
@@ -64,12 +65,7 @@ export default function CustomCourseForm({
     });
   }
 
-  function onChangeFn(
-    key: keyof CourseData,
-  ): (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void {
-    return e =>
-      setCustomCourseData(prev => ({ ...prev, [key]: e.target.value }));
-  }
+  const onChangeFn = textChangeUpdater(setCustomCourseData);
 
   function addCustomCourse(): void {
     setBusy(true);

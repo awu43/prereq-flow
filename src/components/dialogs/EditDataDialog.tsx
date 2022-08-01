@@ -6,6 +6,7 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 import type { NodeId, CourseData, NodeDataMap } from "types/main";
+import { textChangeUpdater } from "@utils";
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 
 import "./EditDataDialog.scss";
@@ -78,11 +79,7 @@ export default function EditDataDialog({
     close();
   }
 
-  function onChangeFn(
-    key: keyof CourseData,
-  ): (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void {
-    return e => setCourseData(prev => ({ ...prev, [key]: e.target.value }));
-  }
+  const onChangeFn = textChangeUpdater(setCourseData);
 
   return (
     <ModalDialog
