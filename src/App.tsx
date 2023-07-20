@@ -48,6 +48,7 @@ import tableIcon from "@icons/table.svg";
 
 import "./App.scss";
 
+import { useCookies } from "react-cookie";
 import usePrefersReducedMotion from "./usePrefersReducedMotion";
 import useDialogStatus from "./useDialogStatus";
 
@@ -76,6 +77,7 @@ import AddCourseDialog from "./components/dialogs/AddCourseDialog";
 import AboutDialog from "./components/dialogs/AboutDialog";
 import TableDialog from "./components/dialogs/TableDialog";
 import EditDataDialog from "./components/dialogs/EditDataDialog";
+import ArchiveDialog from "./components/dialogs/ArchiveDialog";
 
 import {
   isNode,
@@ -102,6 +104,14 @@ interface AppProps {
   initialElements: Element[];
 }
 export default function App({ initialElements }: AppProps): JSX.Element {
+  const [archiveCls, openArchiveDlg, closeArchiveDlg] = useDialogStatus();
+  const [cookies, setCookie, _removeCookie] = useCookies<string>([]);
+  useEffect(() => {
+    if (!("archive-notice-seen" in cookies)) {
+      openArchiveDlg();
+    }
+  }, []);
+
   const [newFlowDlgCls, openNewFlowDlg, closeNewFlowDlg] = useDialogStatus();
   const [openFileDlgCls, openOpenFileDlg, closeOpenFileDlg] = useDialogStatus();
   const [addCourseDlgCls, openAddCourseDlg, closeAddCourseDlg] =
@@ -179,13 +189,21 @@ export default function App({ initialElements }: AppProps): JSX.Element {
   const dialogOpen = useMemo(
     () =>
       [
+        archiveCls,
         newFlowDlgCls,
         openFileDlgCls,
         addCourseDlgCls,
         aboutDlgCls,
         editDlgCls,
       ].some(cls => !cls.includes("--display-none")),
-    [newFlowDlgCls, openFileDlgCls, addCourseDlgCls, aboutDlgCls, editDlgCls],
+    [
+      archiveCls,
+      newFlowDlgCls,
+      openFileDlgCls,
+      addCourseDlgCls,
+      aboutDlgCls,
+      editDlgCls,
+    ],
   );
 
   useEffect(() => {
@@ -1109,6 +1127,12 @@ export default function App({ initialElements }: AppProps): JSX.Element {
         <div className="over-one-away">&gt;1&nbsp;away</div>
       </aside>
       <UserControls />
+
+      <ArchiveDialog
+        modalCls={archiveCls}
+        closeDialog={closeArchiveDlg}
+        setCookie={setCookie}
+      />
 
       <NewFlowDialog
         modalCls={newFlowDlgCls}

@@ -19,6 +19,10 @@ export default function PreWarning({
       <section>
         <h3>⚠️ Important information ⚠️</h3>
         <p>
+          <strong>Prereq Flow will be archived on December 1, 2023.</strong>
+        </p>
+
+        <p>
           Prereq Flow is not an official University of Washington resource. No
           guarantees are made about the accuracy, completeness, or
           up-to-dateness of any information&nbsp;presented.
