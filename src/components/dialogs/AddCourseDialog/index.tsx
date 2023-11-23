@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import type { MouseEvent } from "react";
 
 import { useAtomValue } from "jotai";
@@ -16,7 +16,7 @@ import type {
 } from "types/main";
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 
-import { courseDataAtom } from "@state";
+import { courseDataAtom, courseMapAtom } from "@state";
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import { newCourseNode, generateInitialElements, courseIdMatch } from "@utils";
 import "./index.scss";
@@ -49,11 +49,7 @@ export default function AddCourseDialog({
   addExternalFlow,
 }: AddCourseDialogProps): JSX.Element {
   const courseData = useAtomValue(courseDataAtom);
-
-  const courseMapRef = useRef<Map<string, CourseData>>(new Map());
-  useEffect(() => {
-    courseMapRef.current = new Map(courseData.map(c => [c.id, c]));
-  }, courseData);
+  const courseDataMap = useAtomValue(courseMapAtom);
 
   const [tabIndex, setTabIndex] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -143,9 +139,9 @@ export default function AddCourseDialog({
     setUwErrorMsg("");
     setBusy(true);
 
-    if (courseMapRef.current.has(searchQuery)) {
+    if (courseDataMap.has(searchQuery)) {
       addNewNode(
-        courseMapRef.current.get(searchQuery)!,
+        courseDataMap.get(searchQuery)!,
         uwcfState.alwaysAtZero ? "zero" : "relative",
         uwcfState.connectTo,
       );

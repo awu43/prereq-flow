@@ -1,8 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
+import { useAtomValue } from "jotai";
 import { getConnectedEdges } from "react-flow-renderer";
 
 import type { Edge, Element } from "types/main";
@@ -19,6 +20,7 @@ import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import "./index.scss";
 import FINAL_CURRICULA from "@data/final_seattle_curricula.json";
 import FINAL_MAJORS from "@data/final_majors.json";
+import { courseMapAtom } from "@state";
 import ModalDialog from "../ModalDialog";
 import type {
   DegreeSelectState,
@@ -51,9 +53,14 @@ export default function NewFlowDialog({
   const [slideState, setSlideState] = useState(0);
   const [tabIndex, setTabIndex] = useState(0);
 
+  const courseMap = useAtomValue(courseMapAtom);
   const [supportedMajors, _setSupportedMajors] = useState(
     FINAL_MAJORS as [string, string[]][],
   );
+  const supportedMajorsMapRef = useRef<Map<string, string[]>>(new Map());
+  useEffect(() => {
+    supportedMajorsMapRef.current = new Map(supportedMajors);
+  }, supportedMajors);
   const [degreeSelectState, setDegreeSelectState] = useState<DegreeSelectState>(
     {
       majors: [],
@@ -114,26 +121,20 @@ export default function NewFlowDialog({
   async function newDegreeFlow(): Promise<void> {
     setBusy(true);
     setDegreeError("");
-    try {
-      const resp = await fetch(`${API_URL}/degrees/`, {
-        method: "POST",
-        headers: { contentType: "application/json" },
-        body: JSON.stringify(degreeSelectState.majors),
-      });
-      const data = await resp.json();
 
-      const newElements = generateInitialElements(
-        data,
-        degreeSelectState.ambiguityHandling,
-      );
-      generateNewFlow(newElements);
-      close();
-    } catch (error) {
-      setDegreeError("Something went wrong");
-      setBusy(false);
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
+    const data = [
+      ...new Set(
+        degreeSelectState.majors
+          .map(m => supportedMajorsMapRef.current.get(m)!)
+          .flat(),
+      ),
+    ].map(c => courseMap.get(c)!);
+    const newElements = generateInitialElements(
+      data,
+      degreeSelectState.ambiguityHandling,
+    );
+    generateNewFlow(newElements);
+    close();
 
     // advanceSlide();
     // if (!prefersReducedMotion) {
