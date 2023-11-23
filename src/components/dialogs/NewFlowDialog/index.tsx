@@ -5,7 +5,7 @@ import "@reach/tabs/styles.css";
 
 import { getConnectedEdges } from "react-flow-renderer";
 
-import type { Campus, Edge, Element } from "types/main";
+import type { Edge, Element } from "types/main";
 import {
   courseIdMatch,
   isNode,
@@ -17,6 +17,7 @@ import type { ModalClass, CloseModal } from "@useDialogStatus";
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 
 import "./index.scss";
+import FINAL_CURRICULA from "@data/final_seattle_curricula.json";
 import ModalDialog from "../ModalDialog";
 import type {
   DegreeSelectState,
@@ -27,12 +28,6 @@ import PreWarning from "./PreWarning";
 import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import NewFlowTextSearch from "./NewFlowTextSearch";
-
-interface CurriculumData {
-  campus: Campus;
-  id: string;
-  name: string;
-}
 
 const API_URL =
   import.meta.env.MODE === "production"
@@ -68,13 +63,12 @@ export default function NewFlowDialog({
     setDegreeSelectState(prev => ({ ...prev, errorMsg }));
   }
 
-  const [supportedCurricula, setSupportedCurricula] = useState<
-    Record<Campus, [id: string, name: string][]>
-  >({ Seattle: [], Bothell: [], Tacoma: [] });
+  const [supportedCurricula, _setSupportedCurricula] = useState(
+    FINAL_CURRICULA as [string, string][],
+  );
   const [curriculumSelectState, setCurriculumSelectState] =
     useState<CurriculumSelectState>({
-      campus: "Seattle",
-      selected: { Seattle: "", Bothell: "", Tacoma: "" },
+      selected: "",
       includeExternal: false,
       ambiguityHandling: "aggressively",
       errorMsg: "",
@@ -125,39 +119,6 @@ export default function NewFlowDialog({
       });
   }, []);
 
-  useEffect(() => {
-    fetch(`${API_URL}/curricula/`)
-      .then(resp => resp.json())
-      .then((data: CurriculumData[]) => {
-        const curriculaData: Record<Campus, CurriculumData[]> = {
-          Seattle: [],
-          Bothell: [],
-          Tacoma: [],
-        };
-        for (const datum of data) {
-          curriculaData[datum.campus].push(datum);
-        }
-
-        const curricula: Record<Campus, [string, string][]> = {
-          Seattle: [],
-          Bothell: [],
-          Tacoma: [],
-        };
-        for (const campus of Object.keys(curricula) as Campus[]) {
-          curricula[campus] = curriculaData[campus]
-            .sort((a, b) => a.id.localeCompare(b.id))
-            .map(c => [c.id, c.name]);
-        }
-
-        setSupportedCurricula(curricula);
-      })
-      .catch(error => {
-        setConnectionError(true);
-        // eslint-disable-next-line no-console
-        console.error(error);
-      });
-  }, []);
-
   async function newDegreeFlow(): Promise<void> {
     setBusy(true);
     setDegreeError("");
@@ -195,8 +156,7 @@ export default function NewFlowDialog({
   async function newCurriculumFlow(): Promise<void> {
     setBusy(true);
     setCurriculumError("");
-    const curriculumId =
-      curriculumSelectState.selected[curriculumSelectState.campus];
+    const curriculumId = curriculumSelectState.selected;
     try {
       const resp = await fetch(`${API_URL}/curricula/${curriculumId}`);
       const data = await resp.json();

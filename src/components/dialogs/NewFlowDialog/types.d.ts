@@ -1,5 +1,3 @@
-import type { Campus } from "types/main";
-
 import type { AmbiguityHandling } from "../AmbiguitySelect";
 
 export interface DegreeSelectState {
@@ -10,8 +8,7 @@ export interface DegreeSelectState {
 }
 
 export interface CurriculumSelectState {
-  campus: Campus;
-  selected: Record<Campus, string>;
+  selected: string;
   includeExternal: boolean;
   ambiguityHandling: AmbiguityHandling;
   errorMsg: string;

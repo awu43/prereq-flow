@@ -68,12 +68,16 @@ export default function DegreeSelect({
       !dsState.majors.includes(dsState.selected) &&
       dsState.majors.length < 3
     ) {
-      dsUpdater.cb("majors", prev => prev.majors.concat([prev.selected]));
+      dsUpdater.transform("majors", prev =>
+        prev.majors.concat([prev.selected]),
+      );
     }
   }
 
   function deleteMajor(targetMajor: string): void {
-    dsUpdater.cb("majors", prev => prev.majors.filter(m => m !== targetMajor));
+    dsUpdater.transform("majors", prev =>
+      prev.majors.filter(m => m !== targetMajor),
+    );
   }
 
   // function addMinor(params) {

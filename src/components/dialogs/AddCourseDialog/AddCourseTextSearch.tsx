@@ -74,7 +74,7 @@ export default function NewFlowTextSearch({
           checked={tsState.connectTo.prereq}
           disabled={busy}
           onChange={() =>
-            tsUpdater.cb("connectTo", prev => ({
+            tsUpdater.transform("connectTo", prev => ({
               ...prev.connectTo,
               prereq: !prev.connectTo.prereq,
             }))
@@ -89,7 +89,7 @@ export default function NewFlowTextSearch({
           checked={tsState.connectTo.postreq}
           disabled={busy}
           onChange={() =>
-            tsUpdater.cb("connectTo", prev => ({
+            tsUpdater.transform("connectTo", prev => ({
               ...prev.connectTo,
               postreq: !prev.connectTo.postreq,
             }))

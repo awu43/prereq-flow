@@ -136,7 +136,7 @@ export default function UwCourseForm({
           checked={uwcfState.connectTo.prereq}
           disabled={busy}
           onChange={() =>
-            uwcfUpdater.cb("connectTo", prev => ({
+            uwcfUpdater.transform("connectTo", prev => ({
               ...prev.connectTo,
               prereq: !prev.connectTo.prereq,
             }))
@@ -151,7 +151,7 @@ export default function UwCourseForm({
           checked={uwcfState.connectTo.postreq}
           disabled={busy}
           onChange={() =>
-            uwcfUpdater.cb("connectTo", prev => ({
+            uwcfUpdater.transform("connectTo", prev => ({
               ...prev.connectTo,
               postreq: !prev.connectTo.postreq,
             }))
@@ -166,7 +166,7 @@ export default function UwCourseForm({
           checked={uwcfState.alwaysAtZero}
           disabled={busy}
           onChange={() =>
-            uwcfUpdater.cb("alwaysAtZero", prev => !prev.alwaysAtZero)
+            uwcfUpdater.transform("alwaysAtZero", prev => !prev.alwaysAtZero)
           }
         />
         Always place new courses at (0, 0)

@@ -737,12 +737,14 @@ export function autoconnect(
 
 interface StateUpdater<S> {
   value: (key: keyof S, value: S[typeof key]) => void;
-  cb: (key: keyof S, value: (prev: S) => S[typeof key]) => void;
+  transform: (key: keyof S, value: (prev: S) => S[typeof key]) => void;
 }
 export function stateUpdater<S>(setState: SetState<S>): StateUpdater<S> {
   return {
+    /** Update one property with a value */
     value: (key, value) => setState(prev => ({ ...prev, [key]: value })),
-    cb: (key, value) =>
+    /** Update one property by transforming its previous value */
+    transform: (key, value) =>
       setState(prev => ({
         ...prev,
         [key]: value(prev),
