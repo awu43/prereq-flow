@@ -1,10 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import type { MouseEvent } from "react";
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
-import { ComboboxOption, ComboboxOptionText } from "@reach/combobox";
-import type { ComboboxOptionProps } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
 import type {
@@ -22,16 +20,10 @@ import { newCourseNode, generateInitialElements, courseIdMatch } from "@utils";
 import "./index.scss";
 import FINAL_COURSES from "@data/final_seattle_courses.json";
 import ModalDialog from "../ModalDialog";
-// import CampusSelect from "../CampusSelect";
 import UwCourseForm from "./UwCourseForm";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
 import type { UwCourseFormState, TextSearchState } from "./types";
-
-const WS_URL =
-  import.meta.env.MODE === "production"
-    ? import.meta.env.VITE_PROD_WS_URL
-    : import.meta.env.VITE_DEV_WS_URL;
 
 const SEARCH_REGEX = /^\s*(?:[A-Z&]+ )+\d{3}\b/;
 // Strips away leading whitespace
@@ -58,7 +50,6 @@ export default function AddCourseDialog({
   addExternalFlow,
 }: AddCourseDialogProps): JSX.Element {
   const [tabIndex, setTabIndex] = useState(0);
-  const [connectionError, setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const focusSearchRef = useRef<() => void>(() => {});
@@ -72,9 +63,7 @@ export default function AddCourseDialog({
   function setUwErrorMsg(errorMsg: string): void {
     setUwcfState(prev => ({ ...prev, errorMsg }));
   }
-  const [autocompleteOpts, setAutocompleteOpts] = useState<
-    ComboboxOptionProps[]
-  >([]);
+  const [autocompleteOpts, setAutocompleteOpts] = useState<JSX.Element[]>([]);
 
   const [customCourseData, setCustomCourseData] = useState<CourseData>({
     id: "",
@@ -93,33 +82,6 @@ export default function AddCourseDialog({
   function setTextSearchErrorMsg(errorMsg: string): void {
     setTsState(prev => ({ ...prev, errorMsg }));
   }
-
-  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065#issuecomment-446425911
-  const websocket = useRef<WebSocket>();
-  useEffect(() => {
-    const wsConnection = new WebSocket(WS_URL);
-    websocket.current = wsConnection;
-    window.addEventListener("beforeunload", () => {
-      wsConnection.close(1000);
-    });
-    wsConnection.addEventListener("message", event => {
-      setAutocompleteOpts(
-        JSON.parse(event.data).map((courseData: CourseData) => (
-          <ComboboxOption key={courseData.id} value={courseData.id}>
-            <ComboboxOptionText />: {courseData.name}
-          </ComboboxOption>
-        )),
-      );
-    });
-    wsConnection.addEventListener("error", event => {
-      setConnectionError(true);
-      // eslint-disable-next-line no-console
-      console.error(event);
-    });
-    return () => {
-      wsConnection.close(1000);
-    };
-  }, []);
 
   const prefersReducedMotion = usePrefersReducedMotion();
   function close(): void {
@@ -229,7 +191,7 @@ export default function AddCourseDialog({
       contentCls="AddCourseDialog"
       contentAriaLabel="Add course dialog"
     >
-      <h2 className={connectionError ? "connection-error" : ""}>Add courses</h2>
+      <h2>Add courses</h2>
       <Tabs index={tabIndex} onChange={i => setTabIndex(i)}>
         <TabList>
           <Tab disabled={busy}>UW course</Tab>
@@ -241,10 +203,9 @@ export default function AddCourseDialog({
           <TabPanel>
             <UwCourseForm
               tabIndex={tabIndex}
-              connectionError={connectionError}
-              websocket={websocket}
               uwcfState={uwcfState}
               setUwcfState={setUwcfState}
+              FINAL_COURSES={FINAL_COURSES}
               autocompleteOpts={autocompleteOpts}
               setAutocompleteOpts={setAutocompleteOpts}
               fetchCourse={fetchCourse}
@@ -266,7 +227,6 @@ export default function AddCourseDialog({
           <TabPanel className="AddCourseDialog__text-search-tab-panel">
             <AddCourseTextSearch
               tabIndex={tabIndex}
-              connectionError={connectionError}
               tsState={tsState}
               setTsState={setTsState}
               busy={busy}

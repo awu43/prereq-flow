@@ -31,6 +31,7 @@ export default function CampusSelect({
           name="uw-campus"
           checked={selectedCampus === "Bothell"}
           onChange={() => setSelectedCampus("Bothell")}
+          disabled={true}
         />
         Bothell
       </label>
@@ -41,6 +42,7 @@ export default function CampusSelect({
           name="uw-campus"
           checked={selectedCampus === "Tacoma"}
           onChange={() => setSelectedCampus("Tacoma")}
+          disabled={true}
         />
         Tacoma
       </label>

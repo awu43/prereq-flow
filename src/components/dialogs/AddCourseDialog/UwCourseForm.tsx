@@ -1,20 +1,22 @@
 import { useRef, useEffect } from "react";
 import type { ChangeEvent, MouseEvent, MutableRefObject } from "react";
 
+import Fuse from "fuse.js";
 import {
   Combobox,
   ComboboxInput,
   ComboboxPopover,
   ComboboxList,
+  ComboboxOption,
+  ComboboxOptionText,
 } from "@reach/combobox";
-import type { ComboboxOptionProps } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
 import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import type { SetState } from "types/main";
+import type { CourseData, SetState } from "types/main";
 
 import { stateUpdater } from "@utils";
 import CampusSelect from "../CampusSelect";
@@ -24,22 +26,20 @@ import "./UwCourseForm.scss";
 
 interface UwCourseFormProps {
   tabIndex: number;
-  connectionError: boolean;
-  websocket: MutableRefObject<WebSocket | undefined>;
   uwcfState: UwCourseFormState;
   setUwcfState: SetState<UwCourseFormState>;
-  autocompleteOpts: ComboboxOptionProps[];
-  setAutocompleteOpts: SetState<ComboboxOptionProps[]>;
+  FINAL_COURSES: CourseData[];
+  autocompleteOpts: JSX.Element[];
+  setAutocompleteOpts: SetState<JSX.Element[]>;
   fetchCourse: (event: MouseEvent) => Promise<void>;
   busy: boolean;
   focusSearchRef: MutableRefObject<() => void>;
 }
 export default function UwCourseForm({
   tabIndex,
-  connectionError,
-  websocket,
   uwcfState,
   setUwcfState,
+  FINAL_COURSES,
   autocompleteOpts,
   setAutocompleteOpts,
   fetchCourse,
@@ -48,6 +48,9 @@ export default function UwCourseForm({
 }: UwCourseFormProps): JSX.Element {
   const uwcfUpdater = stateUpdater(setUwcfState);
 
+  const fuseRef = useRef<Fuse<CourseData>>(
+    new Fuse(FINAL_COURSES, { keys: ["id"] }),
+  );
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   function focusSearchInput(): void {
@@ -65,14 +68,20 @@ export default function UwCourseForm({
   }, []);
 
   function onSearchChange(event: ChangeEvent<HTMLInputElement>): void {
-    // Heroku responds fast enough, no throttling/debouncing needed
     const newValue = event.target.value.toUpperCase();
     setUwcfState(prev => ({ ...prev, searchText: newValue, errorMsg: "" }));
-    if (newValue.trim() && websocket.current?.readyState === 1) {
-      websocket.current.send(
-        JSON.stringify({ campus: uwcfState.campus, id: `${newValue.trim()} ` }),
+    if (newValue.trim()) {
+      const results = fuseRef.current
+        .search(newValue.trim())
+        .slice(0, 10)
+        .map(f => f.item);
+      setAutocompleteOpts(
+        results.map(courseData => (
+          <ComboboxOption key={courseData.id} value={courseData.id}>
+            <ComboboxOptionText />: {courseData.name}
+          </ComboboxOption>
+        )),
       );
-      // Adding a trailing space seems to improve accuracy for some reason
     } else {
       setAutocompleteOpts([]);
     }
@@ -105,7 +114,7 @@ export default function UwCourseForm({
               placeholder="Course ID (Enter key to add)"
               value={uwcfState.searchText}
               onChange={onSearchChange}
-              disabled={connectionError || busy}
+              disabled={busy}
             />
             <ComboboxPopover>
               <ComboboxList>{autocompleteOpts}</ComboboxList>
@@ -115,7 +124,7 @@ export default function UwCourseForm({
         <button
           className="UwCourseForm__add-button"
           type="submit"
-          disabled={connectionError || busy || !uwcfState.searchText.trim()}
+          disabled={busy || !uwcfState.searchText.trim()}
           onClick={fetchCourse}
         >
           Add
