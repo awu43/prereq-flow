@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import type { ChangeEvent, MouseEvent, MutableRefObject } from "react";
 
 import Fuse from "fuse.js";
+import { useAtomValue } from "jotai";
 import {
   Combobox,
   ComboboxInput,
@@ -18,7 +19,9 @@ import "tippy.js/dist/tippy.css";
 
 import type { CourseData, SetState } from "types/main";
 
+import { courseDataAtom } from "@state";
 import { stateUpdater } from "@utils";
+
 import CampusSelect from "../CampusSelect";
 
 import type { UwCourseFormState } from "./types";
@@ -28,7 +31,6 @@ interface UwCourseFormProps {
   tabIndex: number;
   uwcfState: UwCourseFormState;
   setUwcfState: SetState<UwCourseFormState>;
-  FINAL_COURSES: CourseData[];
   autocompleteOpts: JSX.Element[];
   setAutocompleteOpts: SetState<JSX.Element[]>;
   fetchCourse: (event: MouseEvent) => Promise<void>;
@@ -39,7 +41,6 @@ export default function UwCourseForm({
   tabIndex,
   uwcfState,
   setUwcfState,
-  FINAL_COURSES,
   autocompleteOpts,
   setAutocompleteOpts,
   fetchCourse,
@@ -48,9 +49,12 @@ export default function UwCourseForm({
 }: UwCourseFormProps): JSX.Element {
   const uwcfUpdater = stateUpdater(setUwcfState);
 
-  const fuseRef = useRef<Fuse<CourseData>>(
-    new Fuse(FINAL_COURSES, { keys: ["id"] }),
-  );
+  const courseData = useAtomValue(courseDataAtom);
+  const fuseRef = useRef<Fuse<CourseData>>(new Fuse([], { keys: ["id"] }));
+  useEffect(() => {
+    fuseRef.current.setCollection(courseData);
+  }, [courseData]);
+
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   function focusSearchInput(): void {
@@ -76,9 +80,9 @@ export default function UwCourseForm({
         .slice(0, 10)
         .map(f => f.item);
       setAutocompleteOpts(
-        results.map(courseData => (
-          <ComboboxOption key={courseData.id} value={courseData.id}>
-            <ComboboxOptionText />: {courseData.name}
+        results.map(data => (
+          <ComboboxOption key={data.id} value={data.id}>
+            <ComboboxOptionText />: {data.name}
           </ComboboxOption>
         )),
       );

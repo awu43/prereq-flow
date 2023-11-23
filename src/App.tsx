@@ -3,6 +3,8 @@ import type { MouseEvent } from "react";
 
 import classNames from "classnames";
 
+import { useSetAtom } from "jotai";
+
 import ReactFlow, {
   Background,
   MiniMap,
@@ -78,7 +80,7 @@ import AboutDialog from "./components/dialogs/AboutDialog";
 import TableDialog from "./components/dialogs/TableDialog";
 import EditDataDialog from "./components/dialogs/EditDataDialog";
 import ArchiveDialog from "./components/dialogs/ArchiveDialog";
-
+import FINAL_COURSES_URL from "./data/final_seattle_courses.json?url";
 import {
   isNode,
   isCourseNode,
@@ -97,6 +99,7 @@ import {
   resetElementStates,
   autoconnect,
 } from "./utils";
+import { courseDataAtom } from "./state";
 
 const MAX_UNDO_NUM = 20;
 
@@ -159,6 +162,11 @@ export default function App({ initialElements }: AppProps): JSX.Element {
   });
 
   const prefersReducedMotion = usePrefersReducedMotion();
+
+  const setCourseData = useSetAtom(courseDataAtom);
+  useEffect(() => {
+    fetch(FINAL_COURSES_URL).then(async res => setCourseData(await res.json()));
+  }, []);
 
   function onLoad(reactFlowInstance: OnLoadParams): void {
     reactFlowInstance.fitView();

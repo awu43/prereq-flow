@@ -17,6 +17,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@data/*": ["./src/data/*"],
+      "@state": ["./src/state.ts"],
       "@utils": ["./src/utils.ts"],
       "@usePrefersReducedMotion": ["./src/usePrefersReducedMotion.tsx"],
       "@useDialogStatus": ["./src/useDialogStatus"],

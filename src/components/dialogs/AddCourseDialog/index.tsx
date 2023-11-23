@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { MouseEvent } from "react";
 
+import { useAtomValue } from "jotai";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 import "@reach/combobox/styles.css";
@@ -15,10 +16,10 @@ import type {
 } from "types/main";
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 
+import { courseDataAtom } from "@state";
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import { newCourseNode, generateInitialElements, courseIdMatch } from "@utils";
 import "./index.scss";
-import FINAL_COURSES from "@data/final_seattle_courses.json";
 import ModalDialog from "../ModalDialog";
 import UwCourseForm from "./UwCourseForm";
 import CustomCourseForm from "./CustomCourseForm";
@@ -28,8 +29,6 @@ import type { UwCourseFormState, TextSearchState } from "./types";
 const SEARCH_REGEX = /^\s*(?:[A-Z&]+ )+\d{3}\b/;
 // Strips away leading whitespace
 // Will not match if >3 numbers in ID
-
-const FINAL_COURSES_DICT = new Map(FINAL_COURSES.map(c => [c.id, c]));
 
 interface AddCourseDialogProps {
   modalCls: ModalClass;
@@ -49,6 +48,13 @@ export default function AddCourseDialog({
   addCourseNode,
   addExternalFlow,
 }: AddCourseDialogProps): JSX.Element {
+  const courseData = useAtomValue(courseDataAtom);
+
+  const courseMapRef = useRef<Map<string, CourseData>>(new Map());
+  useEffect(() => {
+    courseMapRef.current = new Map(courseData.map(c => [c.id, c]));
+  }, courseData);
+
   const [tabIndex, setTabIndex] = useState(0);
   const [busy, setBusy] = useState(false);
 
@@ -137,9 +143,9 @@ export default function AddCourseDialog({
     setUwErrorMsg("");
     setBusy(true);
 
-    if (FINAL_COURSES_DICT.has(searchQuery)) {
+    if (courseMapRef.current.has(searchQuery)) {
       addNewNode(
-        FINAL_COURSES_DICT.get(searchQuery)!,
+        courseMapRef.current.get(searchQuery)!,
         uwcfState.alwaysAtZero ? "zero" : "relative",
         uwcfState.connectTo,
       );
@@ -171,7 +177,7 @@ export default function AddCourseDialog({
       return;
     }
 
-    const data = FINAL_COURSES.filter(c => toAdd.has(c.id));
+    const data = courseData.filter(c => toAdd.has(c.id));
     if (data.length) {
       const newElements = generateInitialElements(data, "aggressively");
       addExternalFlow(newElements, tsState.connectTo);
@@ -205,7 +211,6 @@ export default function AddCourseDialog({
               tabIndex={tabIndex}
               uwcfState={uwcfState}
               setUwcfState={setUwcfState}
-              FINAL_COURSES={FINAL_COURSES}
               autocompleteOpts={autocompleteOpts}
               setAutocompleteOpts={setAutocompleteOpts}
               fetchCourse={fetchCourse}
