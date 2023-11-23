@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
@@ -18,6 +18,7 @@ import usePrefersReducedMotion from "@usePrefersReducedMotion";
 
 import "./index.scss";
 import FINAL_CURRICULA from "@data/final_seattle_curricula.json";
+import FINAL_MAJORS from "@data/final_majors.json";
 import ModalDialog from "../ModalDialog";
 import type {
   DegreeSelectState,
@@ -44,13 +45,15 @@ export default function NewFlowDialog({
   closeDialog,
   generateNewFlow,
 }: NewFlowDialogProps): JSX.Element {
-  const [connectionError, setConnectionError] = useState(false);
+  const [connectionError, _setConnectionError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [warningAccepted, setWarningAccepted] = useState(0);
   const [slideState, setSlideState] = useState(0);
   const [tabIndex, setTabIndex] = useState(0);
 
-  const [supportedMajors, setSupportedMajors] = useState<string[]>([]);
+  const [supportedMajors, _setSupportedMajors] = useState(
+    FINAL_MAJORS as [string, string[]][],
+  );
   const [degreeSelectState, setDegreeSelectState] = useState<DegreeSelectState>(
     {
       majors: [],
@@ -107,17 +110,6 @@ export default function NewFlowDialog({
   // function advanceSlide() {
   //   setSlideState(slideState + 1);
   // }
-
-  useEffect(() => {
-    fetch(`${API_URL}/degrees/`)
-      .then(resp => resp.json())
-      .then(data => setSupportedMajors(data))
-      .catch(error => {
-        setConnectionError(true);
-        // eslint-disable-next-line no-console
-        console.error(error);
-      });
-  }, []);
 
   async function newDegreeFlow(): Promise<void> {
     setBusy(true);

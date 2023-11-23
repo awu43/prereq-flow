@@ -38,7 +38,7 @@ interface DegreeSelectProps {
   tabIndex: number;
   connectionError: boolean;
   busy: boolean;
-  supportedMajors: string[];
+  supportedMajors: [string, string[]][];
   dsState: DegreeSelectState;
   setDsState: SetState<DegreeSelectState>;
   newDegreeFlow: () => void;
@@ -56,7 +56,7 @@ export default function DegreeSelect({
 
   useEffect(() => {
     if (supportedMajors.length && !dsState.selected) {
-      dsUpdater.value("selected", supportedMajors[0]);
+      dsUpdater.value("selected", supportedMajors[0][0]);
     }
   }, [supportedMajors]);
 
@@ -134,7 +134,7 @@ export default function DegreeSelect({
               disabled={connectionError || busy || !supportedMajors.length}
             >
               {supportedMajors.map(m => (
-                <option key={toKebabCase(m)}>{m}</option>
+                <option key={toKebabCase(m[0])}>{m[0]}</option>
               ))}
             </select>
             <button
