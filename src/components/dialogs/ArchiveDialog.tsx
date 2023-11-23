@@ -29,8 +29,8 @@ export default function ArchiveDialog({
       <h2>Archived on December 1, 2023</h2>
       <p>
         You've reached the archived version of Prereq Flow, last updated on
-        December 1, 2023. Data for a limited number of majors and courses are
-        availaible for demo purposes.
+        December 1, 2023. Data for a limited number of majors and courses has
+        been kept for demo purposes.
       </p>
     </ModalDialog>
   );
