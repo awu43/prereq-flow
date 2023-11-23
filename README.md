@@ -1,20 +1,10 @@
-# prereq-flow
+# prereq-flow 📦 [ARCHIVED] 📦
 
-Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate degrees.
+Prereq Flow is an unofficial course planning aid for University of Washington students that visualizes courses and prerequisites in undergraduate degrees. Unsupported on Safari.
 
 Powered by [React Flow](https://reactflow.dev/) in the front and [FastAPI](https://fastapi.tiangolo.com/) in the back. Built with [Vite](https://vitejs.dev/) and hosted on [Vercel](https://vercel.com/).
 
-<br/>
-
-### 🚧 **Currently unsupported on Safari** 🚧
-
-<br/>
-
-Live here: https://www.prereqflow.com
-
-Degree course lists [here](https://github.com/awu43/prereq-flow-degrees).
-
-<br/>
+Archived version here: https://prereq-flow.vercel.app/
 
 ## License
 MIT
