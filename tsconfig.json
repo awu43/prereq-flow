@@ -16,6 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
+      "@data/*": ["./src/data/*"],
       "@utils": ["./src/utils.ts"],
       "@usePrefersReducedMotion": ["./src/usePrefersReducedMotion.tsx"],
       "@useDialogStatus": ["./src/useDialogStatus"],

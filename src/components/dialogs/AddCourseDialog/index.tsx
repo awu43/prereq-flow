@@ -20,17 +20,13 @@ import type { ModalClass, CloseModal } from "@useDialogStatus";
 import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import { newCourseNode, generateInitialElements, courseIdMatch } from "@utils";
 import "./index.scss";
+import FINAL_COURSES from "@data/final_seattle_courses.json";
 import ModalDialog from "../ModalDialog";
 // import CampusSelect from "../CampusSelect";
 import UwCourseForm from "./UwCourseForm";
 import CustomCourseForm from "./CustomCourseForm";
 import AddCourseTextSearch from "./AddCourseTextSearch";
 import type { UwCourseFormState, TextSearchState } from "./types";
-
-const API_URL =
-  import.meta.env.MODE === "production"
-    ? import.meta.env.VITE_PROD_API_URL
-    : import.meta.env.VITE_DEV_API_URL;
 
 const WS_URL =
   import.meta.env.MODE === "production"
@@ -40,6 +36,8 @@ const WS_URL =
 const SEARCH_REGEX = /^\s*(?:[A-Z&]+ )+\d{3}\b/;
 // Strips away leading whitespace
 // Will not match if >3 numbers in ID
+
+const FINAL_COURSES_DICT = new Map(FINAL_COURSES.map(c => [c.id, c]));
 
 interface AddCourseDialogProps {
   modalCls: ModalClass;
@@ -177,26 +175,14 @@ export default function AddCourseDialog({
     setUwErrorMsg("");
     setBusy(true);
 
-    try {
-      const resp = await fetch(`${API_URL}/courses/${searchQuery}`);
-      if (resp.ok) {
-        addNewNode(
-          await resp.json(),
-          uwcfState.alwaysAtZero ? "zero" : "relative",
-          uwcfState.connectTo,
-        );
-        setUwcfState(prev => ({ ...prev, searchText: "" }));
-      } else if (resp.status === 404) {
-        setUwErrorMsg("Course not found");
-      } else {
-        setUwErrorMsg("Something went wrong");
-        // eslint-disable-next-line no-console
-        console.error(resp);
-      }
-    } catch (error) {
-      setUwErrorMsg("Something went wrong");
-      // eslint-disable-next-line no-console
-      console.error(error);
+    if (FINAL_COURSES_DICT.has(searchQuery)) {
+      addNewNode(
+        FINAL_COURSES_DICT.get(searchQuery)!,
+        uwcfState.alwaysAtZero ? "zero" : "relative",
+        uwcfState.connectTo,
+      );
+    } else {
+      setUwErrorMsg("Course not found");
     }
 
     setBusy(false);
@@ -208,44 +194,29 @@ export default function AddCourseDialog({
     setTextSearchErrorMsg("");
     setBusy(true);
 
-    const matches = [...new Set(courseIdMatch(tsState.text) || [])];
+    const courseIds = [...new Set(courseIdMatch(tsState.text) || [])];
 
-    if (!matches.length) {
+    if (!courseIds.length) {
       setTextSearchErrorMsg("No course IDs found");
       setBusy(false);
       return;
     }
 
-    const courses = matches.filter(m => !nodeData.has(m));
-    if (!courses.length) {
+    const toAdd = new Set(courseIds.filter(m => !nodeData.has(m)));
+    if (!toAdd.size) {
       setTextSearchErrorMsg("All found courses already exist");
       setBusy(false);
       return;
     }
 
-    try {
-      const resp = await fetch(`${API_URL}/courses/`, {
-        method: "POST",
-        headers: { contentType: "application/json" },
-        body: JSON.stringify(courses),
-      });
-
-      if (resp.status === 404) {
-        setTextSearchErrorMsg("No matching courses found");
-        setBusy(false);
-        return;
-      }
-
-      const data = await resp.json();
-
+    const data = FINAL_COURSES.filter(c => toAdd.has(c.id));
+    if (data.length) {
       const newElements = generateInitialElements(data, "aggressively");
       addExternalFlow(newElements, tsState.connectTo);
       setTsState(prev => ({ ...prev, text: "" }));
       setBusy(false);
-    } catch (error) {
-      setTextSearchErrorMsg("Something went wrong");
-      // eslint-disable-next-line no-console
-      console.error(error);
+    } else {
+      setTextSearchErrorMsg("No matching courses found");
       setBusy(false);
     }
   }
