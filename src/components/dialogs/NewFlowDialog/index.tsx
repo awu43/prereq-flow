@@ -20,7 +20,7 @@ import usePrefersReducedMotion from "@usePrefersReducedMotion";
 import "./index.scss";
 import FINAL_CURRICULA from "@data/final_seattle_curricula.json";
 import FINAL_MAJORS from "@data/final_majors.json";
-import { courseMapAtom } from "@state";
+import { courseDataAtom, courseMapAtom } from "@state";
 import ModalDialog from "../ModalDialog";
 import type {
   DegreeSelectState,
@@ -53,6 +53,7 @@ export default function NewFlowDialog({
   const [slideState, setSlideState] = useState(0);
   const [tabIndex, setTabIndex] = useState(0);
 
+  const courseData = useAtomValue(courseDataAtom);
   const courseMap = useAtomValue(courseMapAtom);
   const [supportedMajors, _setSupportedMajors] = useState(
     FINAL_MAJORS as [string, string[]][],
@@ -149,56 +150,45 @@ export default function NewFlowDialog({
   async function newCurriculumFlow(): Promise<void> {
     setBusy(true);
     setCurriculumError("");
-    const curriculumId = curriculumSelectState.selected;
-    try {
-      const resp = await fetch(`${API_URL}/curricula/${curriculumId}`);
-      const data = await resp.json();
 
-      if (curriculumSelectState.includeExternal) {
-        const externalPrereqs = [];
-        for (const course of data) {
-          const courseMatches = courseIdMatch(
-            course.prerequisite,
-          ) as RegExpMatchArray;
-          const external = courseMatches
-            ? courseMatches.filter(
-                courseId => !courseId.startsWith(curriculumId),
-              )
-            : [];
-          externalPrereqs.push(...external);
-        }
-        if (externalPrereqs.length) {
-          const externalResp = await fetch(`${API_URL}/courses/`, {
-            method: "POST",
-            headers: { contentType: "application/json" },
-            body: JSON.stringify(externalPrereqs),
-          });
-          const externalData = await externalResp.json();
-          data.push(...externalData);
+    const curriculumId = curriculumSelectState.selected;
+    const data = courseData.filter(c => c.id.startsWith(curriculumId));
+
+    if (curriculumSelectState.includeExternal) {
+      let externalPrereqs = [];
+      for (const course of data) {
+        const courseMatches = courseIdMatch(
+          course.prerequisite,
+        ) as RegExpMatchArray;
+        const external = courseMatches
+          ? courseMatches.filter(courseId => !courseId.startsWith(curriculumId))
+          : [];
+        externalPrereqs.push(...external);
+      }
+      externalPrereqs = [...new Set(externalPrereqs)];
+      for (const external of externalPrereqs) {
+        const externalData = courseMap.get(external)!;
+        if (externalData) {
+          data.push(externalData);
         }
       }
-
-      const newElements = generateInitialElements(
-        data,
-        curriculumSelectState.ambiguityHandling,
-      );
-      const edges = newElements.filter(elem => isEdge(elem));
-      const externalOrphans = newElements.filter(
-        elem =>
-          isNode(elem) &&
-          !elem.id.startsWith(curriculumId) &&
-          !getConnectedEdges([elem], edges as Edge[]).length,
-        // Not connected to any other nodes
-      );
-
-      generateNewFlow(removeElements(externalOrphans, newElements));
-      close();
-    } catch (error) {
-      setCurriculumError("Something went wrong");
-      // eslint-disable-next-line no-console
-      console.error(error);
-      setBusy(false);
     }
+
+    const newElements = generateInitialElements(
+      data,
+      curriculumSelectState.ambiguityHandling,
+    );
+    const edges = newElements.filter(elem => isEdge(elem));
+    const externalOrphans = newElements.filter(
+      elem =>
+        isNode(elem) &&
+        !elem.id.startsWith(curriculumId) &&
+        !getConnectedEdges([elem], edges as Edge[]).length,
+      // Not connected to any other nodes
+    );
+
+    generateNewFlow(removeElements(externalOrphans, newElements));
+    close();
   }
 
   async function newTextSearchFlow(): Promise<void> {
