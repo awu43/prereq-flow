@@ -1,5 +1,6 @@
 describe("NewFlowTextSearch", () => {
   beforeEach(() => {
+    cy.setCookie("archive-notice-seen", "true");
     cy.visit("/");
     cy.get(".Header").contains("New flow").click();
     // eslint-disable-next-line cypress/no-unnecessary-waiting
