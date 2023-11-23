@@ -32,11 +32,6 @@ import DegreeSelect from "./DegreeSelect";
 import CurriculumSelect from "./CurriculumSelect";
 import NewFlowTextSearch from "./NewFlowTextSearch";
 
-const API_URL =
-  import.meta.env.MODE === "production"
-    ? import.meta.env.VITE_PROD_API_URL
-    : import.meta.env.VITE_DEV_API_URL;
-
 interface NewFlowDialogProps {
   modalCls: ModalClass;
   closeDialog: CloseModal;
@@ -196,29 +191,16 @@ export default function NewFlowDialog({
     setTextSearchError("");
 
     const courseMatches = courseIdMatch(textSearchState.text) ?? [];
-    const courses = [...new Set(courseMatches)];
+    const courses = new Set(courseMatches);
 
-    if (!courses.length) {
+    if (!courses.size) {
       setTextSearchError("No course IDs found");
       setBusy(false);
       return;
     }
 
-    try {
-      const resp = await fetch(`${API_URL}/courses/`, {
-        method: "POST",
-        headers: { contentType: "application/json" },
-        body: JSON.stringify(courses),
-      });
-
-      if (resp.status === 404) {
-        setTextSearchError("No matching courses found");
-        setBusy(false);
-        return;
-      }
-
-      const data = await resp.json();
-
+    const data = courseData.filter(c => courses.has(c.id));
+    if (data.length) {
       const newElements = generateInitialElements(
         data,
         textSearchState.ambiguityHandling,
@@ -226,10 +208,8 @@ export default function NewFlowDialog({
       generateNewFlow(newElements);
       setTextSearchState(prev => ({ ...prev, text: "" }));
       close();
-    } catch (error) {
-      setTextSearchError("Something went wrong");
-      // eslint-disable-next-line no-console
-      console.error(error);
+    } else {
+      setTextSearchError("No matching courses found");
       setBusy(false);
     }
   }
