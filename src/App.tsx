@@ -785,7 +785,7 @@ export default function App({ initialElements }: AppProps): JSX.Element {
       onClick={() => setContextActive(false)}
       onWheel={() => setContextActive(false)}
     >
-      <Header version={CURRENT_VERSION}>
+      <Header>
         <HeaderButton
           label="New flow"
           description="Start a new flow"
