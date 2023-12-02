@@ -15,7 +15,7 @@ export default function ArchiveDialog({
 }: ArchiveDialogProps): JSX.Element {
   function close(): void {
     closeDialog();
-    setCookie("archive-notice-seen", true);
+    setCookie("archive-notice-seen", true, { sameSite: "lax" });
   }
 
   return (
