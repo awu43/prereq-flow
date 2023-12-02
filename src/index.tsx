@@ -8,12 +8,16 @@ import App from "./App";
 
 import demoFlow from "./data/demo-flow.json";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App initialElements={demoFlow.elements as Element[]} />
-  </React.StrictMode>,
-  document.getElementById("root"),
-);
+if (window.location.host === "www.prereqflow.com") {
+  window.location.replace("https://prereq-flow.vercel.app/");
+} else {
+  ReactDOM.render(
+    <React.StrictMode>
+      <App initialElements={demoFlow.elements as Element[]} />
+    </React.StrictMode>,
+    document.getElementById("root"),
+  );
+}
 
 // TODO: Mobile/tablet warning
 // TODO: Add concurrent edge to legend

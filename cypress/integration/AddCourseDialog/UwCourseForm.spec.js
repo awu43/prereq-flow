@@ -1,5 +1,6 @@
 describe("UwCourseForm", () => {
   beforeEach(() => {
+    cy.setCookie("archive-notice-seen", "true");
     cy.visit("/");
     cy.get(".Header").contains("Add courses").click();
     cy.get('[role="tablist"]').contains("UW course").click();

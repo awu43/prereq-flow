@@ -38,7 +38,7 @@ interface DegreeSelectProps {
   tabIndex: number;
   connectionError: boolean;
   busy: boolean;
-  supportedMajors: string[];
+  supportedMajors: [string, string[]][];
   dsState: DegreeSelectState;
   setDsState: SetState<DegreeSelectState>;
   newDegreeFlow: () => void;
@@ -56,7 +56,7 @@ export default function DegreeSelect({
 
   useEffect(() => {
     if (supportedMajors.length && !dsState.selected) {
-      dsUpdater.value("selected", supportedMajors[0]);
+      dsUpdater.value("selected", supportedMajors[0][0]);
     }
   }, [supportedMajors]);
 
@@ -68,12 +68,16 @@ export default function DegreeSelect({
       !dsState.majors.includes(dsState.selected) &&
       dsState.majors.length < 3
     ) {
-      dsUpdater.cb("majors", prev => prev.majors.concat([prev.selected]));
+      dsUpdater.transform("majors", prev =>
+        prev.majors.concat([prev.selected]),
+      );
     }
   }
 
   function deleteMajor(targetMajor: string): void {
-    dsUpdater.cb("majors", prev => prev.majors.filter(m => m !== targetMajor));
+    dsUpdater.transform("majors", prev =>
+      prev.majors.filter(m => m !== targetMajor),
+    );
   }
 
   // function addMinor(params) {
@@ -130,7 +134,7 @@ export default function DegreeSelect({
               disabled={connectionError || busy || !supportedMajors.length}
             >
               {supportedMajors.map(m => (
-                <option key={toKebabCase(m)}>{m}</option>
+                <option key={toKebabCase(m[0])}>{m[0]}</option>
               ))}
             </select>
             <button
@@ -150,20 +154,6 @@ export default function DegreeSelect({
           </div>
         </Tippy>
       </section>
-      <small>
-        See available degrees and course lists on&nbsp;
-        <a
-          href="https://github.com/awu43/prereq-flow-degrees"
-          target="_blank"
-          rel="noreferrer"
-        >
-          GitHub
-        </a>
-      </small>
-      <small>
-        Send suggestions for changes to{" "}
-        <a href="mailto:comments@prereqflow.com">comments@prereqflow.com</a>
-      </small>
 
       <AmbiguitySelect
         ambiguityHandling={dsState.ambiguityHandling}

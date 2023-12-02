@@ -2,6 +2,7 @@ import { getNode } from "../utils";
 
 describe("TableDialog", () => {
   beforeEach(() => {
+    cy.setCookie("archive-notice-seen", "true");
     cy.visit("/");
     cy.get(".TableDialog__open-btn").click();
   });

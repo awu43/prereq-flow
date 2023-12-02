@@ -2,6 +2,7 @@ import { clickNodeContextOpt, getEdge, getNode } from "../utils";
 
 describe("EditDataDialog", () => {
   beforeEach(() => {
+    cy.setCookie("archive-notice-seen", "true");
     cy.visit("/");
   });
   it("Disables save button when ID field is empty", () => {

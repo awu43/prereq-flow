@@ -2,6 +2,7 @@ import { getNode } from "../utils";
 
 describe("CourseNode", () => {
   beforeEach(() => {
+    cy.setCookie("archive-notice-seen", "true");
     cy.visit("/");
   });
   describe("tippy", () => {

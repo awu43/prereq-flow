@@ -15,7 +15,6 @@ import type { TextSearchState } from "./types";
 
 interface TextSearchProps {
   tabIndex: number;
-  connectionError: boolean;
   tsState: TextSearchState;
   setTsState: SetState<TextSearchState>;
   busy: boolean;
@@ -23,7 +22,6 @@ interface TextSearchProps {
 }
 export default function NewFlowTextSearch({
   tabIndex,
-  connectionError,
   tsState,
   setTsState,
   busy,
@@ -65,7 +63,7 @@ export default function NewFlowTextSearch({
             }));
           }}
           ref={textAreaRef}
-          disabled={connectionError || busy}
+          disabled={busy}
         ></textarea>
       </Tippy>
 
@@ -76,7 +74,7 @@ export default function NewFlowTextSearch({
           checked={tsState.connectTo.prereq}
           disabled={busy}
           onChange={() =>
-            tsUpdater.cb("connectTo", prev => ({
+            tsUpdater.transform("connectTo", prev => ({
               ...prev.connectTo,
               prereq: !prev.connectTo.prereq,
             }))
@@ -91,7 +89,7 @@ export default function NewFlowTextSearch({
           checked={tsState.connectTo.postreq}
           disabled={busy}
           onChange={() =>
-            tsUpdater.cb("connectTo", prev => ({
+            tsUpdater.transform("connectTo", prev => ({
               ...prev.connectTo,
               postreq: !prev.connectTo.postreq,
             }))
@@ -105,7 +103,7 @@ export default function NewFlowTextSearch({
         type="submit"
         className="AddCourseTextSearch__add-courses-button"
         onClick={addCoursesFromText}
-        disabled={connectionError || busy || !tsState.text.trim()}
+        disabled={busy || !tsState.text.trim()}
       >
         Add courses
       </button>

@@ -5,7 +5,7 @@ import Tippy from "@tippyjs/react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
 
-import type { SetState, Campus } from "types/main";
+import type { SetState } from "types/main";
 import { stateUpdater } from "@utils";
 
 import CampusSelect from "../CampusSelect";
@@ -18,7 +18,7 @@ interface CurriculumSelectProps {
   tabIndex: number;
   connectionError: boolean;
   busy: boolean;
-  supportedCurricula: Record<Campus, [string, string][]>;
+  supportedCurricula: [string, string][];
   csState: CurriculumSelectState;
   setCsState: SetState<CurriculumSelectState>;
   newCurriculumFlow: () => void;
@@ -35,15 +35,8 @@ export default function CurriculumSelect({
   const csUpdater = stateUpdater(setCsState);
 
   useEffect(() => {
-    if (
-      supportedCurricula.Seattle.length &&
-      !Object.values(csState.selected).some(s => s)
-    ) {
-      csUpdater.value("selected", {
-        Seattle: supportedCurricula.Seattle[0][0],
-        Bothell: supportedCurricula.Bothell[0][0],
-        Tacoma: supportedCurricula.Tacoma[0][0],
-      });
+    if (supportedCurricula.length && !csState.selected) {
+      csUpdater.value("selected", supportedCurricula[0][0]);
     }
   }, [supportedCurricula]);
 
@@ -55,8 +48,8 @@ export default function CurriculumSelect({
   return (
     <div className="CurriculumSelect">
       <CampusSelect
-        selectedCampus={csState.campus}
-        setSelectedCampus={c => csUpdater.value("campus", c)}
+        selectedCampus="Seattle"
+        setSelectedCampus={_ => {}}
         busy={busy}
       />
       <Tippy
@@ -70,20 +63,15 @@ export default function CurriculumSelect({
       >
         <select
           className="CurriculumSelect__select-input"
-          value={csState.selected[csState.campus]}
+          value={csState.selected}
           onChange={e => {
-            csUpdater.cb("selected", prev => ({
-              ...prev.selected,
-              [prev.campus]: e.target.selectedOptions[0].value,
-            }));
+            csUpdater.value("selected", e.target.selectedOptions[0].value);
           }}
-          disabled={
-            connectionError || busy || !supportedCurricula.Seattle.length
-          }
+          disabled={connectionError || busy || !supportedCurricula.length}
         >
-          {supportedCurricula[csState.campus].map(([id, name]) => (
+          {supportedCurricula.map(([id, name]) => (
             <option key={id} value={id}>
-              {`${id}: ${name}`}
+              {name}
             </option>
           ))}
         </select>
@@ -93,7 +81,10 @@ export default function CurriculumSelect({
           type="checkbox"
           checked={csState.includeExternal}
           onChange={() => {
-            csUpdater.cb("includeExternal", prev => !prev.includeExternal);
+            csUpdater.transform(
+              "includeExternal",
+              prev => !prev.includeExternal,
+            );
           }}
           disabled={busy}
         />
@@ -109,9 +100,7 @@ export default function CurriculumSelect({
           type="submit"
           className="CurriculumSelect__get-courses-button"
           onClick={getCourses}
-          disabled={
-            connectionError || busy || !supportedCurricula.Seattle.length
-          }
+          disabled={connectionError || busy || !supportedCurricula.length}
         >
           Get courses
         </button>

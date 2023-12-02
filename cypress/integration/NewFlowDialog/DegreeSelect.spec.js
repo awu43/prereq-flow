@@ -1,5 +1,8 @@
+import ALL_MAJORS from "../../../src/data/final_majors.json";
+
 describe("DegreeSelect", () => {
   beforeEach(() => {
+    cy.setCookie("archive-notice-seen", "true");
     cy.visit("/");
     cy.get(".Header").contains("New flow").click();
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -13,13 +16,12 @@ describe("DegreeSelect", () => {
     cy.get(".majors__add-button").click();
     cy.get(".DegreeSelect").contains("Get courses").click();
     cy.get(".NewFlowDialog").should("not.exist");
-    cy.request("POST", "localhost:3000/degrees", [
-      "Aeronautical and Astronautical Engineering",
-    ]).then(resp => {
-      for (const course of resp.body) {
-        cy.get(`[data-id="${course.id}"`);
-      }
-    });
+    const AA = ALL_MAJORS.find(
+      m => m[0] === "Aeronautical and Astronautical Engineering",
+    )[1];
+    for (const course of AA) {
+      cy.get(`[data-id="${course}"`);
+    }
   });
   it("Adds a major", () => {
     cy.get(".majors__select-input").select(
@@ -46,14 +48,14 @@ describe("DegreeSelect", () => {
   it("Disables the add button when current selection already selected", () => {
     cy.get(".majors__add-button").click();
     cy.get(".majors__add-button").should("be.disabled");
-    cy.get(".majors__select-input").select("Biochemistry");
+    cy.get(".majors__select-input").select("Computer Engineering");
     cy.get(".majors__add-button").should("not.be.disabled");
   });
   it("Disables the add button when three majors are selected", () => {
     cy.get(".majors__add-button").click();
-    cy.get(".majors__select-input").select("Biochemistry");
+    cy.get(".majors__select-input").select("Mechanical Engineering");
     cy.get(".majors__add-button").click();
-    cy.get(".majors__select-input").select("Chemical Engineering");
+    cy.get(".majors__select-input").select("Computer Engineering");
     cy.get(".majors__add-button").click();
     cy.get(".majors__select-input").select("Electrical Engineering");
     cy.get(".majors__add-button").should("be.disabled");
@@ -65,16 +67,18 @@ describe("DegreeSelect", () => {
   });
   it("Persists state", () => {
     cy.get(".majors__add-button").click();
-    cy.get(".majors__select-input").select("Applied Mathematics");
+    cy.get(".majors__select-input").select("Electrical Engineering");
     cy.get(".majors__add-button").click();
-    cy.get(".majors__select-input").select("Astronomy");
+    cy.get(".majors__select-input").select("Civil Engineering");
     cy.get(".AmbiguitySelect label").contains("Cautiously").click();
     cy.get(".CloseButton").click();
     cy.get(".Header").contains("New flow").click();
     cy.get(".DegreeSelect");
     cy.get("li").contains("Aeronautical and Astronautical Engineering");
-    cy.get("li").contains("Applied Mathematics");
-    cy.get(".majors__select-input").find(":selected").contains("Astronomy");
+    cy.get("li").contains("Electrical Engineering");
+    cy.get(".majors__select-input")
+      .find(":selected")
+      .contains("Civil Engineering");
     cy.get('input[type="radio"][checked]').parent().contains("Cautiously");
   });
 });

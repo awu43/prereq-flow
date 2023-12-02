@@ -1,6 +1,5 @@
 import type { ModalClass, CloseModal } from "@useDialogStatus";
 import githubIcon from "@icons/github.svg";
-import envelopeIcon from "@icons/envelope.svg";
 
 import "./AboutDialog.scss";
 import ModalDialog from "./ModalDialog";
@@ -65,16 +64,6 @@ export default function AboutDialog({
           </a>
         </p>
       </section>
-      <h2>Contact</h2>
-      <p>
-        <a
-          href="mailto:comments@prereqflow.com"
-          className="AboutDialog__email-link"
-        >
-          <img src={envelopeIcon} alt="" />
-          comments@prereqflow.com
-        </a>
-      </p>
     </ModalDialog>
   );
 }

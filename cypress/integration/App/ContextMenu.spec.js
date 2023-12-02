@@ -15,6 +15,7 @@ const TEST_COND_IDS = {
 
 describe("ContextMenu", () => {
   beforeEach(() => {
+    cy.setCookie("archive-notice-seen", "true");
     cy.visit("/");
   });
   describe("Node", () => {
